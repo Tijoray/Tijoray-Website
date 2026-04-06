@@ -2,9 +2,9 @@
 
 ## Purpose
 
-This document defines the design direction, content architecture, interaction model, and implementation plan for the Arcana website. It reflects the current built state of the homepage and serves as the living blueprint for future pages.
+This document defines the design direction, content architecture, interaction model, and implementation plan for the Arcana website. It reflects the current built state of all pages and serves as the living blueprint for future work.
 
-**Last updated:** April 2026 — full audit against source files.
+**Last updated:** April 2026 — full audit after Technology page, Configurator, About, Contact builds.
 
 ---
 
@@ -39,6 +39,7 @@ Arcana should feel like a luxury maison with a concealed technological core. The
 - Media examples include certificates, photos, and audio, with content such as "Certificate_042.pdf", "Paris Unveiling", and "Heartbeat"
 - Rose gold is a flagship visual cue and should be treated as a hero finish, not a secondary option
 - The collection language feels named and editorial, such as "Aurelia Infinite"
+- **Product line branding:** The pendant configurator is part of the **Birthstone Series** (future: Birthstone Bracelet)
 
 ---
 
@@ -87,28 +88,215 @@ Arcana should feel like a luxury maison with a concealed technological core. The
 
 ---
 
-## Current Implementation — Homepage
+## Routing (React Router v7 — implemented)
 
-### Stack (built)
+| Path | Page | Status |
+|------|------|--------|
+| `/` | Homepage | ✅ Built |
+| `/about` | About Us (Atelier) | ✅ Built |
+| `/contact` | Contact Us | ✅ Built |
+| `/build` | Pendant Configurator | ✅ Built |
+| `/technology` | Technology | ✅ Built |
 
-- **Framework:** Vite + React 18 + TypeScript
-- **Styling:** CSS Modules per component
-- **3D:** Three.js + GLTFLoader + DRACOLoader + RGBELoader (Poly Haven HDR)
-- **Animation:** CSS keyframes + imperative scroll-driven JS (RAF loop)
-- **Dev server:** `npm run dev` → http://localhost:5173
+---
 
-### File Structure
+## Navigation (built)
+
+- Fixed navbar, three states: transparent (over cream hero), `.in-dark` (over dark scroll story), `.frosted` (cream frosted glass)
+- Logo: `Arcana Logo.png` with dark/light filter switching
+- Links: **Collection** (#), **Technology** (`/technology`), **Atelier** (`/about`), **Journal** (#)
+- CTA button: **"Build Your Arcana"** → `/build` (previously "Curate Your Legacy" → `/contact`)
+- **Mobile (≤900px):** hamburger → full-screen dark overlay with large Cormorant Garamond links, staggered entrance/exit animations
+  - 4 nav links; animation delays: 0.10s, 0.18s, 0.26s, 0.34s (entrance); 0s, 0.04s, 0.08s, 0.12s (exit)
+
+---
+
+## Homepage Sections (built)
+
+### 1. Hero
+
+- Eyebrow: "Atelier Arcana"; Title: "Memories. *Forever.*"
+- CTA buttons: "Curate Your Legacy" → `/contact`; "Explore the Collection" → `/about`
+- Animated rose rule + scroll cue
+
+### 2. Scroll Story (`#scroll-story`)
+
+- **500vh** sticky scroll sequence on dark `#111111` background
+- Three.js pendant (Draco GLB), Z-up corrected, PBR gold + gem materials, HDR env
+- Phase map: `rot [0–0.28] → arrive [0.28–0.43] → tilt [0.43–0.58] → reveal [0.58–0.72] → conn [0.72–1.00]`
+- Phone screens: `Establishing Connection.png` → `Connected Piece.png`
+- Animated maroon loading bar (JS-positioned, pixel-perfect): 0→25% during tilt, 25→100% during reveal
+- Connection Established intermediate screen with gold checkmark
+- Connected text panel: certificate, archive, vault access, generational transfer features
+- Chapter navigation dots (desktop only)
+
+### 3. Features
+
+- Three cards: The Jewel / The Vault / The Legacy — IntersectionObserver fade-in
+
+### 4. CTA Section
+
+- Gold grid background; two buttons: "Enter the Atelier" → `/contact`; "Discover the Technology" → `/about`
+
+### 5. Footer
+
+- Near-black `#0A0A0A`; four columns; dynamic copyright year
+
+---
+
+## About Page (`/about` — built)
+
+- Hero: "Born from the belief that *some things* deserve to last forever."
+- Mission 2-col grid, 3 pillar cards, spec table + quote
+- IntersectionObserver fade-up animations throughout
+- CTA section linking to `/contact`
+
+---
+
+## Contact Page (`/contact` — built)
+
+- 2-col layout, underline-only form inputs
+- Fields: Name, Email, Message
+- Confirmation state with gold checkmark SVG after submission
+- Email reference: curator@atelierarcana.com
+
+---
+
+## Technology Page (`/technology` — built)
+
+### Stack
+- React + CSS Modules; IntersectionObserver fade-up animations; scroll-driven image parallax (JS)
+
+### Sections
+
+**1. Hero**
+- "The intelligence *within* your jewel."
+- Intro copy about the NFC chip and encrypted digital bridge
+
+**2. How It Works — NFC Flow**
+- 3-step iPhone-framed sequence with extracted app screenshots:
+  - `app/app-tap.png` — "Tap Your Piece"
+  - `app/app-connecting.png` — "Identity Confirmed" (Establishing Connection)
+  - `app/app-connected.png` — "Your World Unlocks" (Connection Established)
+
+**3. The App — Your Digital Atelier**
+- Alternating left/right feature rows; phone frames with `overflow: hidden`
+- Feature order (most important first):
+
+| # | Label | Screenshot | Key hook |
+|---|-------|-----------|----------|
+| 1 | The Arcana Experience | `memory-page.mp4` (video, autoplay loop) | Gift message revealed on first tap |
+| 2 | Stone Intelligence | `app/app-atelier.png` (scroll parallax) | Stone type, clarity, GIA certificate |
+| 3 | Gold Composition | `app/app-gold.png` (scroll parallax) | Metal purity, weight, craftsmanship guarantee |
+| 4 | The Vault | `app/app-vault.png` (scroll parallax) | Private archive, date-organised, secure |
+
+- Scroll parallax: images start at top of phone frame; JS scroll listener shifts `translateY` from 0 → `-(imgH - frameH)` as section passes through viewport
+- GIF/video slot: `<video autoPlay loop muted playsInline>` — MP4 primary, MOV fallback
+
+**4. Heritage Guarantee**
+- Dark `var(--ink)` background; italic blockquote in large serif
+- 3 stat cards with gold top border: Lifetime / Encrypted / Immutable
+
+**5. CTA**
+- Gold grid overlay; "Build Your Arcana" → `/build`; "Speak with the Atelier" → `/contact`
+
+---
+
+## Pendant Configurator (`/build` — built)
+
+### Layout
+
+- Split grid: `55fr / 45fr` — sticky Three.js canvas left, scrollable config panel right
+- Config panel: `position: sticky; height: calc(100vh - 80px); overflow-y: auto`
+- Price/CTA block: `position: sticky; bottom: 0` — always visible inside scrollable panel
+
+### Three.js Infrastructure
+
+- `WebGLRenderer` with ACES filmic tone mapping, SRGBColorSpace
+- `PerspectiveCamera(42°)` — square canvas (aspect 1:1)
+- HDR env: Poly Haven `studio_small_09_1k.hdr` via `RGBELoader → PMREMGenerator`
+- `OrbitControls`: `enablePan: false`, `zoomToCursor: true`, `maxDistance: 2.0`
+- Polar angle clamp: `Math.PI/2 ± 0.38` (~±22° from equator)
+- Spring-back to equator in RAF loop when not interacting (`diff * 0.06` lerp per frame)
+
+### GLB Loading
+
+- **Square:** `pendant-square.glb` (Draco compressed, Z-up, ~787KB)
+- **Circle:** `pendant-circle.glb` (meshopt compressed via gltfpack, Z-up, ~1.1MB)
+- Both preloaded silently on mount into `glbCacheRef` — switching shapes is instant (no spinner after first load)
+- Z-up correction: `model.rotation.x = Math.PI / 2` for both shapes
+- Two-pass centering: scale to 2 world-units, re-measure, subtract center
+- Camera framed on pendant gem: `pendantY = box.min.y + modelHeight * 0.20`, Z=1.4
+- Build-in scale animation: `easeOutCubic` over 600ms, `pivot.scale` 0→1
+
+### Material System
+
+- **Gem detection:** material name regex (`garnet|emerald|ruby|sapphire|...`) OR color near-black (`r < 0.12 && g < 0.12 && b < 0.12`)
+- **Construction geometry:** hidden by color (`r < 0.3 && g > 0.45 && b > 0.45`) or `THREE.Line` type
+- **Body materials:** `MeshStandardMaterial` — `metalness: 1.0`, `roughness` per metal, `envMapIntensity: 3.5`
+- **Gem materials:** `MeshPhysicalMaterial` — `clearcoat: 1.0`, `roughness: 0.05`, `reflectivity: 1.0`
+- Metal/color/birthstone mutations are **imperative** (direct `.color.set()`, `.needsUpdate = true`) — no GLB reload
+
+### Configuration Options
+
+| Step | Options |
+|------|---------|
+| 01 Shape | Square, Circle |
+| 02 Base Metal | Steel ($299), Silver ($399), 10K Gold ($799), 18K Gold ($1299) |
+| 03 Metal Color | White, Gold, Rose (disabled for Steel) |
+| 04 Birthstone | 12 months (Jan–Dec), color swatches |
+
+- Series tag: **"Birthstone Series"** under page title (future: Birthstone Bracelet)
+- Step headers: gold decorative line + `?` tooltip icon with per-step descriptions
+- All selection states use consistent gold border treatment
+- Hover affordances: swatches scale 1.08× with shadow; gem swatches scale 1.15×
+- Month labels: 11px; Stone name: 18px italic serif
+
+### Price & CTA
+
+- Dynamic price from metal selection; spec summary line below price
+- "Proceed to Commission" button — disabled with "Coming Soon" badge
+- "Speak with the Atelier" secondary link → `/contact`
+
+---
+
+## Assets (`public/assets/`)
 
 ```
-public/assets/
-  3D Pendant.glb          — Draco-compressed GLB, Z-up export
-  Arcana Logo.png
-  Establishing Connection.png   — phone screen: NFC pairing in progress
-  Connected Piece.png           — phone screen: vault opened (Aurelia Infinite)
+Arcana Logo.png
+Arcana.pdf                        — source app screenshots (16 pages)
+Connected Piece.png               — scroll story phone screen
+Connection Established.png        — scroll story intermediate screen
+Establishing Connection.png       — scroll story phone screen
+pendant-square.glb                — Draco compressed, ~787KB
+pendant-circle.glb                — meshopt compressed (gltfpack -cc), ~1.1MB
+memory-page.mov                   — original recording
+memory-page.mp4                   — converted for browser (avconvert HEVC), ~3.8MB
+memory-page.gif                   — legacy GIF (superseded by MP4)
+app/
+  app-tap.png                     — NFC scan initiation screen
+  app-connecting.png              — Establishing Connection screen
+  app-connected.png               — Connection Established screen
+  app-atelier.png                 — Stone metadata (Atelier tab)
+  app-gold.png                    — Gold composition screen
+  app-memory.png                  — Memory polaroid screen
+  app-vault.png                   — Christina's Vault screen
+  app-reveal.png                  — Piece reveal (Vault Certified)
+  page-01.png … page-16.png       — full PDF page renders (2x, archival)
+scripts/
+  strip-lines.mjs                 — removes non-triangle primitives from GLB (meshopt)
+  decompress-draco.mjs            — decompresses Draco GLB via @gltf-transform
+```
+
+---
+
+## File Structure
+
+```
 src/
-  index.css               — design tokens + global reset
-  main.tsx                — React root (no StrictMode)
-  App.tsx                 — progress bar + component composition
+  index.css                 — design tokens + global reset
+  main.tsx                  — React root (no StrictMode)
+  App.tsx                   — progress bar + React Router routes
   components/
     Navbar.tsx / .module.css
     Hero.tsx / .module.css
@@ -116,155 +304,12 @@ src/
     Features.tsx / .module.css
     CtaSection.tsx / .module.css
     Footer.tsx / .module.css
+  pages/
+    AboutPage.tsx / .module.css
+    ContactPage.tsx / .module.css
+    ConfiguratorPage.tsx / .module.css
+    TechnologyPage.tsx / .module.css
 ```
-
----
-
-## Homepage Sections (built)
-
-### 1. Navigation
-
-- Fixed, three states: transparent (over cream hero), `.in-dark` (over dark scroll story), `.frosted` (cream frosted glass, after story)
-- Logo: `Arcana Logo.png` with dark/light filter switching
-- Links: Collection, Technology, Atelier, Journal — all placeholder `#` for now
-- CTA: "Curate Your Legacy" — burgundy on cream, gold on dark
-- **Mobile (≤900px):** hamburger button → full-screen dark overlay (`rgba(10,8,7,0.97)`) with large Cormorant Garamond links (clamp 36px–56px), staggered entrance (280ms in, 260ms out)
-  - Overlay entrance: `overlayIn` keyframe `translateY(-12px → 0)`, 280ms
-  - Overlay exit: `overlayOut` keyframe `translateY(0 → -12px)`, 260ms — triggered by `closing` state + 260ms `setTimeout` before React unmount
-  - Link entrance: `linkIn` staggered (0.10s, 0.18s, 0.26s, 0.34s delays)
-  - Link exit: `linkOut` reverse stagger (0s, 0.04s, 0.08s, 0.12s delays)
-  - Backdrop click dismisses overlay; X close button inside overlay
-- `aria-label="Primary navigation"` on nav element
-
-### 2. Hero
-
-- Cream background, centred text, animated entrance (riseIn keyframe, staggered)
-- Eyebrow: "Atelier Arcana" — rose gold, 12px, weight 600
-- Title: "Memories. *Forever.*" — Cormorant Garamond, `clamp(76px, 11vw, 148px)`, "Forever" in rose gradient
-- Subtitle (15px, weight 400, `--ink-mid`): "Fine jewellery woven with encrypted digital legacy. / Every piece, an heirloom. Every touch, a memory."
-- **CTA buttons:** "Curate Your Legacy" (dark filled, ink bg) + "Explore the Collection" (ghost, ink border)
-- Rose rule (1px, 56px tall, rose gradient, margin-top 24px)
-- Scroll cue: "Scroll to Discover" label, animated rose line, 10px label
-- Ambient rose-gold orb pulse in background
-
-### 3. Scroll Story (`#scroll-story`)
-
-- Height: **500vh** (desktop and mobile)
-- Sticky stage: `height: 100vh`, dark background `#111111`
-- Stage glow: `radial-gradient(ellipse 70% 55% at 50% 50%, #1c100b 0%, #111111 65%)` behind pendant
-- Radial vignette mask on canvas (pendant) to fade chain edges softly
-
-#### 3D Pendant
-
-- **File:** `public/assets/3D Pendant.glb` (Draco compressed)
-- **Orientation fix:** `model.rotation.x = Math.PI / 2` (Z-up export correction)
-- **Auto-centred and scaled** in two passes: scale to 2 world-units (pass 1), re-measure bounds and subtract new center (pass 2) — prevents centering drift
-- **Pivot group:** model wrapped in `THREE.Group()` so `rotProg` drives `pivot.rotation.y` cleanly; starts at `Math.PI` (back face)
-- **Camera:** `PerspectiveCamera(45)`, aimed at gem bottom 22% of model height; Z=1.4 for both desktop and mobile
-- **Lighting:** `AmbientLight(0xffffff, 0.15)` + `DirectionalLight(0xfff5e0, 1.8)` key at (3,5,3) + `DirectionalLight(0xaaccff, 0.5)` rim at (-2,-1,-3)
-- **HDR environment:** Poly Haven `studio_small_09_1k.hdr` via `RGBELoader` → `PMREMGenerator` for real PBR metal reflections
-- **Gold material override:** `metalness: 1.0, roughness: 0.22, envMapIntensity: 3.5`
-- **Gem material override:** `MeshPhysicalMaterial` — `color: 0x050508, metalness: 0, roughness: 0.05, clearcoat: 1.0, clearcoatRoughness: 0.05` — detected by base color `r < 0.12 && g < 0.12 && b < 0.12`
-- **Tone mapping:** `ACESFilmicToneMapping, exposure: 1.0`; output: `SRGBColorSpace`
-- **Canvas filter:** `drop-shadow(0 0 80px rgba(191,161,95,0.18))` for ambient gold glow
-- **Canvas size:** 78vh desktop / 70vh mobile; `renderer.setSize(w, h, false)` — CSS controls display size; resizes on window resize
-- **Continuous animLoop:** runs at 60fps regardless of scroll; `pivot.rotation.y = Math.PI * (1 - easeOut(rotProg, 1.8))` updated from scroll progress; early-returns rotation (not render) on `prefers-reduced-motion`
-
-#### Pendant Captions
-
-Two caption cards rendered beneath the pendant during the `rot` phase, swapping at `rotProg >= 0.5`:
-
-| rotProg | Eyebrow | Title |
-|---------|---------|-------|
-| < 0.5 | Handcrafted Heirloom | Your Story, *Set in Stone* |
-| ≥ 0.5 | The Arcana Pendant | Eternal Craft, *Digital Soul* |
-
-Caption fades in over first 4% of scroll, fades out over last 6% of `rot` phase. Updated imperatively (innerHTML/textContent) without React state.
-
-#### Phase Map
-
-```js
-P.rot    = [0.00, 0.28]  // pendant rotates back→stone face (pivot.rotation.y: π → 0)
-P.arrive = [0.28, 0.43]  // phone slides up from below (ty: 50vh → 32vh, easeOut 2.8)
-P.tilt   = [0.43, 0.58]  // phone tilts +14° toward pendant, NFC rings pulse, pendant fades
-P.reveal = [0.58, 0.72]  // phone untilts, slides to centre (ty: 32vh → 0, easeOut 2.5)
-P.conn   = [0.72, 1.00]  // gold flash fires instantly, Connected Piece slides in iOS-style
-```
-
-**Note:** Connection Established is NOT a separate screen/phase. The flash fires at `connProg > 0.08` via `.pop` class addition (one-shot, resets when `connProg === 0`). The Connected Piece screen slides in directly. There is no `Connection Established.png` asset — the phone screens are `Establishing Connection.png` → `Connected Piece.png`.
-
-#### Phone Animation
-
-- Phone size: 72vh desktop / 48vh mobile; aspect ratio `0.463` (iPhone 14 Pro)
-- Border radius: 52px desktop / 34px mobile
-- Three.js canvas and phone are separate layers — canvas has radial vignette mask
-- **Desktop conn phase:** phone shifts left `lerp(0, -13, easeOut(connProg, 2.2))` vw; text panel slides from right `translate(lerp(56,16,t)vw, -50%)`
-- **Mobile conn phase:** phone rises `lerp(0, -16, easeOut(connProg, 2.2))` vh (center at 34vh, bottom at 58vh); text panel `translateY(calc(10vh + lerp(5,0,t)vh))`
-- `prefers-reduced-motion`: scroll render function returns early; animLoop still renders but skips pendant rotation
-
-#### Vignette Mask
-
-**Desktop:**
-```css
-mask-image: radial-gradient(
-  ellipse 80% 70% at 50% 62%,
-  black 45%, rgba(0,0,0,0.5) 68%, transparent 90%
-);
-```
-
-**Mobile (≤768px):**
-```css
-mask-image: radial-gradient(
-  ellipse 90% 55% at 50% 68%,
-  black 40%, rgba(0,0,0,0.5) 65%, transparent 88%
-);
-```
-
-#### Connected Text Panel Content
-
-The right-side panel (desktop) / below-phone panel (mobile) that appears during the `conn` phase:
-
-- Eyebrow: "Your Digital Vault"
-- Rose-to-gold horizontal rule (36px wide)
-- Headline: "One Piece. *A Lifetime* of Memory."
-- 4 vault feature items (each with rose vertical bar):
-  1. **Certificate of Authenticity** — Provenance and material purity verified & sealed by Arcana
-  2. **Personal Archive** — Photographs, voice notes, letters — encrypted inside your jewel
-  3. **Access Your Vault** — Tap with any NFC device to reveal your private memories
-  4. **Generational Transfer** — Pass the piece — and the vault — to those who come after you
-- Status badge: gold checkmark SVG + "Legacy Secured" (gold, 10px, letter-spacing 2.5px)
-
-#### Chapter Navigation Dots
-
-- 4 dots, desktop only (hidden on mobile via `display: none`)
-- Real `<button>` elements with `aria-label="Go to chapter N"`
-- Click calls `scrollToChapter(n)` → smooth scroll using fractions `[0, P.arrive[0], P.conn[0], P.conn[0] + 0.1]`
-- Active dot: rose color, `scale(1.5)`; inactive: `rgba(245,240,232,0.2)`
-
-### 4. Features
-
-- Cream background, `padding: 80px 0`
-- Eyebrow: "The Arcana System"; title: "Craft. Vault. *Legacy.*"
-- Three cards: The Jewel / The Vault / The Legacy (staggered `transitionDelay` 0s / 0.12s / 0.24s)
-- Card background: `#E5D9CC` (distinct from `--cream` `#F7F7F2`)
-- Persistent faint rose top border (opacity 0.2), brightens on hover (0.8)
-- Feature numbers: `rgba(185,122,106,0.35)` — visible as decorative elements, 64px Cormorant
-- IntersectionObserver fade-in-up on scroll (threshold 0.18)
-
-### 5. CTA Section
-
-- Warm cream background with subtle gold grid
-- Eyebrow: "Begin Your Journey"
-- Headline: "Curate Your *Legacy*"
-- Body: "Every Arcana piece begins with a conversation…"
-- Two buttons: "Enter the Atelier" (dark primary) + "Discover the Technology" (ghost)
-
-### 6. Footer
-
-- Near-black `#0A0A0A` background
-- Four columns: brand/tagline, Collection, Atelier, Support
-- Copyright: `© {new Date().getFullYear()} Atelier Arcana` — dynamic year
-- All links placeholder `#` — real routes to be added per page
 
 ---
 
@@ -277,8 +322,9 @@ The right-side panel (desktop) / below-phone panel (mobile) that appears during 
 | Chapter dots as `<button>` with aria-labels | ✅ Done |
 | `prefers-reduced-motion` JS check | ✅ Done |
 | Mobile navigation (hamburger) | ✅ Done |
-| WCAG contrast — rose on cream (~2.8:1) | ⚠️ Known issue — rose used only for short decorative labels |
-| Footer link contrast on dark bg | ✅ Fixed to 75% opacity minimum |
+| Configurator birthstone grid `role="group"` | ✅ Done |
+| Contact form confirmation state | ✅ Done |
+| WCAG contrast — rose on cream (~2.8:1) | ⚠️ Known — rose used only for short decorative labels |
 | Keyboard navigation through scroll story | ❌ Not yet implemented |
 | Skip-to-content link | ❌ Not yet implemented |
 
@@ -286,64 +332,31 @@ The right-side panel (desktop) / below-phone panel (mobile) that appears during 
 
 ## Known Open Issues
 
-- All nav/footer links are placeholder `#` — no routing implemented yet
+- Collection, Journal nav links are placeholder `#`
+- Footer links are placeholder `#`
 - Rose (`#B97A6A`) on cream fails WCAG AA — acceptable for eyebrow decorative use only
-- Mobile scroll story layout (phone + text panel) may need further tuning across screen sizes
-- No social proof, press mentions, or product imagery in the above-fold experience
-- No hamburger menu for tablet (900px–768px range is a gap)
+- "Proceed to Commission" CTA is disabled — commission flow not yet built
+- No social proof, press mentions, or editorial photography above the fold
+- Technology page: `memory-page.mp4` is HEVC encoded — may need H.264 re-encode for wider Android support
 
 ---
 
 ## Information Architecture
 
-### Primary Pages
+### Live Pages
 
-- **Home** — built ✅
-- Build Your Arcana — planned
-- Build Necklace — planned
-- Build Bracelet — planned
-- About Us — planned
-- Technology — planned (dark theme)
-- Contact Us — planned
+- **Home** `/` ✅
+- **Technology** `/technology` ✅
+- **About (Atelier)** `/about` ✅
+- **Contact** `/contact` ✅
+- **Build Your Arcana** `/build` ✅
 
-### Utility Surfaces
+### Planned Pages
 
-- Navigation with persistent CTA: "Curate Your Legacy"
-- Mobile navigation: full-screen overlay with large serif links ✅
-- Confirmation modal after inquiry submission — planned
-- Future: Journal, FAQ, Care Guide, Order Tracking
-
----
-
-## Remaining Pages (not yet built)
-
-### Technology Page
-
-- Dark theme (`#111111` background)
-- Gold for signals, certification states, diagrams
-- Sections: NFC intro, vault embedding, auth flow, supported content types, app screenshots
-- Trust messaging: passive NFC, secure pairing, private archive framing
-
-### Builder Pages
-
-- Sticky product preview (desktop) / stacked (mobile)
-- Steps: Base metal → Shape → Gemstone → Summary
-- Real-time preview updates
-- Elevated summary panel in certificate-style framing
-
-### About Us
-
-- Editorial atelier imagery
-- Warm light, shallow depth of field
-- Craftsmanship + digital permanence narrative
-- Specification callouts inspired by app product detail screens
-
-### Contact Us
-
-- Cream background, minimal
-- Fields: Name, Email, Message ("How may our Atelier assist you today?")
-- Burgundy submit button
-- Email: curator@atelierarcana.com
+- Journal — editorial content, articles
+- FAQ / Care Guide
+- Collection landing page
+- Order tracking / account
 
 ---
 
@@ -353,28 +366,31 @@ The right-side panel (desktop) / below-phone panel (mobile) that appears during 
 - Use opacity, parallax depth, object rotation, and soft bloom
 - Avoid bouncy easing or playful interaction timing
 - Scroll-story pacing: 500vh for the full pendant → phone → vault sequence
-- Connection flash: instantaneous gold radial burst (`.pop` class triggers `estFlash` keyframe), not a sustained screen
+- Connection flash: instantaneous gold radial burst (`.pop` class triggers `estFlash` keyframe)
 - Menu open/close: 280ms ease-in (staggered links), 260ms ease-out (reverse stagger)
-- `easeOut(t, exp)` exponents per phase: rotation 1.8, arrive 2.8, reveal 2.5, conn shift/rise 2.2, conn screen 2.5
+- `easeOut(t, exp)` exponents per phase: rotation 1.8, arrive 2.8, reveal 2.5, conn 2.2/2.5
 
 ---
 
 ## Technical Notes
 
-- **No React StrictMode** — double-invocation breaks the WebGL context
+- **No React StrictMode** — double-invocation breaks WebGL context
 - **Three.js imports:** use `three/examples/jsm/` paths (not `three/addons/`)
-- **Draco decoder:** `https://www.gstatic.com/draco/versioned/decoders/1.5.6/`
-- **HDR environment:** loaded from Poly Haven CDN — requires internet; `RGBELoader` → `PMREMGenerator` → `scene.environment`
-- **Scroll animation performance:** all style mutations are imperative (`ref.current.style.xxx`) — never React state in scroll handlers; captions use `textContent`/`innerHTML` with dirty-check to avoid thrashing
-- **Canvas sizing:** `renderer.setSize(w, h, false)` — `false` prevents inline style override of CSS-controlled display size
-- **Two-pass model centering:** scale first, then re-measure with a new `Box3` and subtract the new center — prevents the center vector mutating before the position subtraction
-- **Hamburger exit animation:** React has no native exit animation; pattern is `closing: boolean` state → apply `overlayClosing`/`linksClosing` CSS classes → `setTimeout(260ms)` → set `menuOpen: false`, `closing: false`; component then unmounts cleanly
-- **Flash one-shot:** `flashFired` flag prevents re-triggering; reset only when `connProg === 0` (user scrolls back)
-- **animLoop vs scroll RAF:** Two separate loops — `animLoop` runs continuously for Three.js renders; scroll uses `requestAnimationFrame(render)` debounced on scroll events, with `lastY` dirty-check to skip no-op frames
+- **Draco decoder CDN:** `https://www.gstatic.com/draco/versioned/decoders/1.5.6/`
+- **MeshoptDecoder:** registered via `gltfLoader.setMeshoptDecoder(MeshoptDecoder)` for circle GLB
+- **HDR environment:** loaded from Poly Haven CDN; `RGBELoader → PMREMGenerator → scene.environment`
+- **GLB compression pipeline:**
+  - Draco: `npx gltf-pipeline -i input.glb -o output.glb --draco.compressionLevel 7`
+  - Meshopt: `gltfpack -i input.glb -o output.glb -cc`
+  - Draco → Meshopt: decompress with `scripts/decompress-draco.mjs` first (gltfpack can't read Draco)
+- **Scroll animation performance:** all style mutations are imperative (`ref.current.style.xxx`) — never React state in scroll handlers
+- **Two-pass model centering:** scale first, re-measure with new `Box3`, subtract new center
+- **Bounding box for camera framing:** computed before `pivot.scale.setScalar(0)` — otherwise box is empty
+- **Vite manual chunk splitting:** three.js and react-vendor in separate chunks; `chunkSizeWarningLimit: 600`
 
 ---
 
-## Implementation Phases (updated)
+## Implementation Phases
 
 ### Phase 1: Foundations ✅ Complete
 - Vite + React + TypeScript scaffold
@@ -384,25 +400,28 @@ The right-side panel (desktop) / below-phone panel (mobile) that appears during 
 ### Phase 2: Home Page Animation ✅ Complete
 - 3D pendant via Three.js + GLB (Draco, HDR PBR, gold/gem material overrides)
 - Scroll-story phase sequence (rot → arrive → tilt → reveal → conn)
-- Pendant caption system (two captions swapping at 50% rotProg)
 - Phone mockup sequence, NFC rings, gold flash, Connected text panel
-- Mobile responsive layout
-- Accessibility: reduced-motion, aria labels, interactive chapter dots
-- Hamburger overlay with entrance/exit animations and backdrop dismiss
+- Animated loading bar + Connection Established intermediate screen
+- Mobile responsive layout; reduced-motion; accessibility
 
-### Phase 3: Remaining Marketing Pages
-- Technology page (dark theme)
-- About Us
-- Contact Us + form handling
+### Phase 3: Marketing Pages ✅ Complete
+- Technology page with NFC flow, app screenshots, scroll parallax, video
+- About Us (Atelier) with mission pillars and spec table
+- Contact Us with underline form and confirmation state
+- React Router v7 routing for all pages
 
-### Phase 4: Builder Flow
-- Build Your Arcana landing
-- Necklace and bracelet builder with live preview
-- Pricing logic and summary panel
+### Phase 4: Pendant Configurator ✅ Complete
+- `/build` page with Three.js OrbitControls + HDR + spring-back
+- Square and circle GLB shapes with preloading cache
+- Imperative material mutation (metal, color, birthstone)
+- Sticky price block, series tag, step tooltips, unified hover states
+- Birthstone Series product line designation
 
-### Phase 5: Launch Readiness
-- Real routing (React Router or Next.js migration)
+### Phase 5: Launch Readiness (planned)
+- Commission/checkout flow for `/build`
+- Journal page with editorial articles
+- Collection landing page
 - Analytics and event tracking
 - SEO metadata and social previews
-- Production forms and checkout integration
 - Full WCAG AA audit
+- H.264 re-encode of memory-page.mp4 for Android compatibility

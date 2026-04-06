@@ -4,8 +4,7 @@ import styles from './Navbar.module.css'
 
 const NAV_LINKS = [
   { label: 'Collection', to: '#' },
-  { label: 'Build',      to: '/build' },
-  { label: 'Technology', to: '#' },
+  { label: 'Technology', to: '/technology' },
   { label: 'Atelier',    to: '/about' },
   { label: 'Journal',    to: '#' },
 ]
@@ -77,7 +76,7 @@ export default function Navbar() {
             </li>
           ))}
         </ul>
-        <Link to="/contact" className={styles.cta}>Curate Your Legacy</Link>
+        <Link to="/build" className={styles.cta}>Build Your Arcana</Link>
         <button
           className={styles.hamburger}
           onClick={() => menuOpen ? closeMenu() : setMenuOpen(true)}
@@ -112,8 +111,8 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
-          <Link to="/contact" className={styles.mobileCta} onClick={closeMenu}>
-            Curate Your Legacy
+          <Link to="/build" className={styles.mobileCta} onClick={closeMenu}>
+            Build Your Arcana
           </Link>
         </div>
       )}

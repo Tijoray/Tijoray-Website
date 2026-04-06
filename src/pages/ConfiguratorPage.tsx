@@ -95,6 +95,9 @@ export default function ConfiguratorPage() {
   /* ── Interaction tracking for polar spring-back ── */
   const isInteractingRef = useRef(false)
 
+  /* ── GLB preload cache ── */
+  const glbCacheRef = useRef<Partial<Record<Shape, THREE.Group>>>({})
+
   /* ── Effect 1: Three.js infrastructure (runs once) ── */
   useEffect(() => {
     destroyedRef.current = false
@@ -213,12 +216,32 @@ export default function ConfiguratorPage() {
     }
   }, [])
 
+  /* ── Effect 2a: Preload both GLBs silently on mount ── */
+  useEffect(() => {
+    const dracoLoader = new DRACOLoader()
+    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/')
+    const loader = new GLTFLoader()
+    loader.setDRACOLoader(dracoLoader)
+    loader.setMeshoptDecoder(MeshoptDecoder)
+
+    ;(Object.keys(GLB_PATHS) as Shape[]).forEach((s) => {
+      if (glbCacheRef.current[s]) return
+      loader.load(GLB_PATHS[s], (gltf) => {
+        glbCacheRef.current[s] = gltf.scene
+      })
+    })
+
+    return () => { dracoLoader.dispose() }
+  }, [])
+
   /* ── Effect 2: GLB load (fires when shape changes) ── */
   useEffect(() => {
     if (!shape || !sceneRef.current) return
 
     const scene = sceneRef.current
-    setLoading(true)
+
+    // Only show loading spinner if not yet in cache
+    if (!glbCacheRef.current[shape]) setLoading(true)
 
     // Remove outgoing model
     const outgoing = currentGroupRef.current
@@ -235,16 +258,16 @@ export default function ConfiguratorPage() {
     const snapBirthstone = birthstone
 
     let cancelled = false
-    const dracoLoader = new DRACOLoader()
-    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/')
-    const gltfLoader = new GLTFLoader()
-    gltfLoader.setDRACOLoader(dracoLoader)
-    gltfLoader.setMeshoptDecoder(MeshoptDecoder)
 
-    gltfLoader.load(GLB_PATHS[shape], (gltf) => {
+    function processGltfScene(source: THREE.Group) {
+      // Clone so the cache copy stays pristine for next switch
+      return source.clone(true)
+    }
+
+    function onLoaded(scene3d: THREE.Group) {
       if (cancelled || destroyedRef.current) return
 
-      const model = gltf.scene
+      const model = processGltfScene(scene3d)
 
       // Both GLBs are Z-up (Rhino export), correct to Y-up
       model.rotation.x = Math.PI / 2
@@ -258,13 +281,13 @@ export default function ConfiguratorPage() {
       model.scale.setScalar(targetScale)
       model.updateMatrixWorld(true)
 
-      // Centre on origin (two-pass, same as ScrollStory)
+      // Centre on origin (two-pass)
       const box2 = new THREE.Box3().setFromObject(model)
       const center = box2.getCenter(new THREE.Vector3())
       model.position.sub(center)
       model.updateMatrixWorld(true)
 
-      // Wrap in pivot group (scale stays 1 here so bounding box is correct)
+      // Wrap in pivot group (scale stays 1 so bounding box is correct)
       const pivot = new THREE.Group()
       pivot.add(model)
       pivot.updateMatrixWorld(true)
@@ -277,7 +300,6 @@ export default function ConfiguratorPage() {
         : new THREE.Color(METAL_COLOR_HEX[snapColor])
 
       pivot.traverse((child) => {
-        // Hide any line/curve geometry (CAD construction curves)
         if (child instanceof THREE.Line) { child.visible = false; return }
         if (!(child instanceof THREE.Mesh)) return
         const mats = Array.isArray(child.material) ? child.material : [child.material]
@@ -285,12 +307,7 @@ export default function ConfiguratorPage() {
           if (!mat) return
           const std = mat as THREE.MeshStandardMaterial
           const col = std.color ?? new THREE.Color(1, 1, 1)
-
-          // Hide construction/guide geometry (aqua-teal curves exported from CAD)
-          if (col.r < 0.3 && col.g > 0.45 && col.b > 0.45) {
-            child.visible = false
-            return
-          }
+          if (col.r < 0.3 && col.g > 0.45 && col.b > 0.45) { child.visible = false; return }
 
           const GEM_NAME_RE = /garnet|amethyst|aquamarine|diamond|emerald|pearl|ruby|peridot|sapphire|tourmaline|citrine|turquoise|gem|stone|crystal/i
           const isGem = GEM_NAME_RE.test(std.name) || GEM_NAME_RE.test(child.name) || (col.r < 0.12 && col.g < 0.12 && col.b < 0.12)
@@ -298,12 +315,8 @@ export default function ConfiguratorPage() {
           if (isGem) {
             const gemMat = new THREE.MeshPhysicalMaterial({
               color: new THREE.Color(BIRTHSTONE_COLORS[snapBirthstone]),
-              metalness: 0.0,
-              roughness: 0.05,
-              reflectivity: 1.0,
-              envMapIntensity: 3.0,
-              clearcoat: 1.0,
-              clearcoatRoughness: 0.05,
+              metalness: 0.0, roughness: 0.05, reflectivity: 1.0,
+              envMapIntensity: 3.0, clearcoat: 1.0, clearcoatRoughness: 0.05,
             })
             if (Array.isArray(child.material)) child.material[idx] = gemMat
             else child.material = gemMat
@@ -326,7 +339,6 @@ export default function ConfiguratorPage() {
         if (child instanceof THREE.Mesh) box3.expandByObject(child)
       })
       const modelHeight = box3.max.y - box3.min.y
-      // Focus on the gem (sits ~20% from bottom of full model)
       const pendantY = box3.min.y + modelHeight * 0.20
       if (cameraRef.current) {
         cameraRef.current.position.set(0, pendantY, 1.4)
@@ -337,7 +349,6 @@ export default function ConfiguratorPage() {
         controlsRef.current.update()
       }
 
-      // Now zero scale for build-in animation
       pivot.scale.setScalar(0)
       targetScaleRef.current = 1
 
@@ -346,18 +357,30 @@ export default function ConfiguratorPage() {
       gemMatsRef.current = gemMats
       bodyMatsRef.current = bodyMats
 
-      // Trigger build-in animation
       buildStartRef.current = performance.now()
       setLoading(false)
-    }, undefined, (err) => {
-      console.error('[Arcana Configurator] GLB load error:', err)
-      setLoading(false)
-    })
-
-    return () => {
-      cancelled = true
-      dracoLoader.dispose()
     }
+
+    // Use cache if ready, otherwise load from network and populate cache
+    const cached = glbCacheRef.current[shape]
+    if (cached) {
+      onLoaded(cached)
+    } else {
+      const dracoLoader = new DRACOLoader()
+      dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/')
+      const loader = new GLTFLoader()
+      loader.setDRACOLoader(dracoLoader)
+      loader.setMeshoptDecoder(MeshoptDecoder)
+      loader.load(GLB_PATHS[shape], (gltf) => {
+        glbCacheRef.current[shape] = gltf.scene
+        onLoaded(gltf.scene)
+      }, undefined, (err) => {
+        console.error('[Arcana Configurator] GLB load error:', err)
+        setLoading(false)
+      })
+    }
+
+    return () => { cancelled = true }
   }, [shape]) // eslint-disable-line react-hooks/exhaustive-deps
 
   /* ── Effect 3: Metal / color mutation (no GLB reload) ── */
@@ -433,11 +456,23 @@ export default function ConfiguratorPage() {
           <div className={styles.configHeader}>
             <p className={styles.eyebrow}>Compose Your Piece</p>
             <h1 className={styles.configTitle}>The <em>Arcana</em> Pendant</h1>
+            <p className={styles.seriesTag}>Birthstone Series</p>
           </div>
 
           {/* Step 1 — Shape */}
           <section className={styles.step}>
-            <p className={styles.stepLabel}>01 — Shape</p>
+            <div className={styles.stepHeader}>
+              <div className={styles.stepTitleRow}>
+                <p className={styles.stepLabel}>01 — Shape</p>
+                <span className={styles.tooltipWrap}>
+                  <span className={styles.tooltipIcon} aria-label="About shape">?</span>
+                  <span className={styles.tooltip} role="tooltip">
+                    The foundation of your piece. The <strong>Square</strong> offers clean architectural lines and bold geometry. The <strong>Circle</strong> is a symbol of continuity — a loop with no beginning or end.
+                  </span>
+                </span>
+              </div>
+              <span className={styles.stepLine} aria-hidden="true" />
+            </div>
             <div className={styles.shapeGrid}>
               {(['square', 'circle'] as Shape[]).map(s => (
                 <button
@@ -446,9 +481,11 @@ export default function ConfiguratorPage() {
                   onClick={() => setShape(s)}
                   aria-pressed={shape === s}
                 >
-                  <span className={styles.shapeIcon} aria-hidden="true">
-                    {s === 'square' ? '▪' : '●'}
-                  </span>
+                  <span
+                    className={styles.shapeIcon}
+                    aria-hidden="true"
+                    style={{ borderRadius: s === 'circle' ? '50%' : '2px' }}
+                  />
                   <span className={styles.shapeName}>
                     {s.charAt(0).toUpperCase() + s.slice(1)}
                   </span>
@@ -459,7 +496,18 @@ export default function ConfiguratorPage() {
 
           {/* Step 2 — Base Metal */}
           <section className={styles.step}>
-            <p className={styles.stepLabel}>02 — Base Metal</p>
+            <div className={styles.stepHeader}>
+              <div className={styles.stepTitleRow}>
+                <p className={styles.stepLabel}>02 — Base Metal</p>
+                <span className={styles.tooltipWrap}>
+                  <span className={styles.tooltipIcon} aria-label="About base metal">?</span>
+                  <span className={styles.tooltip} role="tooltip">
+                    The core material of your pendant. <strong>Steel</strong> is modern and resilient. <strong>Silver</strong> is classic and refined. <strong>10K Gold</strong> is 41.7% pure gold — durable for daily wear. <strong>18K Gold</strong> is 75% pure — the mark of a true heirloom.
+                  </span>
+                </span>
+              </div>
+              <span className={styles.stepLine} aria-hidden="true" />
+            </div>
             <div className={styles.optionRow}>
               {(['steel', 'silver', '10k', '18k'] as Metal[]).map(m => (
                 <button
@@ -476,7 +524,18 @@ export default function ConfiguratorPage() {
 
           {/* Step 3 — Metal Color */}
           <section className={`${styles.step} ${metal === 'steel' ? styles.stepDisabled : ''}`}>
-            <p className={styles.stepLabel}>03 — Metal Color</p>
+            <div className={styles.stepHeader}>
+              <div className={styles.stepTitleRow}>
+                <p className={styles.stepLabel}>03 — Metal Color</p>
+                <span className={styles.tooltipWrap}>
+                  <span className={styles.tooltipIcon} aria-label="About metal color">?</span>
+                  <span className={styles.tooltip} role="tooltip">
+                    The finish of your pendant's surface. <strong>White</strong> has a cool, platinum-like tone. <strong>Gold</strong> carries classic warmth. <strong>Rose</strong> blends copper's blush with gold's richness. Steel pieces are finished in their natural gunmetal tone.
+                  </span>
+                </span>
+              </div>
+              <span className={styles.stepLine} aria-hidden="true" />
+            </div>
             <div className={styles.colorSwatches}>
               {(['white', 'gold', 'rose'] as MetalColor[]).map(c => (
                 <button
@@ -496,7 +555,18 @@ export default function ConfiguratorPage() {
 
           {/* Step 4 — Birthstone */}
           <section className={styles.step}>
-            <p className={styles.stepLabel}>04 — Birthstone</p>
+            <div className={styles.stepHeader}>
+              <div className={styles.stepTitleRow}>
+                <p className={styles.stepLabel}>04 — Birthstone</p>
+                <span className={styles.tooltipWrap}>
+                  <span className={styles.tooltipIcon} aria-label="About birthstone">?</span>
+                  <span className={styles.tooltip} role="tooltip">
+                    Each month carries a gemstone chosen across centuries for its beauty and meaning. Select a stone for your birth month, a loved one's, or any date that holds personal significance. Every stone is hand-set by our artisans.
+                  </span>
+                </span>
+              </div>
+              <span className={styles.stepLine} aria-hidden="true" />
+            </div>
             <div className={styles.stoneGrid} role="group" aria-label="Select birthstone by month">
               {MONTH_NAMES.map((month, i) => (
                 <button

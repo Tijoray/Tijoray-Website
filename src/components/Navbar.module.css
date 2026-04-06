@@ -204,7 +204,6 @@
 .linksClosing li:nth-child(2) { animation-delay: 0.04s !important; }
 .linksClosing li:nth-child(3) { animation-delay: 0.08s !important; }
 .linksClosing li:nth-child(4) { animation-delay: 0.12s !important; }
-.linksClosing li:nth-child(5) { animation-delay: 0.16s !important; }
 
 .mobileLinks {
   list-style: none;
@@ -225,7 +224,6 @@
 .mobileLinks li:nth-child(2) { animation-delay: 0.18s; }
 .mobileLinks li:nth-child(3) { animation-delay: 0.26s; }
 .mobileLinks li:nth-child(4) { animation-delay: 0.34s; }
-.mobileLinks li:nth-child(5) { animation-delay: 0.42s; }
 
 .mobileLinks a {
   font-family: var(--font-serif);
