@@ -1,0 +1,494 @@
+.page {
+  background: var(--cream);
+  min-height: 100vh;
+  padding-top: 80px;
+}
+
+/* ── Split layout ── */
+.split {
+  display: grid;
+  grid-template-columns: 55fr 45fr;
+  min-height: calc(100vh - 80px);
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/* ── Canvas panel (left, sticky) ── */
+.canvasPanel {
+  position: sticky;
+  top: 80px;
+  height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 32px;
+  background: var(--cream-warm);
+}
+
+.canvasWrap {
+  position: relative;
+  width: min(74vh, 62vw);
+  height: min(74vh, 62vw);
+}
+
+.canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Loading overlay */
+.loadingOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: rgba(239, 232, 222, 0.88);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loadingSpinner {
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid var(--border-soft);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+/* No-shape prompt */
+.canvasPrompt {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.canvasPrompt p {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+.orbitHint {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ── Config panel (right, scrollable) ── */
+.configPanel {
+  padding: 64px 56px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+  border-left: 1px solid var(--border-soft);
+  min-height: calc(100vh - 80px);
+}
+
+/* Header */
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--rose);
+  margin-bottom: 14px;
+}
+
+.configTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(34px, 3.5vw, 52px);
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+.configTitle em {
+  font-style: italic;
+  color: var(--rose);
+}
+
+/* ── Steps ── */
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: opacity 0.3s;
+}
+
+.stepDisabled {
+  opacity: 0.38;
+  pointer-events: none;
+}
+
+.stepLabel {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ── Shape buttons ── */
+.shapeGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.shapeBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 26px 16px;
+  background: var(--cream-warm);
+  border: 1px solid var(--border-soft);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.25s, background 0.25s;
+}
+
+.shapeBtn.active {
+  border-color: var(--gold);
+  background: rgba(191, 161, 95, 0.07);
+}
+
+.shapeIcon {
+  font-size: 24px;
+  line-height: 1;
+  color: var(--ink-mid);
+}
+
+.shapeName {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+}
+
+/* ── Metal option pills ── */
+.optionRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.optionBtn {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  background: transparent;
+  border: 1px solid var(--border-soft);
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: border-color 0.25s, color 0.25s, background 0.25s;
+}
+
+.optionBtn.active {
+  border-color: var(--gold);
+  color: var(--ink);
+  background: rgba(191, 161, 95, 0.07);
+}
+
+.optionBtn:hover:not(.active) {
+  border-color: var(--ink-mid);
+  color: var(--ink);
+}
+
+/* ── Metal color swatches ── */
+.colorSwatches {
+  display: flex;
+  gap: 24px;
+}
+
+.swatchBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.swatchCircle {
+  display: block;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--swatch-color);
+  border: 2.5px solid transparent;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition: border-color 0.2s, outline-color 0.2s, transform 0.2s;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.14);
+}
+
+.swatchBtn.active .swatchCircle {
+  border-color: var(--gold);
+  outline-color: rgba(191, 161, 95, 0.35);
+  transform: scale(1.12);
+}
+
+.swatchLabel {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ── Birthstone grid (6×2) ── */
+.stoneGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+
+.stoneBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 4px;
+  background: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.stoneBtn.active {
+  border-color: var(--gold);
+  background: rgba(191, 161, 95, 0.06);
+}
+
+.stoneBtn:hover:not(.active) {
+  background: var(--cream-warm);
+}
+
+.gemSwatch {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--gem-color);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.18);
+  flex-shrink: 0;
+}
+
+.monthAbbr {
+  font-family: var(--font-sans);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  line-height: 1;
+}
+
+.stoneName {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ink-mid);
+}
+
+/* ── Price & CTA ── */
+.priceBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-soft);
+  margin-top: auto;
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.priceLabel {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.priceValue {
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 4vw, 52px);
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.specLine {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.ctaBtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  align-self: flex-start;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(245, 240, 232, 0.5);
+  background: rgba(74, 35, 38, 0.45);
+  border: none;
+  padding: 18px 36px;
+  cursor: not-allowed;
+}
+
+.ctaBadge {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  background: rgba(191, 161, 95, 0.18);
+  padding: 3px 8px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.ctaSecondary {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--rose);
+  text-decoration: none;
+  transition: opacity 0.3s;
+  align-self: flex-start;
+}
+
+.ctaSecondary:hover {
+  opacity: 0.7;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+  .configPanel {
+    padding: 48px 36px 64px;
+  }
+
+  .canvasWrap {
+    width: min(52vh, 44vw);
+    height: min(52vh, 44vw);
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding-top: 70px;
+  }
+
+  .split {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    min-height: unset;
+  }
+
+  .canvasPanel {
+    position: static;
+    height: auto;
+    padding: 32px 20px 20px;
+  }
+
+  .canvasWrap {
+    width: min(82vw, 400px);
+    height: min(82vw, 400px);
+  }
+
+  .configPanel {
+    padding: 36px 20px 64px;
+    border-left: none;
+    border-top: 1px solid var(--border-soft);
+    min-height: unset;
+    gap: 36px;
+  }
+
+  .stoneGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .ctaBtn {
+    align-self: stretch;
+    justify-content: center;
+  }
+
+  .ctaSecondary {
+    align-self: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .shapeGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .optionRow {
+    gap: 6px;
+  }
+
+  .optionBtn {
+    font-size: 10px;
+    padding: 9px 12px;
+  }
+
+  .stoneGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+  }
+}

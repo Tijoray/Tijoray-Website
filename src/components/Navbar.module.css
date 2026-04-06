@@ -1,0 +1,281 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 56px;
+  transition: background 0.45s, padding 0.4s, border-color 0.45s;
+}
+
+/* Over cream sections — frosted cream glass */
+.navbar:global(.frosted) {
+  padding: 18px 56px;
+  background: rgba(247, 247, 242, 0.93);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+/* Inside the dark scroll-story section */
+.navbar:global(.in-dark) {
+  padding: 18px 56px;
+  background: rgba(17, 17, 17, 0.93);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(191, 161, 95, 0.12);
+}
+
+/* --- Logo --- */
+.logo img {
+  height: 36px;
+  width: auto;
+  filter: brightness(0);
+  opacity: 0.85;
+  transition: filter 0.45s, opacity 0.45s;
+}
+
+.navbar:global(.in-dark) .logo img {
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+/* --- Links --- */
+.links {
+  display: flex;
+  gap: 44px;
+  list-style: none;
+}
+
+.links a {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.links a:hover {
+  color: var(--ink);
+}
+
+.navbar:global(.in-dark) .links a {
+  color: rgba(245, 240, 232, 0.75);
+}
+
+.navbar:global(.in-dark) .links a:hover {
+  color: var(--text-light);
+}
+
+/* --- CTA button --- */
+.cta {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--burgundy);
+  background: transparent;
+  border: 1px solid rgba(74, 35, 38, 0.38);
+  padding: 11px 26px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.cta:hover {
+  background: var(--burgundy);
+  color: var(--cream);
+  border-color: var(--burgundy);
+}
+
+.navbar:global(.in-dark) .cta {
+  color: var(--gold);
+  border-color: rgba(191, 161, 95, 0.42);
+}
+
+.navbar:global(.in-dark) .cta:hover {
+  background: var(--gold);
+  color: var(--dark-story);
+  border-color: var(--gold);
+}
+
+/* Hamburger — only visible on mobile */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 301;
+}
+
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 1.5px;
+  background: var(--ink);
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+/* When navbar is in-dark, bars are white */
+:global(.in-dark) .hamburger span,
+:global([class*="in-dark"]) .hamburger span {
+  background: var(--text-light);
+}
+
+.barOpen { /* applied to all bars when open */ }
+.barTop.barOpen  { transform: translateY(6.5px) rotate(45deg); }
+.barMid.barOpen  { opacity: 0; }
+.barBot.barOpen  { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* Close button pinned to top-right of overlay */
+.overlayClose {
+  position: absolute;
+  top: 28px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 302;
+}
+
+.overlayClose span {
+  display: block;
+  width: 24px;
+  height: 1.5px;
+  background: var(--text-light);
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes overlayOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-12px); }
+}
+
+@keyframes linkIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes linkOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(12px); }
+}
+
+/* Full-screen overlay */
+.mobileOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 8, 7, 0.97);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: overlayIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.overlayClosing {
+  animation: overlayOut 0.26s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
+}
+
+.linksClosing li {
+  animation: linkOut 0.2s ease forwards !important;
+}
+
+.linksClosing li:nth-child(1) { animation-delay: 0s !important; }
+.linksClosing li:nth-child(2) { animation-delay: 0.04s !important; }
+.linksClosing li:nth-child(3) { animation-delay: 0.08s !important; }
+.linksClosing li:nth-child(4) { animation-delay: 0.12s !important; }
+.linksClosing li:nth-child(5) { animation-delay: 0.16s !important; }
+
+.mobileLinks {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 48px;
+  text-align: center;
+}
+
+.mobileLinks li {
+  opacity: 0;
+  animation: linkIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.mobileLinks li:nth-child(1) { animation-delay: 0.10s; }
+.mobileLinks li:nth-child(2) { animation-delay: 0.18s; }
+.mobileLinks li:nth-child(3) { animation-delay: 0.26s; }
+.mobileLinks li:nth-child(4) { animation-delay: 0.34s; }
+.mobileLinks li:nth-child(5) { animation-delay: 0.42s; }
+
+.mobileLinks a {
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 8vw, 56px);
+  font-weight: 300;
+  letter-spacing: 2px;
+  color: var(--text-light);
+  text-decoration: none;
+  opacity: 0.9;
+  transition: color 0.3s, opacity 0.3s;
+}
+
+.mobileLinks a:hover {
+  color: var(--gold-soft);
+  opacity: 1;
+}
+
+.mobileCta {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid rgba(191,161,95,0.4);
+  padding: 16px 40px;
+  text-decoration: none;
+  transition: background 0.3s, color 0.3s;
+}
+
+.mobileCta:hover {
+  background: var(--gold);
+  color: var(--dark-story);
+}
+
+@media (max-width: 900px) {
+  .navbar {
+    padding: 20px 24px;
+  }
+
+  .navbar:global(.frosted),
+  .navbar:global(.in-dark) {
+    padding: 14px 24px;
+  }
+
+  .links {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+}

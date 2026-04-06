@@ -1,0 +1,124 @@
+.footer {
+  background: #0a0a0a;
+  padding: 96px 56px 44px;
+  border-top: 1px solid rgba(191, 161, 95, 0.1);
+}
+
+.footerGrid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 64px;
+  margin-bottom: 80px;
+}
+
+
+.footerLogo img {
+  height: 30px;
+  filter: brightness(0) invert(1);
+  opacity: 0.65;
+  margin-bottom: 24px;
+  display: block;
+}
+
+.footerTagline {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.65;
+  color: rgba(245, 240, 232, 0.75);
+  max-width: 260px;
+}
+
+.footerColHead {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 24px;
+}
+
+.footerLinks {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.footerLinks a {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(245, 240, 232, 0.75);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footerLinks a:hover {
+  color: var(--gold-soft);
+}
+
+.footerBottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footerCopy {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: rgba(245, 240, 232, 0.55);
+}
+
+.footerLegal {
+  display: flex;
+  gap: 32px;
+}
+
+.footerLegal a {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: rgba(245, 240, 232, 0.55);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footerLegal a:hover {
+  color: var(--gold);
+}
+
+@media (max-width: 900px) {
+  .footer {
+    padding: 64px 24px 32px;
+  }
+
+  .footerGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  .footerBottom {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .footerLinks a {
+    font-size: 14px;
+  }
+
+  .footerCopy,
+  .footerLegal a {
+    font-size: 11px;
+  }
+}

@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap');
+
+:root {
+  --cream:        #F7F7F2;
+  --cream-warm:   #EFE8DE;
+  --dark-story:   #111111;
+  --dark-surface: #181818;
+  --ink:          #1D1A19;
+  --ink-mid:      #4D4641;
+  --ink-soft:     rgba(29, 26, 25, 0.45);
+  --text-light:   #F5F0E8;
+  --text-muted:   rgba(245, 240, 232, 0.75);
+  --text-dim:     rgba(245, 240, 232, 0.55);
+  --rose:         #B97A6A;
+  --rose-deep:    #9A5F51;
+  --gold:         #BFA15F;
+  --gold-soft:    #D8C28A;
+  --burgundy:     #4A2326;
+  --burgundy-h:   #5D2C30;
+  --dark:         #1D1A19;
+  --onyx:         #0A0A0A;
+  --border-soft:  #D9D1C6;
+  --font-serif:   'Cormorant Garamond', Georgia, serif;
+  --font-sans:    'Montserrat', system-ui, sans-serif;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: rgba(185,122,106,0.22); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: opacity 0.4s !important; }
+}

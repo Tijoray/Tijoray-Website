@@ -1,0 +1,122 @@
+.features {
+  background: var(--cream);
+  padding: 80px 0;
+}
+
+.featuresInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 56px;
+}
+
+.featuresHeader {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.sectionEyebrow {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--rose);
+  margin-bottom: 18px;
+}
+
+.sectionTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1.15;
+}
+
+.sectionTitle em {
+  font-style: italic;
+  color: var(--rose);
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+.featureCard {
+  position: relative;
+  background: #E5D9CC;
+  padding: 48px 40px;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.featureCard.inView {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Top rose-to-gold line — faint always, bright on hover */
+.featureCard::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--rose) 50%, transparent 100%);
+  opacity: 0.2;
+  transition: opacity 0.4s;
+}
+
+.featureCard:hover::after {
+  opacity: 0.8;
+}
+
+.featureNum {
+  font-family: var(--font-serif);
+  font-size: 64px;
+  font-weight: 300;
+  color: rgba(185, 122, 106, 0.35);
+  line-height: 1;
+  margin-bottom: 20px;
+}
+
+.featureTitle {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 16px;
+  letter-spacing: 0.3px;
+}
+
+.featureBody {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.9;
+  color: var(--ink-mid);
+}
+
+@media (max-width: 900px) {
+  .featuresGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .featuresInner {
+    padding: 0 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sectionEyebrow {
+    font-size: 11px;
+  }
+
+  .featureBody {
+    font-size: 14px;
+  }
+}

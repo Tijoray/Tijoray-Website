@@ -1,0 +1,129 @@
+.ctaSection {
+  background: var(--cream-warm);
+  padding: 160px 56px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle grid pattern */
+.ctaSection::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(191, 161, 95, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(191, 161, 95, 0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+.ctaInner {
+  position: relative;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.ctaEyebrow {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--rose);
+  margin-bottom: 24px;
+}
+
+.ctaTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(52px, 7vw, 88px);
+  font-weight: 400;
+  line-height: 1.06;
+  color: #1D1A19;
+  margin-bottom: 28px;
+}
+
+.ctaTitle em {
+  font-style: italic;
+  color: var(--rose);
+}
+
+.ctaBody {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.9;
+  color: #4D4641;
+  margin-bottom: 52px;
+}
+
+.ctaBtns {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btnPrimary {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  background: #1D1A19;
+  border: none;
+  padding: 18px 44px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.btnPrimary:hover {
+  background: var(--burgundy);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 36px rgba(74, 35, 38, 0.28);
+}
+
+.btnSecondary {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #1D1A19;
+  background: transparent;
+  border: 1px solid rgba(29, 26, 25, 0.28);
+  padding: 18px 44px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s, border-color 0.3s;
+}
+
+.btnSecondary:hover {
+  color: var(--rose);
+  border-color: var(--rose);
+}
+
+@media (max-width: 900px) {
+  .ctaSection {
+    padding: 100px 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ctaEyebrow {
+    font-size: 11px;
+  }
+
+  .ctaBody {
+    font-size: 14px;
+  }
+
+  .btnPrimary,
+  .btnSecondary {
+    font-size: 11px;
+  }
+}

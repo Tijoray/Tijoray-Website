@@ -1,0 +1,457 @@
+.scrollStory {
+  position: relative;
+  height: 500vh;
+}
+
+.stickyStage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--dark-story);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stageGlow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 55% at 50% 50%, #1c100b 0%, var(--dark-story) 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── PENDANT CANVAS ────────────────────────────────────── */
+.videoWrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  /* Radial vignette — pendant stays sharp, chain fades at edges */
+  -webkit-mask-image: radial-gradient(
+    ellipse 80% 70% at 50% 62%,
+    black 45%,
+    rgba(0,0,0,0.5) 68%,
+    transparent 90%
+  );
+  mask-image: radial-gradient(
+    ellipse 80% 70% at 50% 62%,
+    black 45%,
+    rgba(0,0,0,0.5) 68%,
+    transparent 90%
+  );
+}
+
+.pendantCanvas {
+  height: 78vh;
+  width: auto;
+  max-width: 88vw;
+  display: block;
+  filter: drop-shadow(0 0 80px rgba(191, 161, 95, 0.18));
+}
+
+/* ── PENDANT CAPTION ───────────────────────────────────── */
+.pendantCaption {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 5;
+  white-space: nowrap;
+  opacity: 0;
+}
+
+.capEyebrow {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--rose);
+  margin-bottom: 10px;
+}
+
+.capTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(32px, 4.5vw, 56px);
+  font-weight: 300;
+  color: var(--text-light);
+  line-height: 1.15;
+}
+
+.capTitle em {
+  font-style: italic;
+  color: var(--gold-soft);
+}
+
+/* ── PHONE ─────────────────────────────────────────────── */
+.phoneAnchor {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.phoneMover {
+  perspective: 1100px;
+  will-change: transform;
+  position: relative;
+}
+
+.phoneWrap {
+  position: relative;
+  transform: translate(-50%, -50%);
+  transform-origin: 50% 100%;
+  height: 72vh;
+  width: calc(72vh * 0.463);
+  background: #EEE8DC;
+  border-radius: 52px;
+  filter: drop-shadow(0 40px 80px rgba(0, 0, 0, 0.7));
+}
+
+/* iPhone Dynamic Island */
+.phoneIsland {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30%;
+  height: 3%;
+  min-height: 13px;
+  background: #000;
+  border-radius: 100px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.phoneScreens {
+  position: absolute;
+  inset: 5px;
+  overflow: hidden;
+  border-radius: 48px;
+}
+
+.phoneScreen {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* ── LOADING BAR OVERLAY ───────────────────────────────── */
+/* Precisely positioned over the progress bar baked into Establishing Connection */
+.loadingBarWrap {
+  position: absolute;
+  /* top/left/right set in JS via positionLoadingBar() for pixel-perfect alignment */
+  height: 4px;
+  transform: translateY(-50%);
+  background: #DDD6CB;
+  border-radius: 2px;
+  overflow: hidden;
+  z-index: 6;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.loadingBarFill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: #4A2326;
+  border-radius: 2px;
+  transition: width 0s;
+}
+
+/* ── NFC PULSE ─────────────────────────────────────────── */
+.nfcPulse {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 13vh;
+  height: 13vh;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 8;
+}
+
+.nfcRing {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(191, 161, 95, 0.45);
+  animation: nfcExpand 2.2s ease-out infinite;
+}
+
+.nfcRing:nth-child(2) { animation-delay: 0.73s; }
+.nfcRing:nth-child(3) { animation-delay: 1.46s; }
+
+@keyframes nfcExpand {
+  0%   { transform: scale(1);   opacity: 0.55; }
+  100% { transform: scale(3.2); opacity: 0; }
+}
+
+/* ── CONNECTION ESTABLISHED FLASH ──────────────────────── */
+.establishFlash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 55% 45% at 50% 50%,
+    rgba(191, 161, 95, 0.22) 0%, transparent 68%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 6;
+}
+
+.establishFlash.pop {
+  animation: estFlash 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes estFlash {
+  0%   { opacity: 0; transform: scale(0.7); }
+  18%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.2); }
+}
+
+/* ── CONNECTED PHASE TEXT PANEL ─────────────────────────── */
+.connTextPanel {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 320px;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.connEyebrow {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--rose);
+  margin-bottom: 18px;
+}
+
+.connRule {
+  width: 36px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--rose), var(--gold));
+  margin-bottom: 28px;
+}
+
+.connHeadline {
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 4vw, 54px);
+  font-weight: 300;
+  line-height: 1.1;
+  color: var(--text-light);
+  margin-bottom: 32px;
+}
+
+.connHeadline em {
+  font-style: italic;
+  color: var(--gold-soft);
+}
+
+.connList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin-bottom: 36px;
+}
+
+.connList li {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.connListBar {
+  flex-shrink: 0;
+  width: 1px;
+  height: 36px;
+  background: linear-gradient(to bottom, var(--rose), transparent);
+  margin-top: 3px;
+}
+
+.connList strong {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-light);
+  letter-spacing: 0.4px;
+  margin-bottom: 4px;
+}
+
+.connList span {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(245, 240, 232, 0.75);
+  line-height: 1.65;
+}
+
+/* Status badge */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 18px;
+  border: 1px solid var(--border-soft);
+  background: rgba(191, 161, 95, 0.05);
+}
+
+.badgeLabel {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+}
+
+.checkIcon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* ── CHAPTER DOTS ──────────────────────────────────────── */
+.chapterNav {
+  position: absolute;
+  right: 44px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.chDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(245, 240, 232, 0.2);
+  transition: background 0.4s, transform 0.4s;
+  cursor: pointer;
+  padding: 0;
+  border: none;
+}
+
+.chDot.active {
+  background: var(--rose);
+  transform: scale(1.5);
+}
+
+/* ── RESPONSIVE ────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .scrollStory {
+    height: 500vh;
+  }
+
+  .pendantCanvas {
+    height: 70vh;
+    max-width: 100vw;
+  }
+
+  /* Tighter vignette on mobile */
+  .videoWrap {
+    -webkit-mask-image: radial-gradient(
+      ellipse 90% 55% at 50% 68%,
+      black 40%,
+      rgba(0,0,0,0.5) 65%,
+      transparent 88%
+    );
+    mask-image: radial-gradient(
+      ellipse 90% 55% at 50% 68%,
+      black 40%,
+      rgba(0,0,0,0.5) 65%,
+      transparent 88%
+    );
+  }
+
+  /* Phone: 48vh tall, centered — leaves 58vh bottom edge when risen to 34vh center */
+  .phoneWrap {
+    height: 48vh;
+    width: calc(48vh * 0.463);
+    border-radius: 34px;
+  }
+
+  .phoneIsland {
+    top: 8px;
+    min-height: 9px;
+  }
+
+  .phoneScreens {
+    inset: 4px;
+    border-radius: 31px;
+  }
+
+  /* Text panel: left-aligned, sits below phone, JS anchors at 60vh from top */
+  .connTextPanel {
+    width: auto;
+    left: 24px;
+    right: 24px;
+    top: 50%;
+  }
+
+  .connHeadline {
+    font-size: clamp(26px, 6.5vw, 38px);
+    margin-bottom: 16px;
+  }
+
+  .connList {
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .connList strong {
+    font-size: 12px;
+  }
+
+  .connList span {
+    font-size: 11px;
+  }
+
+  .connEyebrow {
+    margin-bottom: 8px;
+  }
+
+  .connRule {
+    margin-bottom: 12px;
+  }
+
+  .chapterNav {
+    display: none;
+  }
+
+  .pendantCaption {
+    top: 72px;
+  }
+
+  .capTitle {
+    font-size: clamp(20px, 5.5vw, 32px);
+  }
+}
