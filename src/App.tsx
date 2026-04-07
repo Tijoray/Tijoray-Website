@@ -10,6 +10,7 @@ import AboutPage from './pages/AboutPage'
 import ContactPage from './pages/ContactPage'
 import ConfiguratorPage from './pages/ConfiguratorPage'
 import TechnologyPage from './pages/TechnologyPage'
+import CollectionPage from './pages/CollectionPage'
 
 function HomePage() {
   useEffect(() => {
@@ -55,6 +56,7 @@ export default function App() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/build" element={<ConfiguratorPage />} />
         <Route path="/technology" element={<TechnologyPage />} />
+        <Route path="/collection" element={<CollectionPage />} />
       </Routes>
       <Footer />
     </>
