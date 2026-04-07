@@ -606,20 +606,9 @@
     align-self: center;
   }
 
-  /* Tooltip: drop below icon, align left edge, constrain to viewport */
-  .tooltip {
-    left: 0;
-    right: auto;
-    top: calc(100% + 10px);
-    transform: none;
-    width: min(260px, calc(100vw - 48px));
-  }
-
-  /* Larger touch target for tooltip icon */
-  .tooltipIcon {
-    width: 28px;
-    height: 28px;
-    font-size: 11px;
+  /* Hide tooltips on touch/mobile — they require hover and cause overflow */
+  .tooltipWrap {
+    display: none;
   }
 
   /* Gem swatches: slightly larger on touch */
