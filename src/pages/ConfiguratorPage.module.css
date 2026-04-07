@@ -606,10 +606,10 @@
     align-self: center;
   }
 
-  /* Tooltip: reposition below icon and constrain width on mobile */
+  /* Tooltip: drop below icon, align left edge, constrain to viewport */
   .tooltip {
-    left: auto;
-    right: 0;
+    left: 0;
+    right: auto;
     top: calc(100% + 10px);
     transform: none;
     width: min(260px, calc(100vw - 48px));
