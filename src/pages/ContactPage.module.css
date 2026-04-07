@@ -19,7 +19,7 @@
 /* ── Left ── */
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -73,11 +73,11 @@
 
 .detailLabel {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--ink-soft);
+  color: var(--ink-mid);
   flex-shrink: 0;
 }
 
@@ -126,7 +126,7 @@ a.detailValue:hover {
 
 .label {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 2.5px;
   text-transform: uppercase;
@@ -157,6 +157,19 @@ a.detailValue:hover {
 .input:focus,
 .textarea:focus {
   border-bottom-color: var(--rose);
+}
+
+.inputError {
+  border-bottom-color: var(--rose) !important;
+}
+
+.errorMsg {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--rose);
+  margin-top: 6px;
+  line-height: 1.4;
 }
 
 .textarea {

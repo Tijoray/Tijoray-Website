@@ -11,6 +11,7 @@ import ContactPage from './pages/ContactPage'
 import ConfiguratorPage from './pages/ConfiguratorPage'
 import TechnologyPage from './pages/TechnologyPage'
 import CollectionPage from './pages/CollectionPage'
+import NotFoundPage from './pages/NotFoundPage'
 
 function HomePage() {
   useEffect(() => {
@@ -26,12 +27,12 @@ function HomePage() {
   }, [])
 
   return (
-    <>
+    <main>
       <Hero />
       <ScrollStory />
       <Features />
       <CtaSection />
-    </>
+    </main>
   )
 }
 
@@ -57,6 +58,7 @@ export default function App() {
         <Route path="/build" element={<ConfiguratorPage />} />
         <Route path="/technology" element={<TechnologyPage />} />
         <Route path="/collection" element={<CollectionPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer />
     </>

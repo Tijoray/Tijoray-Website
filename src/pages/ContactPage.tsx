@@ -4,13 +4,36 @@ import styles from './ContactPage.module.css'
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false)
   const [form, setForm] = useState({ name: '', email: '', message: '' })
+  const [errors, setErrors] = useState<{ name?: string; email?: string; message?: string }>({})
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    setForm(f => ({ ...f, [e.target.name]: e.target.value }))
+    const { name, value } = e.target
+    setForm(f => ({ ...f, [name]: value }))
+    // Clear individual error as user types
+    if (errors[name as keyof typeof errors]) {
+      setErrors(prev => ({ ...prev, [name]: undefined }))
+    }
+  }
+
+  function validate() {
+    const errs: typeof errors = {}
+    if (!form.name.trim()) errs.name = 'Please enter your name.'
+    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      errs.email = 'Please enter a valid email address.'
+    }
+    if (!form.message.trim()) errs.message = 'Please tell us how we can help.'
+    return errs
   }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    const errs = validate()
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs)
+      return
+    }
+    // TODO: connect to a backend service (Formspree, EmailJS, or a serverless function)
+    // before going live — currently the message is not transmitted anywhere.
     setSubmitted(true)
   }
 
@@ -82,13 +105,15 @@ export default function ContactPage() {
                   id="name"
                   name="name"
                   type="text"
-                  className={styles.input}
+                  className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
                   placeholder="Your name"
                   value={form.name}
                   onChange={handleChange}
-                  required
                   autoComplete="name"
+                  aria-describedby={errors.name ? 'name-error' : undefined}
+                  aria-invalid={!!errors.name}
                 />
+                {errors.name && <p id="name-error" className={styles.errorMsg} role="alert">{errors.name}</p>}
               </div>
               <div className={styles.field}>
                 <label className={styles.label} htmlFor="email">Email Address</label>
@@ -96,26 +121,30 @@ export default function ContactPage() {
                   id="email"
                   name="email"
                   type="email"
-                  className={styles.input}
+                  className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
                   placeholder="your@email.com"
                   value={form.email}
                   onChange={handleChange}
-                  required
                   autoComplete="email"
+                  aria-describedby={errors.email ? 'email-error' : undefined}
+                  aria-invalid={!!errors.email}
                 />
+                {errors.email && <p id="email-error" className={styles.errorMsg} role="alert">{errors.email}</p>}
               </div>
               <div className={styles.field}>
                 <label className={styles.label} htmlFor="message">How may our Atelier assist you today?</label>
                 <textarea
                   id="message"
                   name="message"
-                  className={styles.textarea}
+                  className={`${styles.textarea} ${errors.message ? styles.inputError : ''}`}
                   placeholder="Tell us about your enquiry…"
                   rows={6}
                   value={form.message}
                   onChange={handleChange}
-                  required
+                  aria-describedby={errors.message ? 'message-error' : undefined}
+                  aria-invalid={!!errors.message}
                 />
+                {errors.message && <p id="message-error" className={styles.errorMsg} role="alert">{errors.message}</p>}
               </div>
               <button type="submit" className={styles.submit}>
                 Send to the Atelier

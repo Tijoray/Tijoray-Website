@@ -157,7 +157,7 @@
 
 .scrollCue span {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 3px;
   text-transform: uppercase;
   color: var(--ink-mid);

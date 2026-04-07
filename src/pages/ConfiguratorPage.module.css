@@ -52,7 +52,7 @@
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 2.5px;
   text-transform: uppercase;
@@ -92,11 +92,11 @@
 
 .orbitHint {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 500;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: var(--ink-soft);
+  color: var(--ink-mid);
 }
 
 /* ── Config panel (right, sticky + internal scroll) ── */
@@ -115,7 +115,7 @@
 /* Header */
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -151,7 +151,7 @@
 
 .stepLabel {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -271,7 +271,6 @@
   background: var(--cream-warm);
   border: 1px solid var(--border-soft);
   cursor: pointer;
-  outline: none;
   transition: border-color 0.25s, background 0.25s;
 }
 
@@ -290,7 +289,7 @@
 
 .shapeName {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -377,7 +376,7 @@
 
 .swatchLabel {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 1.5px;
   text-transform: uppercase;
@@ -474,11 +473,11 @@
 
 .priceLabel {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 2.5px;
   text-transform: uppercase;
-  color: var(--ink-soft);
+  color: var(--ink-mid);
 }
 
 .priceValue {
@@ -494,7 +493,7 @@
   font-size: 11px;
   font-weight: 400;
   letter-spacing: 0.5px;
-  color: var(--ink-soft);
+  color: var(--ink-mid);
   line-height: 1.6;
 }
 
@@ -632,7 +631,7 @@
   }
 
   .optionBtn {
-    font-size: 10px;
+    font-size: 11px;
     padding: 9px 12px;
   }
 

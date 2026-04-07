@@ -6,7 +6,7 @@ const NAV_LINKS = [
   { label: 'Collection', to: '/collection' },
   { label: 'Technology', to: '/technology' },
   { label: 'Atelier',    to: '/about' },
-  { label: 'Journal',    to: '#' },
+  { label: 'Journal',    to: null }, // coming soon
 ]
 
 export default function Navbar() {
@@ -72,7 +72,19 @@ export default function Navbar() {
         <ul className={styles.links}>
           {NAV_LINKS.map(({ label, to }) => (
             <li key={label}>
-              <Link to={to}>{label}</Link>
+              {to ? (
+                <Link
+                  to={to}
+                  aria-current={pathname === to ? 'page' : undefined}
+                >
+                  {label}
+                </Link>
+              ) : (
+                <span className={styles.linkSoon}>
+                  {label}
+                  <span className={styles.soonBadge}>Soon</span>
+                </span>
+              )}
             </li>
           ))}
         </ul>
@@ -107,7 +119,13 @@ export default function Navbar() {
           <ul className={`${styles.mobileLinks} ${closing ? styles.linksClosing : ''}`} onClick={e => e.stopPropagation()}>
             {NAV_LINKS.map(({ label, to }) => (
               <li key={label}>
-                <Link to={to} onClick={closeMenu}>{label}</Link>
+                {to ? (
+                  <Link to={to} onClick={closeMenu} aria-current={pathname === to ? 'page' : undefined}>
+                    {label}
+                  </Link>
+                ) : (
+                  <span className={styles.mobileLinkSoon}>{label}</span>
+                )}
               </li>
             ))}
           </ul>

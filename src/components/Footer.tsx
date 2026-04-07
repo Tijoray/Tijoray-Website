@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import styles from './Footer.module.css'
 
 export default function Footer() {
@@ -17,29 +18,29 @@ export default function Footer() {
         <div>
           <p className={styles.footerColHead}>Collection</p>
           <ul className={styles.footerLinks}>
-            <li><a href="#">Necklaces</a></li>
-            <li><a href="#">Bracelets</a></li>
-            <li><a href="#">Build Your Arcana</a></li>
-            <li><a href="#">Gift a Legacy</a></li>
+            <li><Link to="/collection">Pendants</Link></li>
+            <li><Link to="/collection">Bracelets</Link></li>
+            <li><Link to="/build">Build Your Arcana</Link></li>
+            <li><span className={styles.linkPlaceholder}>Gift a Legacy</span></li>
           </ul>
         </div>
 
         <div>
           <p className={styles.footerColHead}>Atelier</p>
           <ul className={styles.footerLinks}>
-            <li><a href="#">Our Story</a></li>
-            <li><a href="#">The Technology</a></li>
-            <li><a href="#">Craftsmanship</a></li>
-            <li><a href="#">Journal</a></li>
+            <li><Link to="/about">Our Story</Link></li>
+            <li><Link to="/technology">The Technology</Link></li>
+            <li><span className={styles.linkPlaceholder}>Craftsmanship</span></li>
+            <li><span className={styles.linkPlaceholder}>Journal</span></li>
           </ul>
         </div>
 
         <div>
           <p className={styles.footerColHead}>Support</p>
           <ul className={styles.footerLinks}>
-            <li><a href="#">Contact Us</a></li>
-            <li><a href="#">Care Guide</a></li>
-            <li><a href="#">FAQ</a></li>
+            <li><Link to="/contact">Contact Us</Link></li>
+            <li><span className={styles.linkPlaceholder}>Care Guide</span></li>
+            <li><span className={styles.linkPlaceholder}>FAQ</span></li>
             <li><a href="mailto:curator@atelierarcana.com">curator@atelierarcana.com</a></li>
           </ul>
         </div>

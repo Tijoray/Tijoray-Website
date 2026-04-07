@@ -35,6 +35,13 @@ body {
 }
 ::selection { background: rgba(185,122,106,0.22); }
 
+/* Global keyboard focus indicator */
+*:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: opacity 0.4s !important; }
 }

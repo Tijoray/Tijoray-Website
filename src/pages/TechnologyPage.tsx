@@ -77,6 +77,7 @@ export default function TechnologyPage() {
 
   // Scroll-driven image reveal — image starts at top and slides up as user scrolls
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     function onScroll() {
       scrollImgs.current.forEach((img) => {
         if (!img) return
@@ -178,6 +179,7 @@ export default function TechnologyPage() {
                       loop
                       muted
                       playsInline
+                      aria-label="Arcana memory feature — a personalised message revealing on first tap"
                     >
                       <source src="/assets/memory-page.mp4" type="video/mp4" />
                       <source src="/assets/memory-page.mov" type="video/quicktime" />

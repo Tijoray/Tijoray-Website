@@ -5,7 +5,7 @@
 /* ── Shared utilities ── */
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -87,7 +87,7 @@
 
 .collectionNum {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -167,6 +167,8 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  text-decoration: none;
+  color: inherit;
   transition: border-color 0.3s, transform 0.35s;
 }
 
@@ -252,13 +254,12 @@
 
 .cardCollection {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
   color: var(--ink-mid);
   margin-bottom: 10px;
-  opacity: 0.6;
 }
 
 .cardName {
@@ -300,7 +301,6 @@
   letter-spacing: 2.5px;
   text-transform: uppercase;
   color: var(--ink-mid);
-  opacity: 0.6;
 }
 
 .priceNum {

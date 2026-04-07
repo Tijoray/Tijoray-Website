@@ -83,7 +83,8 @@ export default function CollectionPage() {
           <div className={styles.productGrid}>
 
             {/* Pendant */}
-            <article
+            <Link
+              to="/build"
               className={`${styles.productCard} ${styles.fadeUp}`}
               ref={ref(1) as any}
             >
@@ -111,10 +112,10 @@ export default function CollectionPage() {
                     <span className={styles.priceFrom}>From</span>
                     <span className={styles.priceNum}>$1,299</span>
                   </div>
-                  <Link to="/build" className={styles.cardCta}>Build Your Piece</Link>
+                  <span className={styles.cardCta}>Build Your Piece</span>
                 </div>
               </div>
-            </article>
+            </Link>
 
             {/* Bracelet — coming soon */}
             <article
