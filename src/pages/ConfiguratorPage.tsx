@@ -301,6 +301,9 @@ export default function ConfiguratorPage() {
         (pendantBox.min.z + pendantBox.max.z) / 2,
       )
       const alignOffset = chainBottomCenter.clone().sub(pendantTopCenter)
+      // Push pendant up so the bail ring overlaps the bottom chain link
+      // rather than sitting flush below it (~20% of pendant height)
+      alignOffset.y += pendantBox.getSize(new THREE.Vector3()).y * 0.20
       pendantModel.position.add(alignOffset)
       pendantModel.updateMatrixWorld(true)
 
