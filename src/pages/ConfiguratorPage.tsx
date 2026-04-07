@@ -45,17 +45,47 @@ const ROUGHNESS: Record<Metal, number> = {
 
 const STEEL_COLOR = '#8A8A8A'
 
+// UI swatch colors (approximate visual representation)
 const BIRTHSTONE_COLORS = [
-  '#9B1B30', '#9B59B6', '#7EC8C8', '#E8F4F8',
+  '#9B1B30', '#9B59B6', '#7EC8C8', '#F2F2FF',
   '#2ECC71', '#D4AF8A', '#CC0000', '#93C572',
   '#154EC1', '#FF6EB4', '#E4A800', '#3BC4C4',
 ]
 
 const BIRTHSTONE_NAMES = [
-  'Garnet', 'Amethyst', 'Aquamarine', 'Diamond',
+  'Garnet', 'Amethyst', 'Aquamarine', 'White Topaz',
   'Emerald', 'Pearl', 'Ruby', 'Peridot',
   'Sapphire', 'Pink Tourmaline', 'Citrine', 'Turquoise',
 ]
+
+// Per-gem physical material properties for realistic rendering.
+// transmission + IOR + attenuation = subsurface color/clarity of real stones.
+const GEM_PROPS = [
+  // Garnet — deep red, high-RI, brilliant
+  { color: '#A01520', ior: 1.78, transmission: 0.70, thickness: 0.4, roughness: 0.02, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 5.0, attenuationColor: '#C02030', attenuationDistance: 1.0,  iridescence: 0, iridescenceIOR: 1.3 },
+  // Amethyst — purple quartz, clear
+  { color: '#8B3FBB', ior: 1.54, transmission: 0.88, thickness: 0.4, roughness: 0.01, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 4.5, attenuationColor: '#A855CC', attenuationDistance: 1.5,  iridescence: 0, iridescenceIOR: 1.3 },
+  // Aquamarine — pale blue beryl, very clear
+  { color: '#7ECFE0', ior: 1.57, transmission: 0.93, thickness: 0.4, roughness: 0.01, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 4.5, attenuationColor: '#A0E0EE', attenuationDistance: 3.0,  iridescence: 0, iridescenceIOR: 1.3 },
+  // White Topaz — colourless, crisp reflections
+  { color: '#E8EEFF', ior: 1.62, transmission: 0.88, thickness: 0.4, roughness: 0.01, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 4.0, attenuationColor: '#F0F2FF', attenuationDistance: 4.0,  iridescence: 0, iridescenceIOR: 1.3 },
+  // Emerald — rich green, slightly included
+  { color: '#22873A', ior: 1.58, transmission: 0.62, thickness: 0.4, roughness: 0.05, clearcoat: 1.0, clearcoatRoughness: 0.05, envMapIntensity: 4.5, attenuationColor: '#38A850', attenuationDistance: 0.8, iridescence: 0, iridescenceIOR: 1.3 },
+  // Pearl — opaque, iridescent nacre
+  { color: '#F5EFE0', ior: 1.53, transmission: 0.00, thickness: 0.5, roughness: 0.15, clearcoat: 0.7, clearcoatRoughness: 0.10, envMapIntensity: 3.0, attenuationColor: '#FFFFFF', attenuationDistance: 4.0,  iridescence: 0.90, iridescenceIOR: 1.5  },
+  // Ruby — deep red corundum, brilliant
+  { color: '#B80010', ior: 1.77, transmission: 0.68, thickness: 0.4, roughness: 0.02, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 5.0, attenuationColor: '#D81828', attenuationDistance: 1.0,  iridescence: 0, iridescenceIOR: 1.3 },
+  // Peridot — bright lime-green olivine
+  { color: '#7DC040', ior: 1.67, transmission: 0.85, thickness: 0.4, roughness: 0.02, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 4.5, attenuationColor: '#A8D868', attenuationDistance: 2.0,  iridescence: 0, iridescenceIOR: 1.3 },
+  // Sapphire — deep blue corundum, brilliant
+  { color: '#1840C0', ior: 1.77, transmission: 0.65, thickness: 0.4, roughness: 0.02, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 5.0, attenuationColor: '#2858E0', attenuationDistance: 1.2,  iridescence: 0, iridescenceIOR: 1.3 },
+  // Pink Tourmaline — warm pink, semi-transparent
+  { color: '#D85080', ior: 1.63, transmission: 0.80, thickness: 0.4, roughness: 0.02, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 4.5, attenuationColor: '#F078A8', attenuationDistance: 1.8,  iridescence: 0, iridescenceIOR: 1.3 },
+  // Citrine — warm golden quartz
+  { color: '#D4980A', ior: 1.54, transmission: 0.86, thickness: 0.4, roughness: 0.01, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 4.5, attenuationColor: '#F0B820', attenuationDistance: 2.0,  iridescence: 0, iridescenceIOR: 1.3 },
+  // Turquoise — opaque, waxy blue-green
+  { color: '#30AEAE', ior: 1.61, transmission: 0.00, thickness: 0.5, roughness: 0.35, clearcoat: 0.2, clearcoatRoughness: 0.30, envMapIntensity: 2.5, attenuationColor: '#FFFFFF', attenuationDistance: 4.0,  iridescence: 0, iridescenceIOR: 1.3 },
+] as const
 
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April',
@@ -63,10 +93,30 @@ const MONTH_NAMES = [
   'September', 'October', 'November', 'December',
 ]
 
-const BUILD_DURATION = 600 // ms
+const BUILD_DURATION  = 900 // ms — fade + drift animation
+const BUILD_DRIFT_Y   = -0.07 // world-units below final position at animation start
 
 /* ── Helpers ───────────────────────────────────────────── */
 function easeOutCubic(t: number) { return 1 - Math.pow(1 - Math.min(t, 1), 3) }
+
+function createGemMaterial(stoneIdx: number): THREE.MeshPhysicalMaterial {
+  const g = GEM_PROPS[stoneIdx]
+  return new THREE.MeshPhysicalMaterial({
+    color:               new THREE.Color(g.color),
+    ior:                 g.ior,
+    transmission:        g.transmission,
+    thickness:           g.thickness,
+    roughness:           g.roughness,
+    metalness:           0,
+    clearcoat:           g.clearcoat,
+    clearcoatRoughness:  g.clearcoatRoughness,
+    envMapIntensity:     g.envMapIntensity,
+    attenuationColor:    new THREE.Color(g.attenuationColor),
+    attenuationDistance: g.attenuationDistance,
+    iridescence:         g.iridescence,
+    iridescenceIOR:      g.iridescenceIOR,
+  })
+}
 
 export default function ConfiguratorPage() {
   /* ── State ── */
@@ -92,8 +142,8 @@ export default function ConfiguratorPage() {
   const bodyMatsRef     = useRef<THREE.MeshStandardMaterial[]>([])
 
   /* ── Build-in animation refs ── */
-  const buildStartRef = useRef<number | null>(null)
-  const targetScaleRef = useRef<number>(1)
+  const buildStartRef   = useRef<number | null>(null)
+  const pendantMatsRef  = useRef<THREE.Material[]>([]) // pendant-only mats for fade animation
 
   /* ── Interaction tracking for polar spring-back ── */
   const isInteractingRef = useRef(false)
@@ -101,6 +151,11 @@ export default function ConfiguratorPage() {
   /* ── GLB preload caches ── */
   const pendantCacheRef = useRef<Partial<Record<Shape, THREE.Group>>>({})
   const chainCacheRef   = useRef<THREE.Group | null>(null)
+
+  /* ── Chain scene state (set once, never rebuilt) ── */
+  const chainGroupRef    = useRef<THREE.Group | null>(null)   // live chain in scene
+  const assemblyScaleRef = useRef<number>(1)                  // scale computed from chain bbox
+  const chainAttachRef   = useRef<THREE.Vector3 | null>(null) // chain bottom-center for pendant alignment
 
   /* ── Touch detection (runs once) ── */
   useEffect(() => {
@@ -180,18 +235,25 @@ export default function ConfiguratorPage() {
     // Reusable spherical for polar spring-back
     const spherical = new THREE.Spherical()
 
-    // Main RAF loop — renders + drives build-in scale animation + polar spring-back
+    // Main RAF loop — renders + drives fade/drift animation + polar spring-back
     function loop(ts: DOMHighResTimeStamp) {
       if (destroyedRef.current) return
       rafRef.current = requestAnimationFrame(loop)
 
       const group = currentGroupRef.current
       if (group && buildStartRef.current !== null) {
-        const elapsed = ts - buildStartRef.current
-        const t = elapsed / BUILD_DURATION
-        const scale = easeOutCubic(t) * targetScaleRef.current
-        group.scale.setScalar(scale)
-        if (t >= 1) buildStartRef.current = null
+        const ease = easeOutCubic((ts - buildStartRef.current) / BUILD_DURATION)
+        // Fade opacity
+        pendantMatsRef.current.forEach(m => { m.opacity = ease; m.needsUpdate = true })
+        // Drift upward into final position
+        group.position.y = BUILD_DRIFT_Y * (1 - ease)
+        if (ease >= 1) {
+          buildStartRef.current = null
+          group.position.y = 0
+          pendantMatsRef.current.forEach(m => {
+            m.transparent = false; m.opacity = 1; m.needsUpdate = true
+          })
+        }
       }
 
       // Polar spring-back — gently return to equator when user releases
@@ -251,97 +313,32 @@ export default function ConfiguratorPage() {
   useEffect(() => {
     if (!shape || !sceneRef.current) return
 
-    const scene = sceneRef.current
+    const scene    = sceneRef.current
+    const shapeKey = shape as Shape
 
-    // Show loading spinner only if either GLB isn't cached yet
-    if (!pendantCacheRef.current[shape] || !chainCacheRef.current) setLoading(true)
-
-    // Remove outgoing model
+    // Remove ONLY the pendant pivot — chain stays in scene permanently
     const outgoing = currentGroupRef.current
     if (outgoing) {
       scene.remove(outgoing)
       currentGroupRef.current = null
-      gemMatsRef.current = []
+      gemMatsRef.current  = []
       bodyMatsRef.current = []
     }
 
-    // Snapshot current config values for use inside async callback
     const snapMetal      = metal
     const snapColor      = metalColor
     const snapBirthstone = birthstone
 
     let cancelled = false
 
-    function onBothLoaded(chainSrc: THREE.Group, pendantSrc: THREE.Group) {
-      if (cancelled || destroyedRef.current) return
-
-      // Clone both so cache copies stay pristine for next switch
-      const chainModel   = chainSrc.clone(true)
-      const pendantModel = pendantSrc.clone(true)
-
-      // Both GLBs are Z-up (Rhino export), correct to Y-up on each sub-model
-      chainModel.rotation.x   = Math.PI / 2
-      pendantModel.rotation.x = Math.PI / 2
-      chainModel.updateMatrixWorld(true)
-      pendantModel.updateMatrixWorld(true)
-
-      // Snap pendant's top (bail) to the chain's bottom-center.
-      // Each GLB may have a different world-space origin, so we align them
-      // explicitly rather than relying on matching coordinates.
-      const chainBox   = new THREE.Box3().setFromObject(chainModel)
-      const pendantBox = new THREE.Box3().setFromObject(pendantModel)
-      const chainBottomCenter = new THREE.Vector3(
-        (chainBox.min.x + chainBox.max.x) / 2,
-        chainBox.min.y,
-        (chainBox.min.z + chainBox.max.z) / 2,
-      )
-      const pendantTopCenter = new THREE.Vector3(
-        (pendantBox.min.x + pendantBox.max.x) / 2,
-        pendantBox.max.y,
-        (pendantBox.min.z + pendantBox.max.z) / 2,
-      )
-      const alignOffset = chainBottomCenter.clone().sub(pendantTopCenter)
-      const pendantSize = pendantBox.getSize(new THREE.Vector3())
-      // Push pendant up so the bail ring overlaps the bottom chain link
-      alignOffset.y += pendantSize.y * 0.23
-      // Nudge left to centre the bail under the chain
-      alignOffset.x -= pendantSize.x * 0.08
-      pendantModel.position.add(alignOffset)
-      pendantModel.updateMatrixWorld(true)
-
-      // Combine into one container for unified scaling + centering
-      const container = new THREE.Group()
-      container.add(chainModel)
-      container.add(pendantModel)
-      container.updateMatrixWorld(true)
-
-      // Scale combined assembly to 2.5 world-units
-      const box1 = new THREE.Box3().setFromObject(container)
-      const size = box1.getSize(new THREE.Vector3())
-      const maxDim = Math.max(size.x, size.y, size.z)
-      const targetScale = maxDim > 0 ? 2.5 / maxDim : 1
-      container.scale.setScalar(targetScale)
-      container.updateMatrixWorld(true)
-
-      // Centre combined assembly on origin
-      const box2 = new THREE.Box3().setFromObject(container)
-      const center = box2.getCenter(new THREE.Vector3())
-      container.position.sub(center)
-      container.updateMatrixWorld(true)
-
-      // Wrap in pivot group (scale used for build-in animation)
-      const pivot = new THREE.Group()
-      pivot.add(container)
-      pivot.updateMatrixWorld(true)
-
-      // Collect material refs and apply initial config
-      const gemMats: THREE.MeshPhysicalMaterial[] = []
-      const bodyMats: THREE.MeshStandardMaterial[] = []
-      const bodyColor = snapMetal === 'steel'
-        ? new THREE.Color(STEEL_COLOR)
-        : new THREE.Color(METAL_COLOR_HEX[snapColor])
-
-      pivot.traverse((child) => {
+    // ── Shared material applicator ──────────────────────────────────────────
+    function applyMetal(
+      root: THREE.Object3D,
+      bodyMats: THREE.MeshStandardMaterial[],
+      gemMats:  THREE.MeshPhysicalMaterial[],
+      bodyColor: THREE.Color,
+    ) {
+      root.traverse((child) => {
         if (child instanceof THREE.Line) { child.visible = false; return }
         if (!(child instanceof THREE.Mesh)) return
         const mats = Array.isArray(child.material) ? child.material : [child.material]
@@ -352,19 +349,15 @@ export default function ConfiguratorPage() {
           if (col.r < 0.3 && col.g > 0.45 && col.b > 0.45) { child.visible = false; return }
 
           const GEM_NAME_RE = /garnet|amethyst|aquamarine|diamond|emerald|pearl|ruby|peridot|sapphire|tourmaline|citrine|turquoise|gem|stone|crystal/i
-          const isGem = GEM_NAME_RE.test(std.name) || GEM_NAME_RE.test(child.name) || (col.r < 0.12 && col.g < 0.12 && col.b < 0.12)
+          const isGem = GEM_NAME_RE.test(std.name) || GEM_NAME_RE.test(child.name)
+            || (col.r < 0.12 && col.g < 0.12 && col.b < 0.12)
 
           if (isGem) {
-            const gemMat = new THREE.MeshPhysicalMaterial({
-              color: new THREE.Color(BIRTHSTONE_COLORS[snapBirthstone]),
-              metalness: 0.0, roughness: 0.05, reflectivity: 1.0,
-              envMapIntensity: 3.0, clearcoat: 1.0, clearcoatRoughness: 0.05,
-            })
+            const gemMat = createGemMaterial(snapBirthstone)
             if (Array.isArray(child.material)) child.material[idx] = gemMat
             else child.material = gemMat
             gemMats.push(gemMat)
           } else {
-            // Chain and pendant body meshes both get the same metal finish
             std.color.set(bodyColor)
             std.metalness = 1.0
             std.roughness = ROUGHNESS[snapMetal]
@@ -374,15 +367,55 @@ export default function ConfiguratorPage() {
           }
         })
       })
+    }
 
-      // Frame camera on the pendant medallion (lower portion of combined assembly)
-      const box3 = new THREE.Box3()
-      pivot.traverse((child) => {
-        if (!child.visible) return
-        if (child instanceof THREE.Mesh) box3.expandByObject(child)
-      })
-      const modelHeight = box3.max.y - box3.min.y
-      const pendantY = box3.min.y + modelHeight * 0.18
+    // ── Align pendant bail to stored chain attach point ─────────────────────
+    function positionPendant(pendantModel: THREE.Group) {
+      const pendantBox  = new THREE.Box3().setFromObject(pendantModel)
+      const pendantSize = pendantBox.getSize(new THREE.Vector3())
+      const pendantTop  = new THREE.Vector3(
+        (pendantBox.min.x + pendantBox.max.x) / 2,
+        pendantBox.max.y,
+        (pendantBox.min.z + pendantBox.max.z) / 2,
+      )
+      const offset = chainAttachRef.current!.clone().sub(pendantTop)
+      offset.y += pendantSize.y * 0.21
+      offset.z -= pendantSize.x * -0.05
+      pendantModel.position.add(offset)
+      pendantModel.updateMatrixWorld(true)
+    }
+
+    // ── Add pendant to scene with build-in animation ─────────────────────────
+    function onPendantReady(pendantSrc: THREE.Group) {
+      if (cancelled || destroyedRef.current) return
+
+      const pendantModel = pendantSrc.clone(true)
+      pendantModel.rotation.x = Math.PI / 2
+      pendantModel.scale.setScalar(assemblyScaleRef.current)
+      pendantModel.updateMatrixWorld(true)
+
+      positionPendant(pendantModel)
+
+      const pivot = new THREE.Group()
+      pivot.add(pendantModel)
+      pivot.updateMatrixWorld(true)
+
+      const gemMats:  THREE.MeshPhysicalMaterial[] = []
+      const bodyMats: THREE.MeshStandardMaterial[]  = []
+      const bodyColor = snapMetal === 'steel'
+        ? new THREE.Color(STEEL_COLOR)
+        : new THREE.Color(METAL_COLOR_HEX[snapColor])
+
+      applyMetal(pivot, bodyMats, gemMats, bodyColor)
+      // Include chain materials so Effect 3 keeps chain in sync on metal change
+      if (chainGroupRef.current) applyMetal(chainGroupRef.current, bodyMats, gemMats, bodyColor)
+
+      // Camera: frame on pendant medallion using combined chain + pendant bbox
+      const combinedBox = new THREE.Box3()
+      if (chainGroupRef.current) combinedBox.expandByObject(chainGroupRef.current)
+      combinedBox.expandByObject(pivot)
+      const totalHeight = combinedBox.max.y - combinedBox.min.y
+      const pendantY    = combinedBox.min.y + totalHeight * 0.18
       if (cameraRef.current) {
         cameraRef.current.position.set(0, pendantY, 1.4)
         cameraRef.current.lookAt(0, pendantY, 0)
@@ -392,37 +425,84 @@ export default function ConfiguratorPage() {
         controlsRef.current.update()
       }
 
-      pivot.scale.setScalar(0)
-      targetScaleRef.current = 1
+      // Set up fade-in: make all pendant materials transparent at opacity 0,
+      // and start the pivot slightly below its final position (drift upward)
+      const fadeMats: THREE.Material[] = []
+      pivot.traverse((child) => {
+        if (!(child instanceof THREE.Mesh)) return
+        const mats = Array.isArray(child.material) ? child.material : [child.material]
+        mats.forEach(m => { m.transparent = true; m.opacity = 0; m.needsUpdate = true; fadeMats.push(m) })
+      })
+      pendantMatsRef.current = fadeMats
+      pivot.position.y = BUILD_DRIFT_Y
 
       scene.add(pivot)
       currentGroupRef.current = pivot
-      gemMatsRef.current = gemMats
+      gemMatsRef.current  = gemMats
       bodyMatsRef.current = bodyMats
-
       buildStartRef.current = performance.now()
       setLoading(false)
     }
 
-    // Load whichever of chain / pendant isn't cached yet, then combine
+    // ── Set up chain in scene (first shape selection only) ───────────────────
+    function setupChain(chainSrc: THREE.Group, pendantSrc: THREE.Group) {
+      if (cancelled || destroyedRef.current) return
+
+      const chainModel = chainSrc.clone(true)
+      chainModel.rotation.x = Math.PI / 2
+      chainModel.updateMatrixWorld(true)
+
+      const box1   = new THREE.Box3().setFromObject(chainModel)
+      const size1  = box1.getSize(new THREE.Vector3())
+      const maxDim = Math.max(size1.x, size1.y, size1.z)
+      const scale  = maxDim > 0 ? 2.5 / maxDim : 1
+      chainModel.scale.setScalar(scale)
+      chainModel.updateMatrixWorld(true)
+
+      const box2   = new THREE.Box3().setFromObject(chainModel)
+      chainModel.position.sub(box2.getCenter(new THREE.Vector3()))
+      chainModel.updateMatrixWorld(true)
+
+      // Store scale and bottom-center attach point for all future pendant loads
+      assemblyScaleRef.current = scale
+      const box3 = new THREE.Box3().setFromObject(chainModel)
+      chainAttachRef.current = new THREE.Vector3(
+        (box3.min.x + box3.max.x) / 2,
+        box3.min.y,
+        (box3.min.z + box3.max.z) / 2,
+      )
+
+      scene.add(chainModel)
+      chainGroupRef.current = chainModel
+      onPendantReady(pendantSrc)
+    }
+
+    // ── Loading coordination ─────────────────────────────────────────────────
+    const chainInScene  = !!chainGroupRef.current
+    const chainCached   = !!chainCacheRef.current
+    const pendantCached = !!pendantCacheRef.current[shapeKey]
+
+    if (!pendantCached || (!chainInScene && !chainCached)) setLoading(true)
+
     const dracoLoader = new DRACOLoader()
     dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/')
     const loader = new GLTFLoader()
     loader.setDRACOLoader(dracoLoader)
     loader.setMeshoptDecoder(MeshoptDecoder)
 
-    const shapeKey = shape as Shape
-
-    let chainReady   = !!chainCacheRef.current
-    let pendantReady = !!pendantCacheRef.current[shapeKey]
+    let chainReady   = chainCached || chainInScene
+    let pendantReady = pendantCached
 
     function tryComplete() {
-      if (chainReady && pendantReady) {
-        onBothLoaded(chainCacheRef.current!, pendantCacheRef.current![shapeKey]!)
+      if (!chainReady || !pendantReady) return
+      if (chainInScene) {
+        onPendantReady(pendantCacheRef.current![shapeKey]!)
+      } else {
+        setupChain(chainCacheRef.current!, pendantCacheRef.current![shapeKey]!)
       }
     }
 
-    if (!chainReady) {
+    if (!chainCached && !chainInScene) {
       loader.load(CHAIN_PATH, (gltf) => {
         chainCacheRef.current = gltf.scene
         chainReady = true
@@ -433,7 +513,7 @@ export default function ConfiguratorPage() {
       })
     }
 
-    if (!pendantReady) {
+    if (!pendantCached) {
       loader.load(PENDANT_PATHS[shapeKey], (gltf) => {
         pendantCacheRef.current[shapeKey] = gltf.scene
         pendantReady = true
@@ -463,13 +543,25 @@ export default function ConfiguratorPage() {
     })
   }, [metal, metalColor])
 
-  /* ── Effect 4: Birthstone mutation ── */
+  /* ── Effect 4: Birthstone mutation — update all physical gem properties ── */
   useEffect(() => {
     const mats = gemMatsRef.current
     if (!mats.length) return
+    const g = GEM_PROPS[birthstone]
     mats.forEach(m => {
-      m.color.set(new THREE.Color(BIRTHSTONE_COLORS[birthstone]))
-      m.needsUpdate = true
+      m.color.set(g.color)
+      m.ior                 = g.ior
+      m.transmission        = g.transmission
+      m.thickness           = g.thickness
+      m.roughness           = g.roughness
+      m.clearcoat           = g.clearcoat
+      m.clearcoatRoughness  = g.clearcoatRoughness
+      m.envMapIntensity     = g.envMapIntensity
+      m.attenuationColor.set(g.attenuationColor)
+      m.attenuationDistance = g.attenuationDistance
+      m.iridescence         = g.iridescence
+      m.iridescenceIOR      = g.iridescenceIOR
+      m.needsUpdate         = true
     })
   }, [birthstone])
 
