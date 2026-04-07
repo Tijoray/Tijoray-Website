@@ -14,9 +14,11 @@ type Metal      = 'steel' | 'silver' | '10k' | '18k'
 type MetalColor = 'white' | 'gold' | 'rose'
 
 /* ── Constants ─────────────────────────────────────────── */
-const GLB_PATHS: Record<Shape, string> = {
-  square: '/assets/pendant-square.glb',
-  circle: '/assets/pendant-circle.glb',
+const CHAIN_PATH = '/assets/chain no lock-optimized.glb'
+
+const PENDANT_PATHS: Record<Shape, string> = {
+  square: '/assets/square pendant-optimized.glb',
+  circle: '/assets/Circle-pendant-optimized.glb',
 }
 
 const METAL_PRICES: Record<Metal, number> = {
@@ -96,8 +98,9 @@ export default function ConfiguratorPage() {
   /* ── Interaction tracking for polar spring-back ── */
   const isInteractingRef = useRef(false)
 
-  /* ── GLB preload cache ── */
-  const glbCacheRef = useRef<Partial<Record<Shape, THREE.Group>>>({})
+  /* ── GLB preload caches ── */
+  const pendantCacheRef = useRef<Partial<Record<Shape, THREE.Group>>>({})
+  const chainCacheRef   = useRef<THREE.Group | null>(null)
 
   /* ── Touch detection (runs once) ── */
   useEffect(() => {
@@ -222,7 +225,7 @@ export default function ConfiguratorPage() {
     }
   }, [])
 
-  /* ── Effect 2a: Preload both GLBs silently on mount ── */
+  /* ── Effect 2a: Preload chain + both pendant GLBs silently on mount ── */
   useEffect(() => {
     const dracoLoader = new DRACOLoader()
     dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/')
@@ -230,10 +233,14 @@ export default function ConfiguratorPage() {
     loader.setDRACOLoader(dracoLoader)
     loader.setMeshoptDecoder(MeshoptDecoder)
 
-    ;(Object.keys(GLB_PATHS) as Shape[]).forEach((s) => {
-      if (glbCacheRef.current[s]) return
-      loader.load(GLB_PATHS[s], (gltf) => {
-        glbCacheRef.current[s] = gltf.scene
+    if (!chainCacheRef.current) {
+      loader.load(CHAIN_PATH, (gltf) => { chainCacheRef.current = gltf.scene })
+    }
+
+    ;(Object.keys(PENDANT_PATHS) as Shape[]).forEach((s) => {
+      if (pendantCacheRef.current[s]) return
+      loader.load(PENDANT_PATHS[s], (gltf) => {
+        pendantCacheRef.current[s] = gltf.scene
       })
     })
 
@@ -246,8 +253,8 @@ export default function ConfiguratorPage() {
 
     const scene = sceneRef.current
 
-    // Only show loading spinner if not yet in cache
-    if (!glbCacheRef.current[shape]) setLoading(true)
+    // Show loading spinner only if either GLB isn't cached yet
+    if (!pendantCacheRef.current[shape] || !chainCacheRef.current) setLoading(true)
 
     // Remove outgoing model
     const outgoing = currentGroupRef.current
@@ -265,37 +272,40 @@ export default function ConfiguratorPage() {
 
     let cancelled = false
 
-    function processGltfScene(source: THREE.Group) {
-      // Clone so the cache copy stays pristine for next switch
-      return source.clone(true)
-    }
-
-    function onLoaded(scene3d: THREE.Group) {
+    function onBothLoaded(chainSrc: THREE.Group, pendantSrc: THREE.Group) {
       if (cancelled || destroyedRef.current) return
 
-      const model = processGltfScene(scene3d)
+      // Clone both so cache copies stay pristine for next switch
+      const chainModel   = chainSrc.clone(true)
+      const pendantModel = pendantSrc.clone(true)
 
-      // Both GLBs are Z-up (Rhino export), correct to Y-up
-      model.rotation.x = Math.PI / 2
-      model.updateMatrixWorld(true)
+      // Both GLBs are Z-up (Rhino export), correct to Y-up on each sub-model
+      chainModel.rotation.x   = Math.PI / 2
+      pendantModel.rotation.x = Math.PI / 2
 
-      // Scale to 2 world-units
-      const box1 = new THREE.Box3().setFromObject(model)
+      // Combine into one container for unified scaling + centering
+      const container = new THREE.Group()
+      container.add(chainModel)
+      container.add(pendantModel)
+      container.updateMatrixWorld(true)
+
+      // Scale combined assembly to 2.5 world-units
+      const box1 = new THREE.Box3().setFromObject(container)
       const size = box1.getSize(new THREE.Vector3())
       const maxDim = Math.max(size.x, size.y, size.z)
-      const targetScale = maxDim > 0 ? 2.0 / maxDim : 1
-      model.scale.setScalar(targetScale)
-      model.updateMatrixWorld(true)
+      const targetScale = maxDim > 0 ? 2.5 / maxDim : 1
+      container.scale.setScalar(targetScale)
+      container.updateMatrixWorld(true)
 
-      // Centre on origin (two-pass)
-      const box2 = new THREE.Box3().setFromObject(model)
+      // Centre combined assembly on origin
+      const box2 = new THREE.Box3().setFromObject(container)
       const center = box2.getCenter(new THREE.Vector3())
-      model.position.sub(center)
-      model.updateMatrixWorld(true)
+      container.position.sub(center)
+      container.updateMatrixWorld(true)
 
-      // Wrap in pivot group (scale stays 1 so bounding box is correct)
+      // Wrap in pivot group (scale used for build-in animation)
       const pivot = new THREE.Group()
-      pivot.add(model)
+      pivot.add(container)
       pivot.updateMatrixWorld(true)
 
       // Collect material refs and apply initial config
@@ -328,6 +338,7 @@ export default function ConfiguratorPage() {
             else child.material = gemMat
             gemMats.push(gemMat)
           } else {
+            // Chain and pendant body meshes both get the same metal finish
             std.color.set(bodyColor)
             std.metalness = 1.0
             std.roughness = ROUGHNESS[snapMetal]
@@ -338,14 +349,14 @@ export default function ConfiguratorPage() {
         })
       })
 
-      // Frame camera on pendant gem — only visible meshes, ignore chain
+      // Frame camera on the pendant medallion (lower portion of combined assembly)
       const box3 = new THREE.Box3()
       pivot.traverse((child) => {
         if (!child.visible) return
         if (child instanceof THREE.Mesh) box3.expandByObject(child)
       })
       const modelHeight = box3.max.y - box3.min.y
-      const pendantY = box3.min.y + modelHeight * 0.20
+      const pendantY = box3.min.y + modelHeight * 0.18
       if (cameraRef.current) {
         cameraRef.current.position.set(0, pendantY, 1.4)
         cameraRef.current.lookAt(0, pendantY, 0)
@@ -367,26 +378,47 @@ export default function ConfiguratorPage() {
       setLoading(false)
     }
 
-    // Use cache if ready, otherwise load from network and populate cache
-    const cached = glbCacheRef.current[shape]
-    if (cached) {
-      onLoaded(cached)
-    } else {
-      const dracoLoader = new DRACOLoader()
-      dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/')
-      const loader = new GLTFLoader()
-      loader.setDRACOLoader(dracoLoader)
-      loader.setMeshoptDecoder(MeshoptDecoder)
-      loader.load(GLB_PATHS[shape], (gltf) => {
-        glbCacheRef.current[shape] = gltf.scene
-        onLoaded(gltf.scene)
+    // Load whichever of chain / pendant isn't cached yet, then combine
+    const dracoLoader = new DRACOLoader()
+    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/')
+    const loader = new GLTFLoader()
+    loader.setDRACOLoader(dracoLoader)
+    loader.setMeshoptDecoder(MeshoptDecoder)
+
+    let chainReady   = !!chainCacheRef.current
+    let pendantReady = !!pendantCacheRef.current[shape]
+
+    function tryComplete() {
+      if (chainReady && pendantReady) {
+        onBothLoaded(chainCacheRef.current!, pendantCacheRef.current![shape]!)
+      }
+    }
+
+    if (!chainReady) {
+      loader.load(CHAIN_PATH, (gltf) => {
+        chainCacheRef.current = gltf.scene
+        chainReady = true
+        tryComplete()
       }, undefined, (err) => {
-        console.error('[Arcana Configurator] GLB load error:', err)
+        console.error('[Arcana Configurator] Chain GLB load error:', err)
         setLoading(false)
       })
     }
 
-    return () => { cancelled = true }
+    if (!pendantReady) {
+      loader.load(PENDANT_PATHS[shape], (gltf) => {
+        pendantCacheRef.current[shape] = gltf.scene
+        pendantReady = true
+        tryComplete()
+      }, undefined, (err) => {
+        console.error('[Arcana Configurator] Pendant GLB load error:', err)
+        setLoading(false)
+      })
+    }
+
+    tryComplete()
+
+    return () => { cancelled = true; dracoLoader.dispose() }
   }, [shape]) // eslint-disable-line react-hooks/exhaustive-deps
 
   /* ── Effect 3: Metal / color mutation (no GLB reload) ── */
