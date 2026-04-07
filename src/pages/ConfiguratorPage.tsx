@@ -385,12 +385,14 @@ export default function ConfiguratorPage() {
     loader.setDRACOLoader(dracoLoader)
     loader.setMeshoptDecoder(MeshoptDecoder)
 
+    const shapeKey = shape as Shape
+
     let chainReady   = !!chainCacheRef.current
-    let pendantReady = !!pendantCacheRef.current[shape]
+    let pendantReady = !!pendantCacheRef.current[shapeKey]
 
     function tryComplete() {
       if (chainReady && pendantReady) {
-        onBothLoaded(chainCacheRef.current!, pendantCacheRef.current![shape]!)
+        onBothLoaded(chainCacheRef.current!, pendantCacheRef.current![shapeKey]!)
       }
     }
 
@@ -406,8 +408,8 @@ export default function ConfiguratorPage() {
     }
 
     if (!pendantReady) {
-      loader.load(PENDANT_PATHS[shape], (gltf) => {
-        pendantCacheRef.current[shape] = gltf.scene
+      loader.load(PENDANT_PATHS[shapeKey], (gltf) => {
+        pendantCacheRef.current[shapeKey] = gltf.scene
         pendantReady = true
         tryComplete()
       }, undefined, (err) => {
