@@ -63,6 +63,8 @@
   z-index: 5;
   white-space: nowrap;
   opacity: 0;
+  width: max-content;
+  max-width: calc(100vw - 48px);
 }
 
 .capEyebrow {
@@ -449,6 +451,13 @@
 
   .pendantCaption {
     top: 72px;
+    white-space: normal;
+    text-align: center;
+    left: 24px;
+    right: 24px;
+    transform: none;
+    width: auto;
+    max-width: 100%;
   }
 
   .capTitle {

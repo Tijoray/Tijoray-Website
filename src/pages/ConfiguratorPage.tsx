@@ -73,6 +73,7 @@ export default function ConfiguratorPage() {
   const [metalColor,  setMetalColor]  = useState<MetalColor>('gold')
   const [birthstone,  setBirthstone]  = useState<number>(0)
   const [loading,     setLoading]     = useState(false)
+  const [isTouch,     setIsTouch]     = useState(false)
 
   /* ── Three.js infrastructure refs (created once) ── */
   const canvasRef    = useRef<HTMLCanvasElement>(null)
@@ -97,6 +98,11 @@ export default function ConfiguratorPage() {
 
   /* ── GLB preload cache ── */
   const glbCacheRef = useRef<Partial<Record<Shape, THREE.Group>>>({})
+
+  /* ── Touch detection (runs once) ── */
+  useEffect(() => {
+    setIsTouch(window.matchMedia('(hover: none)').matches)
+  }, [])
 
   /* ── Effect 1: Three.js infrastructure (runs once) ── */
   useEffect(() => {
@@ -446,7 +452,7 @@ export default function ConfiguratorPage() {
             )}
           </div>
           <p className={styles.orbitHint} aria-hidden="true">
-            Drag to rotate · Scroll to zoom
+            {isTouch ? 'Drag to rotate · Pinch to zoom' : 'Drag to rotate · Scroll to zoom'}
           </p>
         </div>
 

@@ -359,7 +359,7 @@
 /* ── Responsive ── */
 @media (max-width: 900px) {
   .hero {
-    padding: 160px 24px 72px;
+    padding: 120px 24px 60px;
   }
 
   .missionSection,

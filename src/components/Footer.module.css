@@ -112,6 +112,20 @@
   }
 }
 
+@media (max-width: 560px) {
+  .footerGrid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin-bottom: 48px;
+  }
+
+  .footerLegal {
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+}
+
 @media (max-width: 768px) {
   .footerLinks a {
     font-size: 14px;

@@ -570,12 +570,12 @@
   .canvasPanel {
     position: static;
     height: auto;
-    padding: 32px 20px 20px;
+    padding: 28px 20px 16px;
   }
 
   .canvasWrap {
-    width: min(82vw, 400px);
-    height: min(82vw, 400px);
+    width: min(88vw, 420px);
+    height: min(88vw, 420px);
   }
 
   .configPanel {
@@ -604,6 +604,32 @@
 
   .ctaSecondary {
     align-self: center;
+  }
+
+  /* Tooltip: reposition below icon and constrain width on mobile */
+  .tooltip {
+    left: auto;
+    right: 0;
+    top: calc(100% + 10px);
+    transform: none;
+    width: min(260px, calc(100vw - 48px));
+  }
+
+  /* Larger touch target for tooltip icon */
+  .tooltipIcon {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+  }
+
+  /* Gem swatches: slightly larger on touch */
+  .gemSwatch {
+    width: 32px;
+    height: 32px;
+  }
+
+  .stoneBtn {
+    padding: 10px 4px;
   }
 }
 

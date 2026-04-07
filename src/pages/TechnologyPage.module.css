@@ -457,7 +457,7 @@
 /* ── Responsive ── */
 @media (max-width: 900px) {
   .hero {
-    padding: 140px 24px 72px;
+    padding: 120px 24px 60px;
   }
 
   .nfcSection,
@@ -510,7 +510,29 @@
   }
 
   .appPhoneFrame {
-    max-width: 260px;
-    height: 460px;
+    max-width: 240px;
+    height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .appPhoneFrame {
+    max-width: 200px;
+    height: 340px;
+  }
+
+  .featureRow {
+    gap: 28px;
+  }
+
+  .nfcSection,
+  .appSection,
+  .heritageSection,
+  .ctaSection {
+    padding: 64px 20px;
+  }
+
+  .hero {
+    padding: 110px 20px 52px;
   }
 }

@@ -273,6 +273,10 @@
     display: none;
   }
 
+  .cta {
+    display: none;
+  }
+
   .hamburger {
     display: flex;
   }
