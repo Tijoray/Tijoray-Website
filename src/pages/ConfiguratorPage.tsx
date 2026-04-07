@@ -282,6 +282,27 @@ export default function ConfiguratorPage() {
       // Both GLBs are Z-up (Rhino export), correct to Y-up on each sub-model
       chainModel.rotation.x   = Math.PI / 2
       pendantModel.rotation.x = Math.PI / 2
+      chainModel.updateMatrixWorld(true)
+      pendantModel.updateMatrixWorld(true)
+
+      // Snap pendant's top (bail) to the chain's bottom-center.
+      // Each GLB may have a different world-space origin, so we align them
+      // explicitly rather than relying on matching coordinates.
+      const chainBox   = new THREE.Box3().setFromObject(chainModel)
+      const pendantBox = new THREE.Box3().setFromObject(pendantModel)
+      const chainBottomCenter = new THREE.Vector3(
+        (chainBox.min.x + chainBox.max.x) / 2,
+        chainBox.min.y,
+        (chainBox.min.z + chainBox.max.z) / 2,
+      )
+      const pendantTopCenter = new THREE.Vector3(
+        (pendantBox.min.x + pendantBox.max.x) / 2,
+        pendantBox.max.y,
+        (pendantBox.min.z + pendantBox.max.z) / 2,
+      )
+      const alignOffset = chainBottomCenter.clone().sub(pendantTopCenter)
+      pendantModel.position.add(alignOffset)
+      pendantModel.updateMatrixWorld(true)
 
       // Combine into one container for unified scaling + centering
       const container = new THREE.Group()
