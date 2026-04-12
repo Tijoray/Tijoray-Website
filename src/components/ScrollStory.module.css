@@ -1,6 +1,6 @@
 .scrollStory {
   position: relative;
-  height: 500vh;
+  height: 425vh;
 }
 
 .stickyStage {
@@ -370,7 +370,7 @@
 /* ── RESPONSIVE ────────────────────────────────────────── */
 @media (max-width: 768px) {
   .scrollStory {
-    height: 500vh;
+    height: 425vh;
   }
 
   .pendantCanvas {
