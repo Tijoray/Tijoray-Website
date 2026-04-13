@@ -9,7 +9,7 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
 import styles from './ConfiguratorPage.module.css'
 
 /* ── Types ─────────────────────────────────────────────── */
-type Shape      = 'square' | 'circle'
+type Shape      = 'square' | 'circle' | 'heart' | 'pear'
 type Metal      = 'steel' | 'silver' | '10k' | '18k'
 type MetalColor = 'white' | 'gold' | 'rose'
 
@@ -19,6 +19,8 @@ const CHAIN_PATH = '/assets/chain no lock-optimized.glb'
 const PENDANT_PATHS: Record<Shape, string> = {
   square: '/assets/square pendant-optimized.glb',
   circle: '/assets/Circle-pendant-optimized.glb',
+  heart:  '/assets/heart-pendant-optimized.glb',
+  pear:   '/assets/pear-pendant-optimized.glb',
 }
 
 const METAL_PRICES: Record<Metal, number> = {
@@ -98,6 +100,7 @@ const BUILD_DRIFT_Y   = -0.07 // world-units below final position at animation s
 
 /* ── Helpers ───────────────────────────────────────────── */
 function easeOutCubic(t: number) { return 1 - Math.pow(1 - Math.min(t, 1), 3) }
+
 
 function createGemMaterial(stoneIdx: number): THREE.MeshPhysicalMaterial {
   const g = GEM_PROPS[stoneIdx]
@@ -632,7 +635,7 @@ export default function ConfiguratorPage() {
               <span className={styles.stepLine} aria-hidden="true" />
             </div>
             <div className={styles.shapeGrid}>
-              {(['square', 'circle'] as Shape[]).map(s => (
+              {(['square', 'circle', 'heart', 'pear'] as Shape[]).map(s => (
                 <button
                   key={s}
                   className={`${styles.shapeBtn} ${shape === s ? styles.active : ''}`}
@@ -640,9 +643,8 @@ export default function ConfiguratorPage() {
                   aria-pressed={shape === s}
                 >
                   <span
-                    className={styles.shapeIcon}
+                    className={`${styles.shapeIcon} ${styles[`shapeIcon_${s}`]}`}
                     aria-hidden="true"
-                    style={{ borderRadius: s === 'circle' ? '50%' : '2px' }}
                   />
                   <span className={styles.shapeName}>
                     {s.charAt(0).toUpperCase() + s.slice(1)}

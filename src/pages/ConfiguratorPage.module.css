@@ -258,7 +258,7 @@
 /* ── Shape buttons ── */
 .shapeGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
 }
 
@@ -267,7 +267,7 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  padding: 26px 16px;
+  padding: 20px 10px;
   background: var(--cream-warm);
   border: 1px solid var(--border-soft);
   cursor: pointer;
@@ -285,6 +285,34 @@
   height: 22px;
   background: var(--ink-mid);
   flex-shrink: 0;
+}
+
+/* Per-shape icon overrides */
+.shapeIcon_square {
+  border-radius: 2px;
+}
+.shapeIcon_circle {
+  border-radius: 50%;
+}
+.shapeIcon_heart {
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.shapeIcon_heart::before {
+  content: '♥';
+  font-size: 26px;
+  line-height: 1;
+  color: var(--ink-mid);
+}
+.shapeIcon_heart::after {
+  display: none;
+}
+.shapeIcon_pear {
+  width: 16px;
+  height: 22px;
+  border-radius: 50% 50% 50% 50% / 35% 35% 65% 65%;
 }
 
 .shapeName {
@@ -623,7 +651,7 @@
 
 @media (max-width: 480px) {
   .shapeGrid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
   }
 
   .optionRow {
