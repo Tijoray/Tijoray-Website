@@ -1,0 +1,11 @@
+# Dependencies
+node_modules/
+
+# Build output (Vercel builds from source)
+dist/
+
+# Local env files (contain secrets)
+.env*.local
+
+# Vercel
+.vercel

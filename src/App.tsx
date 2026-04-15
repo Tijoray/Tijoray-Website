@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
+import ProtectedRoute from './components/ProtectedRoute'
 import Hero from './components/Hero'
 import ScrollStory from './components/ScrollStory'
 import Features from './components/Features'
@@ -11,6 +12,13 @@ import ContactPage from './pages/ContactPage'
 import ConfiguratorPage from './pages/ConfiguratorPage'
 import TechnologyPage from './pages/TechnologyPage'
 import CollectionPage from './pages/CollectionPage'
+import CartPage from './pages/CartPage'
+import CheckoutPage from './pages/CheckoutPage'
+import OrderSuccessPage from './pages/OrderSuccessPage'
+import PortalPage from './pages/PortalPage'
+import PortalPiecePage from './pages/PortalPiecePage'
+import LoginPage from './pages/LoginPage'
+import SignUpPage from './pages/SignUpPage'
 import NotFoundPage from './pages/NotFoundPage'
 
 function HomePage() {
@@ -58,6 +66,17 @@ export default function App() {
         <Route path="/build" element={<ConfiguratorPage />} />
         <Route path="/technology" element={<TechnologyPage />} />
         <Route path="/collection" element={<CollectionPage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/order/success" element={<OrderSuccessPage />} />
+        <Route path="/portal" element={
+          <ProtectedRoute><PortalPage /></ProtectedRoute>
+        } />
+        <Route path="/portal/piece/:pieceId" element={
+          <ProtectedRoute><PortalPiecePage /></ProtectedRoute>
+        } />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer />

@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { useCart } from '../contexts/CartContext'
+import { useAuth } from '../contexts/AuthContext'
 import styles from './Navbar.module.css'
 
 const NAV_LINKS = [
@@ -14,6 +16,8 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [closing, setClosing] = useState(false)
   const { pathname } = useLocation()
+  const { items } = useCart()
+  const { user }  = useAuth()
 
   function closeMenu() {
     setClosing(true)
@@ -88,7 +92,28 @@ export default function Navbar() {
             </li>
           ))}
         </ul>
-        <Link to="/build" className={styles.cta}>Build Your Arcana</Link>
+        <div className={styles.navRight}>
+          {user ? (
+            <Link to="/portal" className={styles.accountIcon} aria-label="My account">
+              <span className={styles.accountInitial}>
+                {(user.email?.[0] ?? 'A').toUpperCase()}
+              </span>
+            </Link>
+          ) : (
+            <Link to="/login" className={styles.signInLink}>Sign In</Link>
+          )}
+          {items.length > 0 && (
+            <Link to="/cart" className={styles.cartIcon} aria-label="View cart">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M16 10a4 4 0 0 1-8 0"/>
+              </svg>
+              <span className={styles.cartBadge}>{items.length}</span>
+            </Link>
+          )}
+          <Link to="/build" className={styles.cta}>Build Your Arcana</Link>
+        </div>
         <button
           className={styles.hamburger}
           onClick={() => menuOpen ? closeMenu() : setMenuOpen(true)}

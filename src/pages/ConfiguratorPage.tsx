@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useCart } from '../contexts/CartContext'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
@@ -122,6 +123,9 @@ function createGemMaterial(stoneIdx: number): THREE.MeshPhysicalMaterial {
 }
 
 export default function ConfiguratorPage() {
+  const { addItem } = useCart()
+  const navigate    = useNavigate()
+
   /* ── State ── */
   const [shape,       setShape]       = useState<Shape | null>(null)
   const [metal,       setMetal]       = useState<Metal>('18k')
@@ -200,13 +204,23 @@ export default function ConfiguratorPage() {
       }
     )
 
-    // Lights (identical to ScrollStory)
-    scene.add(new THREE.AmbientLight(0xffffff, 0.15))
-    const keyLight = new THREE.DirectionalLight(0xfff5e0, 1.8)
-    keyLight.position.set(3, 5, 3)
+    // Lights — front-heavy for jewelry: stone and chain well-lit head-on
+    scene.add(new THREE.AmbientLight(0xffffff, 0.7))
+    // Strong direct front key — straight-on, slightly high, punches through chain links
+    const frontKey = new THREE.DirectionalLight(0xfff8f0, 2.2)
+    frontKey.position.set(0, 2, 8)
+    scene.add(frontKey)
+    // Softer upper-right accent for metal highlights
+    const keyLight = new THREE.DirectionalLight(0xfff5e0, 0.9)
+    keyLight.position.set(2, 4, 3)
     scene.add(keyLight)
-    const rimLight = new THREE.DirectionalLight(0xaaccff, 0.5)
-    rimLight.position.set(-2, -1, -3)
+    // Left fill to balance rotation
+    const fillLight = new THREE.DirectionalLight(0xd8e8ff, 0.5)
+    fillLight.position.set(-3, 1, 3)
+    scene.add(fillLight)
+    // Soft back-rim for depth separation
+    const rimLight = new THREE.DirectionalLight(0xaaccff, 0.2)
+    rimLight.position.set(-1, -1, -4)
     scene.add(rimLight)
 
     // OrbitControls — free Y rotation, tight vertical clamp
@@ -756,12 +770,22 @@ export default function ConfiguratorPage() {
             <p className={styles.specLine}>{specLine}</p>
             <button
               className={styles.ctaBtn}
-              disabled
-              aria-disabled="true"
-              title="Commission ordering coming soon"
+              disabled={!shape}
+              aria-disabled={!shape}
+              onClick={() => {
+                if (!shape) return
+                addItem({
+                  shape,
+                  metal,
+                  metalColor,
+                  birthstoneIndex: birthstone,
+                  price: METAL_PRICES[metal],
+                  specLine,
+                })
+                navigate('/cart')
+              }}
             >
-              Proceed to Commission
-              <span className={styles.ctaBadge}>Coming Soon</span>
+              {shape ? 'Add to Cart' : 'Select a Shape First'}
             </button>
             <Link to="/contact" className={styles.ctaSecondary}>
               Speak with the Atelier

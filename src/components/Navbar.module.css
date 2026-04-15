@@ -106,6 +106,109 @@
   color: var(--text-light);
 }
 
+/* --- Nav right group --- */
+.navRight {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* --- Sign in link --- */
+.signInLink {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.signInLink:hover {
+  color: var(--ink);
+}
+
+.navbar:global(.in-dark) .signInLink {
+  color: rgba(245, 240, 232, 0.7);
+}
+
+.navbar:global(.in-dark) .signInLink:hover {
+  color: var(--text-light);
+}
+
+/* --- Account avatar --- */
+.accountIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.accountInitial {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--rose);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s;
+}
+
+.accountIcon:hover .accountInitial {
+  opacity: 0.8;
+}
+
+.navbar:global(.in-dark) .accountInitial {
+  background: var(--gold);
+  color: var(--dark-story);
+}
+
+/* --- Cart icon --- */
+.cartIcon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: var(--ink-mid);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.cartIcon:hover {
+  color: var(--rose);
+}
+
+.navbar:global(.in-dark) .cartIcon {
+  color: rgba(245, 240, 232, 0.75);
+}
+
+.navbar:global(.in-dark) .cartIcon:hover {
+  color: var(--gold);
+}
+
+.cartBadge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  width: 16px;
+  height: 16px;
+  background: var(--rose);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
 /* --- CTA button --- */
 .cta {
   font-family: var(--font-sans);
@@ -316,7 +419,7 @@
     display: none;
   }
 
-  .cta {
+  .navRight {
     display: none;
   }
 

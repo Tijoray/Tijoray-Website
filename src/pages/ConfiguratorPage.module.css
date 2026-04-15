@@ -536,11 +536,24 @@
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: rgba(245, 240, 232, 0.5);
-  background: rgba(74, 35, 38, 0.45);
+  color: var(--cream);
+  background: var(--burgundy);
   border: none;
   padding: 18px 36px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.ctaBtn:hover:not(:disabled) {
+  background: var(--burgundy-h);
+  transform: translateY(-2px);
+}
+
+.ctaBtn:disabled {
+  color: rgba(245, 240, 232, 0.5);
+  background: rgba(74, 35, 38, 0.35);
   cursor: not-allowed;
+  transform: none;
 }
 
 .ctaBadge {

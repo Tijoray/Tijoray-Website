@@ -1,0 +1,200 @@
+.page {
+  background: var(--cream);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.inner {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 160px 32px 120px;
+  width: 100%;
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--rose);
+  margin-bottom: 20px;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 5vw, 52px);
+  font-weight: 300;
+  line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 48px;
+}
+
+.title em {
+  font-style: italic;
+  color: var(--rose);
+}
+
+/* ── Form ── */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+}
+
+.optional {
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-soft);
+  font-size: 10px;
+}
+
+.input {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-soft);
+  padding: 12px 0;
+  outline: none;
+  transition: border-color 0.3s;
+  width: 100%;
+}
+
+.input::placeholder {
+  color: var(--ink-soft);
+}
+
+.input:focus {
+  border-bottom-color: var(--rose);
+}
+
+.inputError {
+  border-bottom-color: var(--rose) !important;
+}
+
+.errorMsg {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--rose);
+  line-height: 1.4;
+}
+
+.apiError {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--rose);
+  background: rgba(185, 122, 106, 0.08);
+  border: 1px solid rgba(185, 122, 106, 0.2);
+  padding: 12px 16px;
+  line-height: 1.5;
+}
+
+.submitBtn {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: var(--burgundy);
+  border: none;
+  padding: 20px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  margin-top: 8px;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: var(--burgundy-h);
+  transform: translateY(-2px);
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Switch link ── */
+.switchText {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--ink-mid);
+  margin-top: 32px;
+  text-align: center;
+}
+
+.switchLink {
+  color: var(--rose);
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.3s;
+}
+
+.switchLink:hover {
+  opacity: 0.7;
+}
+
+/* ── Email verification screen ── */
+.verifyIcon {
+  width: 48px;
+  height: 48px;
+  color: var(--rose);
+  margin-bottom: 32px;
+}
+
+.verifyIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.verifyBody {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--ink-mid);
+  margin-bottom: 24px;
+}
+
+.verifyBody strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.verifyNote {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.resendBtn {
+  background: none;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--rose);
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
