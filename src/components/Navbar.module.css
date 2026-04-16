@@ -137,12 +137,74 @@
   color: var(--text-light);
 }
 
-/* --- Account avatar --- */
+/* --- Account avatar + dropdown --- */
+.accountWrap {
+  position: relative;
+}
+
 .accountIcon {
   display: flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.accountDropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  background: #fff;
+  border: 1px solid var(--border-soft);
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  z-index: 250;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  animation: dropIn 0.18s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.dropdownItem {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  text-decoration: none;
+  padding: 14px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background 0.2s, color 0.2s;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.dropdownItem:last-child {
+  border-bottom: none;
+}
+
+.dropdownItem:hover {
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.dropdownSignOut {
+  color: var(--rose);
+}
+
+.dropdownSignOut:hover {
+  color: var(--rose);
 }
 
 .accountInitial {

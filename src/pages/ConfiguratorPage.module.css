@@ -20,17 +20,15 @@
   height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  padding: 32px;
   background: var(--cream-warm);
+  overflow: hidden;
 }
 
 .canvasWrap {
   position: relative;
-  width: min(74vh, 62vw);
-  height: min(74vh, 62vw);
+  width: 100%;
+  flex: 1;
+  min-height: 0;
 }
 
 .canvas {
@@ -91,12 +89,19 @@
 }
 
 .orbitHint {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
   font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--ink-mid);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 2;
 }
 
 /* ── Config panel (right, sticky + internal scroll) ── */
@@ -589,11 +594,6 @@
   .configPanel {
     padding: 48px 36px 0;
   }
-
-  .canvasWrap {
-    width: min(52vh, 44vw);
-    height: min(52vh, 44vw);
-  }
 }
 
 @media (max-width: 768px) {
@@ -609,13 +609,7 @@
 
   .canvasPanel {
     position: static;
-    height: auto;
-    padding: 28px 20px 16px;
-  }
-
-  .canvasWrap {
-    width: min(88vw, 420px);
-    height: min(88vw, 420px);
+    height: min(90vw, 480px);
   }
 
   .configPanel {

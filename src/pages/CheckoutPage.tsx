@@ -6,6 +6,17 @@ import { supabase } from '../lib/supabase'
 import PendantThumbnail from '../components/PendantThumbnail'
 import styles from './CheckoutPage.module.css'
 
+function GoogleIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+      <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
+      <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
+      <path fill="#FBBC05" d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332z"/>
+      <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z"/>
+    </svg>
+  )
+}
+
 const SHAPE_LABELS: Record<string, string> = {
   square: 'Square', circle: 'Circle', heart: 'Heart', pear: 'Pear',
 }
@@ -27,6 +38,15 @@ export default function CheckoutPage() {
   const [errors,     setErrors]     = useState<Record<string, string>>({})
   const [submitting, setSubmitting] = useState(false)
   const [apiError,   setApiError]   = useState('')
+  const [googleBusy, setGoogleBusy] = useState(false)
+
+  async function handleGoogle() {
+    setGoogleBusy(true)
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/checkout` },
+    })
+  }
 
   useEffect(() => {
     if (!authLoading && items.length === 0) navigate('/cart', { replace: true })
@@ -46,6 +66,8 @@ export default function CheckoutPage() {
       if (form.password.length < 8) errs.password = 'At least 8 characters'
       if (form.confirm !== form.password) errs.confirm = 'Passwords do not match'
     }
+    if (!form.recipientName.trim()) errs.recipientName = 'Required'
+    if (!form.recipientPhone.trim()) errs.recipientPhone = 'Required'
     return errs
   }
 
@@ -155,36 +177,39 @@ export default function CheckoutPage() {
                 </p>
               </div>
 
-              <div className={styles.sectionDivider}>
-                <span className={styles.sectionLabel}>Gift Recipient</span>
-              </div>
+              <div className={styles.recipientCard}>
+                <p className={styles.recipientHeading}>Gifting this to someone special?</p>
+                <p className={styles.recipientBody}>
+                  Tell us who this piece is for. We'll ship directly to them and send an invitation to their memory portal once it arrives — no spoilers.
+                </p>
 
-              <p className={styles.sectionNote}>
-                Who is this pendant for? We'll invite them to access the memory portal after it arrives.
-              </p>
+                <div className={styles.fieldRow}>
+                  <div className={styles.field}>
+                    <label className={styles.label} htmlFor="recipientName">Recipient's Name</label>
+                    <input
+                      id="recipientName" name="recipientName" type="text"
+                      className={`${styles.input} ${errors.recipientName ? styles.inputError : ''}`}
+                      value={form.recipientName}
+                      onChange={e => { setForm(f => ({ ...f, recipientName: e.target.value })); setErrors(v => ({ ...v, recipientName: '' })) }}
+                    />
+                    {errors.recipientName && <span className={styles.errorMsg}>{errors.recipientName}</span>}
+                  </div>
 
-              <div className={styles.fieldRow}>
-                <div className={styles.field}>
-                  <label className={styles.label} htmlFor="recipientName">Recipient's Name</label>
-                  <input
-                    id="recipientName" name="recipientName" type="text"
-                    className={styles.input}
-                    value={form.recipientName}
-                    onChange={e => setForm(f => ({ ...f, recipientName: e.target.value }))}
-                  />
+                  <div className={styles.field}>
+                    <label className={styles.label} htmlFor="recipientPhone">Recipient's Phone</label>
+                    <input
+                      id="recipientPhone" name="recipientPhone" type="tel"
+                      className={`${styles.input} ${errors.recipientPhone ? styles.inputError : ''}`}
+                      value={form.recipientPhone}
+                      onChange={e => { setForm(f => ({ ...f, recipientPhone: e.target.value })); setErrors(v => ({ ...v, recipientPhone: '' })) }}
+                    />
+                    {errors.recipientPhone && <span className={styles.errorMsg}>{errors.recipientPhone}</span>}
+                  </div>
                 </div>
 
-                <div className={styles.field}>
-                  <label className={styles.label} htmlFor="recipientEmail">
-                    Recipient's Email <span className={styles.optional}>(optional)</span>
-                  </label>
-                  <input
-                    id="recipientPhone" name="recipientPhone" type="tel"
-                    className={styles.input}
-                    value={form.recipientPhone}
-                    onChange={e => setForm(f => ({ ...f, recipientPhone: e.target.value }))}
-                  />
-                </div>
+                <p className={styles.recipientShippingNote}>
+                  Their shipping address will be collected on the next screen.
+                </p>
               </div>
 
               {apiError && <p className={styles.apiError}>{apiError}</p>}
@@ -198,6 +223,18 @@ export default function CheckoutPage() {
               <p className={styles.formSub}>
                 Your account unlocks your piece's memory portal — add photos, voice notes, and messages for the recipient after purchase.
               </p>
+
+              <button
+                type="button"
+                className={styles.googleBtn}
+                onClick={handleGoogle}
+                disabled={googleBusy}
+              >
+                <GoogleIcon />
+                {googleBusy ? 'Redirecting…' : 'Continue with Google'}
+              </button>
+
+              <div className={styles.orDivider}><span>or create an account</span></div>
 
               <form className={styles.form} onSubmit={handleSubmit} noValidate>
 
@@ -262,36 +299,39 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
-                <div className={styles.sectionDivider}>
-                  <span className={styles.sectionLabel}>Gift Recipient</span>
-                </div>
+                <div className={styles.recipientCard}>
+                  <p className={styles.recipientHeading}>Gifting this to someone special?</p>
+                  <p className={styles.recipientBody}>
+                    Tell us who this piece is for. We'll ship directly to them and send an invitation to their memory portal once it arrives — no spoilers.
+                  </p>
 
-                <p className={styles.sectionNote}>
-                  Who is this pendant for? We'll invite them to access the memory portal after it arrives.
-                </p>
+                  <div className={styles.fieldRow}>
+                    <div className={styles.field}>
+                      <label className={styles.label} htmlFor="recipientName">Recipient's Name</label>
+                      <input
+                        id="recipientName" name="recipientName" type="text"
+                        className={`${styles.input} ${errors.recipientName ? styles.inputError : ''}`}
+                        value={form.recipientName}
+                        onChange={e => { setForm(f => ({ ...f, recipientName: e.target.value })); setErrors(v => ({ ...v, recipientName: '' })) }}
+                      />
+                      {errors.recipientName && <span className={styles.errorMsg}>{errors.recipientName}</span>}
+                    </div>
 
-                <div className={styles.fieldRow}>
-                  <div className={styles.field}>
-                    <label className={styles.label} htmlFor="recipientName">Recipient's Name</label>
-                    <input
-                      id="recipientName" name="recipientName" type="text"
-                      className={styles.input}
-                      value={form.recipientName}
-                      onChange={e => setForm(f => ({ ...f, recipientName: e.target.value }))}
-                    />
+                    <div className={styles.field}>
+                      <label className={styles.label} htmlFor="recipientPhone">Recipient's Phone</label>
+                      <input
+                        id="recipientPhone" name="recipientPhone" type="tel"
+                        className={`${styles.input} ${errors.recipientPhone ? styles.inputError : ''}`}
+                        value={form.recipientPhone}
+                        onChange={e => { setForm(f => ({ ...f, recipientPhone: e.target.value })); setErrors(v => ({ ...v, recipientPhone: '' })) }}
+                      />
+                      {errors.recipientPhone && <span className={styles.errorMsg}>{errors.recipientPhone}</span>}
+                    </div>
                   </div>
 
-                  <div className={styles.field}>
-                    <label className={styles.label} htmlFor="recipientPhone">
-                      Recipient's Phone <span className={styles.optional}>(optional)</span>
-                    </label>
-                    <input
-                      id="recipientPhone" name="recipientPhone" type="tel"
-                      className={styles.input}
-                      value={form.recipientPhone}
-                      onChange={e => setForm(f => ({ ...f, recipientPhone: e.target.value }))}
-                    />
-                  </div>
+                  <p className={styles.recipientShippingNote}>
+                    Their shipping address will be collected on the next screen.
+                  </p>
                 </div>
 
                 {apiError && <p className={styles.apiError}>{apiError}</p>}

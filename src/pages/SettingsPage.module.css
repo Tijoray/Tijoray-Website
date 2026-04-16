@@ -1,0 +1,186 @@
+.page {
+  background: var(--cream);
+  min-height: 100vh;
+}
+
+.inner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 160px 56px 120px;
+}
+
+.header {
+  margin-bottom: 56px;
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--rose);
+  margin-bottom: 16px;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 300;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+/* ── Sections layout ── */
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ── Card ── */
+.card {
+  background: #fff;
+  border: 1px solid var(--border-soft);
+  padding: 36px 40px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.cardTitle {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: -4px;
+}
+
+/* ── Form fields ── */
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+}
+
+.input {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-soft);
+  padding: 12px 0;
+  outline: none;
+  transition: border-color 0.3s;
+  width: 100%;
+}
+
+.input::placeholder {
+  color: var(--ink-soft);
+}
+
+.input:focus {
+  border-bottom-color: var(--rose);
+}
+
+.inputError {
+  border-bottom-color: var(--rose) !important;
+}
+
+.hint {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--ink-soft);
+  font-style: italic;
+  margin-top: -2px;
+}
+
+.errorMsg {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--rose);
+}
+
+/* ── Status messages ── */
+.statusMsg {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.6;
+  padding: 12px 16px;
+  border: 1px solid;
+}
+
+.success {
+  color: #3a6b3e;
+  background: rgba(58, 107, 62, 0.06);
+  border-color: rgba(58, 107, 62, 0.2);
+}
+
+.error {
+  color: var(--rose);
+  background: rgba(185, 122, 106, 0.08);
+  border-color: rgba(185, 122, 106, 0.2);
+}
+
+/* ── Save button ── */
+.saveBtn {
+  align-self: flex-start;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: var(--burgundy);
+  border: none;
+  padding: 16px 36px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  margin-top: 4px;
+}
+
+.saveBtn:hover:not(:disabled) {
+  background: var(--burgundy-h);
+  transform: translateY(-2px);
+}
+
+.saveBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .inner {
+    padding: 140px 24px 80px;
+  }
+
+  .card {
+    padding: 28px 24px 32px;
+  }
+
+  .fieldRow {
+    grid-template-columns: 1fr;
+  }
+}

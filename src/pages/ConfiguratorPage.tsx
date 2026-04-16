@@ -102,11 +102,26 @@ const BUILD_DRIFT_Y   = -0.07 // world-units below final position at animation s
 /* ── Helpers ───────────────────────────────────────────── */
 function easeOutCubic(t: number) { return 1 - Math.pow(1 - Math.min(t, 1), 3) }
 
+// Gem mesh detection — matched against material name, mesh name, and parent node name
+const GEM_NAME_RE = /garnet|amethyst|aquamarine|diamond|emerald|pearl|ruby|peridot|sapphire|tourmaline|citrine|turquoise|gem|stone|crystal/i
 
-function createGemMaterial(stoneIdx: number): THREE.MeshPhysicalMaterial {
+// Heart/pear gem meshes may have inconsistent normals due to how they're modelled
+// as inset cavities. DoubleSide ensures correct glass rendering regardless of normal direction.
+const BEZEL_SHAPES = new Set<Shape>(['heart', 'pear'])
+
+function createGemMaterial(stoneIdx: number, shape: Shape | null = null): THREE.MeshPhysicalMaterial {
   const g = GEM_PROPS[stoneIdx]
+  const inset = shape !== null && BEZEL_SHAPES.has(shape)
+
+  const baseColor = new THREE.Color(g.color)
+
+  // Heart/pear gems: the mesh face may have inconsistent normals (inward-pointing)
+  // because the gem is modelled as an inset cavity. DoubleSide ensures both the
+  // front and back glass surfaces contribute to the render, which restores the
+  // glassy refraction/caustic look regardless of normal direction.
+  // We also boost envMapIntensity so the IOR-driven surface reflections are vivid.
   return new THREE.MeshPhysicalMaterial({
-    color:               new THREE.Color(g.color),
+    color:               baseColor,
     ior:                 g.ior,
     transmission:        g.transmission,
     thickness:           g.thickness,
@@ -114,11 +129,12 @@ function createGemMaterial(stoneIdx: number): THREE.MeshPhysicalMaterial {
     metalness:           0,
     clearcoat:           g.clearcoat,
     clearcoatRoughness:  g.clearcoatRoughness,
-    envMapIntensity:     g.envMapIntensity,
+    envMapIntensity:     inset ? g.envMapIntensity * 2.0 : g.envMapIntensity,
     attenuationColor:    new THREE.Color(g.attenuationColor),
     attenuationDistance: g.attenuationDistance,
     iridescence:         g.iridescence,
     iridescenceIOR:      g.iridescenceIOR,
+    side:                inset ? THREE.DoubleSide : THREE.FrontSide,
   })
 }
 
@@ -187,8 +203,8 @@ export default function ConfiguratorPage() {
     const scene = new THREE.Scene()
     sceneRef.current = scene
 
-    // Camera (square canvas — aspect 1)
-    const camera = new THREE.PerspectiveCamera(42, 1, 0.01, 100)
+    // Camera — aspect updated by resize handler
+    const camera = new THREE.PerspectiveCamera(42, canvas.clientWidth / canvas.clientHeight, 0.01, 100)
     camera.position.set(0, 0, 5)
     cameraRef.current = camera
 
@@ -241,10 +257,13 @@ export default function ConfiguratorPage() {
     controls.addEventListener('start', onStart)
     controls.addEventListener('end',   onEnd)
 
-    // Resize handler — keeps canvas square
+    // Resize handler — fills the full canvas element
     function resize() {
-      const size = canvas!.clientWidth
-      renderer.setSize(size, size, false)
+      const w = canvas!.clientWidth
+      const h = canvas!.clientHeight
+      renderer.setSize(w, h, false)
+      camera.aspect = w / h
+      camera.updateProjectionMatrix()
     }
     resize()
     window.addEventListener('resize', resize, { passive: true })
@@ -331,7 +350,7 @@ export default function ConfiguratorPage() {
     if (!shape || !sceneRef.current) return
 
     const scene    = sceneRef.current
-    const shapeKey = shape as Shape
+    const shapeKey = shape
 
     // Remove ONLY the pendant pivot — chain stays in scene permanently
     const outgoing = currentGroupRef.current
@@ -365,12 +384,12 @@ export default function ConfiguratorPage() {
           const col = std.color ?? new THREE.Color(1, 1, 1)
           if (col.r < 0.3 && col.g > 0.45 && col.b > 0.45) { child.visible = false; return }
 
-          const GEM_NAME_RE = /garnet|amethyst|aquamarine|diamond|emerald|pearl|ruby|peridot|sapphire|tourmaline|citrine|turquoise|gem|stone|crystal/i
-          const isGem = GEM_NAME_RE.test(std.name) || GEM_NAME_RE.test(child.name)
+          const parentName = child.parent?.name ?? ''
+          const isGem = GEM_NAME_RE.test(std.name) || GEM_NAME_RE.test(child.name) || GEM_NAME_RE.test(parentName)
             || (col.r < 0.12 && col.g < 0.12 && col.b < 0.12)
 
           if (isGem) {
-            const gemMat = createGemMaterial(snapBirthstone)
+            const gemMat = createGemMaterial(snapBirthstone, shapeKey)
             if (Array.isArray(child.material)) child.material[idx] = gemMat
             else child.material = gemMat
             gemMats.push(gemMat)
@@ -397,7 +416,7 @@ export default function ConfiguratorPage() {
       )
       const offset = chainAttachRef.current!.clone().sub(pendantTop)
       offset.y += pendantSize.y * 0.21
-      offset.z -= pendantSize.x * -0.05
+      offset.z += pendantSize.x * 0.05
       pendantModel.position.add(offset)
       pendantModel.updateMatrixWorld(true)
     }
@@ -476,11 +495,11 @@ export default function ConfiguratorPage() {
       chainModel.scale.setScalar(scale)
       chainModel.updateMatrixWorld(true)
 
-      const box2   = new THREE.Box3().setFromObject(chainModel)
+      // Centre the chain, then read the final bbox once for the attach point
+      const box2 = new THREE.Box3().setFromObject(chainModel)
       chainModel.position.sub(box2.getCenter(new THREE.Vector3()))
       chainModel.updateMatrixWorld(true)
 
-      // Store scale and bottom-center attach point for all future pendant loads
       assemblyScaleRef.current = scale
       const box3 = new THREE.Box3().setFromObject(chainModel)
       chainAttachRef.current = new THREE.Vector3(
@@ -544,7 +563,10 @@ export default function ConfiguratorPage() {
     tryComplete()
 
     return () => { cancelled = true; dracoLoader.dispose() }
-  }, [shape]) // eslint-disable-line react-hooks/exhaustive-deps
+  // metal/metalColor/birthstone intentionally excluded — Effects 3 & 4 mutate
+  // existing materials directly so the GLB never needs to reload for those changes.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shape])
 
   /* ── Effect 3: Metal / color mutation (no GLB reload) ── */
   useEffect(() => {
@@ -560,27 +582,31 @@ export default function ConfiguratorPage() {
     })
   }, [metal, metalColor])
 
-  /* ── Effect 4: Birthstone mutation — update all physical gem properties ── */
+  /* ── Effect 4: Birthstone change — copy fresh material props onto live gem mats ── */
   useEffect(() => {
     const mats = gemMatsRef.current
     if (!mats.length) return
-    const g = GEM_PROPS[birthstone]
+    // Build a reference material with the correct params for this stone + shape,
+    // then copy every property onto the live materials so Three.js picks up the change.
+    const ref = createGemMaterial(birthstone, shape)
     mats.forEach(m => {
-      m.color.set(g.color)
-      m.ior                 = g.ior
-      m.transmission        = g.transmission
-      m.thickness           = g.thickness
-      m.roughness           = g.roughness
-      m.clearcoat           = g.clearcoat
-      m.clearcoatRoughness  = g.clearcoatRoughness
-      m.envMapIntensity     = g.envMapIntensity
-      m.attenuationColor.set(g.attenuationColor)
-      m.attenuationDistance = g.attenuationDistance
-      m.iridescence         = g.iridescence
-      m.iridescenceIOR      = g.iridescenceIOR
+      m.color.copy(ref.color)
+      m.ior                 = ref.ior
+      m.transmission        = ref.transmission
+      m.thickness           = ref.thickness
+      m.roughness           = ref.roughness
+      m.clearcoat           = ref.clearcoat
+      m.clearcoatRoughness  = ref.clearcoatRoughness
+      m.envMapIntensity     = ref.envMapIntensity
+      m.attenuationColor.copy(ref.attenuationColor)
+      m.attenuationDistance = ref.attenuationDistance
+      m.iridescence         = ref.iridescence
+      m.iridescenceIOR      = ref.iridescenceIOR
+      m.side                = ref.side
       m.needsUpdate         = true
     })
-  }, [birthstone])
+    ref.dispose()
+  }, [birthstone, shape])
 
   /* ── Derived values ── */
   const price = new Intl.NumberFormat('en-US', {
@@ -619,10 +645,10 @@ export default function ConfiguratorPage() {
                 <p>Select a shape to begin</p>
               </div>
             )}
+            <p className={styles.orbitHint} aria-hidden="true">
+              {isTouch ? 'Drag to rotate · Pinch to zoom' : 'Drag to rotate · Scroll to zoom'}
+            </p>
           </div>
-          <p className={styles.orbitHint} aria-hidden="true">
-            {isTouch ? 'Drag to rotate · Pinch to zoom' : 'Drag to rotate · Scroll to zoom'}
-          </p>
         </div>
 
         {/* ── Right: Configurator ── */}

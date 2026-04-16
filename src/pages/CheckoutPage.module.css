@@ -185,6 +185,62 @@
   opacity: 0.7;
 }
 
+/* ── Google button ── */
+.googleBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--border-soft);
+  padding: 16px 24px;
+  cursor: pointer;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  margin-top: 8px;
+}
+
+.googleBtn:hover:not(:disabled) {
+  border-color: var(--ink-mid);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+
+.googleBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.orDivider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 4px 0;
+}
+
+.orDivider::before,
+.orDivider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-soft);
+}
+
+.orDivider span {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
 /* ── Left: account form ── */
 .formSub {
   font-family: var(--font-sans);
@@ -319,6 +375,41 @@
 .submitBtn:disabled {
   opacity: 0.55;
   cursor: not-allowed;
+}
+
+/* ── Recipient card ── */
+.recipientCard {
+  border: 1px solid var(--border-soft);
+  background: #fff;
+  padding: 28px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.recipientHeading {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.recipientBody {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--ink-mid);
+  margin-top: -8px;
+}
+
+.recipientShippingNote {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--ink-soft);
+  font-style: italic;
+  margin-top: 4px;
 }
 
 .sectionDivider {

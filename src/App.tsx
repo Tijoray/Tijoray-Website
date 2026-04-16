@@ -17,6 +17,7 @@ import CheckoutPage from './pages/CheckoutPage'
 import OrderSuccessPage from './pages/OrderSuccessPage'
 import PortalPage from './pages/PortalPage'
 import PortalPiecePage from './pages/PortalPiecePage'
+import SettingsPage from './pages/SettingsPage'
 import LoginPage from './pages/LoginPage'
 import SignUpPage from './pages/SignUpPage'
 import NotFoundPage from './pages/NotFoundPage'
@@ -74,6 +75,9 @@ export default function App() {
         } />
         <Route path="/portal/piece/:pieceId" element={
           <ProtectedRoute><PortalPiecePage /></ProtectedRoute>
+        } />
+        <Route path="/settings" element={
+          <ProtectedRoute><SettingsPage /></ProtectedRoute>
         } />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />

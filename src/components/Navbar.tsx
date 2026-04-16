@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useCart } from '../contexts/CartContext'
 import { useAuth } from '../contexts/AuthContext'
 import styles from './Navbar.module.css'
@@ -13,11 +13,25 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const navRef = useRef<HTMLElement>(null)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [closing, setClosing] = useState(false)
+  const [menuOpen,     setMenuOpen]     = useState(false)
+  const [closing,      setClosing]      = useState(false)
+  const [accountOpen,  setAccountOpen]  = useState(false)
+  const accountRef = useRef<HTMLDivElement>(null)
   const { pathname } = useLocation()
+  const navigate = useNavigate()
   const { items } = useCart()
-  const { user }  = useAuth()
+  const { user, signOut }  = useAuth()
+
+  // Close account dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (accountRef.current && !accountRef.current.contains(e.target as Node)) {
+        setAccountOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   function closeMenu() {
     setClosing(true)
@@ -94,11 +108,42 @@ export default function Navbar() {
         </ul>
         <div className={styles.navRight}>
           {user ? (
-            <Link to="/portal" className={styles.accountIcon} aria-label="My account">
-              <span className={styles.accountInitial}>
-                {(user.email?.[0] ?? 'A').toUpperCase()}
-              </span>
-            </Link>
+            <div className={styles.accountWrap} ref={accountRef}>
+              <button
+                className={styles.accountIcon}
+                aria-label="My account"
+                aria-expanded={accountOpen}
+                onClick={() => setAccountOpen(o => !o)}
+              >
+                <span className={styles.accountInitial}>
+                  {(user.email?.[0] ?? 'A').toUpperCase()}
+                </span>
+              </button>
+              {accountOpen && (
+                <div className={styles.accountDropdown}>
+                  <Link
+                    to="/portal"
+                    className={styles.dropdownItem}
+                    onClick={() => setAccountOpen(false)}
+                  >
+                    Portal
+                  </Link>
+                  <Link
+                    to="/settings"
+                    className={styles.dropdownItem}
+                    onClick={() => setAccountOpen(false)}
+                  >
+                    Settings
+                  </Link>
+                  <button
+                    className={`${styles.dropdownItem} ${styles.dropdownSignOut}`}
+                    onClick={() => { setAccountOpen(false); signOut(); navigate('/') }}
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <Link to="/login" className={styles.signInLink}>Sign In</Link>
           )}
