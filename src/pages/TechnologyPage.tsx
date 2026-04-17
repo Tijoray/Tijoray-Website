@@ -181,8 +181,8 @@ export default function TechnologyPage() {
                       playsInline
                       aria-label="Arcana memory feature — a personalised message revealing on first tap"
                     >
-                      <source src="/assets/memory-page.mp4" type="video/mp4" />
-                      <source src="/assets/memory-page.mov" type="video/quicktime" />
+                      <source src="/assets/video/memory-page.mp4" type="video/mp4" />
+                      <source src="/assets/video/memory-page.mov" type="video/quicktime" />
                     </video>
                   ) : (
                     <img

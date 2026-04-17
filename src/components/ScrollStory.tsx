@@ -151,7 +151,7 @@ export default function ScrollStory() {
     const gltfLoader = new GLTFLoader()
     gltfLoader.setDRACOLoader(dracoLoader)
 
-    gltfLoader.load('/assets/3D Pendant.glb', (gltf) => {
+    gltfLoader.load('/assets/3d/pendant-scroll.glb', (gltf) => {
       if (destroyed) return
 
       const model = gltf.scene
@@ -473,20 +473,20 @@ export default function ScrollStory() {
                 <img
                   ref={phoneEstRef}
                   className={styles.phoneScreen}
-                  src="/assets/Establishing Connection.png"
+                  src="/assets/jewelry/nfc-establishing.png"
                   alt="App: establishing NFC connection with pendant"
                   style={{ opacity: 1 }}
                 />
                 <img
                   ref={phoneEstabRef}
                   className={styles.phoneScreen}
-                  src="/assets/Connection Established.png"
+                  src="/assets/jewelry/nfc-established.png"
                   alt="App: connection established"
                 />
                 <img
                   ref={phoneConnRef}
                   className={styles.phoneScreen}
-                  src="/assets/Connected Piece.png"
+                  src="/assets/jewelry/nfc-connected.png"
                   alt="App: connected piece vault — Aurelia Infinite"
                 />
                 {/* Animated loading bar overlay — JS-positioned to pixel-match the image bar */}

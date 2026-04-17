@@ -85,7 +85,7 @@ export default function Navbar() {
     <>
       <nav ref={navRef} className={styles.navbar} aria-label="Primary navigation">
         <Link to="/" className={styles.logo} aria-label="Arcana Home">
-          <img src="/assets/Arcana Logo.png" alt="Arcana" />
+          <img src="/assets/brand/logo.png" alt="Arcana" />
         </Link>
         <ul className={styles.links}>
           {NAV_LINKS.map(({ label, to }) => (

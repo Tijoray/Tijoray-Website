@@ -90,7 +90,7 @@ export default function CollectionPage() {
             >
               <div className={styles.cardVisual}>
                 <img
-                  src="/assets/Birthstone-Pendant.png"
+                  src="/assets/jewelry/birthstone-pendant.png"
                   alt="Birthstone Pendant — square and circle in 18K gold"
                   className={styles.cardPhoto}
                 />
@@ -125,7 +125,7 @@ export default function CollectionPage() {
             >
               <div className={`${styles.cardVisual} ${styles.cardVisualSoon}`}>
                 <img
-                  src="/assets/Birthstone-Bracelet.png"
+                  src="/assets/jewelry/birthstone-bracelet.png"
                   alt="Birthstone Bracelet — square and circle in 18K gold"
                   className={styles.cardPhoto}
                 />

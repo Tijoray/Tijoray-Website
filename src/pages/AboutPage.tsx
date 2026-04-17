@@ -102,20 +102,22 @@ export default function AboutPage() {
       <section className={`${styles.craftSection} ${styles.fadeUp}`} ref={ref(4) as any}>
         <div className={styles.craftInner}>
           <div className={styles.craftSpecs}>
-            <p className={styles.eyebrow}>Material Specification</p>
-            {[
-              { label: 'Metal Purity', value: '18K — Hallmark Certified' },
-              { label: 'Metal Type',   value: 'Rose Gold / Yellow Gold / White Gold' },
-              { label: 'Setting',      value: 'Hand-finished, prong and bezel options' },
-              { label: 'Gemstone',     value: 'Responsibly sourced, DIA certified' },
-              { label: 'NFC Vault',    value: 'Passive — no battery, no signal required' },
-              { label: 'Guarantee',    value: 'Lifetime Heritage Guarantee' },
-            ].map(s => (
-              <div key={s.label} className={styles.specRow}>
-                <span className={styles.specLabel}>{s.label}</span>
-                <span className={styles.specValue}>{s.value}</span>
-              </div>
-            ))}
+            <p className={styles.eyebrow}>The Making</p>
+            <p className={styles.bodyText}>
+              Each Arcana pendant begins as raw metal and stone — responsibly sourced,
+              rigorously selected. Our jewellers work in stainless steel, sterling silver,
+              and 10K or 18K gold, finishing every surface by hand before the birthstone
+              is set.
+            </p>
+            <p className={styles.bodyText}>
+              The NFC vault sealed within requires no battery, no signal, no subscription.
+              It exists entirely within the piece — passive, permanent, and yours alone to open.
+            </p>
+            <p className={styles.bodyText}>
+              Every pendant leaves our atelier under a Lifetime Heritage Guarantee.
+              Not a warranty — a promise that what you create today will still be
+              readable a generation from now.
+            </p>
           </div>
           <div className={styles.craftQuote}>
             <div className={styles.quoteRule} />

@@ -8,7 +8,7 @@ export default function Footer() {
 
         <div className={styles.footerBrand}>
           <div className={styles.footerLogo}>
-            <img src="/assets/Arcana Logo.png" alt="Arcana" />
+            <img src="/assets/brand/logo.png" alt="Arcana" />
           </div>
           <p className={styles.footerTagline}>
             "A jewel for every memory.<br />A memory for every generation."

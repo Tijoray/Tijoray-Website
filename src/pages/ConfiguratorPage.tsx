@@ -15,13 +15,13 @@ type Metal      = 'steel' | 'silver' | '10k' | '18k'
 type MetalColor = 'white' | 'gold' | 'rose'
 
 /* ── Constants ─────────────────────────────────────────── */
-const CHAIN_PATH = '/assets/chain no lock-optimized.glb'
+const CHAIN_PATH = '/assets/3d/chain.glb'
 
 const PENDANT_PATHS: Record<Shape, string> = {
-  square: '/assets/square pendant-optimized.glb',
-  circle: '/assets/Circle-pendant-optimized.glb',
-  heart:  '/assets/heart-pendant-optimized.glb',
-  pear:   '/assets/pear-pendant-optimized.glb',
+  square: '/assets/3d/pendant-square.glb',
+  circle: '/assets/3d/pendant-circle.glb',
+  heart:  '/assets/3d/pendant-heart.glb',
+  pear:   '/assets/3d/pendant-pear.glb',
 }
 
 const METAL_PRICES: Record<Metal, number> = {
@@ -94,6 +94,21 @@ const MONTH_NAMES = [
   'January', 'February', 'March', 'April',
   'May', 'June', 'July', 'August',
   'September', 'October', 'November', 'December',
+]
+
+const STONE_MEANINGS = [
+  'Devotion and protection on new journeys.',
+  'Clarity of mind, sincerity, and inner peace.',
+  'Courage, calm, and clarity in turbulent waters.',
+  'Eternal love, strength, and invincibility.',
+  'Hope, rebirth, and the endurance of love.',
+  'Purity and wisdom earned through experience.',
+  'Passion, vitality, and the fire of commitment.',
+  'Strength, purpose, and a light that cannot be dimmed.',
+  'Truth, loyalty, and the wisdom of the ages.',
+  'Compassion, healing, and emotional depth.',
+  'Joy, abundance, and the warmth of generosity.',
+  'Protection, friendship, and good fortune.',
 ]
 
 const BUILD_DURATION  = 900 // ms — fade + drift animation
@@ -820,6 +835,151 @@ export default function ConfiguratorPage() {
 
         </div>
       </div>
+
+      {/* ── Story section ── */}
+      <section className={styles.storySection}>
+        <div className={styles.storyInner}>
+          <div className={styles.storyText}>
+            <p className={styles.eyebrow}>The Birthstone Pendant</p>
+            <h2 className={styles.storyTitle}>
+              A gemstone chosen<br />across <em>centuries.</em>
+            </h2>
+            <p className={styles.storyBody}>
+              The tradition of birthstones stretches back to ancient civilisations —
+              each stone assigned to a month not by chance, but by the qualities it
+              was believed to carry: protection, clarity, passion, renewal.
+            </p>
+            <p className={styles.storyBody}>
+              The Arcana Pendant honours that tradition and extends it. Beneath the
+              surface of each stone sits a passive NFC vault — no battery, no signal
+              required — holding whatever you choose to preserve. A voice. A map.
+              A letter. A photograph. The stone carries meaning. The vault carries memory.
+            </p>
+            <p className={styles.storyBody}>
+              Together, they compose something that outlasts both.
+            </p>
+          </div>
+          <div className={styles.storyImageWrap}>
+            <img src="/assets/editorial/lifestyle-worn.png" alt="Arcana pendant worn at the collarbone" />
+          </div>
+        </div>
+      </section>
+
+      {/* ── Stone meanings ── */}
+      <section className={styles.stonesSection}>
+        <div className={styles.stonesInner}>
+          <div className={styles.stonesHeader}>
+            <p className={styles.eyebrow}>The Twelve Stones</p>
+            <h2 className={styles.storyTitle}>Every month has a <em>meaning.</em></h2>
+          </div>
+          <div className={styles.stonesGrid}>
+            {BIRTHSTONE_NAMES.map((name, i) => (
+              <div key={name} className={styles.stoneCard}>
+                <span
+                  className={styles.stoneCardGem}
+                  style={{ '--gem-color': BIRTHSTONE_COLORS[i] } as React.CSSProperties}
+                />
+                <span className={styles.stoneCardMonth}>{MONTH_NAMES[i]}</span>
+                <span className={styles.stoneCardName}>{name}</span>
+                <p className={styles.stoneCardMeaning}>{STONE_MEANINGS[i]}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Crafted to last ── */}
+      <section className={styles.craftSection}>
+        <div className={styles.craftInner}>
+          <div className={styles.craftImageWrap}>
+            <img src="/assets/editorial/macro-finish.png" alt="Close-up of Arcana pendant surface finish" />
+          </div>
+          <div className={styles.craftText}>
+            <p className={styles.eyebrow}>Crafted to Last</p>
+            <h2 className={styles.storyTitle}>Built for <em>a lifetime</em> of wear.</h2>
+            <p className={styles.storyBody}>
+              Every Arcana pendant undergoes a multi-stage surface treatment before it
+              leaves our atelier. Steel pieces are finished with PVD coating — a process
+              used in aerospace and surgical instruments — achieving a hardness that
+              resists daily scratching far beyond standard plating.
+            </p>
+            <p className={styles.storyBody}>
+              Gold and silver pendants receive a final micron-thick rhodium or IP gold
+              layer, bonded at the molecular level. The result is a surface that holds
+              its colour, its lustre, and its precision-set stone through years of
+              continuous wear.
+            </p>
+            <p className={styles.storyBody}>
+              Every piece leaves under our Lifetime Heritage Guarantee — not a warranty,
+              but a commitment that we will maintain your pendant for as long as it exists.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Dimensions ── */}
+      <section className={styles.dimsSection}>
+        <div className={styles.dimsInner}>
+          <p className={styles.eyebrow}>Pendant Dimensions</p>
+          <div className={styles.dimsGrid}>
+            {[
+              { stat: '18 mm', label: 'Pendant face' },
+              { stat: '2.5 mm', label: 'Profile depth' },
+              { stat: '45 cm', label: 'Chain length' },
+              { stat: '4–9 g', label: 'Weight by metal' },
+            ].map(d => (
+              <div key={d.label} className={styles.dimStat}>
+                <span className={styles.dimValue}>{d.stat}</span>
+                <span className={styles.dimLabel}>{d.label}</span>
+              </div>
+            ))}
+          </div>
+          <p className={styles.dimsNote}>
+            The pendant face is consistent across all four shapes — Square, Circle, Heart, and Pear —
+            so pieces can be stacked and layered interchangeably on the same chain.
+            Chain length can be adjusted at checkout.
+          </p>
+        </div>
+      </section>
+
+      {/* ── Ways to wear ── */}
+      <section className={styles.wearSection}>
+        <div className={styles.wearInner}>
+          <p className={styles.eyebrow}>How to Wear It</p>
+          <h2 className={styles.storyTitle}>One piece. <em>Endless ways.</em></h2>
+          <div className={styles.wearGrid}>
+            {[
+              {
+                label: 'Solo',
+                desc: 'Worn alone, the Arcana pendant speaks for itself — a single stone, a single story, worn close to the skin.',
+                img: '/assets/editorial/wear-solo.png',
+                alt: 'Arcana pendant worn solo',
+              },
+              {
+                label: 'Stacked',
+                desc: 'Multiple Arcana pendants on a single chain — each stone a different month, a different person, a different memory.',
+                img: '/assets/editorial/wear-stacked.png',
+                alt: 'Multiple Arcana pendants on one chain',
+              },
+              {
+                label: 'Layered',
+                desc: 'Pair your Arcana pendant with other necklaces at varying lengths — the pendant sits naturally at collarbone height.',
+                img: '/assets/editorial/wear-layered.png',
+                alt: 'Arcana pendant layered with other necklaces',
+              },
+            ].map(w => (
+              <div key={w.label} className={styles.wearCard}>
+                <div className={styles.wearImageWrap}>
+                  <img src={w.img} alt={w.alt} />
+                </div>
+                <h3 className={styles.wearLabel}>{w.label}</h3>
+                <p className={styles.wearDesc}>{w.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
     </main>
   )
 }

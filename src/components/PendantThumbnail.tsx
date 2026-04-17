@@ -9,13 +9,13 @@ type Shape      = 'square' | 'circle' | 'heart' | 'pear'
 type Metal      = 'steel' | 'silver' | '10k' | '18k'
 type MetalColor = 'white' | 'gold' | 'rose'
 
-const CHAIN_PATH = '/assets/chain no lock-optimized.glb'
+const CHAIN_PATH = '/assets/3d/chain.glb'
 
 const PENDANT_PATHS: Record<Shape, string> = {
-  square: '/assets/square pendant-optimized.glb',
-  circle: '/assets/Circle-pendant-optimized.glb',
-  heart:  '/assets/heart-pendant-optimized.glb',
-  pear:   '/assets/pear-pendant-optimized.glb',
+  square: '/assets/3d/pendant-square.glb',
+  circle: '/assets/3d/pendant-circle.glb',
+  heart:  '/assets/3d/pendant-heart.glb',
+  pear:   '/assets/3d/pendant-pear.glb',
 }
 
 const METAL_COLOR_HEX: Record<MetalColor, string> = {

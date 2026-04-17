@@ -589,6 +589,258 @@
   opacity: 0.7;
 }
 
+/* ── Editorial sections (below the configurator split) ── */
+
+
+/* ── Story ── */
+.storySection {
+  background: var(--cream-warm);
+  padding: 120px 56px;
+}
+
+.storyInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 96px;
+  align-items: center;
+}
+
+.storyTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 300;
+  line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 36px;
+}
+
+.storyTitle em {
+  font-style: italic;
+  color: var(--rose);
+}
+
+.storyBody {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--ink-mid);
+  margin-bottom: 18px;
+}
+
+.storyBody:last-child {
+  margin-bottom: 0;
+}
+
+.storyImageWrap {
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+.storyImageWrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Stone meanings ── */
+.stonesSection {
+  background: var(--cream);
+  padding: 120px 56px;
+}
+
+.stonesInner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.stonesHeader {
+  margin-bottom: 64px;
+}
+
+.stonesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+}
+
+.stoneCard {
+  background: var(--cream-warm);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stoneCardGem {
+  display: block;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gem-color);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.16);
+  margin-bottom: 4px;
+  flex-shrink: 0;
+}
+
+.stoneCardMonth {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.stoneCardName {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.stoneCardMeaning {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--ink-mid);
+  margin: 0;
+}
+
+/* ── Crafted to last ── */
+.craftSection {
+  background: var(--cream-warm);
+  padding: 120px 56px;
+}
+
+.craftInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 96px;
+  align-items: center;
+}
+
+.craftImageWrap {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+
+.craftImageWrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Dimensions ── */
+.dimsSection {
+  background: var(--cream);
+  padding: 96px 56px;
+}
+
+.dimsInner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dimsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  margin: 48px 0 40px;
+}
+
+.dimStat {
+  background: var(--cream-warm);
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dimValue {
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 4vw, 52px);
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.dimLabel {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+}
+
+.dimsNote {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--ink-soft);
+  max-width: 680px;
+}
+
+/* ── Ways to wear ── */
+.wearSection {
+  background: var(--cream-warm);
+  padding: 120px 56px;
+}
+
+.wearInner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.wearGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  margin-top: 64px;
+}
+
+.wearCard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.wearImageWrap {
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+.wearImageWrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.wearLabel {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ink);
+}
+
+.wearDesc {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--ink-mid);
+  margin: 0;
+}
+
 /* ── Responsive ── */
 @media (max-width: 1100px) {
   .configPanel {
@@ -673,5 +925,50 @@
   .stoneGrid {
     grid-template-columns: repeat(4, 1fr);
     gap: 4px;
+  }
+}
+
+/* ── Editorial sections responsive ── */
+@media (max-width: 900px) {
+  .storySection,
+  .craftSection,
+  .stonesSection,
+  .dimsSection,
+  .wearSection {
+    padding: 80px 24px;
+  }
+
+  .storyInner,
+  .craftInner {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  /* Image comes after text on mobile for story; before text for craft */
+  .craftImageWrap {
+    order: -1;
+  }
+
+  .stonesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dimsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .wearGrid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stonesGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dimsGrid {
+    grid-template-columns: 1fr 1fr;
   }
 }
