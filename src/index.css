@@ -1,8 +1,8 @@
 :root {
   --cream:        #F7F7F2;
   --cream-warm:   #EFE8DE;
-  --dark-story:   #111111;
-  --dark-surface: #181818;
+  --dark-story:   #0F0E0D;
+  --dark-surface: #181715;
   --ink:          #1D1A19;
   --ink-mid:      #4D4641;
   --ink-soft:     rgba(29, 26, 25, 0.45);
@@ -16,10 +16,13 @@
   --burgundy:     #4A2326;
   --burgundy-h:   #5D2C30;
   --dark:         #1D1A19;
-  --onyx:         #0A0A0A;
+  --onyx:         #0F0E0D;
   --border-soft:  #D9D1C6;
   --font-serif:   'Cormorant Garamond', Georgia, serif;
   --font-sans:    'Montserrat', system-ui, sans-serif;
+  --eyebrow-size: 11px;
+  --eyebrow-track: 0.28em;
+  --space-section: clamp(80px, 10vw, 140px);
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,14 +33,46 @@ body {
   font-family: var(--font-sans);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  font-synthesis: none;
+}
+
+.emphasis {
+  font-style: italic;
+  color: var(--rose-deep);
 }
 ::selection { background: rgba(185,122,106,0.22); }
+html { caret-color: var(--rose-deep); }
 
-/* Global keyboard focus indicator */
+/* Global keyboard focus indicator — dual ring for contrast on cream and gold backgrounds */
 *:focus-visible {
-  outline: 2px solid var(--gold);
-  outline-offset: 3px;
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--gold);
   border-radius: 2px;
+}
+
+/* ── Ghost button utility — transparent fill, rose border, for secondary CTAs ── */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--rose-deep);
+  background: transparent;
+  border: 1px solid var(--rose);
+  padding: 12px 26px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+.btn-ghost:hover {
+  background: var(--rose);
+  color: var(--cream);
+  border-color: var(--rose);
 }
 
 @media (prefers-reduced-motion: reduce) {

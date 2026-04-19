@@ -21,7 +21,7 @@ export default function Footer() {
             <li><Link to="/collection">Pendants</Link></li>
             <li><Link to="/collection">Bracelets</Link></li>
             <li><Link to="/build">Build Your Arcana</Link></li>
-            <li><span className={styles.linkPlaceholder}>Gift a Legacy</span></li>
+            <li><span className={styles.linkSoon}>Gift a Legacy<span className={styles.soonBadge}>Soon</span></span></li>
           </ul>
         </div>
 
@@ -30,8 +30,8 @@ export default function Footer() {
           <ul className={styles.footerLinks}>
             <li><Link to="/about">Our Story</Link></li>
             <li><Link to="/technology">The Technology</Link></li>
-            <li><span className={styles.linkPlaceholder}>Craftsmanship</span></li>
-            <li><span className={styles.linkPlaceholder}>Journal</span></li>
+            <li><span className={styles.linkSoon}>Craftsmanship<span className={styles.soonBadge}>Soon</span></span></li>
+            <li><span className={styles.linkSoon}>Journal<span className={styles.soonBadge}>Soon</span></span></li>
           </ul>
         </div>
 
@@ -39,8 +39,8 @@ export default function Footer() {
           <p className={styles.footerColHead}>Support</p>
           <ul className={styles.footerLinks}>
             <li><Link to="/contact">Contact Us</Link></li>
-            <li><span className={styles.linkPlaceholder}>Care Guide</span></li>
-            <li><span className={styles.linkPlaceholder}>FAQ</span></li>
+            <li><span className={styles.linkSoon}>Care Guide<span className={styles.soonBadge}>Soon</span></span></li>
+            <li><span className={styles.linkSoon}>FAQ<span className={styles.soonBadge}>Soon</span></span></li>
             <li><a href="mailto:curator@atelierarcana.com">curator@atelierarcana.com</a></li>
           </ul>
         </div>

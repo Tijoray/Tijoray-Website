@@ -594,7 +594,7 @@
 
 /* ── Story ── */
 .storySection {
-  background: var(--cream-warm);
+  background: var(--cream);
   padding: 120px 56px;
 }
 
@@ -647,7 +647,7 @@
 
 /* ── Stone meanings ── */
 .stonesSection {
-  background: var(--cream);
+  background: var(--cream-warm);
   padding: 120px 56px;
 }
 
@@ -713,7 +713,7 @@
 
 /* ── Crafted to last ── */
 .craftSection {
-  background: var(--cream-warm);
+  background: var(--cream);
   padding: 120px 56px;
 }
 
@@ -740,7 +740,7 @@
 
 /* ── Dimensions ── */
 .dimsSection {
-  background: var(--cream);
+  background: var(--cream-warm);
   padding: 96px 56px;
 }
 
@@ -791,7 +791,7 @@
 
 /* ── Ways to wear ── */
 .wearSection {
-  background: var(--cream-warm);
+  background: var(--cream);
   padding: 120px 56px;
 }
 
