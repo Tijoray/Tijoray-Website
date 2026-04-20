@@ -7,6 +7,8 @@ import path from 'path'
 
 const s3 = new S3Client({
   region: process.env.AWS_REGION!,
+  endpoint: process.env.S3_ENDPOINT,
+  forcePathStyle: !!process.env.S3_ENDPOINT,
   credentials: {
     accessKeyId:     process.env.AWS_ACCESS_KEY_ID!,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
@@ -123,7 +125,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     },
   })
 
-  const fileUrl = `https://${bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
+  const fileUrl = process.env.PUBLIC_FILE_BASE_URL
+    ? `${process.env.PUBLIC_FILE_BASE_URL.replace(/\/$/, '')}/${key}`
+    : `https://${bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
 
   return res.status(200).json({ presignedPost: { url, fields }, fileUrl })
 }
