@@ -51,7 +51,7 @@ export default function CartPage() {
         {/* Left — item list */}
         <div className={styles.left}>
           <p className={styles.eyebrow}>Your Cart</p>
-          <h1 className={styles.title}>The <em>Arcana</em> Pendant{items.length > 1 ? 's' : ''}</h1>
+          <h1 className={styles.title}>The <em>Tijoray</em> Pendant{items.length > 1 ? 's' : ''}</h1>
 
           <ul className={styles.itemList}>
             {items.map((item, idx) => {

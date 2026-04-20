@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.arcana.jewelry/sitemap.xml
+Sitemap: https://www.tijoray.com/sitemap.xml

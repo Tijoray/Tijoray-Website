@@ -46,7 +46,7 @@ export default function CollectionPage() {
             Every piece tells a <em>story.</em>
           </h1>
           <p className={styles.heroSub}>
-            Each Arcana collection is built around a single idea — that fine jewellery
+            Each Tijoray collection is built around a single idea — that fine jewellery
             should carry more than beauty. Browse our series below, each crafted to hold
             memory, provenance, and meaning for generations.
           </p>
@@ -66,7 +66,7 @@ export default function CollectionPage() {
               <p className={styles.collectionDesc}>
                 Twelve stones. Twelve months. Each piece carries the gemstone of the
                 moment your loved one entered the world — set in your chosen metal,
-                embedded with a private memory, and registered in the Arcana vault forever.
+                embedded with a private memory, and registered in the Tijoray vault forever.
               </p>
             </div>
             <div className={styles.stoneStrip}>
@@ -180,7 +180,7 @@ export default function CollectionPage() {
             Your piece is <em>waiting.</em>
           </h2>
           <div className={styles.ctaBtns}>
-            <Link to="/build" className={styles.btnPrimary}>Build Your Arcana</Link>
+            <Link to="/build" className={styles.btnPrimary}>Build Your Tijoray</Link>
             <Link to="/contact" className={styles.btnSecondary}>Speak with the Atelier</Link>
           </div>
         </div>

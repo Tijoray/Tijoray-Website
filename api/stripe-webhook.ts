@@ -107,14 +107,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const customerEmail = session.customer_details?.email
   if (customerEmail) {
     await resend.emails.send({
-      from: 'Arcana <hello@arcana.jewelry>',
+      from: 'Tijoray <hello@tijoray.com>',
       to:   customerEmail,
-      subject: 'Your Arcana pendant is being crafted',
+      subject: 'Your Tijoray pendant is being crafted',
       html: `
         <p>Thank you for your order.</p>
-        <p>Your <strong>${session.metadata?.collection ?? 'Arcana'}</strong> pendant is now in production. You'll receive a shipping confirmation within 10–14 business days.</p>
+        <p>Your <strong>${session.metadata?.collection ?? 'Tijoray'}</strong> pendant is now in production. You'll receive a shipping confirmation within 10–14 business days.</p>
         <p>Once it arrives, visit <a href="${process.env.VITE_SITE_URL}/portal">your portal</a> to compose the memory inside.</p>
-        <p>— The Arcana Atelier</p>
+        <p>— The Tijoray Atelier</p>
       `,
     }).catch(err => console.error('Resend error:', err))
   }

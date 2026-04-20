@@ -48,15 +48,15 @@ export default function ContactPage() {
             How may our<br />Atelier <em>assist you</em>?
           </h1>
           <p className={styles.intro}>
-            Every Arcana piece begins with a conversation. Whether you have a
+            Every Tijoray piece begins with a conversation. Whether you have a
             question about a commission, the technology, or our process — we are
             here to listen.
           </p>
           <div className={styles.contactDetails}>
             <div className={styles.detailRow}>
               <span className={styles.detailLabel}>Email</span>
-              <a href="mailto:curator@atelierarcana.com" className={styles.detailValue}>
-                curator@atelierarcana.com
+              <a href="mailto:curator@tijoray.com" className={styles.detailValue}>
+                curator@tijoray.com
               </a>
             </div>
             <div className={styles.detailRow}>

@@ -10,7 +10,7 @@ export default function CtaSection() {
           Curate Your<br /><em>Legacy</em>
         </h2>
         <p className={styles.ctaBody}>
-          Every Arcana piece begins with a conversation. Tell us what you wish to preserve,
+          Every Tijoray piece begins with a conversation. Tell us what you wish to preserve,
           and our atelier will craft a jewel worthy of carrying it — now and for generations to come.
         </p>
         <div className={styles.ctaBtns}>

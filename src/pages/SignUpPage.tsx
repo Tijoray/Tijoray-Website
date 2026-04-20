@@ -118,7 +118,7 @@ export default function SignUpPage() {
     <main className={styles.page}>
       <div className={styles.inner}>
         <p className={styles.eyebrow}>Create your account</p>
-        <h1 className={styles.title}>Join <em>Arcana</em></h1>
+        <h1 className={styles.title}>Join <em>Tijoray</em></h1>
 
         <button
           type="button"

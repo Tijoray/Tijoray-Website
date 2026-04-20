@@ -22,7 +22,7 @@ export default function Features() {
     <section className={styles.features}>
       <div className={styles.featuresInner}>
         <header className={styles.featuresHeader}>
-          <p className={styles.sectionEyebrow}>The Arcana System</p>
+          <p className={styles.sectionEyebrow}>The Tijoray System</p>
           <h2 className={styles.sectionTitle}>Craft. Vault. <em>Legacy.</em></h2>
         </header>
 
@@ -31,7 +31,7 @@ export default function Features() {
             <div className={styles.featureNum}>01</div>
             <h3 className={styles.featureTitle}>The Jewel</h3>
             <p className={styles.featureBody}>
-              Each Arcana piece is individually handcrafted in our atelier.
+              Each Tijoray piece is individually handcrafted in our atelier.
               Custom-blended alloys, hand-finished settings, and responsibly sourced
               gemstones — created for those who demand permanence.
             </p>
@@ -51,7 +51,7 @@ export default function Features() {
             <div className={styles.featureNum}>03</div>
             <h3 className={styles.featureTitle}>The Legacy</h3>
             <p className={styles.featureBody}>
-              Unlike photographs in a drawer or files lost to time, Arcana endures.
+              Unlike photographs in a drawer or files lost to time, Tijoray endures.
               Transfer your vault to the next generation. A private archive, worn as
               jewellery — crafted to outlast its maker.
             </p>

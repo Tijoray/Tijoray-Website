@@ -229,7 +229,7 @@ export default function ScrollStory() {
 
       scene.add(pivot)
     }, undefined, (err) => {
-      console.error('[Arcana] GLB load error:', err)
+      console.error('[Tijoray] GLB load error:', err)
     })
 
     /* ── State ─────────────────────────────────────────── */
@@ -454,7 +454,7 @@ export default function ScrollStory() {
             ref={canvasRef}
             className={styles.pendantCanvas}
             role="img"
-            aria-label="Arcana pendant 3D view"
+            aria-label="Tijoray pendant 3D view"
           />
         </div>
 
@@ -465,7 +465,7 @@ export default function ScrollStory() {
         </div>
 
         {/* Phone animation */}
-        <div ref={phoneAnchorRef} id="phone-anchor" className={styles.phoneAnchor} aria-label="Arcana app connection sequence">
+        <div ref={phoneAnchorRef} id="phone-anchor" className={styles.phoneAnchor} aria-label="Tijoray app connection sequence">
           <div ref={phoneMoverRef} className={styles.phoneMover}>
             <div ref={phoneWrapRef} className={styles.phoneWrap}>
               <div className={styles.phoneIsland} aria-hidden="true" />
@@ -516,7 +516,7 @@ export default function ScrollStory() {
               <div className={styles.connListBar} />
               <div>
                 <strong>Certificate of Authenticity</strong>
-                <span>Provenance and material purity verified &amp; sealed by Arcana</span>
+                <span>Provenance and material purity verified &amp; sealed by Tijoray</span>
               </div>
             </li>
             <li>

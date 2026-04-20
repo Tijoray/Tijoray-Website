@@ -79,7 +79,7 @@ export default function LoginPage() {
     <main className={styles.page}>
       <div className={styles.inner}>
         <p className={styles.eyebrow}>Welcome back</p>
-        <h1 className={styles.title}>Sign in to <em>Arcana</em></h1>
+        <h1 className={styles.title}>Sign in to <em>Tijoray</em></h1>
 
         <button
           type="button"

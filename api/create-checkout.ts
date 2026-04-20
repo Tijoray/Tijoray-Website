@@ -75,7 +75,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         currency:     'usd',
         unit_amount:  METAL_PRICES_CENTS[item.metal] ?? 129900,
         product_data: {
-          name:        `The Arcana Pendant — ${shapeLabel}`,
+          name:        `The Tijoray Pendant — ${shapeLabel}`,
           description: item.specLine ?? `${metalLine} · ${birthstoneName}`,
         },
       },
@@ -102,8 +102,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       recipientName:  recipientName  ?? '',
       recipientPhone: recipientPhone ?? '',
     },
-    success_url: `${process.env.VITE_SITE_URL ?? 'http://localhost:5173'}/order/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url:  `${process.env.VITE_SITE_URL ?? 'http://localhost:5173'}/cart`,
+    success_url: `${process.env.VITE_SITE_URL ?? 'https://tijoray.com'}/order/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url:  `${process.env.VITE_SITE_URL ?? 'https://tijoray.com'}/cart`,
   })
 
   return res.status(200).json({ sessionUrl: session.url })

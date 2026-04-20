@@ -16,7 +16,7 @@ type CartContextValue = {
   clearCart:  () => void
 }
 
-const STORAGE_KEY = 'arcana_cart'
+const STORAGE_KEY = 'tijoray_cart'
 
 const CartContext = createContext<CartContextValue>({
   items:      [],

@@ -29,18 +29,31 @@
   border-bottom: 1px solid rgba(191, 161, 95, 0.12);
 }
 
-/* --- Logo --- */
+/* --- Logo — centered wordmark --- */
+.logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  pointer-events: auto;
+}
+
 .logo img {
-  height: 36px;
+  height: 28px;
   width: auto;
   filter: brightness(0);
-  opacity: 0.85;
+  opacity: 0.88;
   transition: filter 0.45s, opacity 0.45s;
+  display: block;
 }
 
 .navbar:global(.in-dark) .logo img {
   filter: brightness(0) invert(1);
-  opacity: 0.9;
+  opacity: 0.92;
 }
 
 /* --- Links --- */
@@ -487,5 +500,10 @@
 
   .hamburger {
     display: flex;
+    margin-left: auto;
+  }
+
+  .logo img {
+    height: 24px;
   }
 }

@@ -7,13 +7,13 @@ const NFC_STEPS = [
     num: '01',
     img: '/assets/app/app-tap.png',
     title: 'Tap Your Piece',
-    desc: 'Hold your Arcana jewel to the back of your phone. No app launch required — the connection begins the moment metal meets signal.',
+    desc: 'Hold your Tijoray jewel to the back of your phone. No app launch required — the connection begins the moment metal meets signal.',
   },
   {
     num: '02',
     img: '/assets/app/app-connecting.png',
     title: 'Identity Confirmed',
-    desc: "Your piece's unique serial node is verified against the Arcana vault in seconds. Authenticated. Immutable. Yours.",
+    desc: "Your piece's unique serial node is verified against the Tijoray vault in seconds. Authenticated. Immutable. Yours.",
   },
   {
     num: '03',
@@ -26,9 +26,9 @@ const NFC_STEPS = [
 const APP_FEATURES = [
   {
     img: '/assets/app/app-memory.png',
-    label: 'The Arcana Experience',
+    label: 'The Tijoray Experience',
     title: 'A message waiting inside your gift.',
-    body: 'When you commission an Arcana piece, you can embed a private message directly into the jewel itself — photographs, voice recordings, handwritten notes, or words you want your loved one to carry forever. The moment they tap the pendant, it opens. Not a card. Not a text. Something that lives inside what you gave them.',
+    body: 'When you commission an Tijoray piece, you can embed a private message directly into the jewel itself — photographs, voice recordings, handwritten notes, or words you want your loved one to carry forever. The moment they tap the pendant, it opens. Not a card. Not a text. Something that lives inside what you gave them.',
     pills: ['Photos & Video', 'Voice Messages', 'Personal Notes', 'Revealed on First Tap'],
   },
   {
@@ -42,14 +42,14 @@ const APP_FEATURES = [
     img: '/assets/app/app-gold.png',
     label: 'Gold Composition',
     title: 'Know what you wear.',
-    body: "Every alloy in your Arcana piece is catalogued — metal purity, colour composition, and total mass. Our Craftsmanship Guarantee is embedded directly in the record, verified by the Atelier's Master Smith.",
+    body: "Every alloy in your Tijoray piece is catalogued — metal purity, colour composition, and total mass. Our Craftsmanship Guarantee is embedded directly in the record, verified by the Atelier's Master Smith.",
     pills: ['Metal Purity', 'Composition', 'Weight', 'Craftsmanship Guarantee'],
   },
   {
     img: '/assets/app/app-vault.png',
     label: 'The Vault',
     title: 'A private archive, secured forever.',
-    body: 'Your personal Vault holds every memory, certificate, and document tied to your collection. Organised by date, accessible anywhere, and protected by the Arcana security infrastructure. Your legacy, archived.',
+    body: 'Your personal Vault holds every memory, certificate, and document tied to your collection. Organised by date, accessible anywhere, and protected by the Tijoray security infrastructure. Your legacy, archived.',
     pills: ['Personal Storage', 'Certificate Archive', 'Date Organised', 'Secure Access'],
   },
 ]
@@ -118,7 +118,7 @@ export default function TechnologyPage() {
             The intelligence <em>within</em> your jewel.
           </h1>
           <p className={styles.heroSub}>
-            Every Arcana piece carries a concealed chip — a permanent, encrypted bridge
+            Every Tijoray piece carries a concealed chip — a permanent, encrypted bridge
             between the physical and digital. One tap connects your jewellery to a living
             record of its craft, its stones, and the memories you bind to it.
           </p>
@@ -160,7 +160,7 @@ export default function TechnologyPage() {
             <p className={styles.eyebrow}>The App</p>
             <h2 className={styles.sectionTitle}>Your Digital Atelier</h2>
             <p className={styles.appHeaderSub}>
-              The Arcana app is where your gift comes alive. Embed a private message before you give — and watch it reveal itself the moment your loved one taps their piece for the first time.
+              The Tijoray app is where your gift comes alive. Embed a private message before you give — and watch it reveal itself the moment your loved one taps their piece for the first time.
             </p>
           </div>
 
@@ -179,7 +179,7 @@ export default function TechnologyPage() {
                       loop
                       muted
                       playsInline
-                      aria-label="Arcana memory feature — a personalised message revealing on first tap"
+                      aria-label="Tijoray memory feature — a personalised message revealing on first tap"
                     >
                       <source src="/assets/video/memory-page.mp4" type="video/mp4" />
                       <source src="/assets/video/memory-page.mov" type="video/quicktime" />
@@ -213,7 +213,7 @@ export default function TechnologyPage() {
       <section className={`${styles.heritageSection} ${styles.fadeUp}`} ref={ref(9) as any}>
         <div className={styles.heritageInner}>
           <blockquote className={styles.heritageQuote}>
-            "Every Arcana piece is registered in our permanent digital archive, ensuring
+            "Every Tijoray piece is registered in our permanent digital archive, ensuring
             provenance and value for generations to come."
           </blockquote>
           <div className={styles.statGrid}>
@@ -235,7 +235,7 @@ export default function TechnologyPage() {
             Your piece is <em>waiting.</em>
           </h2>
           <div className={styles.ctaBtns}>
-            <Link to="/build" className={styles.btnPrimary}>Build Your Arcana</Link>
+            <Link to="/build" className={styles.btnPrimary}>Build Your Tijoray</Link>
             <Link to="/contact" className={styles.btnSecondary}>Speak with the Atelier</Link>
           </div>
         </div>

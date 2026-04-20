@@ -559,7 +559,7 @@ export default function ConfiguratorPage() {
         chainReady = true
         tryComplete()
       }, undefined, (err) => {
-        console.error('[Arcana Configurator] Chain GLB load error:', err)
+        console.error('[Tijoray Configurator] Chain GLB load error:', err)
         setLoading(false)
       })
     }
@@ -570,7 +570,7 @@ export default function ConfiguratorPage() {
         pendantReady = true
         tryComplete()
       }, undefined, (err) => {
-        console.error('[Arcana Configurator] Pendant GLB load error:', err)
+        console.error('[Tijoray Configurator] Pendant GLB load error:', err)
         setLoading(false)
       })
     }
@@ -671,7 +671,7 @@ export default function ConfiguratorPage() {
 
           <div className={styles.configHeader}>
             <p className={styles.eyebrow}>Compose Your Piece</p>
-            <h1 className={styles.configTitle}>The <em>Arcana</em> Pendant</h1>
+            <h1 className={styles.configTitle}>The <em>Tijoray</em> Pendant</h1>
             <p className={styles.seriesTag}>Birthstone Series</p>
           </div>
 
@@ -850,7 +850,7 @@ export default function ConfiguratorPage() {
               was believed to carry: protection, clarity, passion, renewal.
             </p>
             <p className={styles.storyBody}>
-              The Arcana Pendant honours that tradition and extends it. Beneath the
+              The Tijoray Pendant honours that tradition and extends it. Beneath the
               surface of each stone sits a passive NFC vault — no battery, no signal
               required — holding whatever you choose to preserve. A voice. A map.
               A letter. A photograph. The stone carries meaning. The vault carries memory.
@@ -860,7 +860,7 @@ export default function ConfiguratorPage() {
             </p>
           </div>
           <div className={styles.storyImageWrap}>
-            <img src="/assets/editorial/lifestyle-worn.png" alt="Arcana pendant worn at the collarbone" />
+            <img src="/assets/editorial/lifestyle-worn.png" alt="Tijoray pendant worn at the collarbone" />
           </div>
         </div>
       </section>
@@ -892,13 +892,13 @@ export default function ConfiguratorPage() {
       <section className={styles.craftSection}>
         <div className={styles.craftInner}>
           <div className={styles.craftImageWrap}>
-            <img src="/assets/editorial/macro-finish.png" alt="Close-up of Arcana pendant surface finish" />
+            <img src="/assets/editorial/macro-finish.png" alt="Close-up of Tijoray pendant surface finish" />
           </div>
           <div className={styles.craftText}>
             <p className={styles.eyebrow}>Crafted to Last</p>
             <h2 className={styles.storyTitle}>Built for <em>a lifetime</em> of wear.</h2>
             <p className={styles.storyBody}>
-              Every Arcana pendant undergoes a multi-stage surface treatment before it
+              Every Tijoray pendant undergoes a multi-stage surface treatment before it
               leaves our atelier. Steel pieces are finished with PVD coating — a process
               used in aerospace and surgical instruments — achieving a hardness that
               resists daily scratching far beyond standard plating.
@@ -951,21 +951,21 @@ export default function ConfiguratorPage() {
             {[
               {
                 label: 'Solo',
-                desc: 'Worn alone, the Arcana pendant speaks for itself — a single stone, a single story, worn close to the skin.',
+                desc: 'Worn alone, the Tijoray pendant speaks for itself — a single stone, a single story, worn close to the skin.',
                 img: '/assets/editorial/wear-solo.png',
-                alt: 'Arcana pendant worn solo',
+                alt: 'Tijoray pendant worn solo',
               },
               {
                 label: 'Stacked',
-                desc: 'Multiple Arcana pendants on a single chain — each stone a different month, a different person, a different memory.',
+                desc: 'Multiple Tijoray pendants on a single chain — each stone a different month, a different person, a different memory.',
                 img: '/assets/editorial/wear-stacked.png',
-                alt: 'Multiple Arcana pendants on one chain',
+                alt: 'Multiple Tijoray pendants on one chain',
               },
               {
                 label: 'Layered',
-                desc: 'Pair your Arcana pendant with other necklaces at varying lengths — the pendant sits naturally at collarbone height.',
+                desc: 'Pair your Tijoray pendant with other necklaces at varying lengths — the pendant sits naturally at collarbone height.',
                 img: '/assets/editorial/wear-layered.png',
-                alt: 'Arcana pendant layered with other necklaces',
+                alt: 'Tijoray pendant layered with other necklaces',
               },
             ].map(w => (
               <div key={w.label} className={styles.wearCard}>

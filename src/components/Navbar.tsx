@@ -84,9 +84,6 @@ export default function Navbar() {
   return (
     <>
       <nav ref={navRef} className={styles.navbar} aria-label="Primary navigation">
-        <Link to="/" className={styles.logo} aria-label="Arcana Home">
-          <img src="/assets/brand/logo.png" alt="Arcana" />
-        </Link>
         <ul className={styles.links}>
           {NAV_LINKS.map(({ label, to }) => (
             <li key={label}>
@@ -106,6 +103,9 @@ export default function Navbar() {
             </li>
           ))}
         </ul>
+        <Link to="/" className={styles.logo} aria-label="Tijoray Home">
+          <img src="/assets/brand/Text.svg" alt="Tijoray" />
+        </Link>
         <div className={styles.navRight}>
           {user ? (
             <div className={styles.accountWrap} ref={accountRef}>
@@ -157,7 +157,7 @@ export default function Navbar() {
               <span className={styles.cartBadge}>{items.length}</span>
             </Link>
           )}
-          <Link to="/build" className={styles.cta}>Build Your Arcana</Link>
+          <Link to="/build" className={styles.cta}>Build Your Tijoray</Link>
         </div>
         <button
           className={styles.hamburger}
@@ -200,7 +200,7 @@ export default function Navbar() {
             ))}
           </ul>
           <Link to="/build" className={styles.mobileCta} onClick={closeMenu}>
-            Build Your Arcana
+            Build Your Tijoray
           </Link>
         </div>
       )}

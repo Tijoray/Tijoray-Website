@@ -32,7 +32,7 @@ export default function AboutPage() {
             deserve to last forever.
           </h1>
           <p className={styles.heroSub}>
-            Atelier Arcana was founded at the intersection of fine jewellery and
+            Atelier Tijoray was founded at the intersection of fine jewellery and
             encrypted memory — for those who understand that legacy is not inherited,
             it is composed.
           </p>
@@ -81,7 +81,7 @@ export default function AboutPage() {
             {
               num: '03',
               title: 'Generational Transfer',
-              body: 'Arcana pieces are designed to be passed on. When you transfer the jewel, you transfer the vault — photographs, voices, letters — intact across generations.',
+              body: 'Tijoray pieces are designed to be passed on. When you transfer the jewel, you transfer the vault — photographs, voices, letters — intact across generations.',
             },
           ].map((p, i) => (
             <article
@@ -104,7 +104,7 @@ export default function AboutPage() {
           <div className={styles.craftSpecs}>
             <p className={styles.eyebrow}>The Making</p>
             <p className={styles.bodyText}>
-              Each Arcana pendant begins as raw metal and stone — responsibly sourced,
+              Each Tijoray pendant begins as raw metal and stone — responsibly sourced,
               rigorously selected. Our jewellers work in stainless steel, sterling silver,
               and 10K or 18K gold, finishing every surface by hand before the birthstone
               is set.
@@ -124,7 +124,7 @@ export default function AboutPage() {
             <blockquote className={styles.quoteText}>
               "We are not competing with fashion. We are competing with time."
             </blockquote>
-            <p className={styles.quoteAttr}>— Atelier Arcana, Founding Principle</p>
+            <p className={styles.quoteAttr}>— Atelier Tijoray, Founding Principle</p>
           </div>
         </div>
       </section>
@@ -137,7 +137,7 @@ export default function AboutPage() {
             Compose something <em>permanent.</em>
           </h2>
           <p className={styles.ctaBody}>
-            Every Arcana piece begins with a conversation. Tell us what you wish to
+            Every Tijoray piece begins with a conversation. Tell us what you wish to
             preserve, and our atelier will craft a jewel worthy of carrying it.
           </p>
           <div className={styles.ctaBtns}>

@@ -8,7 +8,7 @@ export default function Footer() {
 
         <div className={styles.footerBrand}>
           <div className={styles.footerLogo}>
-            <img src="/assets/brand/logo.png" alt="Arcana" />
+            <img src="/assets/brand/Logo with text.svg" alt="Tijoray" />
           </div>
           <p className={styles.footerTagline}>
             "A jewel for every memory.<br />A memory for every generation."
@@ -20,7 +20,7 @@ export default function Footer() {
           <ul className={styles.footerLinks}>
             <li><Link to="/collection">Pendants</Link></li>
             <li><Link to="/collection">Bracelets</Link></li>
-            <li><Link to="/build">Build Your Arcana</Link></li>
+            <li><Link to="/build">Build Your Tijoray</Link></li>
             <li><span className={styles.linkSoon}>Gift a Legacy<span className={styles.soonBadge}>Soon</span></span></li>
           </ul>
         </div>
@@ -41,14 +41,14 @@ export default function Footer() {
             <li><Link to="/contact">Contact Us</Link></li>
             <li><span className={styles.linkSoon}>Care Guide<span className={styles.soonBadge}>Soon</span></span></li>
             <li><span className={styles.linkSoon}>FAQ<span className={styles.soonBadge}>Soon</span></span></li>
-            <li><a href="mailto:curator@atelierarcana.com">curator@atelierarcana.com</a></li>
+            <li><a href="mailto:curator@tijoray.com">curator@tijoray.com</a></li>
           </ul>
         </div>
 
       </div>
 
       <div className={styles.footerBottom}>
-        <p className={styles.footerCopy}>© {new Date().getFullYear()} Atelier Arcana. All rights reserved.</p>
+        <p className={styles.footerCopy}>© {new Date().getFullYear()} Atelier Tijoray. All rights reserved.</p>
         <nav className={styles.footerLegal} aria-label="Legal">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>

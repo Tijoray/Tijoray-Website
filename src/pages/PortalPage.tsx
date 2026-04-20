@@ -80,7 +80,7 @@ export default function PortalPage() {
         <header className={styles.header}>
           <div>
             <p className={styles.eyebrow}>Memory Portal</p>
-            <h1 className={styles.title}>Your <em>Arcana</em> Pieces</h1>
+            <h1 className={styles.title}>Your <em>Tijoray</em> Pieces</h1>
           </div>
           <button className={styles.signOutBtn} onClick={signOut}>Sign out</button>
         </header>
@@ -93,7 +93,7 @@ export default function PortalPage() {
           <div className={styles.empty}>
             <p className={styles.emptyTitle}>No pieces yet</p>
             <p className={styles.emptyBody}>
-              Your Arcana pendant will appear here once your order is confirmed and dispatched.
+              Your Tijoray pendant will appear here once your order is confirmed and dispatched.
             </p>
             <Link to="/build" className={styles.emptyLink}>Design a pendant</Link>
           </div>
@@ -117,7 +117,7 @@ export default function PortalPage() {
                       />
                     </div>
                     <div className={styles.cardBody}>
-                      <p className={styles.cardTitle}>{piece.collection ?? 'Arcana Pendant'}</p>
+                      <p className={styles.cardTitle}>{piece.collection ?? 'Tijoray Pendant'}</p>
                       <p className={styles.cardSerial}>
                         {piece.serial ?? `ID: ${piece.id.slice(0, 8).toUpperCase()}`}
                       </p>

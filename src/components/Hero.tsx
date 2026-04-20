@@ -7,7 +7,7 @@ export default function Hero() {
       <div className={styles.heroOrb} aria-hidden="true" />
 
       <div className={styles.heroContent}>
-        <p className={styles.heroEyebrow}>Atelier Arcana</p>
+        <p className={styles.heroEyebrow}>Atelier Tijoray</p>
         <h1 className={styles.heroTitle}>
           Memories.<br />
           <em>Forever.</em>

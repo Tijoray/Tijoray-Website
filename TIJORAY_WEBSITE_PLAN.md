@@ -1,8 +1,8 @@
-# Arcana Website Design and Plan
+# Tijoray Website Design and Plan
 
 ## Purpose
 
-This document defines the design direction, content architecture, interaction model, and implementation plan for the Arcana website. It reflects the current built state of all pages and serves as the living blueprint for future work.
+This document defines the design direction, content architecture, interaction model, and implementation plan for the Tijoray website. It reflects the current built state of all pages and serves as the living blueprint for future work.
 
 **Last updated:** April 2026 — full audit after Technology page, Configurator, About, Contact builds.
 
@@ -10,7 +10,7 @@ This document defines the design direction, content architecture, interaction mo
 
 ## Brand Direction
 
-Arcana should feel like a luxury maison with a concealed technological core. The website needs to balance editorial warmth and high-end craftsmanship with the precision of secure digital infrastructure.
+Tijoray should feel like a luxury maison with a concealed technological core. The website needs to balance editorial warmth and high-end craftsmanship with the precision of secure digital infrastructure.
 
 ### Brand Pillars
 
@@ -22,7 +22,7 @@ Arcana should feel like a luxury maison with a concealed technological core. The
 
 ### Experience Goals
 
-- Introduce Arcana as memory-preserving jewelry, not generic accessories
+- Introduce Tijoray as memory-preserving jewelry, not generic accessories
 - Make NFC and the digital vault feel magical but credible
 - Guide users from intrigue to configuration with minimal friction
 - Preserve a premium, deliberate pace across motion and content
@@ -32,7 +32,7 @@ Arcana should feel like a luxury maison with a concealed technological core. The
 ## Confirmed Language From the App
 
 - Product vocabulary consistently uses atelier language: "Atelier", "Vault", and "Digital Atelier"
-- Trust states use explicit certification language: "Vault Secure", "Vault Certified", "Purity Verified", and "Verification secured BY ARCANA"
+- Trust states use explicit certification language: "Vault Secure", "Vault Certified", "Purity Verified", and "Verification secured BY TIJORAY"
 - Material metadata is presented as elevated specification blocks: "Metal Type", "Metal Color", and "Metal Purity"
 - The app emphasizes permanence and provenance through phrases like "Your legacy, secured" and "permanent digital archive"
 - The vault is framed as intimate and archival, not social: "A sanctuary for your most precious digital memories"
@@ -103,9 +103,9 @@ Arcana should feel like a luxury maison with a concealed technological core. The
 ## Navigation (built)
 
 - Fixed navbar, three states: transparent (over cream hero), `.in-dark` (over dark scroll story), `.frosted` (cream frosted glass)
-- Logo: `Arcana Logo.png` with dark/light filter switching
+- Logo: `Tijoray Logo.png` with dark/light filter switching
 - Links: **Collection** (#), **Technology** (`/technology`), **Atelier** (`/about`), **Journal** (#)
-- CTA button: **"Build Your Arcana"** → `/build` (previously "Curate Your Legacy" → `/contact`)
+- CTA button: **"Build Your Tijoray"** → `/build` (previously "Curate Your Legacy" → `/contact`)
 - **Mobile (≤900px):** hamburger → full-screen dark overlay with large Cormorant Garamond links, staggered entrance/exit animations
   - 4 nav links; animation delays: 0.10s, 0.18s, 0.26s, 0.34s (entrance); 0s, 0.04s, 0.08s, 0.12s (exit)
 
@@ -115,7 +115,7 @@ Arcana should feel like a luxury maison with a concealed technological core. The
 
 ### 1. Hero
 
-- Eyebrow: "Atelier Arcana"; Title: "Memories. *Forever.*"
+- Eyebrow: "Atelier Tijoray"; Title: "Memories. *Forever.*"
 - CTA buttons: "Curate Your Legacy" → `/contact`; "Explore the Collection" → `/about`
 - Animated rose rule + scroll cue
 
@@ -158,7 +158,7 @@ Arcana should feel like a luxury maison with a concealed technological core. The
 - 2-col layout, underline-only form inputs
 - Fields: Name, Email, Message
 - Confirmation state with gold checkmark SVG after submission
-- Email reference: curator@atelierarcana.com
+- Email reference: curator@tijoray.com
 
 ---
 
@@ -185,7 +185,7 @@ Arcana should feel like a luxury maison with a concealed technological core. The
 
 | # | Label | Screenshot | Key hook |
 |---|-------|-----------|----------|
-| 1 | The Arcana Experience | `memory-page.mp4` (video, autoplay loop) | Gift message revealed on first tap |
+| 1 | The Tijoray Experience | `memory-page.mp4` (video, autoplay loop) | Gift message revealed on first tap |
 | 2 | Stone Intelligence | `app/app-atelier.png` (scroll parallax) | Stone type, clarity, GIA certificate |
 | 3 | Gold Composition | `app/app-gold.png` (scroll parallax) | Metal purity, weight, craftsmanship guarantee |
 | 4 | The Vault | `app/app-vault.png` (scroll parallax) | Private archive, date-organised, secure |
@@ -198,7 +198,7 @@ Arcana should feel like a luxury maison with a concealed technological core. The
 - 3 stat cards with gold top border: Lifetime / Encrypted / Immutable
 
 **5. CTA**
-- Gold grid overlay; "Build Your Arcana" → `/build`; "Speak with the Atelier" → `/contact`
+- Gold grid overlay; "Build Your Tijoray" → `/build`; "Speak with the Atelier" → `/contact`
 
 ---
 
@@ -263,8 +263,8 @@ Arcana should feel like a luxury maison with a concealed technological core. The
 ## Assets (`public/assets/`)
 
 ```
-Arcana Logo.png
-Arcana.pdf                        — source app screenshots (16 pages)
+Tijoray Logo.png
+Tijoray.pdf                        — source app screenshots (16 pages)
 Connected Piece.png               — scroll story phone screen
 Connection Established.png        — scroll story intermediate screen
 Establishing Connection.png       — scroll story phone screen
@@ -349,7 +349,7 @@ src/
 - **Technology** `/technology` ✅
 - **About (Atelier)** `/about` ✅
 - **Contact** `/contact` ✅
-- **Build Your Arcana** `/build` ✅
+- **Build Your Tijoray** `/build` ✅
 
 ### Planned Pages
 
