@@ -43,7 +43,7 @@
 }
 
 .logo img {
-  height: 28px;
+  height: 44px;
   width: auto;
   filter: brightness(0);
   opacity: 0.88;
@@ -504,6 +504,6 @@
   }
 
   .logo img {
-    height: 24px;
+    height: 34px;
   }
 }
