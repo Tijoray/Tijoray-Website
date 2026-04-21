@@ -12,6 +12,13 @@ const supabase = createClient(
 
 const resend = new Resend(process.env.RESEND_API_KEY!)
 
+async function readRawBody(req: VercelRequest): Promise<Buffer> {
+  const chunks: Buffer[] = []
+  for await (const chunk of req) {
+    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk)
+  }
+  return Buffer.concat(chunks)
+}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
@@ -21,8 +28,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   let event: Stripe.Event
   try {
-    // req.body must be the raw buffer — Vercel provides it when bodyParser is disabled
-    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET!)
+    const rawBody = await readRawBody(req)
+    event = stripe.webhooks.constructEvent(rawBody, sig, process.env.STRIPE_WEBHOOK_SECRET!)
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Webhook signature verification failed'
     console.error('Webhook error:', message)
@@ -122,5 +129,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   return res.status(200).json({ received: true })
 }
 
-// Disable Vercel's body parser so we get the raw body for signature verification
-export const config = { api: { bodyParser: false } }
+// Disable Vercel's body parser so we can read the raw stream for Stripe signature verification
+export const config = {
+  api: { bodyParser: false },
+  runtime: 'nodejs',
+}

@@ -202,6 +202,27 @@ export default function Navbar() {
           <Link to="/build" className={styles.mobileCta} onClick={closeMenu}>
             Build Your Tijoray
           </Link>
+          <div className={styles.mobileAccount} onClick={e => e.stopPropagation()}>
+            {user ? (
+              <>
+                <Link to="/portal" className={styles.mobileAccountLink} onClick={closeMenu}>Portal</Link>
+                <Link to="/settings" className={styles.mobileAccountLink} onClick={closeMenu}>Settings</Link>
+                <button
+                  className={`${styles.mobileAccountLink} ${styles.mobileSignOut}`}
+                  onClick={() => { closeMenu(); signOut(); navigate('/') }}
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <Link to="/login" className={styles.mobileAccountLink} onClick={closeMenu}>Sign In</Link>
+            )}
+            {items.length > 0 && (
+              <Link to="/cart" className={styles.mobileAccountLink} onClick={closeMenu}>
+                Cart ({items.length})
+              </Link>
+            )}
+          </div>
         </div>
       )}
     </>
