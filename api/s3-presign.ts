@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { S3Client } from '@aws-sdk/client-s3'
-import { createPresignedPost } from '@aws-sdk/s3-presigned-post'
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { createClient } from '@supabase/supabase-js'
 import { randomUUID } from 'crypto'
 import path from 'path'
@@ -115,28 +115,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(403).json({ error: 'Piece not found or access denied' })
   }
 
-  // ── Generate presigned POST (supports ContentLengthRange) ─────────────────
+  // ── Generate presigned PUT URL (works reliably on R2) ─────────────────────
   const key    = `pieces/${pieceId}/${randomUUID()}${ext}`
   const bucket = process.env.AWS_S3_BUCKET_NAME!
 
-  const { url, fields } = await createPresignedPost(s3, {
-    Bucket:  bucket,
-    Key:     key,
-    Expires: 300, // 5 minutes
-    Conditions: [
-      ['content-length-range', 1, MAX_BYTES],       // 1 byte – 50 MB
-      ['eq', '$Content-Type', contentType],          // must match exactly
-      ['eq', '$Content-Disposition', 'attachment'],  // never serve inline
-    ],
-    Fields: {
-      'Content-Type':        contentType,
-      'Content-Disposition': 'attachment',
-    },
-  })
+  const uploadUrl = await getSignedUrl(
+    s3,
+    new PutObjectCommand({
+      Bucket:             bucket,
+      Key:                key,
+      ContentType:        contentType,
+      ContentDisposition: 'attachment',
+    }),
+    { expiresIn: 300 },
+  )
 
   const fileUrl = process.env.PUBLIC_FILE_BASE_URL
     ? `${process.env.PUBLIC_FILE_BASE_URL.replace(/\/$/, '')}/${key}`
     : `https://${bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
 
-  return res.status(200).json({ presignedPost: { url, fields }, fileUrl })
+  return res.status(200).json({ uploadUrl, fileUrl, contentType, maxBytes: MAX_BYTES })
 }

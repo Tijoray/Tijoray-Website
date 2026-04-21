@@ -54,15 +54,24 @@ async function uploadFile(
     const body = await res.json().catch(() => ({}))
     throw new Error(body.error ?? 'Could not get upload URL')
   }
-  const { presignedPost, fileUrl } = await res.json()
+  const { uploadUrl, fileUrl, contentType, maxBytes } = await res.json()
 
-  // Use multipart POST (required for presigned POST with policy conditions)
-  const formData = new FormData()
-  Object.entries(presignedPost.fields as Record<string, string>).forEach(([k, v]) => formData.append(k, v))
-  formData.append('file', file) // file must be last
+  if (file.size > maxBytes) {
+    throw new Error(`File is too large (max ${Math.round(maxBytes / 1024 / 1024)}MB)`)
+  }
 
-  const uploadRes = await fetch(presignedPost.url, { method: 'POST', body: formData })
-  if (!uploadRes.ok) throw new Error('Upload to S3 failed')
+  const uploadRes = await fetch(uploadUrl, {
+    method: 'PUT',
+    headers: {
+      'Content-Type':        contentType,
+      'Content-Disposition': 'attachment',
+    },
+    body: file,
+  })
+  if (!uploadRes.ok) {
+    const errText = await uploadRes.text().catch(() => '')
+    throw new Error(`Upload failed (${uploadRes.status}): ${errText.slice(0, 140)}`)
+  }
 
   return fileUrl
 }
