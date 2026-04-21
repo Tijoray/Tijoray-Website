@@ -40,10 +40,12 @@
   justify-content: center;
   z-index: 1;
   pointer-events: auto;
+  overflow: visible;
+  height: 0;
 }
 
 .logo img {
-  height: 44px;
+  height: 180px;
   width: auto;
   filter: brightness(0);
   opacity: 0.88;
@@ -504,6 +506,7 @@
   }
 
   .logo img {
-    height: 34px;
+    height: 240px;
+    max-width: 92vw;
   }
 }

@@ -416,17 +416,21 @@
     width: auto;
     left: 24px;
     right: 24px;
-    top: 50%;
+    top: 38%;
   }
 
   .connHeadline {
-    font-size: clamp(26px, 6.5vw, 38px);
-    margin-bottom: 16px;
+    font-size: clamp(22px, 5.8vw, 32px);
+    margin-bottom: 12px;
   }
 
   .connList {
-    gap: 10px;
-    margin-bottom: 14px;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .connListBar {
+    height: 28px;
   }
 
   .connList strong {
