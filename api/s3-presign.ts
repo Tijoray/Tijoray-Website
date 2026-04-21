@@ -58,6 +58,15 @@ function isRateLimited(userId: string): boolean {
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
 
+  console.log('[s3-presign] env check', {
+    endpoint: process.env.S3_ENDPOINT,
+    region: process.env.AWS_REGION,
+    bucket: process.env.AWS_S3_BUCKET_NAME,
+    hasKey: !!process.env.AWS_ACCESS_KEY_ID,
+    hasSecret: !!process.env.AWS_SECRET_ACCESS_KEY,
+    publicBase: process.env.PUBLIC_FILE_BASE_URL,
+  })
+
   // ── Auth ───────────────────────────────────────────────────────────────────
   const token = req.headers.authorization?.startsWith('Bearer ')
     ? req.headers.authorization.slice(7)
