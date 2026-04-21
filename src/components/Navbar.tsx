@@ -71,7 +71,7 @@ export default function Navbar() {
       nav!.classList.remove('frosted', 'in-dark')
       if (y > heroBottom && y < storyEnd - window.innerHeight * 0.5) {
         nav!.classList.add('in-dark')
-      } else if (y > heroBottom) {
+      } else {
         nav!.classList.add('frosted')
       }
     }
