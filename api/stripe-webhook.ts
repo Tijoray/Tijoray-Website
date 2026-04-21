@@ -10,7 +10,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 )
 
-const resend = new Resend(process.env.RESEND_API_KEY!)
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
 async function readRawBody(req: VercelRequest): Promise<Buffer> {
   const chunks: Buffer[] = []
@@ -112,7 +112,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   // Send confirmation email
   const customerEmail = session.customer_details?.email
-  if (customerEmail) {
+  if (customerEmail && resend) {
     await resend.emails.send({
       from: 'Tijoray <hello@tijoray.com>',
       to:   customerEmail,
