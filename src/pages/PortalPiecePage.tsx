@@ -62,10 +62,7 @@ async function uploadFile(
 
   const uploadRes = await fetch(uploadUrl, {
     method: 'PUT',
-    headers: {
-      'Content-Type':        contentType,
-      'Content-Disposition': 'attachment',
-    },
+    headers: { 'Content-Type': contentType },
     body: file,
   })
   if (!uploadRes.ok) {
