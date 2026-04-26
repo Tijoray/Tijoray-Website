@@ -116,7 +116,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   // ── Generate presigned PUT URL (works reliably on R2) ─────────────────────
-  const key    = `pieces/${pieceId}/${randomUUID()}${ext}`
+  const key    = `piece/${pieceId}/message/${randomUUID()}${ext}`
   const bucket = process.env.AWS_S3_BUCKET_NAME!
 
   const uploadUrl = await getSignedUrl(
