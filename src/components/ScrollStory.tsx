@@ -4,6 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import styles from './ScrollStory.module.css'
+import { ASSETS } from '../lib/assets'
 
 /* ── Utilities ─────────────────────────────────────────── */
 function clamp(v: number, lo: number, hi: number) { return v < lo ? lo : v > hi ? hi : v }
@@ -151,7 +152,7 @@ export default function ScrollStory() {
     const gltfLoader = new GLTFLoader()
     gltfLoader.setDRACOLoader(dracoLoader)
 
-    gltfLoader.load('/assets/3d/pendant-scroll.glb', (gltf) => {
+    gltfLoader.load(ASSETS.pendantScroll, (gltf) => {
       if (destroyed) return
 
       const model = gltf.scene

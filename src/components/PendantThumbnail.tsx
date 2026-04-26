@@ -4,18 +4,19 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
+import { ASSETS } from '../lib/assets'
 
 type Shape      = 'square' | 'circle' | 'heart' | 'pear'
 type Metal      = 'steel' | 'silver' | '10k' | '18k'
 type MetalColor = 'white' | 'gold' | 'rose'
 
-const CHAIN_PATH = '/assets/3d/chain.glb'
+const CHAIN_PATH = ASSETS.chain
 
 const PENDANT_PATHS: Record<Shape, string> = {
-  square: '/assets/3d/pendant-square.glb',
-  circle: '/assets/3d/pendant-circle.glb',
-  heart:  '/assets/3d/pendant-heart.glb',
-  pear:   '/assets/3d/pendant-pear.glb',
+  square: ASSETS.pendantSquare,
+  circle: ASSETS.pendantCircle,
+  heart:  ASSETS.pendantHeart,
+  pear:   ASSETS.pendantPear,
 }
 
 const METAL_COLOR_HEX: Record<MetalColor, string> = {

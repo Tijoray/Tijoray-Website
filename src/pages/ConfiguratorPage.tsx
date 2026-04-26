@@ -8,6 +8,7 @@ import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
 import styles from './ConfiguratorPage.module.css'
+import { ASSETS } from '../lib/assets'
 
 /* ── Types ─────────────────────────────────────────────── */
 type Shape      = 'square' | 'circle' | 'heart' | 'pear'
@@ -15,13 +16,13 @@ type Metal      = 'steel' | 'silver' | '10k' | '18k'
 type MetalColor = 'white' | 'gold' | 'rose'
 
 /* ── Constants ─────────────────────────────────────────── */
-const CHAIN_PATH = '/assets/3d/chain.glb'
+const CHAIN_PATH = ASSETS.chain
 
 const PENDANT_PATHS: Record<Shape, string> = {
-  square: '/assets/3d/pendant-square.glb',
-  circle: '/assets/3d/pendant-circle.glb',
-  heart:  '/assets/3d/pendant-heart.glb',
-  pear:   '/assets/3d/pendant-pear.glb',
+  square: ASSETS.pendantSquare,
+  circle: ASSETS.pendantCircle,
+  heart:  ASSETS.pendantHeart,
+  pear:   ASSETS.pendantPear,
 }
 
 const METAL_PRICES: Record<Metal, number> = {
