@@ -130,9 +130,5 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     { expiresIn: 300 },
   )
 
-  const fileUrl = process.env.PUBLIC_FILE_BASE_URL
-    ? `${process.env.PUBLIC_FILE_BASE_URL.replace(/\/$/, '')}/${key}`
-    : `https://${bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
-
-  return res.status(200).json({ uploadUrl, fileUrl, contentType, maxBytes: MAX_BYTES })
+  return res.status(200).json({ uploadUrl, fileKey: key, contentType, maxBytes: MAX_BYTES })
 }

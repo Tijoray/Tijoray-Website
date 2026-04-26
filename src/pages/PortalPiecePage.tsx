@@ -32,7 +32,7 @@ function blank(type: MessageItemType): PendingItem {
   return { type, title: '', content: '', file: null, state: 'idle', error: '' }
 }
 
-/* ── Upload helper ── */
+/* ── Upload helper — returns R2 key (not a public URL) ── */
 async function uploadFile(
   file: File,
   pieceId: string,
@@ -54,7 +54,7 @@ async function uploadFile(
     const body = await res.json().catch(() => ({}))
     throw new Error(body.error ?? 'Could not get upload URL')
   }
-  const { uploadUrl, fileUrl, contentType, maxBytes } = await res.json()
+  const { uploadUrl, fileKey, contentType, maxBytes } = await res.json()
 
   if (file.size > maxBytes) {
     throw new Error(`File is too large (max ${Math.round(maxBytes / 1024 / 1024)}MB)`)
@@ -73,7 +73,34 @@ async function uploadFile(
     throw new Error(`Upload failed (${uploadRes.status}): ${errText.slice(0, 140)}`)
   }
 
-  return fileUrl
+  return fileKey
+}
+
+/* ── SignedMedia — fetches a short-lived presigned URL then renders the media ── */
+function SignedMedia({ fileKey, type, token }: { fileKey: string; type: MessageItemType; token: string }) {
+  const [src, setSrc] = useState<string | null>(null)
+  const [err, setErr] = useState(false)
+
+  useEffect(() => {
+    let cancelled = false
+    fetch('/api/file-serve', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ key: fileKey }),
+    })
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(({ signedUrl }) => { if (!cancelled) setSrc(signedUrl) })
+      .catch(() => { if (!cancelled) setErr(true) })
+    return () => { cancelled = true }
+  }, [fileKey, token])
+
+  if (err) return <p className={styles.itemMeta}>Could not load file</p>
+  if (!src) return <p className={styles.itemMeta}>Loading…</p>
+
+  if (type === 'photo') return <img src={src} alt="" className={styles.mediaPreview} />
+  if (type === 'video') return <video src={src} controls className={styles.mediaPreview} />
+  if (type === 'audio' || type === 'voice_note') return <audio src={src} controls className={styles.mediaPreview} />
+  return <p className={styles.itemMeta}>File ready</p>
 }
 
 /* ── FileZone sub-component ── */
@@ -115,6 +142,7 @@ export default function PortalPiecePage() {
   const [items,    setItems]    = useState<MessageItem[]>([])
   const [loading,  setLoading]  = useState(true)
   const [notFound, setNotFound] = useState(false)
+  const [token,    setToken]    = useState<string | null>(null)
 
   const [activeType, setActiveType]   = useState<MessageItemType>('photo')
   const [pending,    setPending]      = useState<PendingItem>(blank('photo'))
@@ -129,9 +157,11 @@ export default function PortalPiecePage() {
   useEffect(() => {
     if (!pieceId || !user) return
     Promise.all([
+      supabase.auth.getSession(),
       supabase.from('Pieces').select('*').eq('id', pieceId).eq('sender_id', user.id).single(),
       supabase.from('Messages').select('*').eq('piece_id', pieceId).single(),
-    ]).then(([{ data: p, error: pErr }, { data: m }]) => {
+    ]).then(([{ data: sessionData }, { data: p, error: pErr }, { data: m }]) => {
+      setToken(sessionData.session?.access_token ?? null)
       if (pErr || !p) { setNotFound(true); setLoading(false); return }
       setPiece(p)
       setMessage(m ?? null)
@@ -376,13 +406,14 @@ export default function PortalPiecePage() {
                       <p className={styles.itemTitle}>
                         {item.title ?? ITEM_TYPES.find(t => t.type === item.type)?.label}
                       </p>
-                      <p className={styles.itemMeta}>
-                        {item.type === 'note' && item.content
-                          ? item.content.slice(0, 80) + (item.content.length > 80 ? '…' : '')
-                          : item.file_url
-                            ? 'File uploaded'
-                            : item.content?.slice(0, 60)}
-                      </p>
+                      {item.file_url && token
+                        ? <SignedMedia fileKey={item.file_url} type={item.type} token={token} />
+                        : <p className={styles.itemMeta}>
+                            {item.type === 'note' && item.content
+                              ? item.content.slice(0, 80) + (item.content.length > 80 ? '…' : '')
+                              : item.content?.slice(0, 60)}
+                          </p>
+                      }
                     </div>
                     <button
                       className={styles.deleteBtn}
