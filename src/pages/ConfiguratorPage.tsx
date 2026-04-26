@@ -8,7 +8,7 @@ import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
 import styles from './ConfiguratorPage.module.css'
-import { ASSETS } from '../lib/assets'
+import { ASSETS, asset } from '../lib/assets'
 
 /* ── Types ─────────────────────────────────────────────── */
 type Shape      = 'square' | 'circle' | 'heart' | 'pear'
@@ -861,7 +861,7 @@ export default function ConfiguratorPage() {
             </p>
           </div>
           <div className={styles.storyImageWrap}>
-            <img src="/assets/editorial/lifestyle-worn.png" alt="Tijoray pendant worn at the collarbone" />
+            <img src={asset('/assets/editorial/lifestyle-worn.png')} alt="Tijoray pendant worn at the collarbone" />
           </div>
         </div>
       </section>
@@ -893,7 +893,7 @@ export default function ConfiguratorPage() {
       <section className={styles.craftSection}>
         <div className={styles.craftInner}>
           <div className={styles.craftImageWrap}>
-            <img src="/assets/editorial/macro-finish.png" alt="Close-up of Tijoray pendant surface finish" />
+            <img src={asset('/assets/editorial/macro-finish.png')} alt="Close-up of Tijoray pendant surface finish" />
           </div>
           <div className={styles.craftText}>
             <p className={styles.eyebrow}>Crafted to Last</p>
@@ -953,19 +953,19 @@ export default function ConfiguratorPage() {
               {
                 label: 'Solo',
                 desc: 'Worn alone, the Tijoray pendant speaks for itself — a single stone, a single story, worn close to the skin.',
-                img: '/assets/editorial/wear-solo.png',
+                img: asset('/assets/editorial/wear-solo.png'),
                 alt: 'Tijoray pendant worn solo',
               },
               {
                 label: 'Stacked',
                 desc: 'Multiple Tijoray pendants on a single chain — each stone a different month, a different person, a different memory.',
-                img: '/assets/editorial/wear-stacked.png',
+                img: asset('/assets/editorial/wear-stacked.png'),
                 alt: 'Multiple Tijoray pendants on one chain',
               },
               {
                 label: 'Layered',
                 desc: 'Pair your Tijoray pendant with other necklaces at varying lengths — the pendant sits naturally at collarbone height.',
-                img: '/assets/editorial/wear-layered.png',
+                img: asset('/assets/editorial/wear-layered.png'),
                 alt: 'Tijoray pendant layered with other necklaces',
               },
             ].map(w => (

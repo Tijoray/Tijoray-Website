@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import styles from './ScrollStory.module.css'
-import { ASSETS } from '../lib/assets'
+import { ASSETS, asset } from '../lib/assets'
 
 /* ── Utilities ─────────────────────────────────────────── */
 function clamp(v: number, lo: number, hi: number) { return v < lo ? lo : v > hi ? hi : v }
@@ -474,20 +474,20 @@ export default function ScrollStory() {
                 <img
                   ref={phoneEstRef}
                   className={styles.phoneScreen}
-                  src="/assets/jewelry/nfc-establishing.png"
+                  src={asset('/assets/jewelry/nfc-establishing.png')}
                   alt="App: establishing NFC connection with pendant"
                   style={{ opacity: 1 }}
                 />
                 <img
                   ref={phoneEstabRef}
                   className={styles.phoneScreen}
-                  src="/assets/jewelry/nfc-established.png"
+                  src={asset('/assets/jewelry/nfc-established.png')}
                   alt="App: connection established"
                 />
                 <img
                   ref={phoneConnRef}
                   className={styles.phoneScreen}
-                  src="/assets/jewelry/nfc-connected.png"
+                  src={asset('/assets/jewelry/nfc-connected.png')}
                   alt="App: connected piece vault — Aurelia Infinite"
                 />
                 {/* Animated loading bar overlay — JS-positioned to pixel-match the image bar */}

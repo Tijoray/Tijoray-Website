@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './CollectionPage.module.css'
+import { asset } from '../lib/assets'
 
 const BIRTHSTONES = [
   { month: 'Jan', stone: 'Garnet',       color: '#9B1B30' },
@@ -90,7 +91,7 @@ export default function CollectionPage() {
             >
               <div className={styles.cardVisual}>
                 <img
-                  src="/assets/jewelry/birthstone-pendant.png"
+                  src={asset('/assets/jewelry/birthstone-pendant.png')}
                   alt="Birthstone Pendant — square and circle in 18K gold"
                   className={styles.cardPhoto}
                 />
@@ -125,7 +126,7 @@ export default function CollectionPage() {
             >
               <div className={`${styles.cardVisual} ${styles.cardVisualSoon}`}>
                 <img
-                  src="/assets/jewelry/birthstone-bracelet.png"
+                  src={asset('/assets/jewelry/birthstone-bracelet.png')}
                   alt="Birthstone Bracelet — square and circle in 18K gold"
                   className={styles.cardPhoto}
                 />

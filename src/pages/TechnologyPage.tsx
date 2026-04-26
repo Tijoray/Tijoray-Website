@@ -1,23 +1,24 @@
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './TechnologyPage.module.css'
+import { asset } from '../lib/assets'
 
 const NFC_STEPS = [
   {
     num: '01',
-    img: '/assets/app/app-tap.png',
+    img: asset('/assets/app/app-tap.png'),
     title: 'Tap Your Piece',
     desc: 'Hold your Tijoray jewel to the back of your phone. No app launch required — the connection begins the moment metal meets signal.',
   },
   {
     num: '02',
-    img: '/assets/app/app-connecting.png',
+    img: asset('/assets/app/app-connecting.png'),
     title: 'Identity Confirmed',
     desc: "Your piece's unique serial node is verified against the Tijoray vault in seconds. Authenticated. Immutable. Yours.",
   },
   {
     num: '03',
-    img: '/assets/app/app-connected.png',
+    img: asset('/assets/app/app-connected.png'),
     title: 'Your World Unlocks',
     desc: 'The full digital profile of your piece opens — provenance, stone data, personal memories, and the certificate that proves its origin.',
   },
@@ -25,28 +26,28 @@ const NFC_STEPS = [
 
 const APP_FEATURES = [
   {
-    img: '/assets/app/app-memory.png',
+    img: asset('/assets/app/app-memory.png'),
     label: 'The Tijoray Experience',
     title: 'A message waiting inside your gift.',
     body: 'When you commission an Tijoray piece, you can embed a private message directly into the jewel itself — photographs, voice recordings, handwritten notes, or words you want your loved one to carry forever. The moment they tap the pendant, it opens. Not a card. Not a text. Something that lives inside what you gave them.',
     pills: ['Photos & Video', 'Voice Messages', 'Personal Notes', 'Revealed on First Tap'],
   },
   {
-    img: '/assets/app/app-atelier.png',
+    img: asset('/assets/app/app-atelier.png'),
     label: 'Stone Intelligence',
     title: 'Every stone, documented.',
     body: "Tap your piece and unlock a complete gemological record. Stone type, clarity grade, colour range, carat weight, and cut quality — all sourced directly from the artisan's certification at the moment of creation.",
     pills: ['Stone Type', 'Clarity Grade', 'GIA Certificate', 'Carat Weight'],
   },
   {
-    img: '/assets/app/app-gold.png',
+    img: asset('/assets/app/app-gold.png'),
     label: 'Gold Composition',
     title: 'Know what you wear.',
     body: "Every alloy in your Tijoray piece is catalogued — metal purity, colour composition, and total mass. Our Craftsmanship Guarantee is embedded directly in the record, verified by the Atelier's Master Smith.",
     pills: ['Metal Purity', 'Composition', 'Weight', 'Craftsmanship Guarantee'],
   },
   {
-    img: '/assets/app/app-vault.png',
+    img: asset('/assets/app/app-vault.png'),
     label: 'The Vault',
     title: 'A private archive, secured forever.',
     body: 'Your personal Vault holds every memory, certificate, and document tied to your collection. Organised by date, accessible anywhere, and protected by the Tijoray security infrastructure. Your legacy, archived.',
@@ -181,8 +182,8 @@ export default function TechnologyPage() {
                       playsInline
                       aria-label="Tijoray memory feature — a personalised message revealing on first tap"
                     >
-                      <source src="/assets/video/memory-page.mp4" type="video/mp4" />
-                      <source src="/assets/video/memory-page.mov" type="video/quicktime" />
+                      <source src={asset('/assets/video/memory-page.mp4')} type="video/mp4" />
+                      <source src={asset('/assets/video/memory-page.mov')} type="video/quicktime" />
                     </video>
                   ) : (
                     <img

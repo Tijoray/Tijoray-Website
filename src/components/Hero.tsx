@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom'
 import styles from './Hero.module.css'
+import { asset } from '../lib/assets'
 
 export default function Hero() {
   return (
     <section className={`${styles.hero} hero-section`} aria-label="Hero">
       <picture>
-        <source media="(max-width: 768px)" srcSet="/assets/editorial/hero-mobile.png" />
+        <source media="(max-width: 768px)" srcSet={asset('/assets/editorial/hero-mobile.png')} />
         <img
-          src="/assets/editorial/hero.png"
+          src={asset('/assets/editorial/hero.png')}
           alt=""
           aria-hidden="true"
           className={styles.heroImage}
