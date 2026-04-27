@@ -4,62 +4,85 @@ import { useDropzone } from 'react-dropzone'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import type { Piece, Message, MessageItem, MessageItemType } from '../lib/supabase'
+import TutorialModal from './TutorialModal'
+import MemoryCarousel from './MemoryCarousel'
 import styles from './PortalPiecePage.module.css'
 
 /* ── Types ── */
 type UploadState = 'idle' | 'uploading' | 'done' | 'error'
 
 type PendingItem = {
-  type: MessageItemType
-  title: string
-  content: string   // for note/spotify/maps
+  type:    MessageItemType
+  title:   string
+  content: string
   file:    File | null
   state:   UploadState
   error:   string
 }
 
-const ITEM_TYPES: { type: MessageItemType; label: string; icon: string; accept?: Record<string, string[]>; isFile: boolean }[] = [
-  { type: 'photo',      label: 'Photo',       icon: '🖼',  accept: { 'image/*': [] },                                      isFile: true  },
-  { type: 'video',      label: 'Video',       icon: '🎬',  accept: { 'video/*': [] },                                      isFile: true  },
-  { type: 'audio',      label: 'Audio',       icon: '🎵',  accept: { 'audio/*': [] },                                      isFile: true  },
-  { type: 'voice_note', label: 'Voice Note',  icon: '🎙',  accept: { 'audio/*': [] },                                      isFile: true  },
-  { type: 'note',       label: 'Note',        icon: '✍️', isFile: false },
-  { type: 'spotify',    label: 'Spotify',     icon: '🎧', isFile: false },
-  { type: 'google_maps',label: 'Place',       icon: '📍', isFile: false },
+/* ── Inline SVG icons ── */
+function Icon({ type, size = 20, active = false }: { type: MessageItemType; size?: number; active?: boolean }) {
+  const props = {
+    width: size, height: size, viewBox: '0 0 20 20',
+    fill: 'none', stroke: active ? 'var(--rose)' : 'currentColor',
+    strokeWidth: 1.5, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const,
+  }
+  if (type === 'photo') return (
+    <svg {...props}><rect x="2" y="4" width="16" height="12" rx="2"/><circle cx="10" cy="10" r="3"/><path d="M7 4l1.5-2h3L13 4"/></svg>
+  )
+  if (type === 'video') return (
+    <svg {...props}><rect x="2" y="5" width="11" height="10" rx="2"/><path d="M13 8l5-3v10l-5-3V8z"/></svg>
+  )
+  if (type === 'audio') return (
+    <svg {...props}><path d="M9 4l-5 4H2a1 1 0 00-1 1v2a1 1 0 001 1h2l5 4V4z"/><path d="M15 8a4 4 0 010 4M18 6a7 7 0 010 8"/></svg>
+  )
+  if (type === 'voice_note') return (
+    <svg {...props}><rect x="7" y="2" width="6" height="10" rx="3"/><path d="M4 10a6 6 0 0012 0M10 16v2M7 18h6"/></svg>
+  )
+  if (type === 'note') return (
+    <svg {...props}><path d="M14 2H6a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2z"/><path d="M8 8h4M8 12h2"/></svg>
+  )
+  if (type === 'spotify') return (
+    <svg {...props}><circle cx="10" cy="10" r="8"/><path d="M6 12.5c2.5-1 5-1 7.5 0M5.5 9.5C9 8 12 8 15 9.5M7 6.5c2-1 4.5-1 6.5 0"/></svg>
+  )
+  if (type === 'google_maps') return (
+    <svg {...props}><path d="M10 2a6 6 0 016 6c0 4-6 10-6 10S4 12 4 8a6 6 0 016-6z"/><circle cx="10" cy="8" r="2"/></svg>
+  )
+  return null
+}
+
+const ITEM_TYPES: {
+  type: MessageItemType
+  label: string
+  accept?: Record<string, string[]>
+  isFile: boolean
+}[] = [
+  { type: 'photo',       label: 'Photo',      accept: { 'image/*': [] },  isFile: true  },
+  { type: 'video',       label: 'Video',      accept: { 'video/*': [] },  isFile: true  },
+  { type: 'audio',       label: 'Audio',      accept: { 'audio/*': [] },  isFile: true  },
+  { type: 'voice_note',  label: 'Voice Note',                             isFile: true  },
+  { type: 'note',        label: 'Note',                                   isFile: false },
+  { type: 'spotify',     label: 'Spotify',                                isFile: false },
+  { type: 'google_maps', label: 'Place',                                  isFile: false },
 ]
 
 function blank(type: MessageItemType): PendingItem {
   return { type, title: '', content: '', file: null, state: 'idle', error: '' }
 }
 
-/* ── Upload helper — returns R2 key (not a public URL) ── */
-async function uploadFile(
-  file: File,
-  pieceId: string,
-  token: string,
-): Promise<string> {
+/* ── Upload helper ── */
+async function uploadFile(file: File, pieceId: string, token: string): Promise<string> {
   const res = await fetch('/api/s3-presign', {
     method: 'POST',
-    headers: {
-      'Content-Type':  'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      filename:    file.name,
-      contentType: file.type,
-      pieceId,
-    }),
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ filename: file.name, contentType: file.type, pieceId }),
   })
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
     throw new Error(body.error ?? 'Could not get upload URL')
   }
   const { uploadUrl, fileKey, contentType, maxBytes } = await res.json()
-
-  if (file.size > maxBytes) {
-    throw new Error(`File is too large (max ${Math.round(maxBytes / 1024 / 1024)}MB)`)
-  }
-
+  if (file.size > maxBytes) throw new Error(`File is too large (max ${Math.round(maxBytes / 1024 / 1024)}MB)`)
   const uploadRes = await fetch(uploadUrl, {
     method: 'PUT',
     headers: { 'Content-Type': contentType },
@@ -69,20 +92,18 @@ async function uploadFile(
     const errText = await uploadRes.text().catch(() => '')
     throw new Error(`Upload failed (${uploadRes.status}): ${errText.slice(0, 140)}`)
   }
-
   return fileKey
 }
 
-/* ── SignedMedia — fetches a short-lived presigned URL then renders the media ── */
+/* ── SignedMedia ── */
 function SignedMedia({ fileKey, type, token }: { fileKey: string; type: MessageItemType; token: string }) {
   const [src, setSrc] = useState<string | null>(null)
   const [err, setErr] = useState(false)
-
   useEffect(() => {
     let cancelled = false
     fetch('/api/file-serve', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ key: fileKey }),
     })
       .then(r => r.ok ? r.json() : Promise.reject())
@@ -91,42 +112,45 @@ function SignedMedia({ fileKey, type, token }: { fileKey: string; type: MessageI
     return () => { cancelled = true }
   }, [fileKey, token])
 
-  if (err) return <p className={styles.itemMeta}>Could not load file</p>
-  if (!src) return <p className={styles.itemMeta}>Loading…</p>
+  if (err) return <span className={styles.thumbMeta}>—</span>
+  if (!src) return <div className={styles.thumbSpinner}/>
 
-  if (type === 'photo') return <img src={src} alt="" className={styles.mediaPreview} />
-  if (type === 'video') return <video src={src} controls className={styles.mediaPreview} />
-  if (type === 'audio' || type === 'voice_note') return <audio src={src} controls className={styles.mediaPreview} />
-  return <p className={styles.itemMeta}>File ready</p>
+  if (type === 'photo') return <img src={src} alt="" className={styles.thumbImg}/>
+  if (type === 'video') return <video src={src} className={styles.thumbImg} muted/>
+  return (
+    <span className={styles.thumbIcon}>
+      <Icon type={type} size={16}/>
+    </span>
+  )
 }
 
-/* ── FileZone sub-component ── */
-function FileZone({
-  accept,
-  onFile,
-  file,
-}: {
-  accept: Record<string, string[]>
-  onFile: (f: File) => void
-  file: File | null
-}) {
+/* ── FileZone ── */
+function FileZone({ accept, onFile, file }: { accept: Record<string, string[]>; onFile: (f: File) => void; file: File | null }) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept,
-    maxFiles: 1,
-    onDrop: ([f]) => { if (f) onFile(f) },
+    accept, maxFiles: 1, onDrop: ([f]) => { if (f) onFile(f) },
   })
   return (
     <div {...getRootProps()} className={`${styles.dropzone} ${isDragActive ? styles.dropzoneActive : ''}`}>
       <input {...getInputProps()} />
-      {file ? (
-        <p className={styles.dropzoneFile}>{file.name}</p>
-      ) : (
-        <p className={styles.dropzoneHint}>
-          {isDragActive ? 'Drop it here' : 'Drag & drop or click to select'}
-        </p>
-      )}
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.dropzoneIcon}>
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+      </svg>
+      {file
+        ? <p className={styles.dropzoneFile}>{file.name}</p>
+        : <p className={styles.dropzoneHint}>{isDragActive ? 'Drop it here' : 'Drag & drop or click to select'}</p>
+      }
     </div>
   )
+}
+
+/* ── sortItems helper ── */
+function sortItems(items: MessageItem[]): MessageItem[] {
+  return [...items].sort((a, b) => {
+    if (a.sort_order != null && b.sort_order != null) return a.sort_order - b.sort_order
+    if (a.sort_order != null) return -1
+    if (b.sort_order != null) return 1
+    return new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+  })
 }
 
 /* ── Main page ── */
@@ -141,15 +165,33 @@ export default function PortalPiecePage() {
   const [notFound, setNotFound] = useState(false)
   const [token,    setToken]    = useState<string | null>(null)
 
-  const [activeType, setActiveType]   = useState<MessageItemType>('photo')
-  const [pending,    setPending]      = useState<PendingItem>(blank('photo'))
-  const [saving,     setSaving]       = useState(false)
+  const [activeType, setActiveType] = useState<MessageItemType>('photo')
+  const [pending,    setPending]    = useState<PendingItem>(blank('photo'))
+  const [saving,     setSaving]     = useState(false)
+
+  // Carousel
+  const [carouselIndex, setCarouselIndex] = useState(0)
+
+  // Tutorial
+  const [showTutorial, setShowTutorial] = useState(false)
+
+  // Recommendation banner
+  const [recDismissed, setRecDismissed] = useState(() =>
+    !!localStorage.getItem('mb_rec_dismissed')
+  )
 
   // Voice recording
   const [recording,  setRecording]  = useState(false)
   const [audioBlob,  setAudioBlob]  = useState<Blob | null>(null)
   const mediaRecRef  = useRef<MediaRecorder | null>(null)
   const chunksRef    = useRef<Blob[]>([])
+
+  // Drag-and-drop reorder
+  const dragSrcRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    if (!localStorage.getItem('mb_tutorial_seen')) setShowTutorial(true)
+  }, [])
 
   useEffect(() => {
     if (!pieceId || !user) return
@@ -167,12 +209,23 @@ export default function PortalPiecePage() {
           .from('Message_Items')
           .select('*')
           .eq('message_id', m.id)
-          .order('created_at')
-          .then(({ data }) => setItems(data ?? []))
+          .order('sort_order', { ascending: true, nullsFirst: false })
+          .order('created_at', { ascending: true })
+          .then(({ data }) => setItems(sortItems(data ?? [])))
       }
       setLoading(false)
     })
   }, [pieceId, user])
+
+  function closeTutorial() {
+    localStorage.setItem('mb_tutorial_seen', '1')
+    setShowTutorial(false)
+  }
+
+  function dismissRec() {
+    localStorage.setItem('mb_rec_dismissed', '1')
+    setRecDismissed(true)
+  }
 
   function switchType(type: MessageItemType) {
     setActiveType(type)
@@ -188,8 +241,7 @@ export default function PortalPiecePage() {
     rec.onstop = () => {
       const blob = new Blob(chunksRef.current, { type: 'audio/webm' })
       setAudioBlob(blob)
-      const file = new File([blob], `voice-${Date.now()}.webm`, { type: 'audio/webm' })
-      setPending(p => ({ ...p, file }))
+      setPending(p => ({ ...p, file: new File([blob], `voice-${Date.now()}.webm`, { type: 'audio/webm' }) }))
     }
     rec.start()
     mediaRecRef.current = rec
@@ -210,13 +262,14 @@ export default function PortalPiecePage() {
 
     try {
       let fileUrl: string | null = null
-
       if (typeDef.isFile && pending.file) {
         const { data: sessionData } = await supabase.auth.getSession()
-        const token = sessionData.session?.access_token
-        if (!token) throw new Error('Not authenticated')
-        fileUrl = await uploadFile(pending.file, pieceId, token)
+        const tok = sessionData.session?.access_token
+        if (!tok) throw new Error('Not authenticated')
+        fileUrl = await uploadFile(pending.file, pieceId, tok)
       }
+
+      const nextOrder = items.length
 
       const { data: newItem, error } = await supabase
         .from('Message_Items')
@@ -226,12 +279,14 @@ export default function PortalPiecePage() {
           title:      pending.title || null,
           file_url:   fileUrl,
           content:    (!typeDef.isFile && pending.content) ? pending.content : null,
+          sort_order: nextOrder,
         })
         .select('*')
         .single()
 
       if (error) throw new Error(error.message)
-      setItems(prev => [...prev, newItem])
+      setItems(prev => sortItems([...prev, newItem]))
+      setCarouselIndex(nextOrder)
       setPending(blank(activeType))
       setAudioBlob(null)
     } catch (err: unknown) {
@@ -243,13 +298,53 @@ export default function PortalPiecePage() {
   }
 
   async function handleDelete(itemId: string) {
+    const item = items.find(i => i.id === itemId)
+    if (item?.file_url && token) {
+      await fetch('/api/file-delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ key: item.file_url }),
+      })
+    }
     await supabase.from('Message_Items').delete().eq('id', itemId)
-    setItems(prev => prev.filter(i => i.id !== itemId))
+    setItems(prev => {
+      const next = sortItems(prev.filter(i => i.id !== itemId))
+      setCarouselIndex(i => Math.min(i, Math.max(0, next.length - 1)))
+      return next
+    })
   }
 
+  /* ── Drag reorder ── */
+  function onDragStart(index: number) {
+    dragSrcRef.current = index
+  }
+
+  function onDragOver(e: React.DragEvent, index: number) {
+    e.preventDefault()
+    const src = dragSrcRef.current
+    if (src === null || src === index) return
+    setItems(prev => {
+      const next = [...prev]
+      const [moved] = next.splice(src, 1)
+      next.splice(index, 0, moved)
+      dragSrcRef.current = index
+      return next
+    })
+  }
+
+  async function onDrop() {
+    dragSrcRef.current = null
+    // Persist new order
+    const updates = items.map((item, i) => ({ id: item.id, sort_order: i }))
+    await supabase.from('Message_Items').upsert(updates)
+    setItems(prev => prev.map((item, i) => ({ ...item, sort_order: i })))
+    setCarouselIndex(0)
+  }
+
+  /* ── Render guards ── */
   if (loading) return (
     <main className={styles.page}>
-      <div className={styles.loading}><div className={styles.spinner} /></div>
+      <div className={styles.loading}><div className={styles.spinner}/></div>
     </main>
   )
 
@@ -262,171 +357,278 @@ export default function PortalPiecePage() {
     </main>
   )
 
+  const typeDef = ITEM_TYPES.find(t => t.type === activeType)!
+  const isAddDisabled = saving || (
+    typeDef.isFile ? !pending.file : activeType !== 'voice_note' && !pending.content.trim()
+  )
+
   return (
-    <main className={styles.page}>
-      <div className={styles.inner}>
+    <>
+      {showTutorial && <TutorialModal onClose={closeTutorial}/>}
 
-        {/* Header */}
-        <header className={styles.header}>
-          <Link to="/portal" className={styles.backLink}>← Portal</Link>
-          <div>
-            <p className={styles.eyebrow}>Memory Builder</p>
-            <h1 className={styles.title}>{piece?.collection ?? 'Your Pendant'}</h1>
-          </div>
-        </header>
+      <main className={styles.page}>
+        <div className={styles.inner}>
 
-        <div className={styles.layout}>
-
-          {/* Left — add form */}
-          <div className={styles.addPanel}>
-            <p className={styles.panelLabel}>Add a memory</p>
-
-            {/* Type tabs */}
-            <div className={styles.typeTabs} role="tablist">
-              {ITEM_TYPES.map(t => (
-                <button
-                  key={t.type}
-                  role="tab"
-                  aria-selected={activeType === t.type}
-                  className={`${styles.typeTab} ${activeType === t.type ? styles.typeTabActive : ''}`}
-                  onClick={() => switchType(t.type)}
-                >
-                  <span className={styles.typeIcon}>{t.icon}</span>
-                  <span className={styles.typeLabel}>{t.label}</span>
-                </button>
-              ))}
+          {/* Header */}
+          <header className={styles.header}>
+            <Link to="/portal" className={styles.backLink}>
+              <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M13 4l-6 6 6 6"/>
+              </svg>
+              Portal
+            </Link>
+            <div className={styles.headerText}>
+              <p className={styles.eyebrow}>Memory Builder</p>
+              <h1 className={styles.title}>{piece?.collection ?? 'Your Pendant'}</h1>
             </div>
+            <button className={styles.helpBtn} onClick={() => setShowTutorial(true)} aria-label="Show tutorial">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="10" cy="10" r="8"/>
+                <path d="M10 14v-4M10 7v-.5"/>
+              </svg>
+              How it works
+            </button>
+          </header>
 
-            {/* Title field */}
-            <div className={styles.field}>
-              <label className={styles.label}>Title <span className={styles.optional}>(optional)</span></label>
-              <input
-                className={styles.input}
-                value={pending.title}
-                onChange={e => setPending(p => ({ ...p, title: e.target.value }))}
-                placeholder="e.g. Our first dance"
-              />
-            </div>
+          <div className={styles.layout}>
 
-            {/* Type-specific input */}
-            {activeType === 'voice_note' ? (
-              <div className={styles.field}>
-                <label className={styles.label}>Recording</label>
-                {!audioBlob ? (
-                  <button
-                    type="button"
-                    className={`${styles.recordBtn} ${recording ? styles.recordBtnActive : ''}`}
-                    onClick={recording ? stopRecording : startRecording}
-                  >
-                    {recording ? '⏹ Stop' : '⏺ Record'}
+            {/* ── Left: Add form ── */}
+            <div className={styles.addPanel}>
+              <p className={styles.panelLabel}>Add a Memory</p>
+
+              {/* Recommendation banner */}
+              {items.length === 0 && !recDismissed && (
+                <div className={styles.recBanner}>
+                  <button className={styles.recClose} onClick={dismissRec} aria-label="Dismiss">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                      <path d="M2 2l12 12M14 2L2 14"/>
+                    </svg>
                   </button>
-                ) : (
-                  <div className={styles.audioPreview}>
-                    <audio controls src={URL.createObjectURL(audioBlob)} />
-                    <button
-                      type="button"
-                      className={styles.rerecordBtn}
-                      onClick={() => { setAudioBlob(null); setPending(p => ({ ...p, file: null })) }}
-                    >
-                      Re-record
-                    </button>
-                  </div>
-                )}
+                  <p className={styles.recTitle}>Start with a heartfelt message</p>
+                  <p className={styles.recBody}>
+                    "Happy Birthday", "I Love You", "Happy Anniversary" — your recipient will see it first.
+                  </p>
+                  <button className={styles.recBtn} onClick={() => { switchType('note'); dismissRec() }}>
+                    Write a Note
+                    <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 10h10M12 6l4 4-4 4"/>
+                    </svg>
+                  </button>
+                </div>
+              )}
+
+              {/* Type selector */}
+              <div className={styles.typeTabs} role="tablist">
+                {ITEM_TYPES.map(t => (
+                  <button
+                    key={t.type}
+                    role="tab"
+                    aria-selected={activeType === t.type}
+                    className={`${styles.typeTab} ${activeType === t.type ? styles.typeTabActive : ''}`}
+                    onClick={() => switchType(t.type)}
+                  >
+                    <span className={styles.typeTabIcon}>
+                      <Icon type={t.type} size={18} active={activeType === t.type}/>
+                    </span>
+                    <span className={styles.typeLabel}>{t.label}</span>
+                  </button>
+                ))}
               </div>
-            ) : ITEM_TYPES.find(t => t.type === activeType)?.isFile ? (
-              <div className={styles.field}>
-                <label className={styles.label}>File</label>
-                <FileZone
-                  accept={ITEM_TYPES.find(t => t.type === activeType)?.accept ?? {}}
-                  file={pending.file}
-                  onFile={f => setPending(p => ({ ...p, file: f }))}
-                />
-              </div>
-            ) : (
+
+              {/* Title */}
               <div className={styles.field}>
                 <label className={styles.label}>
-                  {activeType === 'note' ? 'Message' : activeType === 'spotify' ? 'Spotify URL' : 'Google Maps URL'}
+                  Title <span className={styles.optional}>(optional)</span>
                 </label>
-                {activeType === 'note' ? (
-                  <textarea
-                    className={styles.textarea}
-                    rows={5}
-                    value={pending.content}
-                    onChange={e => setPending(p => ({ ...p, content: e.target.value }))}
-                    placeholder="Write something meaningful…"
-                  />
-                ) : (
-                  <input
-                    className={styles.input}
-                    type="url"
-                    value={pending.content}
-                    onChange={e => setPending(p => ({ ...p, content: e.target.value }))}
-                    placeholder={activeType === 'spotify' ? 'https://open.spotify.com/track/…' : 'https://maps.google.com/…'}
-                  />
-                )}
+                <input
+                  className={styles.input}
+                  value={pending.title}
+                  onChange={e => setPending(p => ({ ...p, title: e.target.value }))}
+                  placeholder="e.g. Our first dance"
+                />
               </div>
-            )}
 
-            {pending.error && <p className={styles.fieldError}>{pending.error}</p>}
-
-            <button
-              className={styles.addBtn}
-              disabled={saving || (
-                ITEM_TYPES.find(t => t.type === activeType)?.isFile
-                  ? !pending.file
-                  : activeType !== 'voice_note' && !pending.content.trim()
-              )}
-              onClick={handleAdd}
-            >
-              {saving ? 'Saving…' : 'Add to Memory'}
-            </button>
-          </div>
-
-          {/* Right — existing items */}
-          <div className={styles.itemsPanel}>
-            <p className={styles.panelLabel}>
-              {items.length === 0 ? 'No memories yet' : `${items.length} memor${items.length === 1 ? 'y' : 'ies'}`}
-            </p>
-
-            {items.length === 0 ? (
-              <p className={styles.emptyItems}>
-                Add photos, voice notes, songs, and more using the panel on the left.
-              </p>
-            ) : (
-              <ul className={styles.itemList}>
-                {items.map(item => (
-                  <li key={item.id} className={styles.item}>
-                    <div className={styles.itemIcon}>
-                      {ITEM_TYPES.find(t => t.type === item.type)?.icon ?? '📎'}
-                    </div>
-                    <div className={styles.itemBody}>
-                      <p className={styles.itemTitle}>
-                        {item.title ?? ITEM_TYPES.find(t => t.type === item.type)?.label}
-                      </p>
-                      {item.file_url && token
-                        ? <SignedMedia fileKey={item.file_url} type={item.type} token={token} />
-                        : <p className={styles.itemMeta}>
-                            {item.type === 'note' && item.content
-                              ? item.content.slice(0, 80) + (item.content.length > 80 ? '…' : '')
-                              : item.content?.slice(0, 60)}
-                          </p>
-                      }
-                    </div>
+              {/* Type-specific input */}
+              {activeType === 'voice_note' ? (
+                <div className={styles.field}>
+                  <label className={styles.label}>Recording</label>
+                  {!audioBlob ? (
                     <button
-                      className={styles.deleteBtn}
-                      onClick={() => handleDelete(item.id)}
-                      aria-label="Remove item"
+                      type="button"
+                      className={`${styles.recordBtn} ${recording ? styles.recordBtnActive : ''}`}
+                      onClick={recording ? stopRecording : startRecording}
                     >
-                      ×
+                      {recording ? (
+                        <>
+                          <span className={styles.recordDot}/>
+                          Stop Recording
+                        </>
+                      ) : (
+                        <>
+                          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="7" y="2" width="6" height="10" rx="3"/>
+                            <path d="M4 10a6 6 0 0012 0M10 16v2M7 18h6"/>
+                          </svg>
+                          Start Recording
+                        </>
+                      )}
                     </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+                  ) : (
+                    <div className={styles.audioPreview}>
+                      <audio controls src={URL.createObjectURL(audioBlob)} className={styles.audioPlayer}/>
+                      <button type="button" className={styles.rerecordBtn}
+                        onClick={() => { setAudioBlob(null); setPending(p => ({ ...p, file: null })) }}>
+                        Re-record
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : typeDef.isFile ? (
+                <div className={styles.field}>
+                  <label className={styles.label}>File</label>
+                  <FileZone
+                    accept={typeDef.accept ?? {}}
+                    file={pending.file}
+                    onFile={f => setPending(p => ({ ...p, file: f }))}
+                  />
+                </div>
+              ) : (
+                <div className={styles.field}>
+                  <label className={styles.label}>
+                    {activeType === 'note' ? 'Message' : activeType === 'spotify' ? 'Spotify URL' : 'Google Maps URL'}
+                  </label>
+                  {activeType === 'note' ? (
+                    <textarea
+                      className={styles.textarea}
+                      rows={5}
+                      value={pending.content}
+                      onChange={e => setPending(p => ({ ...p, content: e.target.value }))}
+                      placeholder="Write something meaningful…"
+                    />
+                  ) : (
+                    <input
+                      className={styles.input}
+                      type="url"
+                      value={pending.content}
+                      onChange={e => setPending(p => ({ ...p, content: e.target.value }))}
+                      placeholder={activeType === 'spotify' ? 'https://open.spotify.com/track/…' : 'https://maps.google.com/…'}
+                    />
+                  )}
+                </div>
+              )}
 
+              {pending.error && <p className={styles.fieldError}>{pending.error}</p>}
+
+              <button className={styles.addBtn} disabled={isAddDisabled} onClick={handleAdd}>
+                {saving ? (
+                  <><div className={styles.btnSpinner}/> Saving…</>
+                ) : (
+                  <>
+                    Add to Memory
+                    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M10 4v12M4 10h12"/>
+                    </svg>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* ── Right: Carousel + list ── */}
+            <div className={styles.rightPanel}>
+
+              {/* Carousel preview */}
+              <div className={styles.previewSection}>
+                <p className={styles.panelLabel}>Preview as Recipient</p>
+                <MemoryCarousel
+                  items={items}
+                  token={token}
+                  activeIndex={carouselIndex}
+                  onIndexChange={setCarouselIndex}
+                />
+              </div>
+
+              {/* Sortable item list */}
+              {items.length > 0 && (
+                <div className={styles.listSection}>
+                  <div className={styles.listHeader}>
+                    <p className={styles.panelLabel}>
+                      Your Memories
+                    </p>
+                    <span className={styles.itemCount}>{items.length}</span>
+                  </div>
+                  <p className={styles.listHint}>Drag to reorder — the carousel updates automatically</p>
+
+                  <ul className={styles.sortList}>
+                    {items.map((item, i) => (
+                      <li
+                        key={item.id}
+                        className={`${styles.sortItem} ${carouselIndex === i ? styles.sortItemActive : ''}`}
+                        draggable
+                        onDragStart={() => onDragStart(i)}
+                        onDragOver={e => onDragOver(e, i)}
+                        onDrop={onDrop}
+                        onClick={() => setCarouselIndex(i)}
+                      >
+                        {/* Drag handle */}
+                        <span className={styles.dragHandle} aria-hidden="true">
+                          <svg width="12" height="16" viewBox="0 0 12 16" fill="currentColor">
+                            <circle cx="3" cy="3" r="1.5"/>
+                            <circle cx="9" cy="3" r="1.5"/>
+                            <circle cx="3" cy="8" r="1.5"/>
+                            <circle cx="9" cy="8" r="1.5"/>
+                            <circle cx="3" cy="13" r="1.5"/>
+                            <circle cx="9" cy="13" r="1.5"/>
+                          </svg>
+                        </span>
+
+                        {/* Thumbnail */}
+                        <div className={styles.thumb}>
+                          {item.file_url && token ? (
+                            <SignedMedia fileKey={item.file_url} type={item.type} token={token}/>
+                          ) : (
+                            <span className={styles.thumbIcon}>
+                              <Icon type={item.type} size={16}/>
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Info */}
+                        <div className={styles.sortItemBody}>
+                          <p className={styles.sortItemTitle}>
+                            {item.title ?? ITEM_TYPES.find(t => t.type === item.type)?.label}
+                          </p>
+                          {item.content && item.type === 'note' && (
+                            <p className={styles.sortItemMeta}>
+                              {item.content.slice(0, 50)}{item.content.length > 50 ? '…' : ''}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Type badge */}
+                        <span className={styles.typeBadge}>
+                          <Icon type={item.type} size={12}/>
+                        </span>
+
+                        {/* Delete */}
+                        <button
+                          className={styles.deleteBtn}
+                          onClick={e => { e.stopPropagation(); handleDelete(item.id) }}
+                          aria-label="Remove memory"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M5 5l10 10M15 5L5 15"/>
+                          </svg>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   )
 }

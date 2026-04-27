@@ -1,0 +1,263 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 14, 13, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 24px;
+  backdrop-filter: blur(4px);
+}
+
+.card {
+  position: relative;
+  background: #fff;
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  overflow: hidden;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink-soft);
+  padding: 4px;
+  line-height: 0;
+  transition: color 0.2s;
+  z-index: 1;
+}
+.closeBtn:hover { color: var(--ink); }
+
+/* ── Header ── */
+.header {
+  background: var(--cream-warm);
+  padding: 36px 36px 28px;
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--rose);
+  margin-bottom: 10px;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+/* ── Visual area ── */
+.visual {
+  padding: 0 36px;
+}
+
+.visualGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.visualTab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 8px;
+  border: 1px solid var(--border-soft);
+}
+
+.visualIcon {
+  width: 24px;
+  height: 24px;
+  color: var(--rose);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.visualIcon svg { width: 100%; height: 100%; }
+
+.visualLabel {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+}
+
+/* Step 2 visual */
+.visualForm {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.visualField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.visualFieldLabel {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+}
+
+.visualFieldInput {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--ink);
+  border-bottom: 1px solid var(--rose);
+  padding: 8px 0;
+}
+
+.visualDropzone {
+  border: 1px dashed var(--border-soft);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink-soft);
+  font-family: var(--font-sans);
+  font-size: 12px;
+}
+.visualDropzone svg { flex-shrink: 0; color: var(--rose); }
+
+/* Step 3 visual */
+.visualCarousel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.visualCard {
+  background: var(--dark-surface);
+  width: 100%;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.visualCardEyebrow {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.visualCardMedia {
+  height: 80px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dim);
+}
+
+.visualDots {
+  display: flex;
+  gap: 6px;
+}
+
+.visualDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border-soft);
+}
+.visualDotActive {
+  background: var(--rose);
+}
+
+/* ── Body ── */
+.body {
+  padding: 0 36px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--ink-mid);
+}
+
+/* ── Footer ── */
+.footer {
+  padding: 0 36px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dots {
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border-soft);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.25s;
+}
+.dotActive { background: var(--rose); }
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btnSecondary {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  background: none;
+  border: 1px solid var(--border-soft);
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: border-color 0.25s, color 0.25s;
+}
+.btnSecondary:hover { border-color: var(--ink-mid); color: var(--ink); }
+
+.btnPrimary {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: var(--burgundy);
+  border: none;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: background 0.25s;
+}
+.btnPrimary:hover { background: var(--burgundy-h); }

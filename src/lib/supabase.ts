@@ -64,6 +64,7 @@ export type MessageItem = {
   type: MessageItemType
   file_url: string | null
   content: string | null
+  sort_order: number | null
   created_at: string
 }
 
