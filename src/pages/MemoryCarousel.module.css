@@ -236,6 +236,40 @@
   color: rgba(255,255,255,0.6);
 }
 
+/* ── Map card ── */
+.mapWrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.mapFrame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  /* Warm, desaturated filter to match Tijoray cream/ink palette */
+  filter: sepia(35%) brightness(82%) saturate(55%) contrast(95%) hue-rotate(5deg);
+}
+
+.mapPin {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 28px 14px 14px;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #fff;
+  pointer-events: none;
+}
+
 /* ── Loading ── */
 .loadingBox {
   width: 100%;

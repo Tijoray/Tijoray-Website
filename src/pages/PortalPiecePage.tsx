@@ -143,6 +143,84 @@ function FileZone({ accept, onFile, file }: { accept: Record<string, string[]>; 
   )
 }
 
+/* ── Location search (Nominatim, free, no key) ── */
+type NominatimResult = { place_id: number; display_name: string; lat: string; lon: string }
+
+function LocationSearch({ value, onChange }: { value: string; onChange: (json: string) => void }) {
+  const [query,       setQuery]       = useState('')
+  const [results,     setResults]     = useState<NominatimResult[]>([])
+  const [open,        setOpen]        = useState(false)
+  const [loading,     setLoading]     = useState(false)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Parse existing value to show selected name
+  const selected = (() => { try { return JSON.parse(value) } catch { return null } })()
+
+  function search(q: string) {
+    setQuery(q)
+    onChange('') // clear selection while typing
+    if (timerRef.current) clearTimeout(timerRef.current)
+    if (!q.trim()) { setResults([]); setOpen(false); return }
+    timerRef.current = setTimeout(async () => {
+      setLoading(true)
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=5&addressdetails=0`,
+          { headers: { 'Accept-Language': 'en' } }
+        )
+        const data: NominatimResult[] = await res.json()
+        setResults(data)
+        setOpen(true)
+      } catch { /* ignore */ }
+      finally { setLoading(false) }
+    }, 350)
+  }
+
+  function select(r: NominatimResult) {
+    const short = r.display_name.split(',').slice(0, 3).join(',')
+    setQuery(short)
+    setOpen(false)
+    onChange(JSON.stringify({ lat: r.lat, lon: r.lon, name: r.display_name }))
+  }
+
+  return (
+    <div className={styles.locationWrap}>
+      <div className={styles.locationInputWrap}>
+        <svg className={styles.locationInputIcon} width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M10 2a6 6 0 016 6c0 4-6 10-6 10S4 12 4 8a6 6 0 016-6z"/><circle cx="10" cy="8" r="2"/>
+        </svg>
+        <input
+          className={styles.locationInput}
+          value={selected ? selected.name.split(',').slice(0, 3).join(',') : query}
+          onChange={e => search(e.target.value)}
+          onFocus={() => { if (results.length) setOpen(true) }}
+          onBlur={() => setTimeout(() => setOpen(false), 150)}
+          placeholder="Search for a place…"
+          autoComplete="off"
+        />
+        {loading && <div className={styles.locationSpinner}/>}
+        {selected && (
+          <button className={styles.locationClear} onClick={() => { setQuery(''); onChange(''); setResults([]) }} aria-label="Clear">
+            <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M2 2l12 12M14 2L2 14"/></svg>
+          </button>
+        )}
+      </div>
+      {open && results.length > 0 && (
+        <ul className={styles.locationDropdown}>
+          {results.map(r => (
+            <li key={r.place_id} className={styles.locationOption} onMouseDown={() => select(r)}>
+              <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, color: 'var(--rose)' }}>
+                <path d="M10 2a6 6 0 016 6c0 4-6 10-6 10S4 12 4 8a6 6 0 016-6z"/><circle cx="10" cy="8" r="2"/>
+              </svg>
+              <span>{r.display_name.split(',').slice(0, 4).join(', ')}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
 /* ── sortItems helper ── */
 function sortItems(items: MessageItem[]): MessageItem[] {
   return [...items].sort((a, b) => {
@@ -502,7 +580,7 @@ export default function PortalPiecePage() {
               ) : (
                 <div className={styles.field}>
                   <label className={styles.label}>
-                    {activeType === 'note' ? 'Message' : activeType === 'spotify' ? 'Spotify URL' : 'Google Maps URL'}
+                    {activeType === 'note' ? 'Message' : activeType === 'spotify' ? 'Spotify URL' : 'Location'}
                   </label>
                   {activeType === 'note' ? (
                     <textarea
@@ -512,13 +590,18 @@ export default function PortalPiecePage() {
                       onChange={e => setPending(p => ({ ...p, content: e.target.value }))}
                       placeholder="Write something meaningful…"
                     />
+                  ) : activeType === 'google_maps' ? (
+                    <LocationSearch
+                      value={pending.content}
+                      onChange={json => setPending(p => ({ ...p, content: json }))}
+                    />
                   ) : (
                     <input
                       className={styles.input}
                       type="url"
                       value={pending.content}
                       onChange={e => setPending(p => ({ ...p, content: e.target.value }))}
-                      placeholder={activeType === 'spotify' ? 'https://open.spotify.com/track/…' : 'https://maps.google.com/…'}
+                      placeholder="https://open.spotify.com/track/…"
                     />
                   )}
                 </div>

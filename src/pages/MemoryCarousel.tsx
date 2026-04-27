@@ -82,6 +82,40 @@ function CardMedia({
   return null
 }
 
+/* ── Map card — OSM iframe with warm CSS filter ── */
+function MapCard({ content }: { content: string }) {
+  const parsed = (() => { try { return JSON.parse(content) } catch { return null } })()
+  if (!parsed?.lat || !parsed?.lon) return (
+    <div className={styles.contentCard}>
+      <span className={styles.contentIcon}><TypeIcon type="google_maps" size={28}/></span>
+      <p className={styles.linkText}>{content.replace('https://', '')}</p>
+    </div>
+  )
+
+  const { lat, lon, name } = parsed
+  const delta = 0.012
+  const bbox = `${+lon - delta},${+lat - delta},${+lon + delta},${+lat + delta}`
+  const src = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lon}`
+  const shortName = (name as string).split(',').slice(0, 2).join(', ')
+
+  return (
+    <div className={styles.mapWrap}>
+      <iframe
+        src={src}
+        className={styles.mapFrame}
+        title={shortName}
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+        sandbox="allow-scripts allow-same-origin"
+      />
+      <div className={styles.mapPin}>
+        <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a6 6 0 016 6c0 4-6 10-6 10S4 12 4 8a6 6 0 016-6z"/></svg>
+        <span>{shortName}</span>
+      </div>
+    </div>
+  )
+}
+
 /* ── Single card ── */
 function MemoryCard({
   item, token, position,
@@ -118,6 +152,8 @@ function MemoryCard({
           token={token}
           onOrientation={setLandscape}
         />
+      ) : item.type === 'google_maps' && item.content ? (
+        <MapCard content={item.content}/>
       ) : (
         <div className={styles.contentCard}>
           <span className={styles.contentIcon}><TypeIcon type={item.type} size={28}/></span>
