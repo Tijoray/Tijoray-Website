@@ -91,8 +91,8 @@
 }
 
 .cardCenter.cardLandscape {
-  width: 400px;
-  height: 240px;
+  width: 420px;
+  height: 280px;
 }
 
 .cardLeft {
@@ -258,10 +258,10 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 32px 14px 12px;
-  background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 100%);
+  padding: 36px 14px 14px;
+  background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, transparent 100%);
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 6px;
   font-family: var(--font-sans);
   font-size: 11px;
@@ -269,9 +269,7 @@
   letter-spacing: 0.5px;
   color: #fff;
   pointer-events: none;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.5;
 }
 
 /* ── Loading ── */

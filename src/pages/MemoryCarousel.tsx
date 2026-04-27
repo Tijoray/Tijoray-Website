@@ -111,15 +111,15 @@ function LeafletMapInner({ lat, lon }: { lat: number; lon: number }) {
       }
 
       const map = L.map(containerRef.current!, {
-        center:           [lat, lon],
-        zoom:             15,
-        zoomControl:      false,
+        center:             [lat, lon],
+        zoom:               15,
+        zoomControl:        false,
         attributionControl: false,
-        dragging:         false,
-        scrollWheelZoom:  false,
-        doubleClickZoom:  false,
-        touchZoom:        false,
-        keyboard:         false,
+        dragging:           true,
+        scrollWheelZoom:    false,  // off — avoids hijacking page scroll
+        doubleClickZoom:    true,
+        touchZoom:          true,
+        keyboard:           false,
       })
 
       // CartoDB Positron — clean, minimal, no API key required
@@ -194,10 +194,11 @@ function MemoryCard({
   else if (position <= -2)    posClass = styles.cardFarLeft
   else if (position >= 2)     posClass = styles.cardFarRight
 
+  const isMap = item.type === 'google_maps'
   const cardClass = [
     styles.card,
     posClass,
-    landscape && isFile ? styles.cardLandscape : '',
+    (landscape && isFile) || isMap ? styles.cardLandscape : '',
   ].filter(Boolean).join(' ')
 
   return (
