@@ -236,12 +236,13 @@ export default function PortalPiecePage() {
   const { pieceId } = useParams<{ pieceId: string }>()
   const { user }    = useAuth()
 
-  const [piece,    setPiece]    = useState<Piece | null>(null)
-  const [message,  setMessage]  = useState<Message | null>(null)
-  const [items,    setItems]    = useState<MessageItem[]>([])
-  const [loading,  setLoading]  = useState(true)
-  const [notFound, setNotFound] = useState(false)
-  const [token,    setToken]    = useState<string | null>(null)
+  const [piece,         setPiece]         = useState<Piece | null>(null)
+  const [message,       setMessage]       = useState<Message | null>(null)
+  const [items,         setItems]         = useState<MessageItem[]>([])
+  const [loading,       setLoading]       = useState(true)
+  const [notFound,      setNotFound]      = useState(false)
+  const [token,         setToken]         = useState<string | null>(null)
+  const [recipientName, setRecipientName] = useState<string | null>(null)
 
   const [activeType, setActiveType] = useState<MessageItemType>('photo')
   const [pending,    setPending]    = useState<PendingItem>(blank('photo'))
@@ -282,7 +283,8 @@ export default function PortalPiecePage() {
       supabase.from('Pieces').select('*').eq('id', pieceId).eq('sender_id', user.id).single(),
       supabase.from('Messages').select('*').eq('piece_id', pieceId).single(),
     ]).then(([{ data: sessionData }, { data: p, error: pErr }, { data: m }]) => {
-      setToken(sessionData.session?.access_token ?? null)
+      const tok = sessionData.session?.access_token ?? null
+      setToken(tok)
       if (pErr || !p) { setNotFound(true); setLoading(false); return }
       setPiece(p)
       setMessage(m ?? null)
@@ -294,6 +296,17 @@ export default function PortalPiecePage() {
           .order('sort_order', { ascending: true, nullsFirst: false })
           .order('created_at', { ascending: true })
           .then(({ data }) => setItems(sortItems(data ?? [])))
+      }
+      // Fetch recipient name via API (requires service role, can't do client-side)
+      if (tok) {
+        fetch('/api/recipient-name', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tok}` },
+          body: JSON.stringify({ pieceId }),
+        })
+          .then(r => r.ok ? r.json() : null)
+          .then(data => { if (data?.name) setRecipientName(data.name) })
+          .catch(() => {})
       }
       setLoading(false)
     })
@@ -628,7 +641,9 @@ export default function PortalPiecePage() {
 
               {/* Carousel preview */}
               <div className={styles.previewSection}>
-                <p className={styles.panelLabel}>Preview as Recipient</p>
+                <p className={styles.panelLabel}>
+                  {recipientName ? `What ${recipientName.split(' ')[0]} will see` : 'Preview as Recipient'}
+                </p>
                 <MemoryCarousel
                   items={items}
                   token={token}
