@@ -36,7 +36,7 @@
 .stage {
   position: relative;
   width: 100%;
-  height: 380px;
+  height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -82,7 +82,7 @@
 
 /* ── Position transforms ── */
 .cardCenter {
-  transform: translateX(0) scale(1);
+  transform: translateX(0) translateY(-28px) scale(1);
   opacity: 1;
   z-index: 10;
   width: 240px;
@@ -96,25 +96,25 @@
 }
 
 .cardLeft {
-  transform: translateX(-60%) scale(0.78);
+  transform: translateX(-60%) translateY(0px) scale(0.78);
   opacity: 0.6;
   z-index: 5;
 }
 
 .cardRight {
-  transform: translateX(60%) scale(0.78);
+  transform: translateX(60%) translateY(0px) scale(0.78);
   opacity: 0.6;
   z-index: 5;
 }
 
 .cardFarLeft {
-  transform: translateX(-100%) scale(0.6);
+  transform: translateX(-100%) translateY(0px) scale(0.6);
   opacity: 0.25;
   z-index: 1;
 }
 
 .cardFarRight {
-  transform: translateX(100%) scale(0.6);
+  transform: translateX(100%) translateY(0px) scale(0.6);
   opacity: 0.25;
   z-index: 1;
 }
