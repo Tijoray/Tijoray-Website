@@ -252,22 +252,37 @@
   filter: sepia(35%) brightness(82%) saturate(55%) contrast(95%) hue-rotate(5deg);
 }
 
-.mapPin {
+/* Custom pin centered over the map (bbox center = the location) */
+.mapPinIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* translate so the tip of the pin sits exactly at center */
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.35));
+}
+
+/* Place name label at bottom of map card */
+.mapLabel {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 28px 14px 14px;
-  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+  padding: 32px 14px 12px;
+  background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 100%);
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.5px;
   color: #fff;
   pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ── Loading ── */

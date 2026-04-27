@@ -95,8 +95,9 @@ function MapCard({ content }: { content: string }) {
   const { lat, lon, name } = parsed
   const delta = 0.012
   const bbox = `${+lon - delta},${+lat - delta},${+lon + delta},${+lat + delta}`
-  const src = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lon}`
-  const shortName = (name as string).split(',').slice(0, 2).join(', ')
+  // No &marker= — we render our own themed pin over the iframe center
+  const src = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik`
+  const shortName = (name as string).split(',').slice(0, 3).join(', ')
 
   return (
     <div className={styles.mapWrap}>
@@ -108,8 +109,21 @@ function MapCard({ content }: { content: string }) {
         referrerPolicy="no-referrer-when-downgrade"
         sandbox="allow-scripts allow-same-origin"
       />
-      <div className={styles.mapPin}>
-        <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a6 6 0 016 6c0 4-6 10-6 10S4 12 4 8a6 6 0 016-6z"/></svg>
+
+      {/* Custom rose pin centered over the location (always the bbox center) */}
+      <div className={styles.mapPinIcon} aria-hidden="true">
+        <svg width="28" height="36" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 0C6.268 0 0 6.268 0 14c0 9.333 14 22 14 22S28 23.333 28 14C28 6.268 21.732 0 14 0z" fill="#B97A6A"/>
+          <path d="M14 0C6.268 0 0 6.268 0 14c0 9.333 14 22 14 22S28 23.333 28 14C28 6.268 21.732 0 14 0z" stroke="#4A2326" strokeWidth="1.5"/>
+          <circle cx="14" cy="14" r="5" fill="#fff" opacity="0.9"/>
+        </svg>
+      </div>
+
+      {/* Place name label at bottom */}
+      <div className={styles.mapLabel}>
+        <svg width="10" height="10" viewBox="0 0 20 20" fill="currentColor" style={{ flexShrink: 0 }}>
+          <path d="M10 2a6 6 0 016 6c0 4-6 10-6 10S4 12 4 8a6 6 0 016-6z"/>
+        </svg>
         <span>{shortName}</span>
       </div>
     </div>
@@ -165,8 +179,8 @@ function MemoryCard({
         </div>
       )}
 
-      {/* Overlay label (center only) */}
-      {isCenter && (
+      {/* Overlay label (center only, skip for maps which have their own label) */}
+      {isCenter && item.type !== 'google_maps' && (
         <div className={styles.overlay}>
           <p className={styles.overlayTitle}>{item.title ?? LABEL[item.type]}</p>
           <span className={styles.overlayBadge}>
