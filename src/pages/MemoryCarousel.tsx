@@ -2,35 +2,32 @@ import { useState, useEffect } from 'react'
 import type { MessageItem, MessageItemType } from '../lib/supabase'
 import styles from './MemoryCarousel.module.css'
 
-/* ── Type icons (SVG, color-matched) ── */
+const LABEL: Record<MessageItemType, string> = {
+  photo: 'Photo', video: 'Video', audio: 'Audio', voice_note: 'Voice Note',
+  note: 'Note', spotify: 'Song', google_maps: 'Place',
+}
+
 function TypeIcon({ type, size = 16 }: { type: MessageItemType; size?: number }) {
-  const props = { width: size, height: size, viewBox: '0 0 20 20', fill: 'none', stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
-  if (type === 'photo') return (
-    <svg {...props}><rect x="2" y="4" width="16" height="12" rx="2"/><circle cx="10" cy="10" r="3"/><path d="M7 4l1.5-2h3L13 4"/></svg>
-  )
-  if (type === 'video') return (
-    <svg {...props}><rect x="2" y="5" width="11" height="10" rx="2"/><path d="M13 8l5-3v10l-5-3V8z"/></svg>
-  )
-  if (type === 'audio') return (
-    <svg {...props}><path d="M9 4l-5 4H2a1 1 0 00-1 1v2a1 1 0 001 1h2l5 4V4z"/><path d="M15 8a4 4 0 010 4M18 6a7 7 0 010 8"/></svg>
-  )
-  if (type === 'voice_note') return (
-    <svg {...props}><rect x="7" y="2" width="6" height="10" rx="3"/><path d="M4 10a6 6 0 0012 0M10 16v2M7 18h6"/></svg>
-  )
-  if (type === 'note') return (
-    <svg {...props}><path d="M14 2H6a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2z"/><path d="M8 8h4M8 12h2"/></svg>
-  )
-  if (type === 'spotify') return (
-    <svg {...props}><circle cx="10" cy="10" r="8"/><path d="M6 12.5c2.5-1 5-1 7.5 0M5.5 9.5C9 8 12 8 15 9.5M7 6.5c2-1 4.5-1 6.5 0"/></svg>
-  )
-  if (type === 'google_maps') return (
-    <svg {...props}><path d="M10 2a6 6 0 016 6c0 4-6 10-6 10S4 12 4 8a6 6 0 016-6z"/><circle cx="10" cy="8" r="2"/></svg>
-  )
+  const p = { width: size, height: size, viewBox: '0 0 20 20', fill: 'none', stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
+  if (type === 'photo')      return <svg {...p}><rect x="2" y="4" width="16" height="12" rx="2"/><circle cx="10" cy="10" r="3"/><path d="M7 4l1.5-2h3L13 4"/></svg>
+  if (type === 'video')      return <svg {...p}><rect x="2" y="5" width="11" height="10" rx="2"/><path d="M13 8l5-3v10l-5-3V8z"/></svg>
+  if (type === 'audio')      return <svg {...p}><path d="M9 4l-5 4H2a1 1 0 00-1 1v2a1 1 0 001 1h2l5 4V4z"/><path d="M15 8a4 4 0 010 4M18 6a7 7 0 010 8"/></svg>
+  if (type === 'voice_note') return <svg {...p}><rect x="7" y="2" width="6" height="10" rx="3"/><path d="M4 10a6 6 0 0012 0M10 16v2M7 18h6"/></svg>
+  if (type === 'note')       return <svg {...p}><path d="M14 2H6a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2z"/><path d="M8 8h4M8 12h2"/></svg>
+  if (type === 'spotify')    return <svg {...p}><circle cx="10" cy="10" r="8"/><path d="M6 12.5c2.5-1 5-1 7.5 0M5.5 9.5C9 8 12 8 15 9.5M7 6.5c2-1 4.5-1 6.5 0"/></svg>
+  if (type === 'google_maps')return <svg {...p}><path d="M10 2a6 6 0 016 6c0 4-6 10-6 10S4 12 4 8a6 6 0 016-6z"/><circle cx="10" cy="8" r="2"/></svg>
   return null
 }
 
-/* ── SignedMedia (local copy for carousel cards) ── */
-function CardMedia({ fileKey, type, token }: { fileKey: string; type: MessageItemType; token: string }) {
+/* ── Fetches a signed URL, reports media orientation ── */
+function CardMedia({
+  fileKey, type, token, onOrientation,
+}: {
+  fileKey: string
+  type: MessageItemType
+  token: string
+  onOrientation?: (landscape: boolean) => void
+}) {
   const [src, setSrc] = useState<string | null>(null)
   const [err, setErr] = useState(false)
 
@@ -48,14 +45,105 @@ function CardMedia({ fileKey, type, token }: { fileKey: string; type: MessageIte
   }, [fileKey, token])
 
   if (err) return <p className={styles.cardMeta}>Could not load file</p>
-  if (!src) return <div className={styles.cardLoading}><div className={styles.cardSpinner}/></div>
+  if (!src)  return <div className={styles.loadingBox}><div className={styles.spinner}/></div>
 
-  if (type === 'photo') return <img src={src} alt="" className={styles.cardMedia}/>
-  if (type === 'video') return <video src={src} controls className={styles.cardMedia}/>
-  if (type === 'audio' || type === 'voice_note') return <audio src={src} controls className={styles.cardAudio}/>
+  if (type === 'photo') return (
+    <img
+      src={src}
+      alt=""
+      className={styles.fillMedia}
+      onLoad={e => {
+        const img = e.currentTarget
+        onOrientation?.(img.naturalWidth > img.naturalHeight)
+      }}
+    />
+  )
+  if (type === 'video') return (
+    <video
+      src={src}
+      className={styles.fillMedia}
+      onLoadedMetadata={e => {
+        const v = e.currentTarget
+        onOrientation?.(v.videoWidth > v.videoHeight)
+      }}
+      controls
+    />
+  )
+  if (type === 'audio' || type === 'voice_note') return (
+    <div className={styles.audioCard}>
+      <div className={styles.audioWave}>
+        {Array.from({ length: 20 }).map((_, i) => (
+          <div key={i} className={styles.audioBar} style={{ '--h': `${20 + Math.sin(i * 1.3) * 60}%` } as React.CSSProperties}/>
+        ))}
+      </div>
+      <audio src={src} controls className={styles.audioEl}/>
+    </div>
+  )
   return null
 }
 
+/* ── Single card ── */
+function MemoryCard({
+  item, token, position,
+}: {
+  item: MessageItem
+  token: string | null
+  position: number // -2, -1, 0, 1, 2
+}) {
+  const [landscape, setLandscape] = useState(false)
+  const isCenter = position === 0
+  const isFile = !!item.file_url
+
+  // Determine position class
+  let posClass = styles.cardFar
+  if (position === 0)         posClass = styles.cardCenter
+  else if (position === -1)   posClass = styles.cardLeft
+  else if (position === 1)    posClass = styles.cardRight
+  else if (position <= -2)    posClass = styles.cardFarLeft
+  else if (position >= 2)     posClass = styles.cardFarRight
+
+  const cardClass = [
+    styles.card,
+    posClass,
+    landscape && isFile ? styles.cardLandscape : '',
+  ].filter(Boolean).join(' ')
+
+  return (
+    <div className={cardClass}>
+      {/* Media fill */}
+      {isFile && token ? (
+        <CardMedia
+          fileKey={item.file_url!}
+          type={item.type}
+          token={token}
+          onOrientation={setLandscape}
+        />
+      ) : (
+        <div className={styles.contentCard}>
+          <span className={styles.contentIcon}><TypeIcon type={item.type} size={28}/></span>
+          {item.type === 'note' && item.content ? (
+            <p className={styles.noteText}>{item.content}</p>
+          ) : (
+            <p className={styles.linkText}>{item.content?.replace('https://', '') ?? ''}</p>
+          )}
+        </div>
+      )}
+
+      {/* Overlay label (center only) */}
+      {isCenter && (
+        <div className={styles.overlay}>
+          <p className={styles.overlayTitle}>{item.title ?? LABEL[item.type]}</p>
+          <span className={styles.overlayBadge}>
+            <TypeIcon type={item.type} size={11}/>
+            {LABEL[item.type]}
+          </span>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ── Main export ── */
 interface MemoryCarouselProps {
   items: MessageItem[]
   token: string | null
@@ -67,82 +155,51 @@ export default function MemoryCarousel({ items, token, activeIndex, onIndexChang
   if (items.length === 0) {
     return (
       <div className={styles.empty}>
-        <div className={styles.emptyIcon}>
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="3" y="3" width="18" height="14" rx="2"/>
-            <circle cx="12" cy="10" r="3"/>
-            <path d="M8 21h8M12 17v4"/>
-          </svg>
-        </div>
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--border-soft)' }}>
+          <rect x="3" y="3" width="18" height="14" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M8 21h8M12 17v4"/>
+        </svg>
         <p className={styles.emptyText}>Your memories will appear here</p>
         <p className={styles.emptyMeta}>Add a memory using the panel on the left</p>
       </div>
     )
   }
 
-  const item = items[activeIndex] ?? items[0]
-  const LABEL: Record<MessageItemType, string> = {
-    photo: 'Photo', video: 'Video', audio: 'Audio', voice_note: 'Voice Note',
-    note: 'Note', spotify: 'Song', google_maps: 'Place',
-  }
+  const prev = () => onIndexChange((activeIndex - 1 + items.length) % items.length)
+  const next = () => onIndexChange((activeIndex + 1) % items.length)
 
   return (
     <div className={styles.wrap}>
-      {/* Card */}
-      <div className={styles.cardWrap}>
+      {/* Coverflow stage */}
+      <div className={styles.stage}>
+        {items.map((item, i) => {
+          const pos = i - activeIndex
+          if (Math.abs(pos) > 2) return null
+          return (
+            <div
+              key={item.id}
+              className={styles.slot}
+              onClick={() => pos !== 0 && onIndexChange(i)}
+              style={{ cursor: pos !== 0 ? 'pointer' : 'default' }}
+            >
+              <MemoryCard item={item} token={token} position={pos}/>
+            </div>
+          )
+        })}
+
+        {/* Arrow buttons */}
         {items.length > 1 && (
-          <button
-            className={`${styles.arrow} ${styles.arrowLeft}`}
-            onClick={() => onIndexChange((activeIndex - 1 + items.length) % items.length)}
-            aria-label="Previous memory"
-          >
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M13 4l-6 6 6 6"/>
-            </svg>
-          </button>
-        )}
-
-        <div className={styles.card}>
-          <div className={styles.cardHeader}>
-            <p className={styles.cardEyebrow}>
-              {item.title ?? LABEL[item.type]}
-            </p>
-            <span className={styles.cardTypeIcon}>
-              <TypeIcon type={item.type} size={14}/>
-            </span>
-          </div>
-
-          <div className={styles.cardBody}>
-            {item.file_url && token ? (
-              <CardMedia fileKey={item.file_url} type={item.type} token={token}/>
-            ) : item.type === 'note' && item.content ? (
-              <p className={styles.cardNote}>{item.content}</p>
-            ) : item.type === 'spotify' && item.content ? (
-              <div className={styles.cardLink}>
-                <TypeIcon type="spotify" size={20}/>
-                <span className={styles.cardLinkText}>{item.content.replace('https://', '')}</span>
-              </div>
-            ) : item.type === 'google_maps' && item.content ? (
-              <div className={styles.cardLink}>
-                <TypeIcon type="google_maps" size={20}/>
-                <span className={styles.cardLinkText}>{item.content.replace('https://', '')}</span>
-              </div>
-            ) : null}
-          </div>
-
-          <p className={styles.cardCounter}>{activeIndex + 1} / {items.length}</p>
-        </div>
-
-        {items.length > 1 && (
-          <button
-            className={`${styles.arrow} ${styles.arrowRight}`}
-            onClick={() => onIndexChange((activeIndex + 1) % items.length)}
-            aria-label="Next memory"
-          >
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M7 4l6 6-6 6"/>
-            </svg>
-          </button>
+          <>
+            <button className={`${styles.arrow} ${styles.arrowLeft}`} onClick={prev} aria-label="Previous">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M13 4l-6 6 6 6"/>
+              </svg>
+            </button>
+            <button className={`${styles.arrow} ${styles.arrowRight}`} onClick={next} aria-label="Next">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M7 4l6 6-6 6"/>
+              </svg>
+            </button>
+          </>
         )}
       </div>
 
