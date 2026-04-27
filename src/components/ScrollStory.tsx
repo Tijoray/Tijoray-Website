@@ -64,7 +64,11 @@ export default function ScrollStory() {
 
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true })
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    renderer.setSize(700, 700, false)
+    {
+      const initW = canvas.clientWidth || window.innerWidth || 700
+      const initH = canvas.clientHeight || initW
+      renderer.setSize(initW, initH, false)
+    }
     renderer.toneMapping = THREE.ACESFilmicToneMapping
     renderer.toneMappingExposure = 1.0
     renderer.outputColorSpace = THREE.SRGBColorSpace

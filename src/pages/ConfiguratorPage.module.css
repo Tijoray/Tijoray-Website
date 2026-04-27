@@ -910,7 +910,12 @@
 
 @media (max-width: 480px) {
   .shapeGrid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .shapeBtn {
+    padding: 14px 6px;
   }
 
   .optionRow {
@@ -918,13 +923,34 @@
   }
 
   .optionBtn {
-    font-size: 11px;
-    padding: 9px 12px;
+    font-size: 10px;
+    padding: 9px 10px;
+    letter-spacing: 1px;
+  }
+
+  .colorSwatches {
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: flex-start;
+  }
+
+  .swatchCircle {
+    width: 32px;
+    height: 32px;
   }
 
   .stoneGrid {
     grid-template-columns: repeat(4, 1fr);
     gap: 4px;
+  }
+
+  .configPanel {
+    padding: 28px 16px 0;
+    gap: 32px;
+  }
+
+  .canvasPanel {
+    height: min(100vw, 420px);
   }
 }
 

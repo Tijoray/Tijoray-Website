@@ -537,7 +537,19 @@
   }
 
   .logo img {
-    height: 240px;
-    max-width: 92vw;
+    height: 200px;
+    max-width: 88vw;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar,
+  .navbar:global(.frosted),
+  .navbar:global(.in-dark) {
+    padding: 14px 18px;
+  }
+  .logo img {
+    height: 150px;
+    max-width: 76vw;
   }
 }

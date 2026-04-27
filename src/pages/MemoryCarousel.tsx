@@ -252,10 +252,31 @@ export default function MemoryCarousel({ items, token, activeIndex, onIndexChang
   const prev = () => onIndexChange((activeIndex - 1 + items.length) % items.length)
   const next = () => onIndexChange((activeIndex + 1) % items.length)
 
+  const swipeStartRef = useRef<{ x: number; y: number } | null>(null)
+  const onPointerDown = (e: React.PointerEvent) => {
+    swipeStartRef.current = { x: e.clientX, y: e.clientY }
+  }
+  const onPointerUp = (e: React.PointerEvent) => {
+    const start = swipeStartRef.current
+    swipeStartRef.current = null
+    if (!start || items.length < 2) return
+    const dx = e.clientX - start.x
+    const dy = e.clientY - start.y
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+      if (dx < 0) next()
+      else prev()
+    }
+  }
+
   return (
     <div className={styles.wrap}>
       {/* Coverflow stage */}
-      <div className={styles.stage}>
+      <div
+        className={styles.stage}
+        onPointerDown={onPointerDown}
+        onPointerUp={onPointerUp}
+        style={{ touchAction: 'pan-y' }}
+      >
         {items.map((item, i) => {
           const pos = i - activeIndex
           if (Math.abs(pos) > 2) return null

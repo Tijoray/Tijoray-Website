@@ -261,3 +261,42 @@
   transition: background 0.25s;
 }
 .btnPrimary:hover { background: var(--burgundy-h); }
+
+@media (max-width: 600px) {
+  .backdrop {
+    padding: 16px;
+  }
+  .card {
+    max-width: calc(100vw - 32px);
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+    gap: 20px;
+  }
+  .header {
+    padding: 28px 22px 22px;
+  }
+  .title {
+    font-size: 22px;
+  }
+  .visual,
+  .body {
+    padding: 0 22px;
+  }
+  .footer {
+    padding: 0 22px 24px;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .visualGrid {
+    gap: 6px;
+  }
+  .visualLabel {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+  .btnSecondary,
+  .btnPrimary {
+    padding: 12px 18px;
+    font-size: 10px;
+  }
+}

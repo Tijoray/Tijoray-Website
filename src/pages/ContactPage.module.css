@@ -255,12 +255,24 @@ a.detailValue:hover {
 @media (max-width: 900px) {
   .inner {
     grid-template-columns: 1fr;
-    gap: 64px;
-    padding: 140px 24px 80px;
+    gap: 56px;
+    padding: 130px 20px 72px;
   }
 
   .intro {
     max-width: 100%;
+  }
+
+  .detailRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 12px 0;
+  }
+
+  .detailValue {
+    text-align: left;
+    font-size: 16px;
   }
 }
 
@@ -277,5 +289,17 @@ a.detailValue:hover {
   .submit {
     align-self: stretch;
     text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .textarea {
+    min-height: 110px;
+  }
+  .form {
+    gap: 24px;
+  }
+  .title {
+    font-size: clamp(32px, 9vw, 44px);
   }
 }

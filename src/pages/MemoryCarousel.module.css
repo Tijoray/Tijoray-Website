@@ -350,3 +350,68 @@
   background: var(--rose);
   transform: scale(1.5);
 }
+
+/* ── Mobile responsive ── */
+@media (max-width: 600px) {
+  .stage {
+    height: 320px;
+    touch-action: pan-y;
+  }
+
+  .card {
+    width: 168px;
+    height: 248px;
+  }
+  .cardLandscape {
+    width: min(86vw, 300px);
+    height: 180px;
+  }
+
+  .cardCenter {
+    width: 200px;
+    height: 280px;
+  }
+  .cardCenter.cardLandscape {
+    width: min(88vw, 320px);
+    height: 200px;
+  }
+
+  .cardLeft  { transform: translateX(-58%) translateY(0) scale(0.74); }
+  .cardRight { transform: translateX(58%)  translateY(0) scale(0.74); }
+  .cardFarLeft  { transform: translateX(-96%) translateY(0) scale(0.55); opacity: 0.18; }
+  .cardFarRight { transform: translateX(96%)  translateY(0) scale(0.55); opacity: 0.18; }
+
+  .arrow {
+    width: 32px;
+    height: 32px;
+  }
+  .arrowLeft  { left: 4px; }
+  .arrowRight { right: 4px; }
+
+  .overlay {
+    padding: 32px 14px 14px;
+  }
+  .overlayTitle { font-size: 14px; }
+
+  .noteText {
+    font-size: 14px;
+    -webkit-line-clamp: 6;
+  }
+}
+
+@media (max-width: 768px) {
+  .dot {
+    width: 8px;
+    height: 8px;
+    position: relative;
+  }
+  /* Larger invisible touch target without changing visual size */
+  .dot::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+  }
+  .dots {
+    gap: 12px;
+  }
+}

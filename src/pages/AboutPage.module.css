@@ -361,4 +361,39 @@
   .ctaBody {
     font-size: 14px;
   }
+
+  .pillarCard {
+    padding: 32px 22px;
+  }
+
+  .pillarNum {
+    font-size: 52px;
+    margin-bottom: 14px;
+  }
+
+  .pillarTitle {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+
+  .missionSection,
+  .pillarsSection,
+  .craftSection {
+    padding: 64px 18px;
+  }
+
+  .ctaSection {
+    padding: 88px 20px;
+  }
+
+  .ctaBtns {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btnPrimary,
+  .btnSecondary {
+    padding: 16px 24px;
+    text-align: center;
+  }
 }
