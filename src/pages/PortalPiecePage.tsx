@@ -188,6 +188,10 @@ export default function PortalPiecePage() {
 
   // Drag-and-drop reorder
   const dragSrcRef = useRef<number | null>(null)
+  const itemsRef   = useRef<MessageItem[]>([])
+
+  // Keep ref in sync so drag handlers always see latest order
+  useEffect(() => { itemsRef.current = items }, [items])
 
   useEffect(() => {
     if (!localStorage.getItem('mb_tutorial_seen')) setShowTutorial(true)
@@ -323,27 +327,25 @@ export default function PortalPiecePage() {
     e.preventDefault()
     const src = dragSrcRef.current
     if (src === null || src === index) return
-    setItems(prev => {
-      const next = [...prev]
-      const [moved] = next.splice(src, 1)
-      next.splice(index, 0, moved)
-      dragSrcRef.current = index
-      return next
-    })
+    const next = [...itemsRef.current]
+    const [moved] = next.splice(src, 1)
+    next.splice(index, 0, moved)
+    dragSrcRef.current = index
+    itemsRef.current = next   // update ref immediately so next dragOver sees correct state
+    setItems(next)
   }
 
   async function onDrop() {
     dragSrcRef.current = null
-    // Capture current order from state before any async gaps
-    setItems(prev => {
-      const ordered = prev.map((item, i) => ({ ...item, sort_order: i }))
-      // Fire-and-forget individual updates — upsert with partial data can silently fail
-      ordered.forEach(item =>
+    const ordered = itemsRef.current.map((item, i) => ({ ...item, sort_order: i }))
+    setItems(ordered)
+    setCarouselIndex(0)
+    // Persist — individual updates, not upsert, so no missing-column issues
+    await Promise.all(
+      ordered.map(item =>
         supabase.from('Message_Items').update({ sort_order: item.sort_order }).eq('id', item.id)
       )
-      return ordered
-    })
-    setCarouselIndex(0)
+    )
   }
 
   /* ── Render guards ── */
