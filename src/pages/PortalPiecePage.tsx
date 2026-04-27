@@ -334,10 +334,15 @@ export default function PortalPiecePage() {
 
   async function onDrop() {
     dragSrcRef.current = null
-    // Persist new order
-    const updates = items.map((item, i) => ({ id: item.id, sort_order: i }))
-    await supabase.from('Message_Items').upsert(updates)
-    setItems(prev => prev.map((item, i) => ({ ...item, sort_order: i })))
+    // Capture current order from state before any async gaps
+    setItems(prev => {
+      const ordered = prev.map((item, i) => ({ ...item, sort_order: i }))
+      // Fire-and-forget individual updates — upsert with partial data can silently fail
+      ordered.forEach(item =>
+        supabase.from('Message_Items').update({ sort_order: item.sort_order }).eq('id', item.id)
+      )
+      return ordered
+    })
     setCarouselIndex(0)
   }
 
