@@ -28,7 +28,6 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
 }
 body {
@@ -36,7 +35,6 @@ body {
   color: var(--ink);
   font-family: var(--font-sans);
   overflow-x: hidden;
-  width: 100%;
   -webkit-font-smoothing: antialiased;
   font-synthesis: none;
 }
