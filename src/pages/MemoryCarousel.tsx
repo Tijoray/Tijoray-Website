@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import type { Map as LeafletMap } from 'leaflet'
 import type { MessageItem, MessageItemType } from '../lib/supabase'
 import styles from './MemoryCarousel.module.css'
 
@@ -82,7 +83,72 @@ function CardMedia({
   return null
 }
 
-/* ── Map card — OSM iframe with warm CSS filter ── */
+/* ── Leaflet map with custom rose marker ── */
+const PIN_SVG = `
+  <svg width="28" height="36" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M14 0C6.268 0 0 6.268 0 14c0 9.333 14 22 14 22S28 23.333 28 14C28 6.268 21.732 0 14 0z"
+      fill="#B97A6A" stroke="#4A2326" stroke-width="1.5"/>
+    <circle cx="14" cy="14" r="5" fill="white" opacity="0.9"/>
+  </svg>
+`.trim()
+
+function LeafletMapInner({ lat, lon }: { lat: number; lon: number }) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const mapRef       = useRef<LeafletMap | null>(null)
+
+  useEffect(() => {
+    if (!containerRef.current || mapRef.current) return
+
+    // Dynamic import so Leaflet's window references don't break SSR/Vite build
+    import('leaflet').then(L => {
+      // Import Leaflet CSS once
+      if (!document.getElementById('leaflet-css')) {
+        const link = document.createElement('link')
+        link.id   = 'leaflet-css'
+        link.rel  = 'stylesheet'
+        link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'
+        document.head.appendChild(link)
+      }
+
+      const map = L.map(containerRef.current!, {
+        center:           [lat, lon],
+        zoom:             15,
+        zoomControl:      false,
+        attributionControl: false,
+        dragging:         false,
+        scrollWheelZoom:  false,
+        doubleClickZoom:  false,
+        touchZoom:        false,
+        keyboard:         false,
+      })
+
+      // CartoDB Positron — clean, minimal, no API key required
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        subdomains: 'abcd',
+        maxZoom:    19,
+      }).addTo(map)
+
+      // Custom rose/burgundy pin
+      const icon = L.divIcon({
+        html:       PIN_SVG,
+        className:  '',          // removes Leaflet's default white box
+        iconSize:   [28, 36],
+        iconAnchor: [14, 36],    // tip of pin at exact coords
+      })
+
+      L.marker([lat, lon], { icon }).addTo(map)
+      mapRef.current = map
+    })
+
+    return () => {
+      mapRef.current?.remove()
+      mapRef.current = null
+    }
+  }, [lat, lon])
+
+  return <div ref={containerRef} className={styles.leafletContainer}/>
+}
+
 function MapCard({ content }: { content: string }) {
   const parsed = (() => { try { return JSON.parse(content) } catch { return null } })()
   if (!parsed?.lat || !parsed?.lon) return (
@@ -93,33 +159,11 @@ function MapCard({ content }: { content: string }) {
   )
 
   const { lat, lon, name } = parsed
-  const delta = 0.012
-  const bbox = `${+lon - delta},${+lat - delta},${+lon + delta},${+lat + delta}`
-  // No &marker= — we render our own themed pin over the iframe center
-  const src = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik`
   const shortName = (name as string).split(',').slice(0, 3).join(', ')
 
   return (
     <div className={styles.mapWrap}>
-      <iframe
-        src={src}
-        className={styles.mapFrame}
-        title={shortName}
-        loading="lazy"
-        referrerPolicy="no-referrer-when-downgrade"
-        sandbox="allow-scripts allow-same-origin"
-      />
-
-      {/* Custom rose pin centered over the location (always the bbox center) */}
-      <div className={styles.mapPinIcon} aria-hidden="true">
-        <svg width="28" height="36" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M14 0C6.268 0 0 6.268 0 14c0 9.333 14 22 14 22S28 23.333 28 14C28 6.268 21.732 0 14 0z" fill="#B97A6A"/>
-          <path d="M14 0C6.268 0 0 6.268 0 14c0 9.333 14 22 14 22S28 23.333 28 14C28 6.268 21.732 0 14 0z" stroke="#4A2326" strokeWidth="1.5"/>
-          <circle cx="14" cy="14" r="5" fill="#fff" opacity="0.9"/>
-        </svg>
-      </div>
-
-      {/* Place name label at bottom */}
+      <LeafletMapInner lat={+lat} lon={+lon}/>
       <div className={styles.mapLabel}>
         <svg width="10" height="10" viewBox="0 0 20 20" fill="currentColor" style={{ flexShrink: 0 }}>
           <path d="M10 2a6 6 0 016 6c0 4-6 10-6 10S4 12 4 8a6 6 0 016-6z"/>
