@@ -9,6 +9,7 @@ import HowItWorks from './components/HowItWorks'
 import TrustSection from './components/TrustSection'
 import PricingBand from './components/PricingBand'
 import StickyMobileCta from './components/StickyMobileCta'
+import Testimonials from './components/Testimonials'
 import CtaSection from './components/CtaSection'
 import Footer from './components/Footer'
 import AboutPage from './pages/AboutPage'
@@ -25,6 +26,8 @@ import SettingsPage from './pages/SettingsPage'
 import LoginPage from './pages/LoginPage'
 import SignUpPage from './pages/SignUpPage'
 import NotFoundPage from './pages/NotFoundPage'
+import FaqPage from './pages/FaqPage'
+import CraftsmanshipPage from './pages/CraftsmanshipPage'
 
 function HomePage() {
   useEffect(() => {
@@ -47,6 +50,7 @@ function HomePage() {
       <Features />
       <PricingBand />
       <TrustSection />
+      <Testimonials />
       <CtaSection />
       <StickyMobileCta />
     </main>
@@ -88,6 +92,8 @@ export default function App() {
         <Route path="/settings" element={
           <ProtectedRoute><SettingsPage /></ProtectedRoute>
         } />
+        <Route path="/faq" element={<FaqPage />} />
+        <Route path="/craftsmanship" element={<CraftsmanshipPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="*" element={<NotFoundPage />} />

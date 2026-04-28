@@ -1,0 +1,156 @@
+.section {
+  background: var(--cream);
+  padding: var(--space-section) 0;
+  border-top: 1px solid var(--border-soft);
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 56px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--rose);
+  margin-bottom: 18px;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.title em {
+  font-style: italic;
+  color: var(--rose);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+.card {
+  background: var(--cream-warm);
+  padding: 48px 40px 44px;
+  margin: 0;
+  position: relative;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  border-top: 1px solid var(--border-soft);
+}
+
+.card.inView {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Gold top-bar accent on hover */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.openQuote {
+  font-family: var(--font-serif);
+  font-size: 72px;
+  font-weight: 300;
+  color: var(--gold);
+  line-height: 0.6;
+  display: block;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.quote {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--ink);
+  margin: 0 0 32px;
+}
+
+.caption {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-top: 1px solid var(--border-soft);
+  padding-top: 20px;
+}
+
+.name {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.detail {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--ink-soft);
+  letter-spacing: 0.3px;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .inner {
+    padding: 0 24px;
+  }
+
+  .card {
+    padding: 36px 28px 32px;
+  }
+}
+
+@media (max-width: 600px) {
+  .section {
+    padding: 72px 0;
+  }
+
+  .inner {
+    padding: 0 20px;
+  }
+
+  .card {
+    padding: 32px 22px 28px;
+  }
+
+  .quote {
+    font-size: 16px;
+  }
+}

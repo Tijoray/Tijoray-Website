@@ -30,7 +30,7 @@ export default function Footer() {
           <ul className={styles.footerLinks}>
             <li><Link to="/about">Our Story</Link></li>
             <li><Link to="/technology">The Technology</Link></li>
-            <li><span className={styles.linkSoon}>Craftsmanship<span className={styles.soonBadge}>Soon</span></span></li>
+            <li><Link to="/craftsmanship">Craftsmanship</Link></li>
             <li><span className={styles.linkSoon}>Journal<span className={styles.soonBadge}>Soon</span></span></li>
           </ul>
         </div>
@@ -40,7 +40,7 @@ export default function Footer() {
           <ul className={styles.footerLinks}>
             <li><Link to="/contact">Contact Us</Link></li>
             <li><span className={styles.linkSoon}>Care Guide<span className={styles.soonBadge}>Soon</span></span></li>
-            <li><span className={styles.linkSoon}>FAQ<span className={styles.soonBadge}>Soon</span></span></li>
+            <li><Link to="/faq">FAQ</Link></li>
             <li><a href="mailto:curator@tijoray.com">curator@tijoray.com</a></li>
           </ul>
         </div>
