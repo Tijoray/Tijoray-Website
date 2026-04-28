@@ -5,6 +5,10 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Hero from './components/Hero'
 import ScrollStory from './components/ScrollStory'
 import Features from './components/Features'
+import HowItWorks from './components/HowItWorks'
+import TrustSection from './components/TrustSection'
+import PricingBand from './components/PricingBand'
+import StickyMobileCta from './components/StickyMobileCta'
 import CtaSection from './components/CtaSection'
 import Footer from './components/Footer'
 import AboutPage from './pages/AboutPage'
@@ -38,9 +42,13 @@ function HomePage() {
   return (
     <main>
       <Hero />
+      <HowItWorks />
       <ScrollStory />
       <Features />
+      <PricingBand />
+      <TrustSection />
       <CtaSection />
+      <StickyMobileCta />
     </main>
   )
 }

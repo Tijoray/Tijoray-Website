@@ -1,0 +1,83 @@
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--cream-warm);
+}
+
+.track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+
+.slideActive {
+  opacity: 1;
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 6s ease;
+  transform: scale(1);
+  /* Placeholder gradient when image fails to load */
+  background: linear-gradient(
+    145deg,
+    var(--cream-warm) 0%,
+    #E5D9CC 40%,
+    #D5C9BC 100%
+  );
+}
+
+.imgZoomed {
+  transform: scale(1.04);
+}
+
+/* Subtle dark-bottom vignette for text legibility if caption added later */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 60%, rgba(15, 14, 13, 0.25) 100%);
+  pointer-events: none;
+}
+
+.dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1px solid rgba(191, 161, 95, 0.6);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.3s, border-color 0.3s, transform 0.3s;
+}
+
+.dot:hover {
+  border-color: var(--gold);
+}
+
+.dotActive {
+  background: var(--gold);
+  border-color: var(--gold);
+  transform: scale(1.3);
+}

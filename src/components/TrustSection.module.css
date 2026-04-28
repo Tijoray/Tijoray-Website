@@ -1,0 +1,149 @@
+.section {
+  background: var(--dark-surface);
+  padding: var(--space-section) 0;
+  border-top: 1px solid rgba(191, 161, 95, 0.12);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.section.inView {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.inner {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 56px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 18px;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 300;
+  color: var(--text-light);
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.title em {
+  font-style: italic;
+  color: var(--gold-soft);
+}
+
+.subtitle {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.75;
+  color: var(--text-muted);
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.itemBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 22px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: opacity 0.2s;
+}
+
+.itemBtn:hover {
+  opacity: 0.85;
+}
+
+.itemIcon {
+  flex-shrink: 0;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+}
+
+.itemLabel {
+  flex: 1;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  color: var(--text-light);
+}
+
+.itemChevron {
+  flex-shrink: 0;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.itemBtnOpen .itemChevron {
+  transform: rotate(180deg);
+}
+
+.itemDetail {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.85;
+  color: var(--text-muted);
+  padding: 0 0 24px 44px;
+}
+
+@media (max-width: 900px) {
+  .inner {
+    padding: 0 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .inner {
+    padding: 0 20px;
+  }
+
+  .section {
+    padding: 72px 0;
+  }
+
+  .itemLabel {
+    font-size: 13px;
+  }
+
+  .itemDetail {
+    padding-left: 0;
+    font-size: 13px;
+  }
+}

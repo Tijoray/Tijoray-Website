@@ -1,0 +1,57 @@
+/* Only visible on mobile */
+.bar {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 500;
+    background: var(--burgundy);
+    padding: 14px 20px;
+    gap: 12px;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    /* Safe area for notched phones */
+    padding-bottom: max(14px, env(safe-area-inset-bottom));
+    box-shadow: 0 -2px 24px rgba(15, 14, 13, 0.3);
+  }
+
+  .barVisible {
+    transform: translateY(0);
+  }
+
+  .cta {
+    flex: 1;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--cream);
+    text-decoration: none;
+    text-align: center;
+  }
+
+  .dismiss {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: rgba(247, 242, 234, 0.5);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+  }
+
+  .dismiss:hover {
+    color: var(--cream);
+  }
+}

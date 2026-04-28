@@ -1,10 +1,16 @@
 import { Link } from 'react-router-dom'
 import styles from './Hero.module.css'
 import { asset } from '../lib/assets'
+import HeroCarousel from './HeroCarousel'
+
+function scrollToHowItWorks(e: React.MouseEvent) {
+  e.preventDefault()
+  document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })
+}
 
 export default function Hero() {
   return (
-    <section className={`${styles.hero} hero-section`} aria-label="Hero">
+    <section className={`${styles.hero} hero-section`} aria-label="Hero" id="hero-section">
       <picture>
         <source media="(max-width: 768px)" srcSet={asset('/assets/editorial/hero-mobile.png')} />
         <img
@@ -19,18 +25,25 @@ export default function Hero() {
       <div className={styles.heroWash} aria-hidden="true" />
       <div className={styles.heroVignette} aria-hidden="true" />
 
-      <div className={styles.heroContent}>
-        <h1 className={styles.heroTitle}>
-          Memories.<br />
-          <em>Forever.</em>
-        </h1>
-        <p className={styles.heroSub}>
-          Fine jewellery woven with encrypted digital legacy.<br />
-          Every piece, an heirloom. Every touch, a memory.
-        </p>
-        <div className={styles.heroCtas}>
-          <Link to="/contact" className={styles.heroBtnPrimary}>Curate Your Legacy</Link>
-          <Link to="/about" className={styles.heroBtnSecondary}>Explore the Collection</Link>
+      <div className={styles.heroLayout}>
+        <div className={styles.heroContent}>
+          <h1 className={styles.heroTitle}>
+            Luxury jewellery that<br />
+            stores your private<br />
+            memories <em>forever.</em>
+          </h1>
+          <p className={styles.heroSub}>
+            Handcrafted pendants and bracelets with encrypted NFC vaults
+            for photos, voice notes, letters, and legacy.
+          </p>
+          <div className={styles.heroCtas}>
+            <Link to="/build" className={styles.heroBtnPrimary}>Build Your Tijoray</Link>
+            <a href="#how-it-works" className={styles.heroBtnSecondary} onClick={scrollToHowItWorks}>How It Works</a>
+          </div>
+        </div>
+
+        <div className={styles.heroCarouselPanel} aria-hidden="true">
+          <HeroCarousel />
         </div>
       </div>
 

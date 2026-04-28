@@ -8,7 +8,6 @@ const NAV_LINKS = [
   { label: 'Collection', to: '/collection' },
   { label: 'Technology', to: '/technology' },
   { label: 'Atelier',    to: '/about' },
-  { label: 'Journal',    to: null }, // coming soon
 ]
 
 export default function Navbar() {
