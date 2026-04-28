@@ -19,8 +19,8 @@ const STEPS = [
   },
   {
     num: '04',
-    title: 'Pass It On for Generations',
-    body: 'Transfer ownership and vault access to a loved one. Your legacy, worn and remembered — for generations to come.',
+    title: 'Gift It to Someone Special',
+    body: 'Give a Tijoray to a loved one, a friend, or even yourself. A gift that holds memories, not just beauty — worn close, forever.',
   },
 ]
 
