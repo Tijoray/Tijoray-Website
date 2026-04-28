@@ -21,7 +21,7 @@ export default function Footer() {
             <li><Link to="/collection">Pendants</Link></li>
             <li><Link to="/collection">Bracelets</Link></li>
             <li><Link to="/build">Build Your Tijoray</Link></li>
-            <li><span className={styles.linkSoon}>Gift a Legacy<span className={styles.soonBadge}>Soon</span></span></li>
+            <li><span className={styles.linkSoon}>Gift a Legacy Piece<span className={styles.soonBadge}>Soon</span></span></li>
           </ul>
         </div>
 

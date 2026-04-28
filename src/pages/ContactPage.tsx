@@ -45,7 +45,7 @@ export default function ContactPage() {
         <div className={styles.left}>
           <p className={styles.eyebrow}>Contact the Atelier</p>
           <h1 className={styles.title}>
-            How may our<br />Atelier <em>assist you</em>?
+            How may our<br />atelier <em>assist you</em>?
           </h1>
           <p className={styles.intro}>
             Every Tijoray piece begins with a conversation. Whether you have a
@@ -132,7 +132,7 @@ export default function ContactPage() {
                 {errors.email && <p id="email-error" className={styles.errorMsg} role="alert">{errors.email}</p>}
               </div>
               <div className={styles.field}>
-                <label className={styles.label} htmlFor="message">How may our Atelier assist you today?</label>
+                <label className={styles.label} htmlFor="message">How may our atelier assist you today?</label>
                 <textarea
                   id="message"
                   name="message"

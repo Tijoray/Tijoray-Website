@@ -6,7 +6,7 @@ const STEPS = [
   {
     num: '01',
     title: 'Choose Your Jewel',
-    body: 'Select from our handcrafted pendants and bracelets, choosing your metal, gemstone, and silhouette in our atelier.',
+    body: 'Choose from our handcrafted pendants and bracelets, then select your metal, gemstone, and silhouette in our atelier.',
     illustration: asset('/assets/illustrations/how-it-works-1-choose.png'),
   },
   {

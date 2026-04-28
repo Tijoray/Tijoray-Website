@@ -149,7 +149,7 @@ export default function CollectionPage() {
                     <span className={styles.priceFrom}>Pricing</span>
                     <span className={styles.priceNum}>TBA</span>
                   </div>
-                  <Link to="/contact" className={styles.cardCtaGhost}>Register Interest</Link>
+                  <Link to="/contact" className={styles.cardCtaGhost}>Register Your Interest</Link>
                 </div>
               </div>
             </article>

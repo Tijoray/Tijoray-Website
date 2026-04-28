@@ -28,8 +28,8 @@ export default function Hero() {
       <div className={styles.heroLayout}>
         <div className={styles.heroContent}>
           <h1 className={styles.heroTitle}>
-            Luxury jewellery that<br />
-            stores your private<br />
+            Luxury jewellery made<br />
+            to hold your private<br />
             memories <em>forever.</em>
           </h1>
           <p className={styles.heroSub}>

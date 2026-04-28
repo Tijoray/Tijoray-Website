@@ -41,8 +41,8 @@ export default function Features() {
             <div className={styles.featureNum}>02</div>
             <h3 className={styles.featureTitle}>The Vault</h3>
             <p className={styles.featureBody}>
-              A passive NFC vault lives within your jewellery. Authenticated only by
-              proximity and intent. Store photographs, voice notes, letters, and
+              A passive NFC vault lives within your jewellery. It authenticates through
+              proximity and intent alone. Store photographs, voice notes, letters, and
               certificates within the piece you wear closest to your heart.
             </p>
           </article>

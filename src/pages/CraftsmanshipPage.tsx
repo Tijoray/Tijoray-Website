@@ -61,7 +61,7 @@ export default function CraftsmanshipPage() {
         <h1 className={styles.title}>The craft behind <em>every piece.</em></h1>
         <p className={styles.subtitle}>
           Fine jewellery has always been a statement of permanence.
-          Tijoray pieces are built to outlast their makers — in materials, in technique, and in legacy.
+          Tijoray pieces are built to outlast their makers — through their materials, technique, and legacy.
         </p>
       </div>
 

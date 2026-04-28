@@ -5,14 +5,14 @@ const TIERS = [
   {
     name: 'Signature Pieces',
     from: 'from $1,250',
-    desc: 'Handcrafted pendants and bracelets with birthstone vault.',
+    desc: 'Handcrafted pendants and bracelets with a birthstone vault.',
     link: '/collection',
     cta: 'Explore Collection',
   },
   {
     name: 'Bespoke Creations',
     from: 'from $5,000',
-    desc: 'Fully bespoke pieces with custom alloys, rare gemstones, and private commission.',
+    desc: 'Fully bespoke pieces with custom alloys, rare gemstones, and a private commission process.',
     link: '/contact',
     cta: 'Begin Commission',
   },

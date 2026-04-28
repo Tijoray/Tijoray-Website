@@ -5,7 +5,7 @@ export default function CtaSection() {
   return (
     <section className={styles.ctaSection}>
       <div className={styles.ctaInner}>
-        <p className={styles.ctaEyebrow}>Begin Your Journey</p>
+        <p className={styles.ctaEyebrow}>Your Legacy Starts Here</p>
         <h2 className={styles.ctaTitle}>
           Begin Your<br /><em>Legacy Piece</em>
         </h2>

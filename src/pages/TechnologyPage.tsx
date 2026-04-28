@@ -14,7 +14,7 @@ const NFC_STEPS = [
     num: '02',
     img: asset('/assets/app/app-connecting.png'),
     title: 'Identity Confirmed',
-    desc: "Your piece's unique serial node is verified against the Tijoray vault in seconds. Authenticated. Immutable. Yours.",
+    desc: "Your piece's unique serial identity is verified against the Tijoray vault in seconds. Authenticated. Immutable. Yours.",
   },
   {
     num: '03',
@@ -29,7 +29,7 @@ const APP_FEATURES = [
     img: asset('/assets/app/app-memory.png'),
     label: 'The Tijoray Experience',
     title: 'A message waiting inside your gift.',
-    body: 'When you commission an Tijoray piece, you can embed a private message directly into the jewel itself — photographs, voice recordings, handwritten notes, or words you want your loved one to carry forever. The moment they tap the pendant, it opens. Not a card. Not a text. Something that lives inside what you gave them.',
+    body: 'When you commission a Tijoray piece, you can embed a private message directly into the jewel itself — photographs, voice recordings, handwritten notes, or words you want your loved one to carry forever. The moment they tap the pendant, it opens. Not a card. Not a text. Something that lives inside what you gave them.',
     pills: ['Photos & Video', 'Voice Messages', 'Personal Notes', 'Revealed on First Tap'],
   },
   {
@@ -50,7 +50,7 @@ const APP_FEATURES = [
     img: asset('/assets/app/app-vault.png'),
     label: 'The Vault',
     title: 'A private archive, secured forever.',
-    body: 'Your personal Vault holds every memory, certificate, and document tied to your collection. Organised by date, accessible anywhere, and protected by the Tijoray security infrastructure. Your legacy, archived.',
+    body: 'Your personal vault holds every memory, certificate, and document tied to your collection. Organised by date, accessible anywhere, and protected by the Tijoray security infrastructure. Your legacy, archived.',
     pills: ['Personal Storage', 'Certificate Archive', 'Date Organised', 'Secure Access'],
   },
 ]
