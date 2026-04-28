@@ -3,11 +3,11 @@ import { asset } from '../lib/assets'
 import styles from './HeroCarousel.module.css'
 
 const SLIDES = [
-  { src: asset('/assets/editorial/product-pendant-closeup.jpg'), alt: 'Tijoray pendant — macro close-up' },
-  { src: asset('/assets/editorial/product-pendant-worn.jpg'),    alt: 'Tijoray pendant worn on model' },
-  { src: asset('/assets/editorial/product-bracelet-worn.jpg'),   alt: 'Tijoray bracelet on wrist' },
-  { src: asset('/assets/editorial/product-unboxing.jpg'),        alt: 'Tijoray unboxing and packaging' },
-  { src: asset('/assets/editorial/product-nfc-tap.jpg'),         alt: 'NFC tap — unlocking the vault' },
+  { src: asset('/assets/editorial/product-pendant-closeup.png'), alt: 'Tijoray pendant — macro close-up' },
+  { src: asset('/assets/editorial/product-pendant-worn.png'),    alt: 'Tijoray pendant worn on model' },
+  { src: asset('/assets/editorial/product-bracelet-worn.png'),   alt: 'Tijoray bracelet on wrist' },
+  { src: asset('/assets/editorial/product-unboxing.png'),        alt: 'Tijoray unboxing and packaging' },
+  { src: asset('/assets/editorial/product-nfc-tap.png'),         alt: 'NFC tap — unlocking the vault' },
 ]
 
 const INTERVAL = 6000
