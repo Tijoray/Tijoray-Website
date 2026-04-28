@@ -41,6 +41,18 @@ function blank(type: MessageItemType): PendingItem {
   return { type, title: '', content: '', file: null, state: 'idle', error: '' }
 }
 
+const RECORDING_FORMATS = [
+  { mimeType: 'audio/webm;codecs=opus', contentType: 'audio/webm', ext: 'webm' },
+  { mimeType: 'audio/webm', contentType: 'audio/webm', ext: 'webm' },
+  { mimeType: 'audio/mp4', contentType: 'audio/mp4', ext: 'm4a' },
+  { mimeType: 'audio/ogg;codecs=opus', contentType: 'audio/ogg', ext: 'ogg' },
+]
+
+function getRecordingFormat() {
+  if (typeof MediaRecorder === 'undefined') return null
+  return RECORDING_FORMATS.find(f => MediaRecorder.isTypeSupported(f.mimeType)) ?? null
+}
+
 /* ── Upload helper ── */
 async function uploadFile(file: File, pieceId: string, token: string): Promise<string> {
   const res = await fetch('/api/s3-presign', {
@@ -300,18 +312,42 @@ export default function PortalPiecePage() {
   }
 
   async function startRecording() {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-    const rec = new MediaRecorder(stream)
-    chunksRef.current = []
-    rec.ondataavailable = e => chunksRef.current.push(e.data)
-    rec.onstop = () => {
-      const blob = new Blob(chunksRef.current, { type: 'audio/webm' })
-      setAudioBlob(blob)
-      setPending(p => ({ ...p, file: new File([blob], `voice-${Date.now()}.webm`, { type: 'audio/webm' }) }))
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setPending(p => ({ ...p, state: 'error', error: 'Voice recording is not supported in this browser.' }))
+      return
     }
-    rec.start()
-    mediaRecRef.current = rec
-    setRecording(true)
+
+    const format = getRecordingFormat()
+    if (!format) {
+      setPending(p => ({ ...p, state: 'error', error: 'Voice recording is not supported in this browser.' }))
+      return
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      const rec = new MediaRecorder(stream, { mimeType: format.mimeType })
+      chunksRef.current = []
+      rec.ondataavailable = e => {
+        if (e.data.size > 0) chunksRef.current.push(e.data)
+      }
+      rec.onstop = () => {
+        const blob = new Blob(chunksRef.current, { type: format.contentType })
+        setAudioBlob(blob)
+        setPending(p => ({
+          ...p,
+          state: 'idle',
+          error: '',
+          file: new File([blob], `voice-${Date.now()}.${format.ext}`, { type: format.contentType }),
+        }))
+      }
+      rec.start()
+      mediaRecRef.current = rec
+      setRecording(true)
+      setPending(p => ({ ...p, state: 'idle', error: '' }))
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Could not start recording'
+      setPending(p => ({ ...p, state: 'error', error: msg }))
+    }
   }
 
   function stopRecording() {
