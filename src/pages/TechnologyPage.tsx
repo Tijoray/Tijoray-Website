@@ -36,22 +36,22 @@ const APP_FEATURES = [
     img: asset('/assets/app/app-atelier.png'),
     label: 'Stone Intelligence',
     title: 'Every stone, documented.',
-    body: "Tap your piece and unlock a complete gemological record. Stone type, clarity grade, colour range, carat weight, and cut quality — all sourced directly from the artisan's certification at the moment of creation.",
+    body: "Tap your piece and unlock a complete gemological record. Stone type, clarity grade, color range, carat weight, and cut quality — all sourced directly from the artisan's certification at the moment of creation.",
     pills: ['Stone Type', 'Clarity Grade', 'GIA Certificate', 'Carat Weight'],
   },
   {
     img: asset('/assets/app/app-gold.png'),
     label: 'Gold Composition',
     title: 'Know what you wear.',
-    body: "Every alloy in your Tijoray piece is catalogued — metal purity, colour composition, and total mass. Our Craftsmanship Guarantee is embedded directly in the record, verified by the Atelier's Master Smith.",
+    body: "Every alloy in your Tijoray piece is catalogued — metal purity, color composition, and total mass. Our Craftsmanship Guarantee is embedded directly in the record, verified by the Atelier's Master Smith.",
     pills: ['Metal Purity', 'Composition', 'Weight', 'Craftsmanship Guarantee'],
   },
   {
     img: asset('/assets/app/app-vault.png'),
     label: 'The Vault',
     title: 'A private archive, secured forever.',
-    body: 'Your personal vault holds every memory, certificate, and document tied to your collection. Organised by date, accessible anywhere, and protected by the Tijoray security infrastructure. Your legacy, archived.',
-    pills: ['Personal Storage', 'Certificate Archive', 'Date Organised', 'Secure Access'],
+    body: 'Your personal vault holds every memory, certificate, and document tied to your collection. Organized by date, accessible anywhere, and protected by the Tijoray security infrastructure. Your legacy, archived.',
+    pills: ['Personal Storage', 'Certificate Archive', 'Date Organized', 'Secure Access'],
   },
 ]
 
@@ -120,7 +120,7 @@ export default function TechnologyPage() {
           </h1>
           <p className={styles.heroSub}>
             Every Tijoray piece carries a concealed chip — a permanent, encrypted bridge
-            between the physical and digital. One tap connects your jewellery to a living
+            between the physical and digital. One tap connects your jewelry to a living
             record of its craft, its stones, and the memories you bind to it.
           </p>
         </div>

@@ -8,7 +8,7 @@ const FAQS = [
     a: 'Yes. Tijoray uses standard NFC technology supported natively on all modern iPhones (XS and later) and Android devices. No app download is required — simply tap your phone to the piece to unlock your vault.',
   },
   {
-    q: 'What happens if I lose my jewellery?',
+    q: 'What happens if I lose my jewelry?',
     a: 'Your memories are stored in an encrypted cloud vault, not solely on the NFC chip. If your piece is lost or stolen, your data remains safe and accessible via your account. You can order a replacement piece and transfer your vault to the new NFC chip.',
   },
   {
@@ -29,7 +29,7 @@ const FAQS = [
   },
   {
     q: 'How long does it last?',
-    a: 'The NFC chip itself is rated for decades of use with no maintenance — it requires no battery or charging. The jewellery is handcrafted from materials chosen for longevity: 18k gold, platinum, and sterling silver. Your vault subscription is covered for the lifetime of the piece.',
+    a: 'The NFC chip itself is rated for decades of use with no maintenance — it requires no battery or charging. The jewelry is handcrafted from materials chosen for longevity: 18k gold, platinum, and sterling silver. Your vault subscription is covered for the lifetime of the piece.',
   },
 ]
 
@@ -46,7 +46,7 @@ export default function FaqPage() {
         <p className={styles.eyebrow}>Support</p>
         <h1 className={styles.title}>Frequently Asked <em>Questions</em></h1>
         <p className={styles.subtitle}>
-          Everything you need to know about Tijoray jewellery and the memory vault.
+          Everything you need to know about Tijoray jewelry and the memory vault.
         </p>
       </div>
 

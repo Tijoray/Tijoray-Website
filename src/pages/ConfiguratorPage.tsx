@@ -71,7 +71,7 @@ const GEM_PROPS = [
   { color: '#8B3FBB', ior: 1.54, transmission: 0.88, thickness: 0.4, roughness: 0.01, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 4.5, attenuationColor: '#A855CC', attenuationDistance: 1.5,  iridescence: 0, iridescenceIOR: 1.3 },
   // Aquamarine — pale blue beryl, very clear
   { color: '#7ECFE0', ior: 1.57, transmission: 0.93, thickness: 0.4, roughness: 0.01, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 4.5, attenuationColor: '#A0E0EE', attenuationDistance: 3.0,  iridescence: 0, iridescenceIOR: 1.3 },
-  // White Topaz — colourless, crisp reflections
+  // White Topaz — colorless, crisp reflections
   { color: '#E8EEFF', ior: 1.62, transmission: 0.88, thickness: 0.4, roughness: 0.01, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 4.0, attenuationColor: '#F0F2FF', attenuationDistance: 4.0,  iridescence: 0, iridescenceIOR: 1.3 },
   // Emerald — rich green, slightly included
   { color: '#22873A', ior: 1.58, transmission: 0.62, thickness: 0.4, roughness: 0.05, clearcoat: 1.0, clearcoatRoughness: 0.05, envMapIntensity: 4.5, attenuationColor: '#38A850', attenuationDistance: 0.8, iridescence: 0, iridescenceIOR: 1.3 },
@@ -851,12 +851,12 @@ export default function ConfiguratorPage() {
               A gemstone chosen<br />across <em>centuries.</em>
             </h2>
             <p className={styles.storyBody}>
-              The tradition of birthstones stretches back to ancient civilisations —
+              The tradition of birthstones stretches back to ancient civilizations —
               each stone assigned to a month not by chance, but by the qualities it
               was believed to carry: protection, clarity, passion, renewal.
             </p>
             <p className={styles.storyBody}>
-              The Tijoray Pendant honours that tradition and extends it. Beneath the
+              The Tijoray Pendant honors that tradition and extends it. Beneath the
               surface of each stone sits a passive NFC vault — no battery, no signal
               required — holding whatever you choose to preserve. A voice. A map.
               A letter. A photograph. The stone carries meaning. The vault carries memory.
@@ -912,7 +912,7 @@ export default function ConfiguratorPage() {
             <p className={styles.storyBody}>
               Gold and silver pendants receive a final micron-thick rhodium or IP gold
               layer, bonded at the molecular level. The result is a surface that holds
-              its colour, its lustre, and its precision-set stone through years of
+              its color, its luster, and its precision-set stone through years of
               continuous wear.
             </p>
             <p className={styles.storyBody}>

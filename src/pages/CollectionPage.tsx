@@ -47,7 +47,7 @@ export default function CollectionPage() {
             Every piece tells a <em>story.</em>
           </h1>
           <p className={styles.heroSub}>
-            Each Tijoray collection is built around a single idea — that fine jewellery
+            Each Tijoray collection is built around a single idea — that fine jewelry
             should carry more than beauty. Browse our series below, each crafted to hold
             memory, provenance, and meaning for generations.
           </p>
@@ -105,7 +105,7 @@ export default function CollectionPage() {
                   <h3 className={styles.cardName}>Birthstone Pendant</h3>
                   <p className={styles.cardDetail}>
                     Available in square and circle silhouettes. Set in steel, silver,
-                    10K, or 18K gold — with your chosen birthstone at the centre.
+                    10K, or 18K gold — with your chosen birthstone at the center.
                   </p>
                 </div>
                 <div className={styles.cardBottom}>

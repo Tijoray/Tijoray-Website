@@ -32,7 +32,7 @@ export default function AboutPage() {
             deserve to last forever.
           </h1>
           <p className={styles.heroSub}>
-            Atelier Tijoray was founded at the intersection of fine jewellery and
+            Atelier Tijoray was founded at the intersection of fine jewelry and
             encrypted memory — for those who understand that legacy is not inherited,
             it is composed.
           </p>

@@ -6,12 +6,12 @@ const PILLARS = [
   {
     num: '01',
     title: 'Alloy Composition',
-    body: 'Every Tijoray piece begins with metallurgy. Our goldsmiths work in 18k yellow, white, and rose gold, each with a proprietary alloy blend that enhances durability without sacrificing warmth. Platinum pieces are crafted in 950Pt — the purest standard for fine jewellery.',
+    body: 'Every Tijoray piece begins with metallurgy. Our goldsmiths work in 18k yellow, white, and rose gold, each with a proprietary alloy blend that enhances durability without sacrificing warmth. Platinum pieces are crafted in 950Pt — the purest standard for fine jewelry.',
   },
   {
     num: '02',
     title: 'Gemstone Sourcing',
-    body: 'We source only ethically certified gemstones — conflict-free diamonds graded by GIA, and coloured stones from traceable mines across Sri Lanka, Colombia, and East Africa. Each stone is hand-selected by our gemmologist for cut, clarity, and character.',
+    body: 'We source only ethically certified gemstones — conflict-free diamonds graded by GIA, and colored stones from traceable mines across Sri Lanka, Colombia, and East Africa. Each stone is hand-selected by our gemologist for cut, clarity, and character.',
   },
   {
     num: '03',
@@ -60,7 +60,7 @@ export default function CraftsmanshipPage() {
         <p className={styles.eyebrow}>Atelier</p>
         <h1 className={styles.title}>The craft behind <em>every piece.</em></h1>
         <p className={styles.subtitle}>
-          Fine jewellery has always been a statement of permanence.
+          Fine jewelry has always been a statement of permanence.
           Tijoray pieces are built to outlast their makers — through their materials, technique, and legacy.
         </p>
       </div>

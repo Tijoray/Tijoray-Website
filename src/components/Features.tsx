@@ -41,7 +41,7 @@ export default function Features() {
             <div className={styles.featureNum}>02</div>
             <h3 className={styles.featureTitle}>The Vault</h3>
             <p className={styles.featureBody}>
-              A passive NFC vault lives within your jewellery. It authenticates through
+              A passive NFC vault lives within your jewelry. It authenticates through
               proximity and intent alone. Store photographs, voice notes, letters, and
               certificates within the piece you wear closest to your heart.
             </p>
@@ -53,7 +53,7 @@ export default function Features() {
             <p className={styles.featureBody}>
               Unlike photographs in a drawer or files lost to time, Tijoray endures.
               Transfer your vault to the next generation. A private archive, worn as
-              jewellery — crafted to outlast its maker.
+              jewelry — crafted to outlast its maker.
             </p>
           </article>
         </div>

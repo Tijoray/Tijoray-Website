@@ -137,7 +137,7 @@ export default function ContactPage() {
                   id="message"
                   name="message"
                   className={`${styles.textarea} ${errors.message ? styles.inputError : ''}`}
-                  placeholder="Tell us about your enquiry…"
+                  placeholder="Tell us about your inquiry…"
                   rows={6}
                   value={form.message}
                   onChange={handleChange}
