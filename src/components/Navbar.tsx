@@ -112,6 +112,7 @@ export default function Navbar() {
               <button
                 className={styles.accountIcon}
                 aria-label="My account"
+                title="My Account"
                 aria-expanded={accountOpen}
                 onClick={() => setAccountOpen(o => !o)}
               >

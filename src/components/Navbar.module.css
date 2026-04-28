@@ -63,6 +63,8 @@
   display: flex;
   gap: 44px;
   list-style: none;
+  position: relative;
+  z-index: 2;
 }
 
 .links a {
@@ -126,6 +128,8 @@
   display: flex;
   align-items: center;
   gap: 20px;
+  position: relative;
+  z-index: 2;
 }
 
 /* --- Sign in link --- */

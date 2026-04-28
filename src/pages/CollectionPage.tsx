@@ -85,7 +85,7 @@ export default function CollectionPage() {
 
             {/* Pendant */}
             <Link
-              to="/build"
+              to="/products/birthstone-pendant"
               className={`${styles.productCard} ${styles.fadeUp}`}
               ref={ref(1) as any}
             >

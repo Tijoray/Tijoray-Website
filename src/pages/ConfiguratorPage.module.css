@@ -75,8 +75,10 @@
   position: absolute;
   inset: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 28px;
   pointer-events: none;
 }
 
@@ -86,6 +88,29 @@
   font-weight: 300;
   font-style: italic;
   color: var(--ink-soft);
+}
+
+@keyframes ringPulse {
+  0%   { transform: scale(0.72); opacity: 0.55; }
+  50%  { transform: scale(1);    opacity: 0.18; }
+  100% { transform: scale(0.72); opacity: 0.55; }
+}
+
+.canvasPromptRing {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 1.5px solid var(--rose);
+  animation: ringPulse 2.4s ease-in-out infinite;
+  position: relative;
+}
+
+.canvasPromptRing::after {
+  content: '';
+  position: absolute;
+  inset: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(180, 100, 90, 0.35);
 }
 
 .orbitHint {
@@ -139,6 +164,35 @@
 .configTitle em {
   font-style: italic;
   color: var(--rose);
+}
+
+/* Back to collection */
+.backLink {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: color 0.25s;
+  align-self: flex-start;
+  margin-bottom: -32px;
+}
+
+.backLink:hover {
+  color: var(--rose);
+}
+
+/* Step hint (shown when step is locked) */
+.stepHint {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: -8px;
 }
 
 /* ── Steps ── */

@@ -658,6 +658,7 @@ export default function ConfiguratorPage() {
             )}
             {!shape && !loading && (
               <div className={styles.canvasPrompt} aria-hidden="true">
+                <div className={styles.canvasPromptRing} />
                 <p>Select a shape to begin</p>
               </div>
             )}
@@ -669,6 +670,8 @@ export default function ConfiguratorPage() {
 
         {/* ── Right: Configurator ── */}
         <div className={styles.configPanel}>
+
+          <Link to="/collection" className={styles.backLink}>← Collection</Link>
 
           <div className={styles.configHeader}>
             <p className={styles.eyebrow}>Compose Your Piece</p>
@@ -711,7 +714,7 @@ export default function ConfiguratorPage() {
           </section>
 
           {/* Step 2 — Base Metal */}
-          <section className={styles.step}>
+          <section className={`${styles.step} ${!shape ? styles.stepDisabled : ''}`}>
             <div className={styles.stepHeader}>
               <div className={styles.stepTitleRow}>
                 <p className={styles.stepLabel}>02 — Base Metal</p>
@@ -736,6 +739,7 @@ export default function ConfiguratorPage() {
                 </button>
               ))}
             </div>
+            {!shape && <p className={styles.stepHint}>Select a shape above to unlock</p>}
           </section>
 
           {/* Step 3 — Metal Color */}
@@ -770,7 +774,7 @@ export default function ConfiguratorPage() {
           </section>
 
           {/* Step 4 — Birthstone */}
-          <section className={styles.step}>
+          <section className={`${styles.step} ${!shape ? styles.stepDisabled : ''}`}>
             <div className={styles.stepHeader}>
               <div className={styles.stepTitleRow}>
                 <p className={styles.stepLabel}>04 — Birthstone</p>
@@ -801,6 +805,7 @@ export default function ConfiguratorPage() {
             <p className={styles.stoneName}>
               {BIRTHSTONE_NAMES[birthstone]} — {MONTH_NAMES[birthstone]}
             </p>
+            {!shape && <p className={styles.stepHint}>Select a shape above to unlock</p>}
           </section>
 
           {/* Price + CTA */}

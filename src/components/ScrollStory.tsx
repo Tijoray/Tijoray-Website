@@ -565,6 +565,7 @@ export default function ScrollStory() {
               className={i === 0 ? `${styles.chDot} ${styles.active}` : styles.chDot}
               onClick={() => scrollToChapter(i)}
               aria-label={`Go to chapter ${i + 1}`}
+              title={`Chapter ${i + 1}`}
             />
           ))}
         </div>
