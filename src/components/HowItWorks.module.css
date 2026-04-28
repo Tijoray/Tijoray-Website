@@ -12,7 +12,7 @@
 
 .header {
   text-align: center;
-  margin-bottom: 64px;
+  margin-bottom: 72px;
 }
 
 .eyebrow {
@@ -41,28 +41,22 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0;
-  position: relative;
-}
-
-/* Connecting line between steps */
-.grid::before {
-  content: '';
-  position: absolute;
-  top: 28px;
-  left: calc(12.5% + 20px);
-  right: calc(12.5% + 20px);
-  height: 1px;
-  background: linear-gradient(90deg, var(--rose) 0%, var(--gold) 50%, var(--rose) 100%);
-  opacity: 0.3;
+  gap: 2px;
 }
 
 .card {
   position: relative;
-  padding: 0 32px 0 0;
+  background: var(--cream);
+  padding: 36px 28px 40px;
   opacity: 0;
   transform: translateY(28px);
   transition: opacity 0.7s ease, transform 0.7s ease;
+  border-top: 2px solid transparent;
+  transition: opacity 0.7s ease, transform 0.7s ease, border-color 0.3s;
+}
+
+.card:hover {
+  border-top-color: var(--gold);
 }
 
 .card.inView {
@@ -70,29 +64,43 @@
   transform: translateY(0);
 }
 
-.num {
-  font-family: var(--font-serif);
-  font-size: 13px;
-  font-weight: 400;
-  letter-spacing: 2px;
-  color: var(--gold);
-  background: var(--cream-warm);
-  display: inline-block;
-  padding-right: 16px;
+/* Illustration */
+.illustrationWrap {
+  width: 96px;
+  height: 96px;
   margin-bottom: 28px;
-  position: relative;
-  z-index: 1;
+  border-radius: 50%;
+  background: var(--cream-warm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid var(--border-soft);
 }
 
-/* Hide connector line element (using grid::before instead) */
-.connector { display: none; }
+.illustration {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+/* Step number — large and readable */
+.stepNum {
+  font-family: var(--font-serif);
+  font-size: 42px;
+  font-weight: 300;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
 
 .cardTitle {
   font-family: var(--font-serif);
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 400;
   color: var(--ink);
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   letter-spacing: 0.2px;
   line-height: 1.3;
 }
@@ -112,22 +120,14 @@
 
   .grid {
     grid-template-columns: 1fr 1fr;
-    gap: 48px 32px;
-  }
-
-  .grid::before {
-    display: none;
-  }
-
-  .card {
-    padding: 0;
+    gap: 2px;
   }
 }
 
 @media (max-width: 600px) {
   .grid {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 2px;
   }
 
   .inner {
@@ -142,7 +142,15 @@
     margin-bottom: 48px;
   }
 
+  .card {
+    padding: 28px 22px 32px;
+  }
+
   .cardBody {
     font-size: 14px;
+  }
+
+  .stepNum {
+    font-size: 36px;
   }
 }

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { asset } from '../lib/assets'
 import styles from './HowItWorks.module.css'
 
 const STEPS = [
@@ -6,21 +7,25 @@ const STEPS = [
     num: '01',
     title: 'Choose Your Jewel',
     body: 'Select from our handcrafted pendants and bracelets, choosing your metal, gemstone, and silhouette in our atelier.',
+    illustration: asset('/assets/illustrations/how-it-works-1-choose.png'),
   },
   {
     num: '02',
     title: 'Upload Memories Securely',
     body: 'Add photographs, voice notes, letters, and certificates to your private encrypted vault — accessible only by you.',
+    illustration: asset('/assets/illustrations/how-it-works-2-upload.png'),
   },
   {
     num: '03',
     title: 'Tap With Your Phone',
     body: 'A single touch of your phone to the piece unlocks your world instantly. No app needed, no internet required.',
+    illustration: asset('/assets/illustrations/how-it-works-3-tap.png'),
   },
   {
     num: '04',
     title: 'Gift It to Someone Special',
     body: 'Give a Tijoray to a loved one, a friend, or even yourself. A gift that holds memories, not just beauty — worn close, forever.',
+    illustration: asset('/assets/illustrations/how-it-works-4-legacy.png'),
   },
 ]
 
@@ -55,8 +60,16 @@ export default function HowItWorks() {
               className={styles.card}
               style={{ transitionDelay: `${i * 0.1}s` }}
             >
-              <div className={styles.num}>{step.num}</div>
-              <div className={styles.connector} aria-hidden="true" />
+              <div className={styles.illustrationWrap}>
+                <img
+                  src={step.illustration}
+                  alt={step.title}
+                  className={styles.illustration}
+                  loading="lazy"
+                  draggable={false}
+                />
+              </div>
+              <div className={styles.stepNum}>{step.num}</div>
               <h3 className={styles.cardTitle}>{step.title}</h3>
               <p className={styles.cardBody}>{step.body}</p>
             </article>
