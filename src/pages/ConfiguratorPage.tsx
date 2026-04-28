@@ -52,13 +52,13 @@ const STEEL_COLOR = '#8A8A8A'
 // UI swatch colors (approximate visual representation)
 const BIRTHSTONE_COLORS = [
   '#9B1B30', '#9B59B6', '#7EC8C8', '#F2F2FF',
-  '#2ECC71', '#D4AF8A', '#CC0000', '#93C572',
+  '#2ECC71', '#F0EDE8', '#CC0000', '#93C572',
   '#154EC1', '#FF6EB4', '#E4A800', '#3BC4C4',
 ]
 
 const BIRTHSTONE_NAMES = [
   'Garnet', 'Amethyst', 'Aquamarine', 'White Topaz',
-  'Emerald', 'Pearl', 'Ruby', 'Peridot',
+  'Emerald', 'Mother of Pearl', 'Ruby', 'Peridot',
   'Sapphire', 'Pink Tourmaline', 'Citrine', 'Turquoise',
 ]
 
@@ -75,8 +75,8 @@ const GEM_PROPS = [
   { color: '#E8EEFF', ior: 1.62, transmission: 0.88, thickness: 0.4, roughness: 0.01, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 4.0, attenuationColor: '#F0F2FF', attenuationDistance: 4.0,  iridescence: 0, iridescenceIOR: 1.3 },
   // Emerald — rich green, slightly included
   { color: '#22873A', ior: 1.58, transmission: 0.62, thickness: 0.4, roughness: 0.05, clearcoat: 1.0, clearcoatRoughness: 0.05, envMapIntensity: 4.5, attenuationColor: '#38A850', attenuationDistance: 0.8, iridescence: 0, iridescenceIOR: 1.3 },
-  // Pearl — opaque, iridescent nacre
-  { color: '#F5EFE0', ior: 1.53, transmission: 0.00, thickness: 0.5, roughness: 0.15, clearcoat: 0.7, clearcoatRoughness: 0.10, envMapIntensity: 3.0, attenuationColor: '#FFFFFF', attenuationDistance: 4.0,  iridescence: 0.90, iridescenceIOR: 1.5  },
+  // Mother of Pearl — opaque nacre, silky smooth with strong orient iridescence
+  { color: '#F5F3EF', ior: 1.53, transmission: 0.00, thickness: 0.5, roughness: 0.06, clearcoat: 0.95, clearcoatRoughness: 0.04, envMapIntensity: 3.5, attenuationColor: '#FFFFFF', attenuationDistance: 4.0,  iridescence: 1.00, iridescenceIOR: 1.60 },
   // Ruby — deep red corundum, brilliant
   { color: '#B80010', ior: 1.77, transmission: 0.68, thickness: 0.4, roughness: 0.02, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 5.0, attenuationColor: '#D81828', attenuationDistance: 1.0,  iridescence: 0, iridescenceIOR: 1.3 },
   // Peridot — bright lime-green olivine
