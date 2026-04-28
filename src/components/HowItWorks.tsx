@@ -69,9 +69,11 @@ export default function HowItWorks() {
                   draggable={false}
                 />
               </div>
-              <div className={styles.stepNum}>{step.num}</div>
-              <h3 className={styles.cardTitle}>{step.title}</h3>
-              <p className={styles.cardBody}>{step.body}</p>
+              <div className={styles.cardText}>
+                <div className={styles.stepNum}>{step.num}</div>
+                <h3 className={styles.cardTitle}>{step.title}</h3>
+                <p className={styles.cardBody}>{step.body}</p>
+              </div>
             </article>
           ))}
         </div>

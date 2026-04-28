@@ -47,12 +47,16 @@
 .card {
   position: relative;
   background: var(--cream);
-  padding: 36px 28px 40px;
+  padding: 0 0 40px;
   text-align: center;
   opacity: 0;
   transform: translateY(28px);
   transition: opacity 0.7s ease, transform 0.7s ease, border-color 0.3s;
   border-top: 2px solid transparent;
+}
+
+.cardText {
+  padding: 0 24px;
 }
 
 .card:hover {
@@ -66,17 +70,19 @@
 
 /* Illustration */
 .illustrationWrap {
-  width: 120px;
-  height: 120px;
-  margin: 0 auto 28px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  margin-bottom: 28px;
+  background: var(--cream-warm);
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .illustration {
-  width: 120px;
-  height: 120px;
+  width: 80%;
+  height: 80%;
   object-fit: contain;
 }
 
