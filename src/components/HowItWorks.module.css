@@ -1,5 +1,5 @@
 .section {
-  background: rgb(250, 235, 220);
+  background: var(--cream);
   padding: var(--space-section) 0;
   border-top: 1px solid var(--border-soft);
 }
@@ -46,7 +46,7 @@
 
 .card {
   position: relative;
-  background: var(--cream);
+  background: rgb(250, 235, 220);
   padding: 0 0 40px;
   text-align: center;
   opacity: 0;

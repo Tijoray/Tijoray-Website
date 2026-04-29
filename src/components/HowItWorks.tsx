@@ -18,7 +18,7 @@ const STEPS = [
   {
     num: '03',
     title: 'Tap With Your Phone',
-    body: 'A single touch of your phone to the piece unlocks your world instantly. No app needed, no internet required.',
+    body: 'A single touch of your phone to the piece opens the Tijoray app, where your personal memories are waiting for you.',
     illustration: asset('/assets/illustrations/how-it-works-3-tap.png'),
   },
   {

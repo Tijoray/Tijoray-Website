@@ -20,8 +20,8 @@ const FAQS = [
     a: "Yes. Tijoray pieces are designed to be passed down through generations. Our ownership transfer process is cryptographically verified, ensuring both the piece's provenance and vault access transfer securely to the new owner. You control exactly what memories are included.",
   },
   {
-    q: 'Can I customise the gemstone?',
-    a: 'Absolutely. Our signature collection features twelve birthstones, and bespoke commissions can incorporate diamonds, emeralds, sapphires, rubies, and other precious stones. Visit the Build Your Tijoray configurator or book a private consultation for bespoke options.',
+    q: 'Are you able to make custom orders with this technology?',
+    a: 'Absolutely. Please reach out with any design ideas and we will work closely with you to bring them to life; combining your vision with our technology to create something truly unique.',
   },
   {
     q: 'How secure is NFC technology?',
