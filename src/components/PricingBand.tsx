@@ -3,25 +3,25 @@ import styles from './PricingBand.module.css'
 
 const TIERS = [
   {
-    name: 'Signature Pieces',
-    from: 'from $1,250',
-    desc: 'Handcrafted pendants and bracelets with a birthstone vault.',
+    name: 'Steel & Silver',
+    from: 'from $299',
+    desc: 'Stainless steel and sterling silver pendants — the same handcrafted form and memory vault, at an accessible entry point.',
     link: '/collection',
     cta: 'Explore Collection',
   },
   {
-    name: 'Bespoke Creations',
-    from: 'from $5,000',
-    desc: 'Fully bespoke pieces with custom alloys, rare gemstones, and a private commission process.',
-    link: '/contact',
-    cta: 'Begin Commission',
+    name: 'Gold Collection',
+    from: 'from $799',
+    desc: '10K and 18K gold settings in white, yellow, or rose. Each piece carries a genuine birthstone and a lifetime memory vault.',
+    link: '/products/birthstone-pendant',
+    cta: 'Configure Yours',
   },
   {
-    name: 'Diamond Editions',
+    name: 'Bespoke Commission',
     from: 'by consultation',
-    desc: 'Our most exceptional pieces — diamonds, platinum, and enduring craftsmanship.',
+    desc: 'Fully custom work — rare gemstones, platinum settings, and a private atelier process for heirloom-grade pieces.',
     link: '/contact',
-    cta: 'Book Consultation',
+    cta: 'Begin Commission',
   },
 ]
 
