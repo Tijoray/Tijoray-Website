@@ -236,7 +236,7 @@ export default function TechnologyPage() {
             Your piece is <em>waiting.</em>
           </h2>
           <div className={styles.ctaBtns}>
-            <Link to="/build" className={styles.btnPrimary}>Build Your Tijoray</Link>
+            <Link to="/collection" className={styles.btnPrimary}>Build Your Tijoray</Link>
             <Link to="/contact" className={styles.btnSecondary}>Speak with the Atelier</Link>
           </div>
         </div>

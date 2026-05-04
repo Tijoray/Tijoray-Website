@@ -30,7 +30,7 @@ export default function StickyMobileCta() {
       role="complementary"
       aria-label="Sticky call to action"
     >
-      <Link to="/build" className={styles.cta}>
+      <Link to="/collection" className={styles.cta}>
         Build Your Tijoray
       </Link>
       <button

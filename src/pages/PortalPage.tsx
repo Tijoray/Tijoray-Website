@@ -95,7 +95,7 @@ export default function PortalPage() {
             <p className={styles.emptyBody}>
               Your Tijoray pendant will appear here once your order is confirmed and dispatched.
             </p>
-            <Link to="/build" className={styles.emptyLink}>Design a pendant</Link>
+            <Link to="/products/birthstone-pendant" className={styles.emptyLink}>Design a pendant</Link>
           </div>
         ) : (
           <ul className={styles.grid}>

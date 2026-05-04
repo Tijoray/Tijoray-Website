@@ -113,7 +113,7 @@ export default function CraftsmanshipPage() {
           </p>
           <div className={styles.ctaBtns}>
             <Link to="/contact" className={styles.btnPrimary}>Book Consultation</Link>
-            <Link to="/build" className={styles.btnSecondary}>Configure a Piece</Link>
+            <Link to="/products/birthstone-pendant" className={styles.btnSecondary}>Configure a Piece</Link>
           </div>
         </div>
       </section>

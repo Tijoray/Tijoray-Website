@@ -76,7 +76,6 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/build" element={<ConfiguratorPage />} />
         <Route path="/products/birthstone-pendant" element={<ConfiguratorPage />} />
         <Route path="/technology" element={<TechnologyPage />} />
         <Route path="/collection" element={<CollectionPage />} />

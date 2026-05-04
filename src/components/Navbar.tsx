@@ -157,7 +157,7 @@ export default function Navbar() {
               <span className={styles.cartBadge}>{items.length}</span>
             </Link>
           )}
-          <Link to="/build" className={styles.cta}>Build Your Tijoray</Link>
+          <Link to="/collection" className={styles.cta}>Build Your Tijoray</Link>
         </div>
         <button
           className={styles.hamburger}
@@ -199,7 +199,7 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
-          <Link to="/build" className={styles.mobileCta} onClick={closeMenu}>
+          <Link to="/collection" className={styles.mobileCta} onClick={closeMenu}>
             Build Your Tijoray
           </Link>
           <div className={styles.mobileAccount} onClick={e => e.stopPropagation()}>
