@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2025-03-31.basil' })
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2026-03-25.dahlia' })
 
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL!,
@@ -51,7 +51,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   // Build Stripe line items + collect metadata for webhook
-  const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = []
+  const lineItems: Array<{
+    price_data: { currency: string; unit_amount: number; product_data: { name: string; description: string } }
+    quantity: number
+  }> = []
   const itemMetadata: string[] = []
 
   for (const item of items) {
