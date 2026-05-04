@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
+import PhoneInput from '../components/PhoneInput'
+import { isValidEmail, isValidPhone } from '../lib/validation'
 import styles from './AuthPage.module.css'
 
 type Step = 'form' | 'verify-email'
@@ -45,8 +47,11 @@ export default function SignUpPage() {
   function validate() {
     const errs: Record<string, string> = {}
     if (!form.name.trim()) errs.name = 'Required'
-    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+    if (!form.email.trim() || !isValidEmail(form.email)) {
       errs.email = 'Valid email required'
+    }
+    if (form.phone.trim() && !isValidPhone(form.phone)) {
+      errs.phone = 'Enter a valid phone number'
     }
     if (form.password.length < 8) errs.password = 'At least 8 characters'
     if (form.confirm !== form.password) errs.confirm = 'Passwords do not match'
@@ -159,12 +164,13 @@ export default function SignUpPage() {
             <label className={styles.label} htmlFor="phone">
               Phone <span className={styles.optional}>(optional)</span>
             </label>
-            <input
-              id="phone" type="tel" autoComplete="tel"
-              className={styles.input}
+            <PhoneInput
+              id="phone"
               value={form.phone}
-              onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+              onChange={v => { setForm(f => ({ ...f, phone: v })); setErrors(e => ({ ...e, phone: '' })) }}
+              error={!!errors.phone}
             />
+            {errors.phone && <span className={styles.errorMsg}>{errors.phone}</span>}
           </div>
 
           <div className={styles.field}>

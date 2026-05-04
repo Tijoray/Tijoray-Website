@@ -1,0 +1,67 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border-soft);
+  transition: border-color 0.3s;
+  background: transparent;
+}
+
+.wrapper:focus-within {
+  border-bottom-color: var(--rose);
+}
+
+.wrapper.error {
+  border-bottom-color: var(--rose) !important;
+}
+
+.wrapper.disabled {
+  opacity: 0.5;
+}
+
+.dialSelect {
+  flex-shrink: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--ink-mid);
+  padding: 12px 8px 12px 0;
+  cursor: pointer;
+  width: 90px;
+}
+
+.dialSelect:focus {
+  outline: none;
+}
+
+.divider {
+  display: block;
+  width: 1px;
+  height: 16px;
+  background: var(--border-soft);
+  margin: 0 10px;
+  flex-shrink: 0;
+}
+
+.numberInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--ink);
+  padding: 12px 0;
+  min-width: 0;
+}
+
+.numberInput::placeholder {
+  color: var(--ink-soft);
+}
+
+.numberInput:focus {
+  outline: none;
+}
