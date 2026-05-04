@@ -50,9 +50,9 @@
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: var(--ink-mid);
 }
@@ -119,9 +119,9 @@
   left: 50%;
   transform: translateX(-50%);
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 500;
-  letter-spacing: 1.5px;
+  letter-spacing: var(--tracking-xs);
   text-transform: uppercase;
   color: var(--ink-mid);
   white-space: nowrap;
@@ -145,9 +145,9 @@
 /* Header */
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--rose);
   margin-bottom: 14px;
@@ -169,9 +169,9 @@
 /* Back to collection */
 .backLink {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--ink-soft);
   text-decoration: none;
@@ -187,9 +187,9 @@
 /* Step hint (shown when step is locked) */
 .stepHint {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 500;
-  letter-spacing: 1.5px;
+  letter-spacing: var(--tracking-xs);
   text-transform: uppercase;
   color: var(--ink-soft);
   margin-top: -8px;
@@ -210,9 +210,9 @@
 
 .stepLabel {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--ink-mid);
 }
@@ -224,7 +224,7 @@
   font-family: var(--font-sans);
   font-size: 9px;
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: var(--gold);
   border: 1px solid rgba(191, 161, 95, 0.45);
@@ -292,7 +292,7 @@
   background: var(--ink);
   color: rgba(245, 240, 232, 0.9);
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 400;
   line-height: 1.65;
   letter-spacing: 0.2px;
@@ -376,9 +376,9 @@
 
 .shapeName {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--ink);
 }
@@ -397,9 +397,9 @@
 
 .optionBtn {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 1.5px;
+  letter-spacing: var(--tracking-xs);
   text-transform: uppercase;
   color: var(--ink-mid);
   background: transparent;
@@ -463,9 +463,9 @@
 
 .swatchLabel {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 1.5px;
+  letter-spacing: var(--tracking-xs);
   text-transform: uppercase;
   color: var(--ink-mid);
 }
@@ -521,7 +521,7 @@
 
 .monthAbbr {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -560,9 +560,9 @@
 
 .priceLabel {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: var(--ink-mid);
 }
@@ -577,7 +577,7 @@
 
 .specLine {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 400;
   letter-spacing: 0.5px;
   color: var(--ink-mid);
@@ -591,9 +591,9 @@
   gap: 12px;
   align-self: flex-start;
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--cream);
   background: var(--burgundy);
@@ -618,7 +618,7 @@
 .ctaBadge {
   font-size: 8px;
   font-weight: 600;
-  letter-spacing: 1.5px;
+  letter-spacing: var(--tracking-xs);
   text-transform: uppercase;
   color: var(--gold-soft);
   background: rgba(191, 161, 95, 0.18);
@@ -629,9 +629,9 @@
 
 .ctaSecondary {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--rose);
   text-decoration: none;
@@ -677,7 +677,7 @@
 
 .storyBody {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   line-height: 1.9;
   color: var(--ink-mid);
   margin-bottom: 18px;
@@ -741,9 +741,9 @@
 
 .stoneCardMonth {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--ink-soft);
 }
@@ -759,7 +759,7 @@
 
 .stoneCardMeaning {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   line-height: 1.7;
   color: var(--ink-mid);
   margin: 0;
@@ -828,16 +828,16 @@
 
 .dimLabel {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: var(--ink-mid);
 }
 
 .dimsNote {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   line-height: 1.8;
   color: var(--ink-soft);
   max-width: 680px;
@@ -889,7 +889,7 @@
 
 .wearDesc {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   line-height: 1.8;
   color: var(--ink-mid);
   margin: 0;
@@ -977,7 +977,7 @@
   }
 
   .optionBtn {
-    font-size: 15px;
+    font-size: var(--text-md);
     padding: 9px 10px;
     letter-spacing: 1px;
   }

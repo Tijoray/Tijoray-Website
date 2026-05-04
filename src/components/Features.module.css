@@ -16,9 +16,9 @@
 
 .sectionEyebrow {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--rose);
   margin-bottom: 18px;
@@ -95,7 +95,7 @@
 
 .featureBody {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 400;
   line-height: 1.9;
   color: var(--ink-mid);
@@ -113,11 +113,11 @@
 
 @media (max-width: 768px) {
   .sectionEyebrow {
-    font-size: 14px;
+    font-size: var(--text-sm);
   }
 
   .featureBody {
-    font-size: 14px;
+    font-size: var(--text-sm);
   }
 
   .featureCard {

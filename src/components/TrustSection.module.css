@@ -25,9 +25,9 @@
 
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--gold);
   margin-bottom: 18px;
@@ -49,7 +49,7 @@
 
 .subtitle {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 400;
   line-height: 1.75;
   color: var(--text-muted);
@@ -96,7 +96,7 @@
 .itemLabel {
   flex: 1;
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 500;
   letter-spacing: 0.3px;
   color: var(--text-light);
@@ -116,7 +116,7 @@
 
 .itemDetail {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 400;
   line-height: 1.85;
   color: var(--text-muted);
@@ -139,11 +139,11 @@
   }
 
   .itemLabel {
-    font-size: 15px;
+    font-size: var(--text-md);
   }
 
   .itemDetail {
     padding-left: 0;
-    font-size: 15px;
+    font-size: var(--text-md);
   }
 }

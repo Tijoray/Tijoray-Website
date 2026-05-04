@@ -20,8 +20,21 @@
   --border-soft:  #D9D1C6;
   --font-serif:   'Cormorant Garamond', Georgia, serif;
   --font-sans:    'Montserrat', system-ui, sans-serif;
-  --eyebrow-size: 11px;
-  --eyebrow-track: 0.28em;
+
+  /* Type scale */
+  --text-xs:      13px;
+  --text-sm:      14px;
+  --text-md:      15px;
+  --text-base:    16px;
+
+  /* Letter spacing */
+  --tracking-eyebrow: 4px;
+  --tracking-wide:    3px;
+  --tracking-md:      2.5px;
+  --tracking-sm:      2px;
+  --tracking-xs:      1.5px;
+
+  --eyebrow-size: 14px;
   --space-section: clamp(80px, 10vw, 140px);
 }
 
@@ -60,7 +73,7 @@ html { caret-color: var(--rose-deep); }
   align-items: center;
   justify-content: center;
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
   letter-spacing: 1.8px;
   text-transform: uppercase;

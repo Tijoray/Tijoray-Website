@@ -5,9 +5,9 @@
 /* ── Shared utilities ── */
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--rose);
   margin-bottom: 20px;
@@ -51,7 +51,7 @@
 
 .heroSub {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 400;
   line-height: 1.85;
   color: var(--ink-mid);
@@ -87,9 +87,9 @@
 
 .collectionNum {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--gold);
   margin-bottom: 16px;
@@ -106,7 +106,7 @@
 
 .collectionDesc {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 400;
   line-height: 1.9;
   color: var(--ink-mid);
@@ -148,7 +148,7 @@
   font-family: var(--font-sans);
   font-size: 9px;
   font-weight: 600;
-  letter-spacing: 1.5px;
+  letter-spacing: var(--tracking-xs);
   text-transform: uppercase;
   color: var(--ink-mid);
 }
@@ -218,7 +218,7 @@
   font-family: var(--font-sans);
   font-size: 9px;
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: var(--ink-mid);
   background: var(--cream);
@@ -237,7 +237,7 @@
   font-family: var(--font-sans);
   font-size: 9px;
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--gold);
 }
@@ -254,9 +254,9 @@
 
 .cardCollection {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--ink-mid);
   margin-bottom: 10px;
@@ -273,7 +273,7 @@
 
 .cardDetail {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 400;
   line-height: 1.85;
   color: var(--ink-mid);
@@ -298,7 +298,7 @@
   font-family: var(--font-sans);
   font-size: 9px;
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: var(--ink-mid);
 }
@@ -313,9 +313,9 @@
 
 .cardCta {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--gold-soft);
   background: var(--ink);
@@ -331,9 +331,9 @@
 
 .cardCtaGhost {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--ink);
   background: transparent;
@@ -381,7 +381,7 @@
 
 .comingBody {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 400;
   line-height: 1.9;
   color: rgba(238, 232, 220, 0.6);
@@ -390,9 +390,9 @@
 
 .comingLink {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 1.5px;
+  letter-spacing: var(--tracking-xs);
   text-transform: uppercase;
   color: var(--gold);
   text-decoration: none;
@@ -457,9 +457,9 @@
 
 .btnPrimary {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: var(--gold-soft);
   background: var(--ink);
@@ -475,9 +475,9 @@
 
 .btnSecondary {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: var(--ink);
   background: transparent;

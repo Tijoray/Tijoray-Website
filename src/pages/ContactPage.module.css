@@ -19,9 +19,9 @@
 /* ── Left ── */
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--rose);
   margin-bottom: 20px;
@@ -43,7 +43,7 @@
 
 .intro {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 400;
   line-height: 1.9;
   color: var(--ink-mid);
@@ -73,9 +73,9 @@
 
 .detailLabel {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--ink-mid);
   flex-shrink: 0;
@@ -83,7 +83,7 @@
 
 .detailValue {
   font-family: var(--font-serif);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 400;
   color: var(--ink);
   text-decoration: none;
@@ -104,7 +104,7 @@ a.detailValue:hover {
 
 .footnote {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 400;
   line-height: 1.8;
   color: var(--ink-soft);
@@ -126,9 +126,9 @@ a.detailValue:hover {
 
 .label {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: var(--ink-mid);
 }
@@ -136,7 +136,7 @@ a.detailValue:hover {
 .input,
 .textarea {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 400;
   color: var(--ink);
   background: transparent;
@@ -165,7 +165,7 @@ a.detailValue:hover {
 
 .errorMsg {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 500;
   color: var(--rose);
   margin-top: 6px;
@@ -179,9 +179,9 @@ a.detailValue:hover {
 
 .submit {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--cream);
   background: var(--burgundy);
@@ -225,7 +225,7 @@ a.detailValue:hover {
 
 .confirmBody {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 400;
   line-height: 1.8;
   color: var(--ink-mid);
@@ -234,9 +234,9 @@ a.detailValue:hover {
 
 .confirmBack {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--rose);
   background: none;
@@ -272,18 +272,18 @@ a.detailValue:hover {
 
   .detailValue {
     text-align: left;
-    font-size: 16px;
+    font-size: var(--text-base);
   }
 }
 
 @media (max-width: 768px) {
   .eyebrow {
-    font-size: 14px;
+    font-size: var(--text-sm);
   }
 
   .intro,
   .confirmBody {
-    font-size: 14px;
+    font-size: var(--text-sm);
   }
 
   .submit {

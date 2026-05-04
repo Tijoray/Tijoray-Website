@@ -12,9 +12,9 @@
 
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--gold);
   margin-bottom: 20px;
@@ -36,7 +36,7 @@
 
 .subtitle {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 400;
   line-height: 1.75;
   color: var(--ink-mid);
@@ -73,7 +73,7 @@
   cursor: pointer;
   text-align: left;
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 500;
   color: var(--ink);
   letter-spacing: 0.2px;
@@ -109,7 +109,7 @@
 
 .answer p {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 400;
   line-height: 1.9;
   color: var(--ink-mid);
@@ -133,9 +133,9 @@
 
 .ctaBtn {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: var(--cream);
   background: var(--burgundy);
@@ -169,7 +169,7 @@
   }
 
   .question {
-    font-size: 14px;
+    font-size: var(--text-sm);
     padding: 22px 0;
   }
 

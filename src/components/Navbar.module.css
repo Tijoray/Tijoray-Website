@@ -69,9 +69,9 @@
 
 .links a {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 500;
-  letter-spacing: 1.5px;
+  letter-spacing: var(--tracking-xs);
   text-transform: uppercase;
   color: var(--ink-mid);
   text-decoration: none;
@@ -93,9 +93,9 @@
   align-items: center;
   gap: 8px;
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 500;
-  letter-spacing: 1.5px;
+  letter-spacing: var(--tracking-xs);
   text-transform: uppercase;
   color: var(--ink-soft);
   cursor: default;
@@ -106,7 +106,7 @@
   font-family: var(--font-sans);
   font-size: 8px;
   font-weight: 600;
-  letter-spacing: 1.5px;
+  letter-spacing: var(--tracking-xs);
   text-transform: uppercase;
   color: var(--gold);
   border: 1px solid rgba(191, 161, 95, 0.4);
@@ -135,9 +135,9 @@
 /* --- Sign in link --- */
 .signInLink {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--ink-mid);
   text-decoration: none;
@@ -193,9 +193,9 @@
 
 .dropdownItem {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--ink-mid);
   text-decoration: none;
@@ -233,7 +233,7 @@
   background: var(--rose);
   color: #fff;
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -293,9 +293,9 @@
 /* --- CTA button --- */
 .cta {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 1.5px;
+  letter-spacing: var(--tracking-xs);
   text-transform: uppercase;
   color: var(--burgundy);
   background: transparent;
@@ -446,7 +446,7 @@
   font-family: var(--font-serif);
   font-size: clamp(36px, 8vw, 56px);
   font-weight: 300;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   color: var(--text-light);
   text-decoration: none;
   opacity: 0.9;
@@ -462,7 +462,7 @@
   font-family: var(--font-serif);
   font-size: clamp(36px, 8vw, 56px);
   font-weight: 300;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   color: rgba(245, 240, 232, 0.35);
   cursor: default;
   user-select: none;
@@ -470,9 +470,9 @@
 
 .mobileCta {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--gold);
   border: 1px solid rgba(191,161,95,0.4);
@@ -496,9 +496,9 @@
 
 .mobileAccountLink {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: rgba(245, 240, 232, 0.75);
   text-decoration: none;

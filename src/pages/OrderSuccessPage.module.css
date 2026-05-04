@@ -21,9 +21,9 @@
 
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--rose);
   margin-bottom: 20px;
@@ -40,7 +40,7 @@
 
 .body {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   line-height: 1.9;
   color: var(--ink-mid);
   margin-bottom: 16px;
@@ -60,9 +60,9 @@
 .primaryBtn {
   display: inline-block;
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--cream);
   background: var(--burgundy);
@@ -79,9 +79,9 @@
 
 .secondaryLink {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--rose);
   text-decoration: none;
