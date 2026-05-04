@@ -37,7 +37,7 @@ export default function Hero() {
             for photos, voice notes, letters, and legacy.
           </p>
           <div className={styles.heroCtas}>
-            <Link to="/build" className={styles.heroBtnPrimary}>Build Your Tijoray</Link>
+            <Link to="/collection" className={styles.heroBtnPrimary}>Build Your Tijoray</Link>
             <a href="#how-it-works" className={styles.heroBtnSecondary} onClick={scrollToHowItWorks}>How It Works</a>
           </div>
         </div>

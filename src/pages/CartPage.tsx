@@ -36,7 +36,7 @@ export default function CartPage() {
           <p className={styles.eyebrow}>Your Cart</p>
           <h1 className={styles.title}>Nothing here yet</h1>
           <p className={styles.body}>Configure your pendant and add it to begin.</p>
-          <Link to="/build" className={styles.ctaBtn}>Design Your Pendant</Link>
+          <Link to="/products/birthstone-pendant" className={styles.ctaBtn}>Design Your Pendant</Link>
         </div>
       </main>
     )
@@ -99,8 +99,8 @@ export default function CartPage() {
             })}
           </ul>
 
-          <Link to="/build" className={styles.addAnotherLink}>
-            + Add another pendant
+          <Link to="/collection" className={styles.addAnotherLink}>
+            + Add another piece
           </Link>
         </div>
 

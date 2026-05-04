@@ -3,7 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import ProtectedRoute from './components/ProtectedRoute'
 import Hero from './components/Hero'
-import ScrollStory from './components/ScrollStory'
+// import ScrollStory from './components/ScrollStory'
 import Features from './components/Features'
 import HowItWorks from './components/HowItWorks'
 import TrustSection from './components/TrustSection'
@@ -46,7 +46,7 @@ function HomePage() {
     <main>
       <Hero />
       <HowItWorks />
-      <ScrollStory />
+      {/* <ScrollStory /> */}
       <Features />
       <PricingBand />
       <TrustSection />
@@ -76,7 +76,6 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/build" element={<ConfiguratorPage />} />
         <Route path="/products/birthstone-pendant" element={<ConfiguratorPage />} />
         <Route path="/technology" element={<TechnologyPage />} />
         <Route path="/collection" element={<CollectionPage />} />
