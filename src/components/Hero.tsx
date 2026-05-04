@@ -47,10 +47,6 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className={styles.scrollCue} aria-hidden="true">
-        <span>Scroll to Discover</span>
-        <div className={styles.scrollLine} />
-      </div>
     </section>
   )
 }
