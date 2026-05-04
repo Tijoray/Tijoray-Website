@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import Navbar from './components/Navbar'
 import ProtectedRoute from './components/ProtectedRoute'
 import Hero from './components/Hero'
@@ -71,6 +72,7 @@ export default function App() {
         background: 'linear-gradient(90deg,var(--rose),var(--gold),var(--gold-soft))',
         zIndex: 1000, transition: 'width 0.08s linear'
       }} />
+      <SpeedInsights />
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />

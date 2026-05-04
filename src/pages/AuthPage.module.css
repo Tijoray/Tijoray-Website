@@ -28,7 +28,7 @@
   font-weight: 300;
   line-height: 1.1;
   color: var(--ink);
-  margin-bottom: 48px;
+  margin-bottom: 28px;
 }
 
 .title em {
@@ -54,7 +54,7 @@
   padding: 16px 24px;
   cursor: pointer;
   transition: border-color 0.3s, box-shadow 0.3s;
-  margin-bottom: 4px;
+  margin-bottom: 16px;
 }
 
 .googleBtn:hover:not(:disabled) {
@@ -72,7 +72,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  margin: 8px 0;
+  margin: 16px 0 28px;
 }
 
 .divider::before,
@@ -96,13 +96,13 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 18px;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
 }
 
 .label {
@@ -129,7 +129,7 @@
   background: transparent;
   border: none;
   border-bottom: 1px solid var(--border-soft);
-  padding: 12px 0;
+  padding: 7px 0;
   outline: none;
   transition: border-color 0.3s;
   width: 100%;

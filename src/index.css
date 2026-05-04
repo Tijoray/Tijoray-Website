@@ -22,10 +22,10 @@
   --font-sans:    'Montserrat', system-ui, sans-serif;
 
   /* Type scale */
-  --text-xs:      13px;
-  --text-sm:      14px;
-  --text-md:      15px;
-  --text-base:    16px;
+  --text-xs:      15px;
+  --text-sm:      16px;
+  --text-md:      17px;
+  --text-base:    18px;
 
   /* Letter spacing */
   --tracking-eyebrow: 4px;
