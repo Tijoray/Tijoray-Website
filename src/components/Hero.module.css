@@ -6,7 +6,7 @@
   justify-content: center;
   overflow: hidden;
   background: var(--cream);
-  padding: 0 clamp(32px, 7vw, 96px);
+  padding: 80px clamp(32px, 7vw, 96px) 0;
 }
 
 /* Full-bleed editorial photo */
