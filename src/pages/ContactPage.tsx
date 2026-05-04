@@ -2,14 +2,15 @@ import { useState } from 'react'
 import styles from './ContactPage.module.css'
 
 export default function ContactPage() {
-  const [submitted, setSubmitted] = useState(false)
+  const [submitted,  setSubmitted]  = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [apiError,   setApiError]   = useState('')
   const [form, setForm] = useState({ name: '', email: '', message: '' })
   const [errors, setErrors] = useState<{ name?: string; email?: string; message?: string }>({})
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = e.target
     setForm(f => ({ ...f, [name]: value }))
-    // Clear individual error as user types
     if (errors[name as keyof typeof errors]) {
       setErrors(prev => ({ ...prev, [name]: undefined }))
     }
@@ -25,16 +26,30 @@ export default function ContactPage() {
     return errs
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const errs = validate()
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs)
-      return
+    if (Object.keys(errs).length > 0) { setErrors(errs); return }
+
+    setSubmitting(true)
+    setApiError('')
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}))
+        throw new Error(body.error ?? 'Something went wrong. Please try again.')
+      }
+      setSubmitted(true)
+    } catch (err: unknown) {
+      setApiError(err instanceof Error ? err.message : 'Something went wrong.')
+    } finally {
+      setSubmitting(false)
     }
-    // TODO: connect to a backend service (Formspree, EmailJS, or a serverless function)
-    // before going live — currently the message is not transmitted anywhere.
-    setSubmitted(true)
   }
 
   return (
@@ -55,8 +70,8 @@ export default function ContactPage() {
           <div className={styles.contactDetails}>
             <div className={styles.detailRow}>
               <span className={styles.detailLabel}>Email</span>
-              <a href="mailto:curator@tijoray.com" className={styles.detailValue}>
-                curator@tijoray.com
+              <a href="mailto:support@tijoray.com" className={styles.detailValue}>
+                support@tijoray.com
               </a>
             </div>
             <div className={styles.detailRow}>
@@ -146,8 +161,9 @@ export default function ContactPage() {
                 />
                 {errors.message && <p id="message-error" className={styles.errorMsg} role="alert">{errors.message}</p>}
               </div>
-              <button type="submit" className={styles.submit}>
-                Send to the Atelier
+              {apiError && <p className={styles.errorMsg} role="alert">{apiError}</p>}
+              <button type="submit" className={styles.submit} disabled={submitting}>
+                {submitting ? 'Sending…' : 'Send to the Atelier'}
               </button>
             </form>
           )}
