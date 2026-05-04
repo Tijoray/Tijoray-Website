@@ -12,7 +12,7 @@
 
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -95,7 +95,7 @@
 
 .pillarBody {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
   line-height: 1.9;
   color: var(--ink-mid);
@@ -154,7 +154,7 @@
 
 .specLabel {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -164,7 +164,7 @@
 
 .specValue {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
   line-height: 1.7;
   color: var(--text-muted);
@@ -186,7 +186,7 @@
 
 .ctaEyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -226,7 +226,7 @@
 
 .btnPrimary {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 2.5px;
   text-transform: uppercase;
@@ -245,7 +245,7 @@
 
 .btnSecondary {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 2.5px;
   text-transform: uppercase;

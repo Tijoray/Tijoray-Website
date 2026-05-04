@@ -14,7 +14,7 @@
 
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -44,7 +44,7 @@
   gap: 12px;
   width: 100%;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -85,7 +85,7 @@
 
 .divider span {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -107,7 +107,7 @@
 
 .label {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 2.5px;
   text-transform: uppercase;
@@ -119,7 +119,7 @@
   letter-spacing: 0;
   text-transform: none;
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: 15px;
 }
 
 .input {
@@ -149,7 +149,7 @@
 
 .errorMsg {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--rose);
   line-height: 1.4;
@@ -157,7 +157,7 @@
 
 .apiError {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
   color: var(--rose);
   background: rgba(185, 122, 106, 0.08);
   border: 1px solid rgba(185, 122, 106, 0.2);
@@ -167,7 +167,7 @@
 
 .submitBtn {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -193,7 +193,7 @@
 /* ── Switch link ── */
 .switchText {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   color: var(--ink-mid);
   margin-top: 32px;
   text-align: center;
@@ -238,7 +238,7 @@
 
 .verifyNote {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
   line-height: 1.7;
   color: var(--ink-soft);
 }
@@ -247,7 +247,7 @@
   background: none;
   border: none;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
   color: var(--rose);
   cursor: pointer;
   padding: 0;

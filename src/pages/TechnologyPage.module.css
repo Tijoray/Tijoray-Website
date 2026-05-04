@@ -5,7 +5,7 @@
 /* ── Shared utilities ── */
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -122,7 +122,7 @@
 
 .nfcStepNum {
   font-family: var(--font-serif);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
   letter-spacing: 3px;
   color: var(--gold);
@@ -156,7 +156,7 @@
 
 .nfcCardDesc {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
   line-height: 1.9;
   color: var(--ink-mid);
@@ -261,7 +261,7 @@
 
 .featureLabel {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -296,7 +296,7 @@
 
 .pill {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -358,7 +358,7 @@
 
 .statLabel {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -419,7 +419,7 @@
 
 .btnPrimary {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 2.5px;
   text-transform: uppercase;
@@ -437,7 +437,7 @@
 
 .btnSecondary {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 2.5px;
   text-transform: uppercase;
@@ -495,7 +495,7 @@
 
 @media (max-width: 768px) {
   .eyebrow {
-    font-size: 11px;
+    font-size: 14px;
   }
 
   .heroSub,

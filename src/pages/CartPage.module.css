@@ -25,7 +25,7 @@
 /* ── Shared typography ── */
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -103,7 +103,7 @@
 
 .detailLabel {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -132,7 +132,7 @@
   background: none;
   border: none;
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -151,7 +151,7 @@
   display: inline-block;
   margin-top: 20px;
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -174,7 +174,7 @@
 
 .summaryTitle {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -186,7 +186,7 @@
   display: flex;
   justify-content: space-between;
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   color: var(--ink-mid);
   margin-bottom: 14px;
 }
@@ -194,7 +194,7 @@
 .summaryMuted {
   color: var(--ink-soft);
   font-style: italic;
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .summaryDivider {
@@ -216,7 +216,7 @@
   display: block;
   width: 100%;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -237,7 +237,7 @@
 
 .secureNote {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   color: var(--ink-soft);
   text-align: center;
   margin-top: 16px;

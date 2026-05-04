@@ -44,7 +44,7 @@
 
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -123,7 +123,7 @@
 
 .visualFieldInput {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   color: var(--ink);
   border-bottom: 1px solid var(--rose);
   padding: 8px 0;
@@ -137,7 +137,7 @@
   gap: 12px;
   color: var(--ink-soft);
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
 }
 .visualDropzone svg { flex-shrink: 0; color: var(--rose); }
 
@@ -161,7 +161,7 @@
 
 .visualCardEyebrow {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -197,7 +197,7 @@
 .body {
   padding: 0 36px;
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.8;
   color: var(--ink-mid);
 }
@@ -234,7 +234,7 @@
 
 .btnSecondary {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -249,7 +249,7 @@
 
 .btnPrimary {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -297,6 +297,6 @@
   .btnSecondary,
   .btnPrimary {
     padding: 12px 18px;
-    font-size: 10px;
+    font-size: 15px;
   }
 }

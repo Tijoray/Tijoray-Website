@@ -20,7 +20,7 @@
 
 .emptyMeta {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   color: var(--ink-soft);
 }
 
@@ -264,7 +264,7 @@
   align-items: flex-end;
   gap: 6px;
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.5px;
   color: #fff;
@@ -294,7 +294,7 @@
 
 .cardMeta {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   color: var(--text-dim);
   padding: 8px;
 }

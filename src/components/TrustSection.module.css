@@ -25,7 +25,7 @@
 
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -116,7 +116,7 @@
 
 .itemDetail {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
   line-height: 1.85;
   color: var(--text-muted);
@@ -139,11 +139,11 @@
   }
 
   .itemLabel {
-    font-size: 13px;
+    font-size: 15px;
   }
 
   .itemDetail {
     padding-left: 0;
-    font-size: 13px;
+    font-size: 15px;
   }
 }

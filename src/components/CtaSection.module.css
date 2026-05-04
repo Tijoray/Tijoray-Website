@@ -26,7 +26,7 @@
 
 .ctaEyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -67,7 +67,7 @@
 .btnPrimary {
   display: inline-block;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -89,7 +89,7 @@
 .btnSecondary {
   display: inline-block;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -115,7 +115,7 @@
 
 @media (max-width: 768px) {
   .ctaEyebrow {
-    font-size: 11px;
+    font-size: 14px;
   }
 
   .ctaBody {
@@ -124,7 +124,7 @@
 
   .btnPrimary,
   .btnSecondary {
-    font-size: 11px;
+    font-size: 14px;
     padding: 16px 32px;
   }
 }

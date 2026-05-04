@@ -69,7 +69,7 @@
 
 .links a {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   letter-spacing: 1.5px;
   text-transform: uppercase;
@@ -93,7 +93,7 @@
   align-items: center;
   gap: 8px;
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   letter-spacing: 1.5px;
   text-transform: uppercase;
@@ -135,7 +135,7 @@
 /* --- Sign in link --- */
 .signInLink {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -193,7 +193,7 @@
 
 .dropdownItem {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -233,7 +233,7 @@
   background: var(--rose);
   color: #fff;
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -293,7 +293,7 @@
 /* --- CTA button --- */
 .cta {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 1.5px;
   text-transform: uppercase;
@@ -470,7 +470,7 @@
 
 .mobileCta {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -496,7 +496,7 @@
 
 .mobileAccountLink {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 2.5px;
   text-transform: uppercase;

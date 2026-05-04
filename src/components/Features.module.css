@@ -16,7 +16,7 @@
 
 .sectionEyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -95,7 +95,7 @@
 
 .featureBody {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
   line-height: 1.9;
   color: var(--ink-mid);
@@ -113,7 +113,7 @@
 
 @media (max-width: 768px) {
   .sectionEyebrow {
-    font-size: 11px;
+    font-size: 14px;
   }
 
   .featureBody {

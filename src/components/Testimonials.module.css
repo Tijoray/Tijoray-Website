@@ -17,7 +17,7 @@
 
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -108,7 +108,7 @@
 
 .name {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 1.5px;
   text-transform: uppercase;
@@ -117,7 +117,7 @@
 
 .detail {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 400;
   color: var(--ink-soft);
   letter-spacing: 0.3px;

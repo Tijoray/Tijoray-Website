@@ -17,7 +17,7 @@
 /* ── Shared typography ── */
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -49,7 +49,7 @@
 
 .summaryTitle {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -91,7 +91,7 @@
 
 .summaryItemSpec {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   color: var(--ink-soft);
   line-height: 1.5;
 }
@@ -107,7 +107,7 @@
   display: flex;
   justify-content: space-between;
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   color: var(--ink-mid);
   margin-bottom: 14px;
 }
@@ -115,7 +115,7 @@
 .summaryMuted {
   color: var(--ink-soft);
   font-style: italic;
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .summaryDivider {
@@ -137,7 +137,7 @@
   display: block;
   width: 100%;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -163,7 +163,7 @@
 
 .secureNote {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   color: var(--ink-soft);
   text-align: center;
 }
@@ -172,7 +172,7 @@
   display: inline-block;
   margin-top: 20px;
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -193,7 +193,7 @@
   gap: 12px;
   width: 100%;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -233,7 +233,7 @@
 
 .orDivider span {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -261,7 +261,7 @@
 
 .loggedInMsg {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   color: var(--ink-mid);
   margin-bottom: 0;
 }
@@ -295,7 +295,7 @@
 
 .label {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 2.5px;
   text-transform: uppercase;
@@ -307,7 +307,7 @@
   letter-spacing: 0;
   text-transform: none;
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: 15px;
 }
 
 .input {
@@ -337,14 +337,14 @@
 
 .errorMsg {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--rose);
 }
 
 .apiError {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
   color: var(--rose);
   background: rgba(185, 122, 106, 0.08);
   border: 1px solid rgba(185, 122, 106, 0.2);
@@ -354,7 +354,7 @@
 
 .submitBtn {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -398,7 +398,7 @@
 
 .recipientBody {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.8;
   color: var(--ink-mid);
   margin-top: -8px;
@@ -406,7 +406,7 @@
 
 .recipientShippingNote {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   color: var(--ink-soft);
   font-style: italic;
   margin-top: 4px;
@@ -429,7 +429,7 @@
 
 .sectionLabel {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -439,7 +439,7 @@
 
 .sectionNote {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.7;
   color: var(--ink-soft);
   margin-top: -12px;
@@ -447,7 +447,7 @@
 
 .signInPrompt {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   color: var(--ink-mid);
   text-align: center;
 }
@@ -505,7 +505,7 @@
 
 .verifyNote {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
   color: var(--ink-soft);
   line-height: 1.7;
 }
@@ -514,7 +514,7 @@
   background: none;
   border: none;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
   color: var(--rose);
   cursor: pointer;
   padding: 0;

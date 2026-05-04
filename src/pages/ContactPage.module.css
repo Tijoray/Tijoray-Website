@@ -19,7 +19,7 @@
 /* ── Left ── */
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -73,7 +73,7 @@
 
 .detailLabel {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -104,7 +104,7 @@ a.detailValue:hover {
 
 .footnote {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 400;
   line-height: 1.8;
   color: var(--ink-soft);
@@ -126,7 +126,7 @@ a.detailValue:hover {
 
 .label {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 2.5px;
   text-transform: uppercase;
@@ -165,7 +165,7 @@ a.detailValue:hover {
 
 .errorMsg {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--rose);
   margin-top: 6px;
@@ -179,7 +179,7 @@ a.detailValue:hover {
 
 .submit {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -234,7 +234,7 @@ a.detailValue:hover {
 
 .confirmBack {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -278,7 +278,7 @@ a.detailValue:hover {
 
 @media (max-width: 768px) {
   .eyebrow {
-    font-size: 11px;
+    font-size: 14px;
   }
 
   .intro,

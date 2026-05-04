@@ -13,7 +13,7 @@
 
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -48,7 +48,7 @@
 
 .tierFrom {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 1.5px;
   text-transform: uppercase;
@@ -57,7 +57,7 @@
 
 .tierDesc {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
   line-height: 1.75;
   color: var(--ink-mid);
@@ -67,7 +67,7 @@
 
 .tierCta {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
