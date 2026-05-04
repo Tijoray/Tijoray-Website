@@ -6,20 +6,6 @@
   background: var(--cream-warm);
 }
 
-/* Left-side cream fade — blends carousel into the hero text area */
-.carousel::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-  background: linear-gradient(
-    to right,
-    var(--cream) 0%,
-    rgba(247, 247, 242, 0.6) 12%,
-    transparent 30%
-  );
-}
 
 .track {
   position: relative;
