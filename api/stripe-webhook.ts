@@ -3,7 +3,7 @@ import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2025-03-31.basil' })
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2026-03-25.dahlia' })
 
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL!,
@@ -40,7 +40,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json({ received: true })
   }
 
-  const session = event.data.object as Stripe.Checkout.Session
+  type SessionWithShipping = Stripe.Checkout.Session & {
+    shipping_details?: { address?: Stripe.Address | null; name?: string | null } | null
+  }
+  const session = event.data.object as SessionWithShipping
   const { userId, items: itemsJson, recipientName, recipientPhone } = session.metadata ?? {}
 
   // Build shipping address from Stripe's collected address
