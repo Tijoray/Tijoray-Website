@@ -15,9 +15,9 @@
 
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--rose);
   margin-bottom: 16px;
@@ -50,9 +50,9 @@
 
 .cardTitle {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--ink-mid);
   padding-bottom: 20px;
@@ -75,16 +75,16 @@
 
 .label {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: var(--ink-mid);
 }
 
 .input {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   color: var(--ink);
   background: transparent;
   border: none;
@@ -109,7 +109,7 @@
 
 .hint {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   color: var(--ink-soft);
   font-style: italic;
   margin-top: -2px;
@@ -117,7 +117,7 @@
 
 .errorMsg {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 500;
   color: var(--rose);
 }
@@ -125,7 +125,7 @@
 /* ── Status messages ── */
 .statusMsg {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
   line-height: 1.6;
   padding: 12px 16px;
   border: 1px solid;
@@ -147,9 +147,9 @@
 .saveBtn {
   align-self: flex-start;
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--cream);
   background: var(--burgundy);

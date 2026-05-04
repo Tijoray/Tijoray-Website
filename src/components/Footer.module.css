@@ -24,7 +24,7 @@
 
 .footerTagline {
   font-family: var(--font-serif);
-  font-size: 16px;
+  font-size: var(--text-base);
   font-weight: 300;
   font-style: italic;
   line-height: 1.65;
@@ -34,9 +34,9 @@
 
 .footerColHead {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--gold);
   margin-bottom: 24px;
@@ -51,7 +51,7 @@
 
 .footerLinks a {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--text-md);
   font-weight: 400;
   color: rgba(245, 240, 232, 0.75);
   text-decoration: none;
@@ -67,7 +67,7 @@
   align-items: center;
   gap: 8px;
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--text-md);
   font-weight: 400;
   color: rgba(245, 240, 232, 0.4);
   cursor: default;
@@ -78,7 +78,7 @@
   font-family: var(--font-sans);
   font-size: 8px;
   font-weight: 600;
-  letter-spacing: 1.5px;
+  letter-spacing: var(--tracking-xs);
   text-transform: uppercase;
   color: var(--gold);
   border: 1px solid rgba(191, 161, 95, 0.4);
@@ -99,7 +99,7 @@
 
 .footerCopy {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   color: rgba(245, 240, 232, 0.55);
 }
 
@@ -110,7 +110,7 @@
 
 .footerLegal a {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   color: rgba(245, 240, 232, 0.55);
   text-decoration: none;
   transition: color 0.3s;
@@ -155,11 +155,11 @@
   }
 
   .footerLinks a {
-    font-size: 14px;
+    font-size: var(--text-sm);
   }
 
   .footerCopy,
   .footerLegal a {
-    font-size: 11px;
+    font-size: var(--text-sm);
   }
 }

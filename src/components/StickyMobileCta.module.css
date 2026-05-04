@@ -30,9 +30,9 @@
   .cta {
     flex: 1;
     font-family: var(--font-sans);
-    font-size: 11px;
+    font-size: var(--text-sm);
     font-weight: 600;
-    letter-spacing: 2.5px;
+    letter-spacing: var(--tracking-md);
     text-transform: uppercase;
     color: var(--cream);
     text-decoration: none;

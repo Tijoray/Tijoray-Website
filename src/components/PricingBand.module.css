@@ -13,9 +13,9 @@
 
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--ink-soft);
   text-align: center;
@@ -48,16 +48,16 @@
 
 .tierFrom {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 1.5px;
+  letter-spacing: var(--tracking-xs);
   text-transform: uppercase;
   color: var(--gold);
 }
 
 .tierDesc {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--text-md);
   font-weight: 400;
   line-height: 1.75;
   color: var(--ink-mid);
@@ -67,9 +67,9 @@
 
 .tierCta {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--ink);
   text-decoration: none;
@@ -82,7 +82,7 @@
 
 .tierCta::after {
   content: '→';
-  font-size: 14px;
+  font-size: var(--text-sm);
   letter-spacing: 0;
   transition: transform 0.3s;
 }

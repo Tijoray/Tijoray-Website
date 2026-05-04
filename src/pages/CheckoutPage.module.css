@@ -17,9 +17,9 @@
 /* ── Shared typography ── */
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--rose);
   margin-bottom: 20px;
@@ -49,9 +49,9 @@
 
 .summaryTitle {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--ink-mid);
   margin-bottom: 24px;
@@ -84,21 +84,21 @@
 
 .summaryItemName {
   font-family: var(--font-serif);
-  font-size: 15px;
+  font-size: var(--text-md);
   color: var(--ink);
   margin-bottom: 3px;
 }
 
 .summaryItemSpec {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   color: var(--ink-soft);
   line-height: 1.5;
 }
 
 .summaryItemPrice {
   font-family: var(--font-serif);
-  font-size: 16px;
+  font-size: var(--text-base);
   color: var(--ink);
   flex-shrink: 0;
 }
@@ -107,7 +107,7 @@
   display: flex;
   justify-content: space-between;
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--text-md);
   color: var(--ink-mid);
   margin-bottom: 14px;
 }
@@ -115,7 +115,7 @@
 .summaryMuted {
   color: var(--ink-soft);
   font-style: italic;
-  font-size: 12px;
+  font-size: var(--text-md);
 }
 
 .summaryDivider {
@@ -126,7 +126,7 @@
 
 .summaryTotal {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
   color: var(--ink);
   margin-bottom: 0;
@@ -137,9 +137,9 @@
   display: block;
   width: 100%;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--cream);
   background: var(--burgundy);
@@ -163,7 +163,7 @@
 
 .secureNote {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   color: var(--ink-soft);
   text-align: center;
 }
@@ -172,9 +172,9 @@
   display: inline-block;
   margin-top: 20px;
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--rose);
   text-decoration: none;
@@ -193,9 +193,9 @@
   gap: 12px;
   width: 100%;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--ink);
   background: #fff;
@@ -233,9 +233,9 @@
 
 .orDivider span {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--ink-soft);
   white-space: nowrap;
@@ -244,7 +244,7 @@
 /* ── Left: account form ── */
 .formSub {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   line-height: 1.8;
   color: var(--ink-mid);
   margin-top: -28px;
@@ -261,7 +261,7 @@
 
 .loggedInMsg {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--text-md);
   color: var(--ink-mid);
   margin-bottom: 0;
 }
@@ -270,7 +270,7 @@
   display: block;
   font-weight: 600;
   color: var(--ink);
-  font-size: 15px;
+  font-size: var(--text-md);
   margin-top: 4px;
 }
 
@@ -295,9 +295,9 @@
 
 .label {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: var(--ink-mid);
 }
@@ -307,12 +307,12 @@
   letter-spacing: 0;
   text-transform: none;
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: var(--text-md);
 }
 
 .input {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   color: var(--ink);
   background: transparent;
   border: none;
@@ -337,14 +337,14 @@
 
 .errorMsg {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 500;
   color: var(--rose);
 }
 
 .apiError {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
   color: var(--rose);
   background: rgba(185, 122, 106, 0.08);
   border: 1px solid rgba(185, 122, 106, 0.2);
@@ -354,9 +354,9 @@
 
 .submitBtn {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--cream);
   background: var(--burgundy);
@@ -398,7 +398,7 @@
 
 .recipientBody {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--text-md);
   line-height: 1.8;
   color: var(--ink-mid);
   margin-top: -8px;
@@ -406,7 +406,7 @@
 
 .recipientShippingNote {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   color: var(--ink-soft);
   font-style: italic;
   margin-top: 4px;
@@ -429,9 +429,9 @@
 
 .sectionLabel {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--ink-mid);
   white-space: nowrap;
@@ -439,7 +439,7 @@
 
 .sectionNote {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--text-md);
   line-height: 1.7;
   color: var(--ink-soft);
   margin-top: -12px;
@@ -447,7 +447,7 @@
 
 .signInPrompt {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--text-md);
   color: var(--ink-mid);
   text-align: center;
 }
@@ -492,7 +492,7 @@
 
 .verifyBody {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   line-height: 1.9;
   color: var(--ink-mid);
   margin-bottom: 20px;
@@ -505,7 +505,7 @@
 
 .verifyNote {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
   color: var(--ink-soft);
   line-height: 1.7;
 }
@@ -514,7 +514,7 @@
   background: none;
   border: none;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
   color: var(--rose);
   cursor: pointer;
   padding: 0;

@@ -14,9 +14,9 @@
 
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--rose);
   margin-bottom: 20px;
@@ -44,9 +44,9 @@
   gap: 12px;
   width: 100%;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--ink);
   background: #fff;
@@ -85,9 +85,9 @@
 
 .divider span {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--ink-soft);
 }
@@ -107,9 +107,9 @@
 
 .label {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: var(--ink-mid);
 }
@@ -119,12 +119,12 @@
   letter-spacing: 0;
   text-transform: none;
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: var(--text-md);
 }
 
 .input {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   color: var(--ink);
   background: transparent;
   border: none;
@@ -149,7 +149,7 @@
 
 .errorMsg {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 500;
   color: var(--rose);
   line-height: 1.4;
@@ -157,7 +157,7 @@
 
 .apiError {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
   color: var(--rose);
   background: rgba(185, 122, 106, 0.08);
   border: 1px solid rgba(185, 122, 106, 0.2);
@@ -167,9 +167,9 @@
 
 .submitBtn {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--cream);
   background: var(--burgundy);
@@ -193,7 +193,7 @@
 /* ── Switch link ── */
 .switchText {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--text-md);
   color: var(--ink-mid);
   margin-top: 32px;
   text-align: center;
@@ -225,7 +225,7 @@
 
 .verifyBody {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   line-height: 1.9;
   color: var(--ink-mid);
   margin-bottom: 24px;
@@ -238,7 +238,7 @@
 
 .verifyNote {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
   line-height: 1.7;
   color: var(--ink-soft);
 }
@@ -247,7 +247,7 @@
   background: none;
   border: none;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
   color: var(--rose);
   cursor: pointer;
   padding: 0;

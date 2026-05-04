@@ -44,9 +44,9 @@
 
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--rose);
   margin-bottom: 10px;
@@ -94,7 +94,7 @@
   font-family: var(--font-sans);
   font-size: 9px;
   font-weight: 600;
-  letter-spacing: 1.5px;
+  letter-spacing: var(--tracking-xs);
   text-transform: uppercase;
   color: var(--ink-mid);
 }
@@ -116,14 +116,14 @@
   font-family: var(--font-sans);
   font-size: 9px;
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--ink-mid);
 }
 
 .visualFieldInput {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--text-md);
   color: var(--ink);
   border-bottom: 1px solid var(--rose);
   padding: 8px 0;
@@ -137,7 +137,7 @@
   gap: 12px;
   color: var(--ink-soft);
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
 }
 .visualDropzone svg { flex-shrink: 0; color: var(--rose); }
 
@@ -161,9 +161,9 @@
 
 .visualCardEyebrow {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--text-muted);
 }
@@ -197,7 +197,7 @@
 .body {
   padding: 0 36px;
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--text-md);
   line-height: 1.8;
   color: var(--ink-mid);
 }
@@ -234,9 +234,9 @@
 
 .btnSecondary {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--ink-mid);
   background: none;
@@ -249,9 +249,9 @@
 
 .btnPrimary {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--cream);
   background: var(--burgundy);
@@ -297,6 +297,6 @@
   .btnSecondary,
   .btnPrimary {
     padding: 12px 18px;
-    font-size: 10px;
+    font-size: var(--text-md);
   }
 }

@@ -18,9 +18,9 @@
 
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--rose);
   margin-bottom: 16px;
@@ -41,9 +41,9 @@
 
 .signOutBtn {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--ink-mid);
   background: none;
@@ -96,7 +96,7 @@
 
 .emptyBody {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   line-height: 1.8;
   color: var(--ink-mid);
   max-width: 420px;
@@ -105,9 +105,9 @@
 
 .emptyLink {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--cream);
   background: var(--burgundy);
@@ -182,8 +182,8 @@
 
 .cardSerial {
   font-family: var(--font-sans);
-  font-size: 11px;
-  letter-spacing: 1.5px;
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-xs);
   color: var(--ink-soft);
   margin-bottom: 4px;
   text-transform: uppercase;
@@ -191,16 +191,16 @@
 
 .cardDate {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
   color: var(--ink-mid);
   margin-bottom: 20px;
 }
 
 .cardCta {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--rose);
 }

@@ -12,9 +12,9 @@
 
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--gold);
   margin-bottom: 20px;
@@ -36,7 +36,7 @@
 
 .subtitle {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 400;
   line-height: 1.8;
   color: var(--ink-mid);
@@ -95,7 +95,7 @@
 
 .pillarBody {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--text-md);
   font-weight: 400;
   line-height: 1.9;
   color: var(--ink-mid);
@@ -154,9 +154,9 @@
 
 .specLabel {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--gold);
   flex: 0 0 200px;
@@ -164,7 +164,7 @@
 
 .specValue {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--text-md);
   font-weight: 400;
   line-height: 1.7;
   color: var(--text-muted);
@@ -186,9 +186,9 @@
 
 .ctaEyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--rose);
   margin-bottom: 20px;
@@ -210,7 +210,7 @@
 
 .ctaBody {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 400;
   line-height: 1.85;
   color: var(--ink-mid);
@@ -226,9 +226,9 @@
 
 .btnPrimary {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: var(--cream);
   background: var(--burgundy);
@@ -245,9 +245,9 @@
 
 .btnSecondary {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: var(--ink);
   background: transparent;

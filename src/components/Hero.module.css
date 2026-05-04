@@ -101,7 +101,7 @@
 
 .heroSub {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 400;
   letter-spacing: 0.3px;
   line-height: 1.8;
@@ -123,9 +123,9 @@
 
 .heroBtnPrimary {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: var(--cream);
   background: var(--burgundy);
@@ -143,9 +143,9 @@
 
 .heroBtnSecondary {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: var(--ink);
   background: transparent;
@@ -186,8 +186,8 @@
 
 .scrollCue span {
   font-family: var(--font-sans);
-  font-size: 11px;
-  letter-spacing: 3px;
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--cream);
   text-shadow: 0 1px 12px rgba(20, 10, 8, 0.55);
@@ -289,7 +289,7 @@
   }
 
   .heroSub {
-    font-size: 14px;
+    font-size: var(--text-sm);
   }
 
   .heroCtas {
@@ -307,6 +307,6 @@
   }
 
   .scrollCue span {
-    font-size: 11px;
+    font-size: var(--text-sm);
   }
 }

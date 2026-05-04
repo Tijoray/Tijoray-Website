@@ -5,9 +5,9 @@
 /* ── Shared utilities ── */
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--rose);
   margin-bottom: 20px;
@@ -65,7 +65,7 @@
 
 .heroSub {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 400;
   line-height: 1.85;
   color: var(--ink-mid);
@@ -122,9 +122,9 @@
 
 .nfcStepNum {
   font-family: var(--font-serif);
-  font-size: 13px;
+  font-size: var(--text-md);
   font-weight: 400;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   color: var(--gold);
   margin-bottom: 24px;
 }
@@ -156,7 +156,7 @@
 
 .nfcCardDesc {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--text-md);
   font-weight: 400;
   line-height: 1.9;
   color: var(--ink-mid);
@@ -186,7 +186,7 @@
 
 .appHeaderSub {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 400;
   line-height: 1.9;
   color: var(--ink-mid);
@@ -261,9 +261,9 @@
 
 .featureLabel {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--gold);
   margin-bottom: 16px;
@@ -280,7 +280,7 @@
 
 .featureBody {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 400;
   line-height: 1.9;
   color: var(--ink-mid);
@@ -296,9 +296,9 @@
 
 .pill {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--gold);
   border: 1px solid rgba(191, 161, 95, 0.4);
@@ -358,9 +358,9 @@
 
 .statLabel {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: rgba(238, 232, 220, 0.55);
 }
@@ -419,9 +419,9 @@
 
 .btnPrimary {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: var(--gold-soft);
   background: var(--ink);
@@ -437,9 +437,9 @@
 
 .btnSecondary {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: var(--ink);
   background: transparent;
@@ -495,14 +495,14 @@
 
 @media (max-width: 768px) {
   .eyebrow {
-    font-size: 11px;
+    font-size: var(--text-sm);
   }
 
   .heroSub,
   .appHeaderSub,
   .featureBody,
   .nfcCardDesc {
-    font-size: 14px;
+    font-size: var(--text-sm);
   }
 
   .phoneImg {

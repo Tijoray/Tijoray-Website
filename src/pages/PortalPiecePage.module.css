@@ -33,7 +33,7 @@
   padding: 200px 32px;
   text-align: center;
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   color: var(--ink-mid);
 }
 
@@ -52,9 +52,9 @@
   align-items: center;
   gap: 6px;
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--rose);
   text-decoration: none;
@@ -67,9 +67,9 @@
 
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--rose);
   margin-bottom: 10px;
@@ -88,9 +88,9 @@
   align-items: center;
   gap: 6px;
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--ink-mid);
   background: none;
@@ -114,9 +114,9 @@
 /* ── Shared panel label ── */
 .panelLabel {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--ink-mid);
   margin-bottom: 20px;
@@ -161,7 +161,7 @@
 
 .recTitle {
   font-family: var(--font-serif);
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 400;
   color: var(--ink);
   padding-right: 20px;
@@ -169,7 +169,7 @@
 
 .recBody {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
   line-height: 1.7;
   color: var(--ink-mid);
 }
@@ -180,9 +180,9 @@
   align-items: center;
   gap: 6px;
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--rose-deep);
   background: none;
@@ -245,9 +245,9 @@
 
 .label {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: var(--tracking-md);
   text-transform: uppercase;
   color: var(--ink-mid);
 }
@@ -257,12 +257,12 @@
   letter-spacing: 0;
   text-transform: none;
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: var(--text-md);
 }
 
 .input {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   color: var(--ink);
   background: transparent;
   border: none;
@@ -277,7 +277,7 @@
 
 .textarea {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   color: var(--ink);
   background: transparent;
   border: 1px solid var(--border-soft);
@@ -313,13 +313,13 @@
 
 .dropzoneHint {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
   color: var(--ink-soft);
 }
 
 .dropzoneFile {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
   color: var(--ink);
   word-break: break-all;
 }
@@ -331,9 +331,9 @@
   justify-content: center;
   gap: 8px;
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: var(--tracking-sm);
   text-transform: uppercase;
   color: var(--cream);
   background: var(--rose);
@@ -368,9 +368,9 @@
 
 .rerecordBtn {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: var(--text-md);
   font-weight: 600;
-  letter-spacing: 1.5px;
+  letter-spacing: var(--tracking-xs);
   text-transform: uppercase;
   color: var(--ink-mid);
   background: none;
@@ -385,7 +385,7 @@
 /* ── Error / Add button ── */
 .fieldError {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   color: var(--rose-deep);
 }
 
@@ -395,9 +395,9 @@
   justify-content: center;
   gap: 8px;
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--cream);
   background: var(--burgundy);
@@ -440,7 +440,7 @@
 
 .itemCount {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: var(--text-md);
   font-weight: 700;
   color: var(--cream);
   background: var(--rose);
@@ -451,7 +451,7 @@
 
 .listHint {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   color: var(--ink-soft);
   margin-bottom: 16px;
 }
@@ -518,7 +518,7 @@
 
 .thumbMeta {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: var(--text-md);
   color: var(--ink-soft);
 }
 
@@ -539,7 +539,7 @@
 
 .sortItemTitle {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--text-md);
   font-weight: 500;
   color: var(--ink);
   white-space: nowrap;
@@ -549,7 +549,7 @@
 
 .sortItemMeta {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-sm);
   color: var(--ink-soft);
   white-space: nowrap;
   overflow: hidden;
@@ -584,7 +584,7 @@
 
 .locationInput {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   color: var(--ink);
   background: transparent;
   border: none;
@@ -641,7 +641,7 @@
   gap: 8px;
   padding: 11px 14px;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-md);
   color: var(--ink-mid);
   cursor: pointer;
   transition: background 0.15s;
