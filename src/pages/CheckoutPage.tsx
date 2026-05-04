@@ -4,6 +4,8 @@ import { useCart } from '../contexts/CartContext'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import PendantThumbnail from '../components/PendantThumbnail'
+import PhoneInput from '../components/PhoneInput'
+import { isValidEmail, isValidPhone } from '../lib/validation'
 import styles from './CheckoutPage.module.css'
 
 function GoogleIcon() {
@@ -60,14 +62,21 @@ export default function CheckoutPage() {
     const errs: Record<string, string> = {}
     if (!user) {
       if (!form.name.trim()) errs.name = 'Required'
-      if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      if (!form.email.trim() || !isValidEmail(form.email)) {
         errs.email = 'Valid email required'
+      }
+      if (form.phone.trim() && !isValidPhone(form.phone)) {
+        errs.phone = 'Enter a valid phone number'
       }
       if (form.password.length < 8) errs.password = 'At least 8 characters'
       if (form.confirm !== form.password) errs.confirm = 'Passwords do not match'
     }
     if (!form.recipientName.trim()) errs.recipientName = 'Required'
-    if (!form.recipientPhone.trim()) errs.recipientPhone = 'Required'
+    if (!form.recipientPhone.trim()) {
+      errs.recipientPhone = 'Required'
+    } else if (!isValidPhone(form.recipientPhone)) {
+      errs.recipientPhone = 'Enter a valid phone number'
+    }
     return errs
   }
 
@@ -197,11 +206,11 @@ export default function CheckoutPage() {
 
                   <div className={styles.field}>
                     <label className={styles.label} htmlFor="recipientPhone">Recipient's Phone</label>
-                    <input
-                      id="recipientPhone" name="recipientPhone" type="tel"
-                      className={`${styles.input} ${errors.recipientPhone ? styles.inputError : ''}`}
+                    <PhoneInput
+                      id="recipientPhone"
                       value={form.recipientPhone}
-                      onChange={e => { setForm(f => ({ ...f, recipientPhone: e.target.value })); setErrors(v => ({ ...v, recipientPhone: '' })) }}
+                      onChange={v => { setForm(f => ({ ...f, recipientPhone: v })); setErrors(e => ({ ...e, recipientPhone: '' })) }}
+                      error={!!errors.recipientPhone}
                     />
                     {errors.recipientPhone && <span className={styles.errorMsg}>{errors.recipientPhone}</span>}
                   </div>
@@ -254,12 +263,13 @@ export default function CheckoutPage() {
                     <label className={styles.label} htmlFor="phone">
                       Phone <span className={styles.optional}>(optional)</span>
                     </label>
-                    <input
-                      id="phone" name="phone" type="tel" autoComplete="tel"
-                      className={styles.input}
+                    <PhoneInput
+                      id="phone"
                       value={form.phone}
-                      onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+                      onChange={v => { setForm(f => ({ ...f, phone: v })); setErrors(e => ({ ...e, phone: '' })) }}
+                      error={!!errors.phone}
                     />
+                    {errors.phone && <span className={styles.errorMsg}>{errors.phone}</span>}
                   </div>
                 </div>
 
@@ -318,12 +328,12 @@ export default function CheckoutPage() {
                     </div>
 
                     <div className={styles.field}>
-                      <label className={styles.label} htmlFor="recipientPhone">Recipient's Phone</label>
-                      <input
-                        id="recipientPhone" name="recipientPhone" type="tel"
-                        className={`${styles.input} ${errors.recipientPhone ? styles.inputError : ''}`}
+                      <label className={styles.label} htmlFor="recipientPhone2">Recipient's Phone</label>
+                      <PhoneInput
+                        id="recipientPhone2"
                         value={form.recipientPhone}
-                        onChange={e => { setForm(f => ({ ...f, recipientPhone: e.target.value })); setErrors(v => ({ ...v, recipientPhone: '' })) }}
+                        onChange={v => { setForm(f => ({ ...f, recipientPhone: v })); setErrors(e => ({ ...e, recipientPhone: '' })) }}
+                        error={!!errors.recipientPhone}
                       />
                       {errors.recipientPhone && <span className={styles.errorMsg}>{errors.recipientPhone}</span>}
                     </div>

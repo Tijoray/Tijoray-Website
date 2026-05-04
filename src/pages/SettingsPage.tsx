@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
+import PhoneInput from '../components/PhoneInput'
+import { isValidEmail, isValidPhone } from '../lib/validation'
 import styles from './SettingsPage.module.css'
 
 type Status = { type: 'success' | 'error'; msg: string } | null
@@ -14,6 +16,7 @@ export default function SettingsPage() {
     phone: (user?.user_metadata?.phone as string) ?? '',
     email: user?.email ?? '',
   })
+  const [profileErrors,  setProfileErrors]  = useState<Record<string, string>>({})
   const [profileStatus,  setProfileStatus]  = useState<Status>(null)
   const [profileSaving,  setProfileSaving]  = useState(false)
 
@@ -26,6 +29,16 @@ export default function SettingsPage() {
   // ── Save profile ───────────────────────────────────────────
   async function handleProfileSave(e: React.FormEvent) {
     e.preventDefault()
+    const errs: Record<string, string> = {}
+    if (!profile.email.trim() || !isValidEmail(profile.email)) {
+      errs.email = 'Valid email required'
+    }
+    if (profile.phone.trim() && !isValidPhone(profile.phone)) {
+      errs.phone = 'Enter a valid phone number'
+    }
+    if (Object.keys(errs).length) { setProfileErrors(errs); return }
+
+    setProfileErrors({})
     setProfileSaving(true)
     setProfileStatus(null)
 
@@ -114,12 +127,13 @@ export default function SettingsPage() {
                 </div>
                 <div className={styles.field}>
                   <label className={styles.label} htmlFor="phone">Phone</label>
-                  <input
-                    id="phone" type="tel" autoComplete="tel"
-                    className={styles.input}
+                  <PhoneInput
+                    id="phone"
                     value={profile.phone}
-                    onChange={e => setProfile(p => ({ ...p, phone: e.target.value }))}
+                    onChange={v => { setProfile(p => ({ ...p, phone: v })); setProfileErrors(e => ({ ...e, phone: '' })) }}
+                    error={!!profileErrors.phone}
                   />
+                  {profileErrors.phone && <span className={styles.errorMsg}>{profileErrors.phone}</span>}
                 </div>
               </div>
 
@@ -127,13 +141,14 @@ export default function SettingsPage() {
                 <label className={styles.label} htmlFor="email">Email Address</label>
                 <input
                   id="email" type="email" autoComplete="email"
-                  className={styles.input}
+                  className={`${styles.input} ${profileErrors.email ? styles.inputError : ''}`}
                   value={profile.email}
-                  onChange={e => setProfile(p => ({ ...p, email: e.target.value }))}
+                  onChange={e => { setProfile(p => ({ ...p, email: e.target.value })); setProfileErrors(er => ({ ...er, email: '' })) }}
                 />
-                <span className={styles.hint}>
-                  Changing your email will send a confirmation to the new address.
-                </span>
+                {profileErrors.email
+                  ? <span className={styles.errorMsg}>{profileErrors.email}</span>
+                  : <span className={styles.hint}>Changing your email will send a confirmation to the new address.</span>
+                }
               </div>
 
               {profileStatus && (
