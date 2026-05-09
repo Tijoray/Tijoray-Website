@@ -11,7 +11,7 @@ export function asset(path: string): string {
 
 export const ASSETS = {
   chain:          asset('/assets/3d/chain.glb'),
-  pendantSquare:  asset('/assets/3d/pendant-square.glb'),
+  pendantSquare:  asset('/assets/3d/pendant-asscher.glb'),
   pendantCircle:  asset('/assets/3d/pendant-circle.glb'),
   pendantHeart:   asset('/assets/3d/pendant-heart.glb'),
   pendantPear:    asset('/assets/3d/pendant-pear.glb'),
