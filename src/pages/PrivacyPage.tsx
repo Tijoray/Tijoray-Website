@@ -43,6 +43,7 @@ export default function PrivacyPage() {
         <div className={styles.section}>
           <h2>How we store and protect your data</h2>
           <p>Account data and vault metadata are stored in Supabase (EU region). Vault media files are stored in Cloudflare R2 with private-access controls. All data in transit is encrypted via TLS. Vault contents are encrypted at rest with AES-256.</p>
+          <p><strong>Your vault is yours alone.</strong> All memories and media you upload — photos, videos, voice notes, and written messages — are encrypted and accessible only by you. Tijoray staff have no ability to view, access, or read the contents of your vault. Not now, not ever.</p>
           <p>We retain your data for as long as your account is active. If you delete your account, your vault contents and personal data are permanently deleted within 30 days.</p>
         </div>
 
