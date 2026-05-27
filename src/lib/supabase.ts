@@ -39,6 +39,7 @@ export type Piece = {
   metal_id: string | null
   sender_id: string | null
   receiver_id: string | null
+  hardware_id: string | null
   nfc_linked_at: string | null
   activated_at: string | null
   created_at: string

@@ -76,24 +76,32 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   for (const item of itemList) {
     const { shape, stoneId, metalId } = item
 
-    const serial = 'ARC-' + Math.random().toString(36).slice(2, 10).toUpperCase()
+    const genSerial = () => 'TIJ-' + Math.random().toString(36).slice(2, 10).toUpperCase()
 
-    const { data: piece, error: pieceErr } = await supabase
-      .from('Pieces')
-      .insert({
-        serial,
-        collection:      `${shape?.charAt(0).toUpperCase()}${shape?.slice(1)} Pendant`,
-        stone_id:        stoneId  || null,
-        metal_id:        metalId  || null,
-        sender_id:       userId,
-        created_at:      new Date().toISOString(),
-        activated_at:    new Date().toISOString(),
-        shipping_address: shippingAddress,
-        recipient_name:  recipientName  || null,
-        recipient_phone: recipientPhone || null,
-      })
-      .select('id')
-      .single()
+    let piece: { id: string } | null = null
+    let pieceErr: unknown = null
+    for (let attempt = 0; attempt < 5; attempt++) {
+      const result = await supabase
+        .from('Pieces')
+        .insert({
+          serial:          genSerial(),
+          collection:      `${shape?.charAt(0).toUpperCase()}${shape?.slice(1)} Pendant`,
+          stone_id:        stoneId  || null,
+          metal_id:        metalId  || null,
+          sender_id:       userId,
+          created_at:      new Date().toISOString(),
+          activated_at:    new Date().toISOString(),
+          shipping_address: shippingAddress,
+          recipient_name:  recipientName  || null,
+          recipient_phone: recipientPhone || null,
+        })
+        .select('id')
+        .single()
+      piece = result.data
+      pieceErr = result.error
+      // retry only on unique-constraint violation (serial collision)
+      if (!result.error || (result.error as any).code !== '23505') break
+    }
 
     if (pieceErr || !piece) {
       console.error('Failed to insert piece:', pieceErr)
