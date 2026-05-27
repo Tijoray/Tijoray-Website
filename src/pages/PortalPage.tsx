@@ -15,6 +15,10 @@ const COLLECTION_TO_SHAPE: Record<string, Shape> = {
   'Circle Pendant': 'circle',
   'Heart Pendant':  'heart',
   'Pear Pendant':   'pear',
+  'Square Pendant — Birthstone Collection': 'square',
+  'Circle Pendant — Birthstone Collection': 'circle',
+  'Heart Pendant — Birthstone Collection':  'heart',
+  'Pear Pendant — Birthstone Collection':   'pear',
 }
 
 const BIRTHSTONE_NAMES = [

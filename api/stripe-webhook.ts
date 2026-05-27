@@ -85,7 +85,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         .from('Pieces')
         .insert({
           serial:          genSerial(),
-          collection:      `${shape?.charAt(0).toUpperCase()}${shape?.slice(1)} Pendant`,
+          collection:      `${shape?.charAt(0).toUpperCase()}${shape?.slice(1)} Pendant — Birthstone Collection`,
           stone_id:        stoneId  || null,
           metal_id:        metalId  || null,
           sender_id:       userId,
