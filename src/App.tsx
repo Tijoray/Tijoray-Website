@@ -29,6 +29,8 @@ import SignUpPage from './pages/SignUpPage'
 import NotFoundPage from './pages/NotFoundPage'
 import FaqPage from './pages/FaqPage'
 import CraftsmanshipPage from './pages/CraftsmanshipPage'
+import PrivacyPage from './pages/PrivacyPage'
+import TermsPage from './pages/TermsPage'
 
 function HomePage() {
   useEffect(() => {
@@ -95,6 +97,8 @@ export default function App() {
         } />
         <Route path="/faq" element={<FaqPage />} />
         <Route path="/craftsmanship" element={<CraftsmanshipPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="*" element={<NotFoundPage />} />

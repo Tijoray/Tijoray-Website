@@ -31,7 +31,6 @@ export default function Footer() {
             <li><Link to="/about">Our Story</Link></li>
             <li><Link to="/technology">The Technology</Link></li>
             <li><Link to="/craftsmanship">Craftsmanship</Link></li>
-            <li><span className={styles.linkSoon}>Journal<span className={styles.soonBadge}>Soon</span></span></li>
           </ul>
         </div>
 
@@ -50,9 +49,8 @@ export default function Footer() {
       <div className={styles.footerBottom}>
         <p className={styles.footerCopy}>© {new Date().getFullYear()} Atelier Tijoray. All rights reserved.</p>
         <nav className={styles.footerLegal} aria-label="Legal">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Service</a>
-          <a href="#">Cookie Preferences</a>
+          <Link to="/privacy">Privacy Policy</Link>
+          <Link to="/terms">Terms of Service</Link>
         </nav>
       </div>
     </footer>
