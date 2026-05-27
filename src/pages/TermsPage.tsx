@@ -6,7 +6,7 @@ export default function TermsPage() {
       <div className={styles.hero}>
         <p className={styles.eyebrow}>Legal</p>
         <h1 className={styles.title}>Terms of Service</h1>
-        <p className={styles.updated}>Last updated: May 2025</p>
+        <p className={styles.updated}>Last updated: 27 May 2026</p>
       </div>
 
       <div className={styles.content}>
