@@ -67,6 +67,37 @@
   cursor: not-allowed;
 }
 
+/* ── Apple button ── */
+.appleBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: var(--text-md);
+  font-weight: 600;
+  letter-spacing: var(--tracking-sm);
+  text-transform: uppercase;
+  color: #fff;
+  background: #000;
+  border: 1px solid #000;
+  padding: 16px 24px;
+  cursor: pointer;
+  transition: opacity 0.3s, box-shadow 0.3s;
+  margin-bottom: 16px;
+}
+
+.appleBtn:hover:not(:disabled) {
+  opacity: 0.85;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+
+.appleBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* ── Divider ── */
 .divider {
   display: flex;

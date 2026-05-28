@@ -8,6 +8,14 @@ import styles from './AuthPage.module.css'
 
 type Step = 'form' | 'verify-email'
 
+function AppleIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 814 1000" aria-hidden="true" fill="#fff">
+      <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-42.4-150.3-109.9C87.5 714.7 48 582.2 48 455.8c0-219.9 143.5-336.3 285.6-336.3 75.3 0 138 49.4 184.9 49.4 44.9 0 115.4-52.3 202.4-52.3zm-37.8-196.7c-31.7 36.5-81 64.6-144.5 64.6-9 0-18-.6-27-1.9-3.9-42.9 14.3-88.9 44.6-120.5 31.7-34.3 83.3-61.4 140.5-66.3 3.2 10.3 4.5 20.7 4.5 30.4 0 40.2-17.5 83.3-18.1 93.7z"/>
+    </svg>
+  )
+}
+
 function GoogleIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
@@ -30,6 +38,15 @@ export default function SignUpPage() {
   const [apiError,   setApiError]   = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [googleBusy, setGoogleBusy] = useState(false)
+  const [appleBusy,  setAppleBusy]  = useState(false)
+
+  async function handleApple() {
+    setAppleBusy(true)
+    await supabase.auth.signInWithOAuth({
+      provider: 'apple',
+      options: { redirectTo: `${window.location.origin}/portal` },
+    })
+  }
 
   async function handleGoogle() {
     setGoogleBusy(true)
@@ -124,6 +141,16 @@ export default function SignUpPage() {
       <div className={styles.inner}>
         <p className={styles.eyebrow}>Create your account</p>
         <h1 className={styles.title}>Join <em>Tijoray</em></h1>
+
+        <button
+          type="button"
+          className={styles.appleBtn}
+          onClick={handleApple}
+          disabled={appleBusy}
+        >
+          <AppleIcon />
+          {appleBusy ? 'Redirecting…' : 'Continue with Apple'}
+        </button>
 
         <button
           type="button"
