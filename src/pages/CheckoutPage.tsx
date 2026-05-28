@@ -80,13 +80,12 @@ export default function CheckoutPage() {
     return errs
   }
 
-  async function proceedToStripe(userId: string) {
+  async function proceedToStripe(accessToken: string) {
     const res = await fetch('/api/create-checkout', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
       body: JSON.stringify({
         items,
-        userId,
         recipientName:  form.recipientName.trim(),
         recipientPhone: form.recipientPhone.trim(),
       }),
@@ -109,7 +108,9 @@ export default function CheckoutPage() {
 
     try {
       if (user) {
-        await proceedToStripe(user.id)
+        const { data: { session } } = await supabase.auth.getSession()
+        if (!session) throw new Error('Session expired. Please sign in again.')
+        await proceedToStripe(session.access_token)
         return
       }
 
@@ -125,7 +126,7 @@ export default function CheckoutPage() {
       if (error) throw new Error(error.message)
 
       if (data.session && data.user) {
-        await proceedToStripe(data.user.id)
+        await proceedToStripe(data.session.access_token)
       } else {
         setSentTo(form.email)
         setStep('verify-email')

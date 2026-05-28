@@ -1,13 +1,16 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { z } from 'zod'
 
-export type CartItem = {
-  shape:           'square' | 'circle' | 'heart' | 'pear'
-  metal:           'steel'  | 'silver' | '10k'   | '18k'
-  metalColor:      'white'  | 'gold'   | 'rose'
-  birthstoneIndex: number   // 0–11
-  price:           number   // USD dollars (not cents)
-  specLine:        string   // human-readable summary
-}
+const CartItemSchema = z.object({
+  shape:           z.enum(['square', 'circle', 'heart', 'pear']),
+  metal:           z.enum(['steel', 'silver', '10k', '18k']),
+  metalColor:      z.enum(['white', 'gold', 'rose']),
+  birthstoneIndex: z.number().int().min(0).max(11),
+  price:           z.number().positive(),
+  specLine:        z.string(),
+})
+
+export type CartItem = z.infer<typeof CartItemSchema>
 
 type CartContextValue = {
   items:      CartItem[]
@@ -29,8 +32,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY)
-      return stored ? JSON.parse(stored) : []
+      if (!stored) return []
+      const parsed = JSON.parse(stored)
+      return CartItemSchema.array().parse(parsed)
     } catch {
+      localStorage.removeItem(STORAGE_KEY)
       return []
     }
   })

@@ -2,6 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
+import { randomBytes } from 'crypto'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2026-03-25.dahlia' })
 
@@ -76,7 +77,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   for (const item of itemList) {
     const { shape, stoneId, metalId } = item
 
-    const genSerial = () => 'TIJ-' + Math.random().toString(36).slice(2, 10).toUpperCase()
+    const genSerial = () => 'TIJ-' + randomBytes(5).toString('hex').toUpperCase()
 
     let piece: { id: string } | null = null
     let pieceErr: unknown = null

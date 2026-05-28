@@ -39,14 +39,23 @@ type CartItem = {
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
 
-  const { items, userId, recipientName, recipientPhone }: {
+  // Verify caller identity — extract userId from the Bearer token, never from the body
+  const authHeader = req.headers.authorization ?? ''
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null
+  if (!token) return res.status(401).json({ error: 'Unauthorized' })
+
+  const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+  if (authError || !user) return res.status(401).json({ error: 'Unauthorized' })
+
+  const userId = user.id
+
+  const { items, recipientName, recipientPhone }: {
     items: CartItem[]
-    userId: string
     recipientName?: string
     recipientPhone?: string
   } = req.body
 
-  if (!Array.isArray(items) || items.length === 0 || !userId) {
+  if (!Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: 'Missing required fields' })
   }
 

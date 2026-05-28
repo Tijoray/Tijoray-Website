@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import Navbar from './components/Navbar'
@@ -13,24 +13,25 @@ import StickyMobileCta from './components/StickyMobileCta'
 import Testimonials from './components/Testimonials'
 import CtaSection from './components/CtaSection'
 import Footer from './components/Footer'
-import AboutPage from './pages/AboutPage'
-import ContactPage from './pages/ContactPage'
-import ConfiguratorPage from './pages/ConfiguratorPage'
-import TechnologyPage from './pages/TechnologyPage'
-import CollectionPage from './pages/CollectionPage'
-import CartPage from './pages/CartPage'
-import CheckoutPage from './pages/CheckoutPage'
-import OrderSuccessPage from './pages/OrderSuccessPage'
-import PortalPage from './pages/PortalPage'
-import PortalPiecePage from './pages/PortalPiecePage'
-import SettingsPage from './pages/SettingsPage'
-import LoginPage from './pages/LoginPage'
-import SignUpPage from './pages/SignUpPage'
-import NotFoundPage from './pages/NotFoundPage'
-import FaqPage from './pages/FaqPage'
-import CraftsmanshipPage from './pages/CraftsmanshipPage'
-import PrivacyPage from './pages/PrivacyPage'
-import TermsPage from './pages/TermsPage'
+
+const AboutPage = lazy(() => import('./pages/AboutPage'))
+const ContactPage = lazy(() => import('./pages/ContactPage'))
+const ConfiguratorPage = lazy(() => import('./pages/ConfiguratorPage'))
+const TechnologyPage = lazy(() => import('./pages/TechnologyPage'))
+const CollectionPage = lazy(() => import('./pages/CollectionPage'))
+const CartPage = lazy(() => import('./pages/CartPage'))
+const CheckoutPage = lazy(() => import('./pages/CheckoutPage'))
+const OrderSuccessPage = lazy(() => import('./pages/OrderSuccessPage'))
+const PortalPage = lazy(() => import('./pages/PortalPage'))
+const PortalPiecePage = lazy(() => import('./pages/PortalPiecePage'))
+const SettingsPage = lazy(() => import('./pages/SettingsPage'))
+const LoginPage = lazy(() => import('./pages/LoginPage'))
+const SignUpPage = lazy(() => import('./pages/SignUpPage'))
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
+const FaqPage = lazy(() => import('./pages/FaqPage'))
+const CraftsmanshipPage = lazy(() => import('./pages/CraftsmanshipPage'))
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage'))
+const TermsPage = lazy(() => import('./pages/TermsPage'))
 
 function HomePage() {
   useEffect(() => {
@@ -76,33 +77,35 @@ export default function App() {
       }} />
       <SpeedInsights />
       <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/products/birthstone-pendant" element={<ConfiguratorPage />} />
-        <Route path="/technology" element={<TechnologyPage />} />
-        <Route path="/collection" element={<CollectionPage />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="/order/success" element={<OrderSuccessPage />} />
-        <Route path="/portal" element={
-          <ProtectedRoute><PortalPage /></ProtectedRoute>
-        } />
-        <Route path="/portal/piece/:pieceId" element={
-          <ProtectedRoute><PortalPiecePage /></ProtectedRoute>
-        } />
-        <Route path="/settings" element={
-          <ProtectedRoute><SettingsPage /></ProtectedRoute>
-        } />
-        <Route path="/faq" element={<FaqPage />} />
-        <Route path="/craftsmanship" element={<CraftsmanshipPage />} />
-        <Route path="/privacy" element={<PrivacyPage />} />
-        <Route path="/terms" element={<TermsPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+      <Suspense fallback={null}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/products/birthstone-pendant" element={<ConfiguratorPage />} />
+          <Route path="/technology" element={<TechnologyPage />} />
+          <Route path="/collection" element={<CollectionPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/order/success" element={<OrderSuccessPage />} />
+          <Route path="/portal" element={
+            <ProtectedRoute><PortalPage /></ProtectedRoute>
+          } />
+          <Route path="/portal/piece/:pieceId" element={
+            <ProtectedRoute><PortalPiecePage /></ProtectedRoute>
+          } />
+          <Route path="/settings" element={
+            <ProtectedRoute><SettingsPage /></ProtectedRoute>
+          } />
+          <Route path="/faq" element={<FaqPage />} />
+          <Route path="/craftsmanship" element={<CraftsmanshipPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Suspense>
       <Footer />
     </>
   )
