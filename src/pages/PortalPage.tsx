@@ -64,6 +64,20 @@ export default function PortalPage() {
   }, [user])
 
   function thumbProps(piece: Piece) {
+    // Prefer the stored config (source of truth, product-agnostic) when present.
+    const cfg = piece.config
+    if (cfg?.shape) {
+      const shapes: Shape[] = ['square', 'circle', 'heart', 'pear']
+      const shape = shapes.includes(cfg.shape as Shape) ? (cfg.shape as Shape) : 'heart'
+      return {
+        shape,
+        metal:           purityToMetal(cfg.metal ?? null),
+        metalColor:      colourToMetalColor(cfg.metalColor ?? null),
+        birthstoneIndex: typeof cfg.birthstoneIndex === 'number' ? cfg.birthstoneIndex : 0,
+      } as const
+    }
+
+    // Legacy fallback — derive from the collection string + Stones/Metals joins.
     const shape       = COLLECTION_TO_SHAPE[piece.collection ?? ''] ?? 'heart'
     const stone       = stones.find(s => s.id === piece.stone_id)
     const metal       = metals.find(m => m.id === piece.metal_id)

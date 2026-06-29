@@ -45,7 +45,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     shipping_details?: { address?: Stripe.Address | null; name?: string | null } | null
   }
   const session = event.data.object as SessionWithShipping
-  const { userId, items: itemsJson, recipientName, recipientPhone } = session.metadata ?? {}
+  const meta = session.metadata ?? {}
+  const { userId, recipientName, recipientPhone } = meta
 
   // Build shipping address from Stripe's collected address
   const stripeAddr = session.shipping_details?.address
@@ -64,18 +65,44 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Missing userId in metadata' })
   }
 
-  // Parse per-item metadata (stringified JSON array)
-  let itemList: { shape: string; stoneId: string; metalId: string }[] = []
+  // Parse per-item metadata (item_0, item_1, … — one Stripe metadata key each).
+  type ItemMeta = {
+    productType?: string; collectionId?: string
+    shape?: string; metal?: string; metalColor?: string; birthstoneIndex?: number
+    stoneId?: string; metalId?: string
+  }
+  const itemCount = parseInt(meta.itemCount ?? '0', 10)
+  const itemList: ItemMeta[] = []
   try {
-    const raw = JSON.parse(itemsJson ?? '[]') as string[]
-    itemList = raw.map(s => JSON.parse(s))
+    for (let i = 0; i < itemCount; i++) {
+      const raw = meta[`item_${i}`]
+      if (raw) itemList.push(JSON.parse(raw))
+    }
   } catch {
     console.error('Webhook: failed to parse items metadata')
     return res.status(400).json({ error: 'Malformed items metadata' })
   }
 
+  // Human-readable collection label for the legacy `collection` column.
+  const COLLECTION_NAMES: Record<string, string> = {
+    'birthstone':     'Birthstone Collection',
+    'diamond':        'Diamond Collection',
+    'initial-letter': 'Initial Collection',
+  }
+
   for (const item of itemList) {
     const { shape, stoneId, metalId } = item
+    const productType  = item.productType ?? 'pendant'
+    const productLabel = productType.charAt(0).toUpperCase() + productType.slice(1)
+    const collName     = COLLECTION_NAMES[item.collectionId ?? 'birthstone'] ?? 'Birthstone Collection'
+    const config = {
+      productType,
+      collectionId:    item.collectionId ?? 'birthstone',
+      shape:           item.shape,
+      metal:           item.metal,
+      metalColor:      item.metalColor,
+      birthstoneIndex: item.birthstoneIndex,
+    }
 
     const genSerial = () => 'TIJ-' + randomBytes(5).toString('hex').toUpperCase()
 
@@ -86,7 +113,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         .from('Pieces')
         .insert({
           serial:          genSerial(),
-          collection:      `${shape?.charAt(0).toUpperCase()}${shape?.slice(1)} Pendant — Birthstone Collection`,
+          collection:      `${shape?.charAt(0).toUpperCase()}${shape?.slice(1)} ${productLabel} — ${collName}`,
+          product_type:    productType,
+          config,
           stone_id:        stoneId  || null,
           metal_id:        metalId  || null,
           sender_id:       userId,

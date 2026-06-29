@@ -16,6 +16,8 @@ const supabase = createClient(
 )
 
 type CartItem = {
+  productType?:    string
+  collectionId?:   string
   shape:           string
   metal:           string
   metalColor:      string
@@ -47,14 +49,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Missing required fields' })
   }
 
-  // Build Stripe line items + collect metadata for webhook
+  // Build Stripe line items. Each item's full config goes into its OWN metadata
+  // key (item_0, item_1, …) rather than one combined value — Stripe caps each
+  // metadata value at 500 chars, which a multi-item cart would otherwise blow.
   const lineItems: Array<{
     price_data: { currency: string; unit_amount: number; product_data: { name: string; description: string } }
     quantity: number
   }> = []
-  const itemMetadata: string[] = []
+  const itemMeta: Record<string, string> = {}
 
-  for (const item of items) {
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i]
+    const productType    = item.productType  ?? 'pendant'
+    const collectionId   = item.collectionId ?? 'birthstone'
     const birthstoneName = BIRTHSTONE_NAMES[item.birthstoneIndex] ?? 'Unknown'
     const shapeLabel     = item.shape.charAt(0).toUpperCase() + item.shape.slice(1)
     const metalLine      = item.metal === 'steel'
@@ -82,11 +89,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       quantity: 1,
     })
 
-    itemMetadata.push(JSON.stringify({
-      shape:   item.shape,
+    // Full configuration the customer chose — persisted to Pieces.config by the webhook.
+    itemMeta[`item_${i}`] = JSON.stringify({
+      productType,
+      collectionId,
+      shape:           item.shape,
+      metal:           item.metal,
+      metalColor:      item.metalColor,
+      birthstoneIndex: item.birthstoneIndex,
       stoneId,
       metalId,
-    }))
+    })
   }
 
   const session = await stripe.checkout.sessions.create({
@@ -98,7 +111,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     },
     metadata: {
       userId,
-      items:          JSON.stringify(itemMetadata),
+      itemCount:      String(items.length),
+      ...itemMeta,
       recipientName:  recipientName  ?? '',
       recipientPhone: recipientPhone ?? '',
     },

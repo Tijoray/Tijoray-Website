@@ -29,10 +29,22 @@ export type Metal = {
   model_url: string | null
 }
 
+/** Full configuration a customer chose — the source of truth for a piece. */
+export type PieceConfig = {
+  productType?:     string
+  collectionId?:    string
+  shape?:           string
+  metal?:           string
+  metalColor?:      string
+  birthstoneIndex?: number
+}
+
 export type Piece = {
   id: string
   serial: string | null
   collection: string | null
+  product_type: string | null
+  config: PieceConfig | null
   cover_image_url: string | null
   model_3d_url: string | null
   stone_id: string | null
