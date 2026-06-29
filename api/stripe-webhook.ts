@@ -1,8 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
-import { Resend } from 'resend'
 import { randomBytes } from 'crypto'
+import { sendCraftingEmail, MEMORY_WINDOW_DAYS } from '../lib/email'
+import { METAL_PRICES_CENTS } from '../src/data/catalog'
+import type { Metal } from '../src/data/catalog'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2026-03-25.dahlia' })
 
@@ -10,8 +12,6 @@ const supabase = createClient(
   process.env.VITE_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 )
-
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
 async function readRawBody(req: VercelRequest): Promise<Buffer> {
   const chunks: Buffer[] = []
@@ -71,6 +71,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     shape?: string; metal?: string; metalColor?: string; birthstoneIndex?: number
     stoneId?: string; metalId?: string
   }
+  // Memory-collection window closes this far out — drives the reminder cron.
+  const memoryDeadline = new Date(Date.now() + MEMORY_WINDOW_DAYS * 86400000).toISOString()
+  // Accumulated for the order-confirmation email.
+  const emailItems: { name: string; priceCents: number }[] = []
+
   const itemCount = parseInt(meta.itemCount ?? '0', 10)
   const itemList: ItemMeta[] = []
   try {
@@ -104,6 +109,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       birthstoneIndex: item.birthstoneIndex,
     }
 
+    const shapeLabel = shape ? `${shape.charAt(0).toUpperCase()}${shape.slice(1)}` : 'Tijoray'
+    emailItems.push({
+      name:       `${shapeLabel} ${productLabel}`,
+      priceCents: METAL_PRICES_CENTS[item.metal as Metal] ?? 129900,
+    })
+
     const genSerial = () => 'TIJ-' + randomBytes(5).toString('hex').toUpperCase()
 
     let piece: { id: string } | null = null
@@ -121,6 +132,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           sender_id:       userId,
           created_at:      new Date().toISOString(),
           activated_at:    new Date().toISOString(),
+          status:          'crafting',
+          memory_deadline: memoryDeadline,
           shipping_address: shippingAddress,
           recipient_name:  recipientName  || null,
           recipient_phone: recipientPhone || null,
@@ -151,20 +164,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     })
   }
 
-  // Send confirmation email
+  // Order-confirmation email (being crafted + start-building CTA). Keyed on the
+  // Stripe session id so a re-delivered webhook never double-sends.
   const customerEmail = session.customer_details?.email
-  if (customerEmail && resend) {
-    await resend.emails.send({
-      from: 'Tijoray <hello@tijoray.com>',
-      to:   customerEmail,
-      subject: 'Your Tijoray pendant is being crafted',
-      html: `
-        <p>Thank you for your order.</p>
-        <p>Your <strong>${session.metadata?.collection ?? 'Tijoray'}</strong> pendant is now in production. You'll receive a shipping confirmation within 10–14 business days.</p>
-        <p>Once it arrives, visit <a href="${process.env.VITE_SITE_URL}/portal">your portal</a> to compose the memory inside.</p>
-        <p>— The Tijoray Atelier</p>
-      `,
-    }).catch(err => console.error('Resend error:', err))
+  if (customerEmail && emailItems.length > 0) {
+    try {
+      await sendCraftingEmail({
+        sessionId:  session.id,
+        to:         customerEmail,
+        buyerName:  session.customer_details?.name,
+        items:      emailItems,
+        totalCents: session.amount_total ?? emailItems.reduce((s, i) => s + i.priceCents, 0),
+      })
+    } catch (err) {
+      console.error('Crafting email error:', err)
+    }
   }
 
   return res.status(200).json({ received: true })
