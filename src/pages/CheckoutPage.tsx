@@ -34,7 +34,7 @@ export default function CheckoutPage() {
 
   const [step,       setStep]       = useState<Step>('form')
   const [sentTo,     setSentTo]     = useState('')
-  const [form,       setForm]       = useState({ name: '', email: '', phone: '', password: '', confirm: '', recipientName: '', recipientPhone: '' })
+  const [form,       setForm]       = useState({ name: '', email: '', phone: '', password: '', confirm: '', recipientName: '', recipientPhone: '', forSelf: false })
   const [errors,     setErrors]     = useState<Record<string, string>>({})
   const [submitting, setSubmitting] = useState(false)
   const [apiError,   setApiError]   = useState('')
@@ -69,11 +69,13 @@ export default function CheckoutPage() {
       if (form.password.length < 8) errs.password = 'At least 8 characters'
       if (form.confirm !== form.password) errs.confirm = 'Passwords do not match'
     }
-    if (!form.recipientName.trim()) errs.recipientName = 'Required'
-    if (!form.recipientPhone.trim()) {
-      errs.recipientPhone = 'Required'
-    } else if (!isValidPhone(form.recipientPhone)) {
-      errs.recipientPhone = 'Enter a valid phone number'
+    if (!form.forSelf) {
+      if (!form.recipientName.trim()) errs.recipientName = 'Required'
+      if (!form.recipientPhone.trim()) {
+        errs.recipientPhone = 'Required'
+      } else if (!isValidPhone(form.recipientPhone)) {
+        errs.recipientPhone = 'Enter a valid phone number'
+      }
     }
     return errs
   }
@@ -84,8 +86,9 @@ export default function CheckoutPage() {
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
       body: JSON.stringify({
         items,
-        recipientName:  form.recipientName.trim(),
-        recipientPhone: form.recipientPhone.trim(),
+        forSelf:        form.forSelf,
+        recipientName:  form.forSelf ? '' : form.recipientName.trim(),
+        recipientPhone: form.forSelf ? '' : form.recipientPhone.trim(),
       }),
     })
     if (!res.ok) {
@@ -164,6 +167,70 @@ export default function CheckoutPage() {
     )
   }
 
+  // Recipient section — shared by the logged-in and sign-up forms.
+  // A "buying for myself" toggle hides the recipient fields; the backend then
+  // fills the recipient from the buyer's own account.
+  function renderRecipientCard(phoneId: string) {
+    return (
+      <div className={styles.recipientCard}>
+        <p className={styles.recipientHeading}>Who is this piece for?</p>
+
+        <label className={styles.selfToggle}>
+          <input
+            type="checkbox"
+            checked={form.forSelf}
+            onChange={e => {
+              const forSelf = e.target.checked
+              setForm(f => ({ ...f, forSelf }))
+              if (forSelf) setErrors(v => ({ ...v, recipientName: '', recipientPhone: '' }))
+            }}
+          />
+          <span>I'm buying this piece for myself</span>
+        </label>
+
+        {form.forSelf ? (
+          <p className={styles.recipientShippingNote}>
+            We'll ship it to you and set up your memory portal under your name. Your shipping address is collected on the next screen.
+          </p>
+        ) : (
+          <>
+            <p className={styles.recipientBody}>
+              Tell us who this piece is for. We'll ship directly to them and send an invitation to their memory portal once it arrives — no spoilers.
+            </p>
+
+            <div className={styles.fieldRow}>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="recipientName">Recipient's Name</label>
+                <input
+                  id="recipientName" name="recipientName" type="text"
+                  className={`${styles.input} ${errors.recipientName ? styles.inputError : ''}`}
+                  value={form.recipientName}
+                  onChange={e => { setForm(f => ({ ...f, recipientName: e.target.value })); setErrors(v => ({ ...v, recipientName: '' })) }}
+                />
+                {errors.recipientName && <span className={styles.errorMsg}>{errors.recipientName}</span>}
+              </div>
+
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor={phoneId}>Recipient's Phone</label>
+                <PhoneInput
+                  id={phoneId}
+                  value={form.recipientPhone}
+                  onChange={v => { setForm(f => ({ ...f, recipientPhone: v })); setErrors(e => ({ ...e, recipientPhone: '' })) }}
+                  error={!!errors.recipientPhone}
+                />
+                {errors.recipientPhone && <span className={styles.errorMsg}>{errors.recipientPhone}</span>}
+              </div>
+            </div>
+
+            <p className={styles.recipientShippingNote}>
+              Their shipping address will be collected on the next screen.
+            </p>
+          </>
+        )}
+      </div>
+    )
+  }
+
   // ── Main layout ────────────────────────────────────────────────────────────
   return (
     <main className={styles.page}>
@@ -185,40 +252,7 @@ export default function CheckoutPage() {
                 </p>
               </div>
 
-              <div className={styles.recipientCard}>
-                <p className={styles.recipientHeading}>Gifting this to someone special?</p>
-                <p className={styles.recipientBody}>
-                  Tell us who this piece is for. We'll ship directly to them and send an invitation to their memory portal once it arrives — no spoilers.
-                </p>
-
-                <div className={styles.fieldRow}>
-                  <div className={styles.field}>
-                    <label className={styles.label} htmlFor="recipientName">Recipient's Name</label>
-                    <input
-                      id="recipientName" name="recipientName" type="text"
-                      className={`${styles.input} ${errors.recipientName ? styles.inputError : ''}`}
-                      value={form.recipientName}
-                      onChange={e => { setForm(f => ({ ...f, recipientName: e.target.value })); setErrors(v => ({ ...v, recipientName: '' })) }}
-                    />
-                    {errors.recipientName && <span className={styles.errorMsg}>{errors.recipientName}</span>}
-                  </div>
-
-                  <div className={styles.field}>
-                    <label className={styles.label} htmlFor="recipientPhone">Recipient's Phone</label>
-                    <PhoneInput
-                      id="recipientPhone"
-                      value={form.recipientPhone}
-                      onChange={v => { setForm(f => ({ ...f, recipientPhone: v })); setErrors(e => ({ ...e, recipientPhone: '' })) }}
-                      error={!!errors.recipientPhone}
-                    />
-                    {errors.recipientPhone && <span className={styles.errorMsg}>{errors.recipientPhone}</span>}
-                  </div>
-                </div>
-
-                <p className={styles.recipientShippingNote}>
-                  Their shipping address will be collected on the next screen.
-                </p>
-              </div>
+              {renderRecipientCard('recipientPhone')}
 
               {apiError && <p className={styles.apiError}>{apiError}</p>}
 
@@ -308,40 +342,7 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
-                <div className={styles.recipientCard}>
-                  <p className={styles.recipientHeading}>Gifting this to someone special?</p>
-                  <p className={styles.recipientBody}>
-                    Tell us who this piece is for. We'll ship directly to them and send an invitation to their memory portal once it arrives — no spoilers.
-                  </p>
-
-                  <div className={styles.fieldRow}>
-                    <div className={styles.field}>
-                      <label className={styles.label} htmlFor="recipientName">Recipient's Name</label>
-                      <input
-                        id="recipientName" name="recipientName" type="text"
-                        className={`${styles.input} ${errors.recipientName ? styles.inputError : ''}`}
-                        value={form.recipientName}
-                        onChange={e => { setForm(f => ({ ...f, recipientName: e.target.value })); setErrors(v => ({ ...v, recipientName: '' })) }}
-                      />
-                      {errors.recipientName && <span className={styles.errorMsg}>{errors.recipientName}</span>}
-                    </div>
-
-                    <div className={styles.field}>
-                      <label className={styles.label} htmlFor="recipientPhone2">Recipient's Phone</label>
-                      <PhoneInput
-                        id="recipientPhone2"
-                        value={form.recipientPhone}
-                        onChange={v => { setForm(f => ({ ...f, recipientPhone: v })); setErrors(e => ({ ...e, recipientPhone: '' })) }}
-                        error={!!errors.recipientPhone}
-                      />
-                      {errors.recipientPhone && <span className={styles.errorMsg}>{errors.recipientPhone}</span>}
-                    </div>
-                  </div>
-
-                  <p className={styles.recipientShippingNote}>
-                    Their shipping address will be collected on the next screen.
-                  </p>
-                </div>
+                {renderRecipientCard('recipientPhone2')}
 
                 {apiError && <p className={styles.apiError}>{apiError}</p>}
 

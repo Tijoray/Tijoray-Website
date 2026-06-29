@@ -39,15 +39,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const userId = user.id
 
-  const { items, recipientName, recipientPhone }: {
+  const { items, recipientName, recipientPhone, forSelf }: {
     items: CartItem[]
     recipientName?: string
     recipientPhone?: string
+    forSelf?: boolean
   } = req.body
 
   if (!Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: 'Missing required fields' })
   }
+
+  // When the buyer is purchasing for themselves, the recipient IS the buyer —
+  // derive name/phone from their own account rather than the (omitted) form fields.
+  const meta = (user.user_metadata ?? {}) as Record<string, unknown>
+  const selfName  = String(meta.name ?? meta.full_name ?? meta.fullName ?? '').trim() || (user.email ?? '')
+  const selfPhone = String(meta.phone ?? meta.phone_number ?? '').trim()
+
+  const finalRecipientName  = forSelf ? selfName  : (recipientName  ?? '')
+  const finalRecipientPhone = forSelf ? selfPhone : (recipientPhone ?? '')
 
   // Build Stripe line items. Each item's full config goes into its OWN metadata
   // key (item_0, item_1, …) rather than one combined value — Stripe caps each
@@ -113,8 +123,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       userId,
       itemCount:      String(items.length),
       ...itemMeta,
-      recipientName:  recipientName  ?? '',
-      recipientPhone: recipientPhone ?? '',
+      recipientName:  finalRecipientName,
+      recipientPhone: finalRecipientPhone,
     },
     success_url: `${process.env.VITE_SITE_URL ?? 'https://tijoray.com'}/order/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url:  `${process.env.VITE_SITE_URL ?? 'https://tijoray.com'}/cart`,

@@ -413,6 +413,27 @@
   margin-top: 4px;
 }
 
+/* "Buying for myself" toggle */
+.selfToggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: var(--text-md);
+  color: var(--ink);
+  margin-top: -8px;
+  user-select: none;
+}
+
+.selfToggle input {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  accent-color: var(--burgundy);
+  cursor: pointer;
+}
+
 .sectionDivider {
   display: flex;
   align-items: center;
