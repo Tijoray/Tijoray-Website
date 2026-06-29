@@ -8,6 +8,11 @@ import {
   METAL_COLOR_LABELS_LONG as METAL_COLOR_LABELS,
   STONE_NAMES_SHORT       as BIRTHSTONE_NAMES,
 } from '../data/catalog'
+import { PRODUCT_TYPES } from '../data/product-types'
+
+/** "Square Pendant", "Heart Bracelet", … from a cart item's product identity. */
+const itemTitle = (shape: string, productType: string) =>
+  `${SHAPE_LABELS[shape as keyof typeof SHAPE_LABELS]} ${PRODUCT_TYPES[productType as keyof typeof PRODUCT_TYPES]?.label ?? 'Pendant'}`
 
 const fmt = (n: number) => new Intl.NumberFormat('en-US', {
   style: 'currency', currency: 'USD', maximumFractionDigits: 0,
@@ -61,7 +66,7 @@ export default function CartPage() {
                   <div className={styles.cardDetails}>
                     <div className={styles.detailRow}>
                       <span className={styles.detailLabel}>Shape</span>
-                      <span className={styles.detailValue}>{SHAPE_LABELS[item.shape]} Pendant</span>
+                      <span className={styles.detailValue}>{itemTitle(item.shape, item.productType)}</span>
                     </div>
                     <div className={styles.detailRow}>
                       <span className={styles.detailLabel}>Metal</span>
@@ -98,7 +103,7 @@ export default function CartPage() {
             <p className={styles.summaryTitle}>Order Summary</p>
             {items.map((item, idx) => (
               <div key={idx} className={styles.summaryRow}>
-                <span>{SHAPE_LABELS[item.shape]} Pendant</span>
+                <span>{itemTitle(item.shape, item.productType)}</span>
                 <span>{fmt(item.price)}</span>
               </div>
             ))}

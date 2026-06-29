@@ -652,6 +652,8 @@ export default function ConfiguratorPage() {
               onClick={() => {
                 if (!shape) return
                 addItem({
+                  productType:  'pendant',
+                  collectionId: 'birthstone',
                   shape,
                   metal,
                   metalColor,

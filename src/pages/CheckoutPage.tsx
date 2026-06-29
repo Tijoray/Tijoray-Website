@@ -7,6 +7,7 @@ import PendantThumbnail from '../components/PendantThumbnail'
 import PhoneInput from '../components/PhoneInput'
 import { isValidEmail, isValidPhone } from '../lib/validation'
 import { SHAPE_LABELS } from '../data/catalog'
+import { PRODUCT_TYPES } from '../data/product-types'
 import styles from './CheckoutPage.module.css'
 
 function GoogleIcon() {
@@ -376,7 +377,7 @@ export default function CheckoutPage() {
                   />
                 </div>
                 <div className={styles.summaryItemInfo}>
-                  <p className={styles.summaryItemName}>{SHAPE_LABELS[item.shape]} Pendant</p>
+                  <p className={styles.summaryItemName}>{SHAPE_LABELS[item.shape]} {PRODUCT_TYPES[item.productType]?.label ?? 'Pendant'}</p>
                   <p className={styles.summaryItemSpec}>{item.specLine}</p>
                 </div>
                 <span className={styles.summaryItemPrice}>{fmt(item.price)}</span>

@@ -2,6 +2,10 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 import { z } from 'zod'
 
 const CartItemSchema = z.object({
+  // Product identity — which matrix cell (collection × product type) this is.
+  // Optional w/ defaults so carts saved before this field still validate.
+  productType:     z.enum(['pendant', 'bracelet']).default('pendant'),
+  collectionId:    z.string().default('birthstone'),
   shape:           z.enum(['square', 'circle', 'heart', 'pear']),
   metal:           z.enum(['steel', 'silver', '10k', '18k']),
   metalColor:      z.enum(['white', 'gold', 'rose']),
