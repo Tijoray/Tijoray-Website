@@ -1,48 +1,16 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
-import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
-import { ASSETS } from '../lib/assets'
-
-type Shape      = 'square' | 'circle' | 'heart' | 'pear'
-type Metal      = 'steel' | 'silver' | '10k' | '18k'
-type MetalColor = 'white' | 'gold' | 'rose'
-
-const CHAIN_PATH = ASSETS.chain
-
-const PENDANT_PATHS: Record<Shape, string> = {
-  square: ASSETS.pendantSquare,
-  circle: ASSETS.pendantCircle,
-  heart:  ASSETS.pendantHeart,
-  pear:   ASSETS.pendantPear,
-}
-
-const METAL_COLOR_HEX: Record<MetalColor, string> = {
-  white: '#D0CFCD', gold: '#D4AF37', rose: '#C4786A',
-}
-
-const ROUGHNESS: Record<Metal, number> = {
-  steel: 0.45, silver: 0.28, '10k': 0.28, '18k': 0.18,
-}
-
-const STEEL_COLOR = '#8A8A8A'
-
-const GEM_PROPS = [
-  { color: '#A01520', ior: 1.78, transmission: 0.70, thickness: 0.4, roughness: 0.02, clearcoat: 1.0, clearcoatRoughness: 0.0, attenuationColor: '#C02030', attenuationDistance: 1.0  },
-  { color: '#8B3FBB', ior: 1.54, transmission: 0.88, thickness: 0.4, roughness: 0.01, clearcoat: 1.0, clearcoatRoughness: 0.0, attenuationColor: '#A855CC', attenuationDistance: 1.5  },
-  { color: '#7ECFE0', ior: 1.57, transmission: 0.93, thickness: 0.4, roughness: 0.01, clearcoat: 1.0, clearcoatRoughness: 0.0, attenuationColor: '#A0E0EE', attenuationDistance: 3.0  },
-  { color: '#E8EEFF', ior: 1.62, transmission: 0.88, thickness: 0.4, roughness: 0.01, clearcoat: 1.0, clearcoatRoughness: 0.0, attenuationColor: '#F0F2FF', attenuationDistance: 4.0  },
-  { color: '#22873A', ior: 1.58, transmission: 0.62, thickness: 0.4, roughness: 0.05, clearcoat: 1.0, clearcoatRoughness: 0.05, attenuationColor: '#38A850', attenuationDistance: 0.8 },
-  { color: '#F5EFE0', ior: 1.53, transmission: 0.00, thickness: 0.5, roughness: 0.15, clearcoat: 0.7, clearcoatRoughness: 0.10, attenuationColor: '#FFFFFF', attenuationDistance: 4.0 },
-  { color: '#B80010', ior: 1.77, transmission: 0.68, thickness: 0.4, roughness: 0.02, clearcoat: 1.0, clearcoatRoughness: 0.0, attenuationColor: '#D81828', attenuationDistance: 1.0  },
-  { color: '#7DC040', ior: 1.67, transmission: 0.85, thickness: 0.4, roughness: 0.02, clearcoat: 1.0, clearcoatRoughness: 0.0, attenuationColor: '#A8D868', attenuationDistance: 2.0  },
-  { color: '#1840C0', ior: 1.77, transmission: 0.65, thickness: 0.4, roughness: 0.02, clearcoat: 1.0, clearcoatRoughness: 0.0, attenuationColor: '#2858E0', attenuationDistance: 1.2  },
-  { color: '#D85080', ior: 1.63, transmission: 0.80, thickness: 0.4, roughness: 0.02, clearcoat: 1.0, clearcoatRoughness: 0.0, attenuationColor: '#F078A8', attenuationDistance: 1.8  },
-  { color: '#D4980A', ior: 1.54, transmission: 0.86, thickness: 0.4, roughness: 0.01, clearcoat: 1.0, clearcoatRoughness: 0.0, attenuationColor: '#F0B820', attenuationDistance: 2.0  },
-  { color: '#30AEAE', ior: 1.61, transmission: 0.00, thickness: 0.5, roughness: 0.35, clearcoat: 0.2, clearcoatRoughness: 0.30, attenuationColor: '#FFFFFF', attenuationDistance: 4.0 },
-] as const
+import { createGltfLoader } from '../3d/engine'
+import { prepareChain, preparePendant } from '../3d/assemblies/pendant'
+import { CHAIN_PATH, PENDANT_PATHS } from '../data/product-types'
+import type { Shape, Metal, MetalColor } from '../data/catalog'
+import {
+  METAL_COLOR_HEX,
+  ROUGHNESS,
+  STEEL_COLOR,
+  GEM_PROPS_THUMB as GEM_PROPS,
+} from '../data/catalog'
 
 const GEM_RE = /garnet|amethyst|aquamarine|diamond|emerald|pearl|ruby|peridot|sapphire|tourmaline|citrine|turquoise|gem|stone|crystal/i
 
@@ -131,11 +99,7 @@ export default function PendantThumbnail({ shape, metal, metalColor, birthstoneI
 
     const camera = new THREE.PerspectiveCamera(30, 1, 0.01, 100)
 
-    const dracoLoader = new DRACOLoader()
-    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/')
-    const loader = new GLTFLoader()
-    loader.setDRACOLoader(dracoLoader)
-    loader.setMeshoptDecoder(MeshoptDecoder)
+    const { loader, dispose: disposeLoader } = createGltfLoader()
 
     let destroyed = false
     let chainGltf: THREE.Group | null = null
@@ -149,47 +113,9 @@ export default function PendantThumbnail({ shape, metal, metalColor, birthstoneI
     function tryRender() {
       if (!chainGltf || !pendantGltf || destroyed) return
 
-      // ── Build scene mirroring configurator logic ──────────────────────────
-      const chainModel = chainGltf.clone(true)
-      chainModel.rotation.x = Math.PI / 2
-      chainModel.updateMatrixWorld(true)
-
-      const chainBox1  = new THREE.Box3().setFromObject(chainModel)
-      const chainSize  = chainBox1.getSize(new THREE.Vector3())
-      const maxDim     = Math.max(chainSize.x, chainSize.y, chainSize.z)
-      const scale      = maxDim > 0 ? 2.5 / maxDim : 1
-      chainModel.scale.setScalar(scale)
-      chainModel.updateMatrixWorld(true)
-
-      const chainBox2  = new THREE.Box3().setFromObject(chainModel)
-      chainModel.position.sub(chainBox2.getCenter(new THREE.Vector3()))
-      chainModel.updateMatrixWorld(true)
-
-      const chainBox3  = new THREE.Box3().setFromObject(chainModel)
-      const attachPt   = new THREE.Vector3(
-        (chainBox3.min.x + chainBox3.max.x) / 2,
-        chainBox3.min.y,
-        (chainBox3.min.z + chainBox3.max.z) / 2,
-      )
-
-      const pendantModel = pendantGltf.clone(true)
-      pendantModel.rotation.x = Math.PI / 2
-      pendantModel.scale.setScalar(scale)
-      pendantModel.updateMatrixWorld(true)
-
-      // Position pendant bail at chain attach point
-      const pendantBox  = new THREE.Box3().setFromObject(pendantModel)
-      const pendantSize = pendantBox.getSize(new THREE.Vector3())
-      const pendantTop  = new THREE.Vector3(
-        (pendantBox.min.x + pendantBox.max.x) / 2,
-        pendantBox.max.y,
-        (pendantBox.min.z + pendantBox.max.z) / 2,
-      )
-      const offset = attachPt.clone().sub(pendantTop)
-      offset.y += pendantSize.y * 0.21
-      offset.z -= pendantSize.x * -0.05
-      pendantModel.position.add(offset)
-      pendantModel.updateMatrixWorld(true)
+      // ── Build scene using the shared pendant assembly ─────────────────────
+      const { chainModel, scale, attach } = prepareChain(chainGltf)
+      const pendantModel = preparePendant(pendantGltf, scale, attach)
 
       applyMaterials(chainModel,   bodyColor, roughness, birthstoneIndex)
       applyMaterials(pendantModel, bodyColor, roughness, birthstoneIndex)
@@ -212,7 +138,7 @@ export default function PendantThumbnail({ shape, metal, metalColor, birthstoneI
       // Tear down Three.js but keep the pixel data on the canvas
       envTexture.dispose()
       renderer.dispose()
-      dracoLoader.dispose()
+      disposeLoader()
     }
 
     loader.load(CHAIN_PATH, (gltf) => {

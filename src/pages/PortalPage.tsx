@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import type { Piece, Stone, Metal } from '../lib/supabase'
 import PendantThumbnail from '../components/PendantThumbnail'
+import { STONE_NAMES_SHORT as BIRTHSTONE_NAMES } from '../data/catalog'
 import styles from './PortalPage.module.css'
 
 type Shape      = 'square' | 'circle' | 'heart' | 'pear'
@@ -20,12 +21,6 @@ const COLLECTION_TO_SHAPE: Record<string, Shape> = {
   'Heart Pendant — Birthstone Collection':  'heart',
   'Pear Pendant — Birthstone Collection':   'pear',
 }
-
-const BIRTHSTONE_NAMES = [
-  'Garnet', 'Amethyst', 'Aquamarine', 'White Topaz',
-  'Emerald', 'Pearl', 'Ruby', 'Peridot',
-  'Sapphire', 'Pink Tourmaline', 'Citrine', 'Turquoise',
-]
 
 function stoneToIndex(name: string | null): number {
   if (!name) return 0

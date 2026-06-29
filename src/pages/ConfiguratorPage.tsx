@@ -2,157 +2,34 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../contexts/CartContext'
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
 import styles from './ConfiguratorPage.module.css'
-import { ASSETS, asset } from '../lib/assets'
-
-/* ── Types ─────────────────────────────────────────────── */
-type Shape      = 'square' | 'circle' | 'heart' | 'pear'
-type Metal      = 'steel' | 'silver' | '10k' | '18k'
-type MetalColor = 'white' | 'gold' | 'rose'
+import { asset } from '../lib/assets'
+import { CHAIN_PATH, PENDANT_PATHS } from '../data/product-types'
+import { createGemMaterial, GEM_NAME_RE } from '../3d/gem'
+import { createGltfLoader } from '../3d/engine'
+import { prepareChain, preparePendant } from '../3d/assemblies/pendant'
+import type { Shape, Metal, MetalColor } from '../data/catalog'
+import {
+  METAL_PRICES,
+  METAL_LABELS_SHORT       as METAL_LABELS,
+  METAL_COLOR_HEX,
+  METAL_COLOR_LABELS_SHORT as METAL_COLOR_LABELS,
+  ROUGHNESS,
+  STEEL_COLOR,
+  STONE_COLORS             as BIRTHSTONE_COLORS,
+  STONE_NAMES              as BIRTHSTONE_NAMES,
+  MONTH_NAMES,
+  STONE_MEANINGS,
+} from '../data/catalog'
 
 /* ── Constants ─────────────────────────────────────────── */
-const CHAIN_PATH = ASSETS.chain
-
-const PENDANT_PATHS: Record<Shape, string> = {
-  square: ASSETS.pendantSquare,
-  circle: ASSETS.pendantCircle,
-  heart:  ASSETS.pendantHeart,
-  pear:   ASSETS.pendantPear,
-}
-
-const METAL_PRICES: Record<Metal, number> = {
-  steel: 299, silver: 399, '10k': 799, '18k': 1299,
-}
-
-const METAL_LABELS: Record<Metal, string> = {
-  steel: 'Steel', silver: 'Silver', '10k': '10K Gold', '18k': '18K Gold',
-}
-
-const METAL_COLOR_HEX: Record<MetalColor, string> = {
-  white: '#D0CFCD',
-  gold:  '#D4AF37',
-  rose:  '#C4786A',
-}
-
-const METAL_COLOR_LABELS: Record<MetalColor, string> = {
-  white: 'White', gold: 'Gold', rose: 'Rose',
-}
-
-const ROUGHNESS: Record<Metal, number> = {
-  steel: 0.45, silver: 0.28, '10k': 0.28, '18k': 0.18,
-}
-
-const STEEL_COLOR = '#8A8A8A'
-
-// UI swatch colors (approximate visual representation)
-const BIRTHSTONE_COLORS = [
-  '#9B1B30', '#9B59B6', '#7EC8C8', '#F2F2FF',
-  '#2ECC71', '#F0EDE8', '#CC0000', '#93C572',
-  '#154EC1', '#FF6EB4', '#E4A800', '#3BC4C4',
-]
-
-const BIRTHSTONE_NAMES = [
-  'Garnet', 'Amethyst', 'Aquamarine', 'White Topaz',
-  'Emerald', 'Mother of Pearl', 'Ruby', 'Peridot',
-  'Sapphire', 'Pink Tourmaline', 'Citrine', 'Turquoise',
-]
-
-// Per-gem physical material properties for realistic rendering.
-// transmission + IOR + attenuation = subsurface color/clarity of real stones.
-const GEM_PROPS = [
-  // Garnet — deep red, high-RI, brilliant
-  { color: '#A01520', ior: 1.78, transmission: 0.70, thickness: 0.4, roughness: 0.02, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 5.0, attenuationColor: '#C02030', attenuationDistance: 1.0,  iridescence: 0, iridescenceIOR: 1.3 },
-  // Amethyst — purple quartz, clear
-  { color: '#8B3FBB', ior: 1.54, transmission: 0.88, thickness: 0.4, roughness: 0.01, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 4.5, attenuationColor: '#A855CC', attenuationDistance: 1.5,  iridescence: 0, iridescenceIOR: 1.3 },
-  // Aquamarine — pale blue beryl, very clear
-  { color: '#7ECFE0', ior: 1.57, transmission: 0.93, thickness: 0.4, roughness: 0.01, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 4.5, attenuationColor: '#A0E0EE', attenuationDistance: 3.0,  iridescence: 0, iridescenceIOR: 1.3 },
-  // White Topaz — colorless, crisp reflections
-  { color: '#E8EEFF', ior: 1.62, transmission: 0.88, thickness: 0.4, roughness: 0.01, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 4.0, attenuationColor: '#F0F2FF', attenuationDistance: 4.0,  iridescence: 0, iridescenceIOR: 1.3 },
-  // Emerald — rich green, slightly included
-  { color: '#22873A', ior: 1.58, transmission: 0.62, thickness: 0.4, roughness: 0.05, clearcoat: 1.0, clearcoatRoughness: 0.05, envMapIntensity: 4.5, attenuationColor: '#38A850', attenuationDistance: 0.8, iridescence: 0, iridescenceIOR: 1.3 },
-  // Mother of Pearl — opaque nacre, silky smooth with strong orient iridescence
-  { color: '#F5F3EF', ior: 1.53, transmission: 0.00, thickness: 0.5, roughness: 0.06, clearcoat: 0.95, clearcoatRoughness: 0.04, envMapIntensity: 3.5, attenuationColor: '#FFFFFF', attenuationDistance: 4.0,  iridescence: 1.00, iridescenceIOR: 1.60 },
-  // Ruby — deep red corundum, brilliant
-  { color: '#B80010', ior: 1.77, transmission: 0.68, thickness: 0.4, roughness: 0.02, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 5.0, attenuationColor: '#D81828', attenuationDistance: 1.0,  iridescence: 0, iridescenceIOR: 1.3 },
-  // Peridot — bright lime-green olivine
-  { color: '#7DC040', ior: 1.67, transmission: 0.85, thickness: 0.4, roughness: 0.02, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 4.5, attenuationColor: '#A8D868', attenuationDistance: 2.0,  iridescence: 0, iridescenceIOR: 1.3 },
-  // Sapphire — deep blue corundum, brilliant
-  { color: '#1840C0', ior: 1.77, transmission: 0.65, thickness: 0.4, roughness: 0.02, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 5.0, attenuationColor: '#2858E0', attenuationDistance: 1.2,  iridescence: 0, iridescenceIOR: 1.3 },
-  // Pink Tourmaline — warm pink, semi-transparent
-  { color: '#D85080', ior: 1.63, transmission: 0.80, thickness: 0.4, roughness: 0.02, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 4.5, attenuationColor: '#F078A8', attenuationDistance: 1.8,  iridescence: 0, iridescenceIOR: 1.3 },
-  // Citrine — warm golden quartz
-  { color: '#D4980A', ior: 1.54, transmission: 0.86, thickness: 0.4, roughness: 0.01, clearcoat: 1.0, clearcoatRoughness: 0.0, envMapIntensity: 4.5, attenuationColor: '#F0B820', attenuationDistance: 2.0,  iridescence: 0, iridescenceIOR: 1.3 },
-  // Turquoise — opaque, waxy blue-green
-  { color: '#30AEAE', ior: 1.61, transmission: 0.00, thickness: 0.5, roughness: 0.35, clearcoat: 0.2, clearcoatRoughness: 0.30, envMapIntensity: 2.5, attenuationColor: '#FFFFFF', attenuationDistance: 4.0,  iridescence: 0, iridescenceIOR: 1.3 },
-] as const
-
-const MONTH_NAMES = [
-  'January', 'February', 'March', 'April',
-  'May', 'June', 'July', 'August',
-  'September', 'October', 'November', 'December',
-]
-
-const STONE_MEANINGS = [
-  'Devotion and protection on new journeys.',
-  'Clarity of mind, sincerity, and inner peace.',
-  'Courage, calm, and clarity in turbulent waters.',
-  'Eternal love, strength, and invincibility.',
-  'Hope, rebirth, and the endurance of love.',
-  'Purity and wisdom earned through experience.',
-  'Passion, vitality, and the fire of commitment.',
-  'Strength, purpose, and a light that cannot be dimmed.',
-  'Truth, loyalty, and the wisdom of the ages.',
-  'Compassion, healing, and emotional depth.',
-  'Joy, abundance, and the warmth of generosity.',
-  'Protection, friendship, and good fortune.',
-]
-
 const BUILD_DURATION  = 900 // ms — fade + drift animation
 const BUILD_DRIFT_Y   = -0.07 // world-units below final position at animation start
 
 /* ── Helpers ───────────────────────────────────────────── */
 function easeOutCubic(t: number) { return 1 - Math.pow(1 - Math.min(t, 1), 3) }
-
-// Gem mesh detection — matched against material name, mesh name, and parent node name
-const GEM_NAME_RE = /garnet|amethyst|aquamarine|diamond|emerald|pearl|ruby|peridot|sapphire|tourmaline|citrine|turquoise|gem|stone|crystal/i
-
-// Heart/pear gem meshes may have inconsistent normals due to how they're modelled
-// as inset cavities. DoubleSide ensures correct glass rendering regardless of normal direction.
-const BEZEL_SHAPES = new Set<Shape>(['heart', 'pear'])
-
-function createGemMaterial(stoneIdx: number, shape: Shape | null = null): THREE.MeshPhysicalMaterial {
-  const g = GEM_PROPS[stoneIdx]
-  const inset = shape !== null && BEZEL_SHAPES.has(shape)
-
-  const baseColor = new THREE.Color(g.color)
-
-  // Heart/pear gems: the mesh face may have inconsistent normals (inward-pointing)
-  // because the gem is modelled as an inset cavity. DoubleSide ensures both the
-  // front and back glass surfaces contribute to the render, which restores the
-  // glassy refraction/caustic look regardless of normal direction.
-  // We also boost envMapIntensity so the IOR-driven surface reflections are vivid.
-  return new THREE.MeshPhysicalMaterial({
-    color:               baseColor,
-    ior:                 g.ior,
-    transmission:        g.transmission,
-    thickness:           g.thickness,
-    roughness:           g.roughness,
-    metalness:           0,
-    clearcoat:           g.clearcoat,
-    clearcoatRoughness:  g.clearcoatRoughness,
-    envMapIntensity:     inset ? g.envMapIntensity * 2.0 : g.envMapIntensity,
-    attenuationColor:    new THREE.Color(g.attenuationColor),
-    attenuationDistance: g.attenuationDistance,
-    iridescence:         g.iridescence,
-    iridescenceIOR:      g.iridescenceIOR,
-    side:                inset ? THREE.DoubleSide : THREE.FrontSide,
-  })
-}
 
 export default function ConfiguratorPage() {
   const { addItem } = useCart()
@@ -341,11 +218,7 @@ export default function ConfiguratorPage() {
 
   /* ── Effect 2a: Preload chain + both pendant GLBs silently on mount ── */
   useEffect(() => {
-    const dracoLoader = new DRACOLoader()
-    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/')
-    const loader = new GLTFLoader()
-    loader.setDRACOLoader(dracoLoader)
-    loader.setMeshoptDecoder(MeshoptDecoder)
+    const { loader, dispose } = createGltfLoader()
 
     if (!chainCacheRef.current) {
       loader.load(CHAIN_PATH, (gltf) => { chainCacheRef.current = gltf.scene })
@@ -358,7 +231,7 @@ export default function ConfiguratorPage() {
       })
     })
 
-    return () => { dracoLoader.dispose() }
+    return () => { dispose() }
   }, [])
 
   /* ── Effect 2: GLB load (fires when shape changes) ── */
@@ -421,32 +294,12 @@ export default function ConfiguratorPage() {
       })
     }
 
-    // ── Align pendant bail to stored chain attach point ─────────────────────
-    function positionPendant(pendantModel: THREE.Group) {
-      const pendantBox  = new THREE.Box3().setFromObject(pendantModel)
-      const pendantSize = pendantBox.getSize(new THREE.Vector3())
-      const pendantTop  = new THREE.Vector3(
-        (pendantBox.min.x + pendantBox.max.x) / 2,
-        pendantBox.max.y,
-        (pendantBox.min.z + pendantBox.max.z) / 2,
-      )
-      const offset = chainAttachRef.current!.clone().sub(pendantTop)
-      offset.y += pendantSize.y * 0.21
-      offset.z += pendantSize.x * 0.05
-      pendantModel.position.add(offset)
-      pendantModel.updateMatrixWorld(true)
-    }
-
     // ── Add pendant to scene with build-in animation ─────────────────────────
     function onPendantReady(pendantSrc: THREE.Group) {
       if (cancelled || destroyedRef.current) return
 
-      const pendantModel = pendantSrc.clone(true)
-      pendantModel.rotation.x = Math.PI / 2
-      pendantModel.scale.setScalar(assemblyScaleRef.current)
-      pendantModel.updateMatrixWorld(true)
-
-      positionPendant(pendantModel)
+      // Clone, scale, and align the pendant bail to the stored chain attach point.
+      const pendantModel = preparePendant(pendantSrc, assemblyScaleRef.current, chainAttachRef.current!)
 
       const pivot = new THREE.Group()
       pivot.add(pendantModel)
@@ -500,29 +353,10 @@ export default function ConfiguratorPage() {
     function setupChain(chainSrc: THREE.Group, pendantSrc: THREE.Group) {
       if (cancelled || destroyedRef.current) return
 
-      const chainModel = chainSrc.clone(true)
-      chainModel.rotation.x = Math.PI / 2
-      chainModel.updateMatrixWorld(true)
-
-      const box1   = new THREE.Box3().setFromObject(chainModel)
-      const size1  = box1.getSize(new THREE.Vector3())
-      const maxDim = Math.max(size1.x, size1.y, size1.z)
-      const scale  = maxDim > 0 ? 2.5 / maxDim : 1
-      chainModel.scale.setScalar(scale)
-      chainModel.updateMatrixWorld(true)
-
-      // Centre the chain, then read the final bbox once for the attach point
-      const box2 = new THREE.Box3().setFromObject(chainModel)
-      chainModel.position.sub(box2.getCenter(new THREE.Vector3()))
-      chainModel.updateMatrixWorld(true)
-
+      // Normalise the chain and compute the pendant attach point.
+      const { chainModel, scale, attach } = prepareChain(chainSrc)
       assemblyScaleRef.current = scale
-      const box3 = new THREE.Box3().setFromObject(chainModel)
-      chainAttachRef.current = new THREE.Vector3(
-        (box3.min.x + box3.max.x) / 2,
-        box3.min.y,
-        (box3.min.z + box3.max.z) / 2,
-      )
+      chainAttachRef.current   = attach
 
       scene.add(chainModel)
       chainGroupRef.current = chainModel
@@ -536,11 +370,7 @@ export default function ConfiguratorPage() {
 
     if (!pendantCached || (!chainInScene && !chainCached)) setLoading(true)
 
-    const dracoLoader = new DRACOLoader()
-    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/')
-    const loader = new GLTFLoader()
-    loader.setDRACOLoader(dracoLoader)
-    loader.setMeshoptDecoder(MeshoptDecoder)
+    const { loader, dispose } = createGltfLoader()
 
     let chainReady   = chainCached || chainInScene
     let pendantReady = pendantCached
@@ -578,7 +408,7 @@ export default function ConfiguratorPage() {
 
     tryComplete()
 
-    return () => { cancelled = true; dracoLoader.dispose() }
+    return () => { cancelled = true; dispose() }
   // metal/metalColor/birthstone intentionally excluded — Effects 3 & 4 mutate
   // existing materials directly so the GLB never needs to reload for those changes.
   // eslint-disable-next-line react-hooks/exhaustive-deps

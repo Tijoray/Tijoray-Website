@@ -2,24 +2,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../contexts/CartContext'
 import PendantThumbnail from '../components/PendantThumbnail'
 import styles from './CartPage.module.css'
-
-const SHAPE_LABELS: Record<string, string> = {
-  square: 'Square', circle: 'Circle', heart: 'Heart', pear: 'Pear',
-}
-
-const METAL_LABELS: Record<string, string> = {
-  steel: 'Stainless Steel', silver: 'Sterling Silver', '10k': '10K Gold', '18k': '18K Gold',
-}
-
-const METAL_COLOR_LABELS: Record<string, string> = {
-  white: 'White', gold: 'Yellow', rose: 'Rose',
-}
-
-const BIRTHSTONE_NAMES = [
-  'Garnet', 'Amethyst', 'Aquamarine', 'White Topaz',
-  'Emerald', 'Pearl', 'Ruby', 'Peridot',
-  'Sapphire', 'Pink Tourmaline', 'Citrine', 'Turquoise',
-]
+import {
+  SHAPE_LABELS,
+  METAL_LABELS_LONG       as METAL_LABELS,
+  METAL_COLOR_LABELS_LONG as METAL_COLOR_LABELS,
+  STONE_NAMES_SHORT       as BIRTHSTONE_NAMES,
+} from '../data/catalog'
 
 const fmt = (n: number) => new Intl.NumberFormat('en-US', {
   style: 'currency', currency: 'USD', maximumFractionDigits: 0,

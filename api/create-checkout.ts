@@ -1,6 +1,12 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
+import {
+  METAL_PRICES_CENTS,
+  METAL_LABELS_LONG       as METAL_LABELS,
+  METAL_COLOR_LABELS_LONG as METAL_COLOR_LABELS,
+  STONE_NAMES_SHORT       as BIRTHSTONE_NAMES,
+} from '../src/data/catalog'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2026-03-25.dahlia' })
 
@@ -8,24 +14,6 @@ const supabase = createClient(
   process.env.VITE_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 )
-
-const METAL_PRICES_CENTS: Record<string, number> = {
-  steel: 29900, silver: 39900, '10k': 79900, '18k': 129900,
-}
-
-const METAL_LABELS: Record<string, string> = {
-  steel: 'Stainless Steel', silver: 'Sterling Silver', '10k': '10K Gold', '18k': '18K Gold',
-}
-
-const METAL_COLOR_LABELS: Record<string, string> = {
-  white: 'White', gold: 'Yellow', rose: 'Rose',
-}
-
-const BIRTHSTONE_NAMES = [
-  'Garnet', 'Amethyst', 'Aquamarine', 'White Topaz',
-  'Emerald', 'Pearl', 'Ruby', 'Peridot',
-  'Sapphire', 'Pink Tourmaline', 'Citrine', 'Turquoise',
-]
 
 type CartItem = {
   shape:           string

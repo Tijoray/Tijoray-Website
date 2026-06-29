@@ -2,21 +2,7 @@ import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './CollectionPage.module.css'
 import { asset } from '../lib/assets'
-
-const BIRTHSTONES = [
-  { month: 'Jan', stone: 'Garnet',       color: '#9B1B30' },
-  { month: 'Feb', stone: 'Amethyst',     color: '#9B59B6' },
-  { month: 'Mar', stone: 'Aquamarine',   color: '#7EC8C8' },
-  { month: 'Apr', stone: 'Diamond',      color: '#E8F4F8' },
-  { month: 'May', stone: 'Emerald',      color: '#2ECC71' },
-  { month: 'Jun', stone: 'Pearl',        color: '#D4AF8A' },
-  { month: 'Jul', stone: 'Ruby',         color: '#CC0000' },
-  { month: 'Aug', stone: 'Peridot',      color: '#93C572' },
-  { month: 'Sep', stone: 'Sapphire',     color: '#154EC1' },
-  { month: 'Oct', stone: 'Tourmaline',   color: '#FF6EB4' },
-  { month: 'Nov', stone: 'Citrine',      color: '#E4A800' },
-  { month: 'Dec', stone: 'Turquoise',    color: '#3BC4C4' },
-]
+import { BIRTHSTONE_CHIPS as BIRTHSTONES } from '../data/catalog'
 
 export default function CollectionPage() {
   const fadeRefs = useRef<(HTMLElement | null)[]>([])

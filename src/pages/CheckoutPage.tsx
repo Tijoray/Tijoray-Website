@@ -6,6 +6,7 @@ import { supabase } from '../lib/supabase'
 import PendantThumbnail from '../components/PendantThumbnail'
 import PhoneInput from '../components/PhoneInput'
 import { isValidEmail, isValidPhone } from '../lib/validation'
+import { SHAPE_LABELS } from '../data/catalog'
 import styles from './CheckoutPage.module.css'
 
 function GoogleIcon() {
@@ -17,10 +18,6 @@ function GoogleIcon() {
       <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z"/>
     </svg>
   )
-}
-
-const SHAPE_LABELS: Record<string, string> = {
-  square: 'Square', circle: 'Circle', heart: 'Heart', pear: 'Pear',
 }
 
 const fmt = (n: number) => new Intl.NumberFormat('en-US', {
