@@ -161,7 +161,7 @@ export default function PendantThumbnail({ shape, metal, metalColor, birthstoneI
       ref={canvasRef}
       width={size}
       height={size}
-      style={{ display: 'block', width: '100%', height: '100%' }}
+      style={{ display: 'block', width: '100%', height: '100%', objectFit: 'contain' }}
     />
   )
 }
