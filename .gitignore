@@ -12,3 +12,11 @@ dist/
 
 # macOS
 .DS_Store
+
+# Scratch/planning docs (keep README.md tracked)
+EMAIL_NOTIFICATIONS_PLAN.md
+HERO_REDESIGN_PLAN.md
+PRE_LAUNCH_CHECKLIST.md
+TIJORAY_WEBSITE_PLAN.md
+claude review.md
+mobile-responsiveness.md
