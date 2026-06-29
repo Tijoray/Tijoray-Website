@@ -1,11 +1,21 @@
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './CollectionPage.module.css'
-import { asset } from '../lib/assets'
-import { BIRTHSTONE_CHIPS as BIRTHSTONES } from '../data/catalog'
+import type { Collection } from '../data/collections'
+import type { Product } from '../data/products'
+import { PRODUCTS, collectionsWithProducts, productsByCollection } from '../data/products'
+
+const fmt = (n: number) => new Intl.NumberFormat('en-US', {
+  style: 'currency', currency: 'USD', maximumFractionDigits: 0,
+}).format(n)
+
+// First live product — drives the page's primary CTAs.
+const firstLiveProduct = PRODUCTS.find(p => p.available)
 
 export default function CollectionPage() {
-  const fadeRefs = useRef<(HTMLElement | null)[]>([])
+  // Collect every fade-in element; the observer reveals each as it scrolls in.
+  const fadeRefs = useRef<Set<HTMLElement>>(new Set())
+  const addFade = (el: HTMLElement | null) => { if (el) fadeRefs.current.add(el) }
 
   useEffect(() => {
     const io = new IntersectionObserver(
@@ -14,12 +24,76 @@ export default function CollectionPage() {
       }),
       { threshold: 0.12 }
     )
-    fadeRefs.current.forEach(el => { if (el) io.observe(el) })
+    fadeRefs.current.forEach(el => io.observe(el))
     return () => io.disconnect()
   }, [])
 
-  function ref(i: number) {
-    return (el: HTMLElement | null) => { fadeRefs.current[i] = el }
+  function ProductCard({ product, collection, index }: { product: Product; collection: Collection; index: number }) {
+    const series = `${collection.designLabel} Series`
+    const delay  = index > 0 ? { transitionDelay: `${(index * 0.14).toFixed(2)}s` } : undefined
+
+    if (product.available) {
+      return (
+        <Link
+          to={product.route}
+          className={`${styles.productCard} ${styles.fadeUp}`}
+          ref={addFade as any}
+          style={delay}
+        >
+          <div className={styles.cardVisual}>
+            <img src={product.cardImage} alt={product.name} className={styles.cardPhoto} />
+            <div className={styles.cardLabel}>
+              <p className={styles.cardSeries}>{series}</p>
+            </div>
+          </div>
+          <div className={styles.cardInfo}>
+            <div>
+              <p className={styles.cardCollection}>{collection.name}</p>
+              <h3 className={styles.cardName}>{product.name}</h3>
+              <p className={styles.cardDetail}>{product.cardDetail}</p>
+            </div>
+            <div className={styles.cardBottom}>
+              <div className={styles.cardPrice}>
+                <span className={styles.priceFrom}>From</span>
+                <span className={styles.priceNum}>{fmt(product.priceFrom)}</span>
+              </div>
+              <span className={styles.cardCta}>Build Your Piece</span>
+            </div>
+          </div>
+        </Link>
+      )
+    }
+
+    // Coming soon
+    return (
+      <article
+        className={`${styles.productCard} ${styles.productCardSoon} ${styles.fadeUp}`}
+        ref={addFade as any}
+        style={delay}
+      >
+        <div className={`${styles.cardVisual} ${styles.cardVisualSoon}`}>
+          <img src={product.cardImage} alt={product.name} className={styles.cardPhoto} />
+          <div className={styles.soonBadge}>Coming Soon</div>
+          <div className={styles.cardLabel}>
+            <p className={styles.cardSeries}>{series}</p>
+          </div>
+        </div>
+        <div className={styles.cardInfo}>
+          <div>
+            <p className={styles.cardCollection}>{collection.name}</p>
+            <h3 className={styles.cardName}>{product.name}</h3>
+            <p className={styles.cardDetail}>{product.cardDetail}</p>
+          </div>
+          <div className={styles.cardBottom}>
+            <div className={styles.cardPrice}>
+              <span className={styles.priceFrom}>Pricing</span>
+              <span className={styles.priceNum}>TBA</span>
+            </div>
+            <Link to="/contact" className={styles.cardCtaGhost}>Register Your Interest</Link>
+          </div>
+        </div>
+      </article>
+    )
   }
 
   return (
@@ -41,111 +115,42 @@ export default function CollectionPage() {
         <hr className={styles.heroRule} />
       </section>
 
-      {/* ── Birthstone Collection ── */}
-      <section className={`${styles.collectionSection} ${styles.fadeUp}`} ref={ref(0) as any}>
-        <div className={styles.collectionInner}>
+      {/* ── Collections (data-driven from the products matrix) ── */}
+      {collectionsWithProducts().map(collection => (
+        <section key={collection.id} className={`${styles.collectionSection} ${styles.fadeUp}`} ref={addFade as any}>
+          <div className={styles.collectionInner}>
 
-          {/* Collection header */}
-          <div className={styles.collectionHeader}>
-            <div className={styles.collectionMeta}>
-              <p className={styles.collectionNum}>Collection No. 01</p>
-              <h2 className={styles.collectionTitle}>The Birthstone Collection</h2>
-              <p className={styles.collectionDesc}>
-                Twelve stones. Twelve months. Each piece carries the gemstone of the
-                moment your loved one entered the world — set in your chosen metal,
-                embedded with a private memory, and registered in the Tijoray vault forever.
-              </p>
-            </div>
-            <div className={styles.stoneStrip}>
-              {BIRTHSTONES.map(b => (
-                <div key={b.month} className={styles.stoneChip} title={b.stone}>
-                  <span className={styles.stoneDot} style={{ background: b.color }} />
-                  <span className={styles.stoneMonth}>{b.month}</span>
+            {/* Collection header */}
+            <div className={styles.collectionHeader}>
+              <div className={styles.collectionMeta}>
+                <p className={styles.collectionNum}>Collection No. {collection.number}</p>
+                <h2 className={styles.collectionTitle}>{collection.name}</h2>
+                <p className={styles.collectionDesc}>{collection.description}</p>
+              </div>
+              {collection.chips && (
+                <div className={styles.stoneStrip}>
+                  {collection.chips.map(b => (
+                    <div key={b.month} className={styles.stoneChip} title={b.stone}>
+                      <span className={styles.stoneDot} style={{ background: b.color }} />
+                      <span className={styles.stoneMonth}>{b.month}</span>
+                    </div>
+                  ))}
                 </div>
+              )}
+            </div>
+
+            {/* Product cards */}
+            <div className={styles.productGrid}>
+              {productsByCollection(collection.id).map((product, i) => (
+                <ProductCard key={product.id} product={product} collection={collection} index={i} />
               ))}
             </div>
           </div>
-
-          {/* Product cards */}
-          <div className={styles.productGrid}>
-
-            {/* Pendant */}
-            <Link
-              to="/products/birthstone-pendant"
-              className={`${styles.productCard} ${styles.fadeUp}`}
-              ref={ref(1) as any}
-            >
-              <div className={styles.cardVisual}>
-                <img
-                  src={asset('/assets/jewelry/birthstone-pendant.png')}
-                  alt="Birthstone Pendant — square and circle in 18K gold"
-                  className={styles.cardPhoto}
-                />
-                <div className={styles.cardLabel}>
-                  <p className={styles.cardSeries}>Birthstone Series</p>
-                </div>
-              </div>
-              <div className={styles.cardInfo}>
-                <div>
-                  <p className={styles.cardCollection}>The Birthstone Collection</p>
-                  <h3 className={styles.cardName}>Birthstone Pendant</h3>
-                  <p className={styles.cardDetail}>
-                    Available in square and circle silhouettes. Set in steel, silver,
-                    10K, or 18K gold — with your chosen birthstone at the center.
-                  </p>
-                </div>
-                <div className={styles.cardBottom}>
-                  <div className={styles.cardPrice}>
-                    <span className={styles.priceFrom}>From</span>
-                    <span className={styles.priceNum}>$1,299</span>
-                  </div>
-                  <span className={styles.cardCta}>Build Your Piece</span>
-                </div>
-              </div>
-            </Link>
-
-            {/* Bracelet — coming soon */}
-            <article
-              className={`${styles.productCard} ${styles.productCardSoon} ${styles.fadeUp}`}
-              ref={ref(2) as any}
-              style={{ transitionDelay: '0.14s' }}
-            >
-              <div className={`${styles.cardVisual} ${styles.cardVisualSoon}`}>
-                <img
-                  src={asset('/assets/jewelry/birthstone-bracelet.png')}
-                  alt="Birthstone Bracelet — square and circle in 18K gold"
-                  className={styles.cardPhoto}
-                />
-                <div className={styles.soonBadge}>Coming Soon</div>
-                <div className={styles.cardLabel}>
-                  <p className={styles.cardSeries}>Birthstone Series</p>
-                </div>
-              </div>
-              <div className={styles.cardInfo}>
-                <div>
-                  <p className={styles.cardCollection}>The Birthstone Collection</p>
-                  <h3 className={styles.cardName}>Birthstone Bracelet</h3>
-                  <p className={styles.cardDetail}>
-                    The same craft, the same vault — worn around the wrist.
-                    Currently in development at the atelier.
-                  </p>
-                </div>
-                <div className={styles.cardBottom}>
-                  <div className={styles.cardPrice}>
-                    <span className={styles.priceFrom}>Pricing</span>
-                    <span className={styles.priceNum}>TBA</span>
-                  </div>
-                  <Link to="/contact" className={styles.cardCtaGhost}>Register Your Interest</Link>
-                </div>
-              </div>
-            </article>
-
-          </div>
-        </div>
-      </section>
+        </section>
+      ))}
 
       {/* ── More collections coming ── */}
-      <section className={`${styles.comingSection} ${styles.fadeUp}`} ref={ref(3) as any}>
+      <section className={`${styles.comingSection} ${styles.fadeUp}`} ref={addFade as any}>
         <div className={styles.comingInner}>
           <p className={styles.eyebrow}>The Archive</p>
           <h2 className={styles.comingTitle}>
@@ -160,14 +165,14 @@ export default function CollectionPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className={`${styles.ctaSection} ${styles.fadeUp}`} ref={ref(4) as any}>
+      <section className={`${styles.ctaSection} ${styles.fadeUp}`} ref={addFade as any}>
         <div className={styles.ctaInner}>
           <p className={styles.eyebrow}>Begin</p>
           <h2 className={styles.ctaTitle}>
             Your piece is <em>waiting.</em>
           </h2>
           <div className={styles.ctaBtns}>
-            <Link to="/products/birthstone-pendant" className={styles.btnPrimary}>Build Your Tijoray</Link>
+            <Link to={firstLiveProduct?.route ?? '/contact'} className={styles.btnPrimary}>Build Your Tijoray</Link>
             <Link to="/contact" className={styles.btnSecondary}>Speak with the Atelier</Link>
           </div>
         </div>

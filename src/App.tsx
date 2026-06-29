@@ -12,6 +12,7 @@ import StickyMobileCta from './components/StickyMobileCta'
 import Testimonials from './components/Testimonials'
 import CtaSection from './components/CtaSection'
 import Footer from './components/Footer'
+import { PRODUCTS } from './data/products'
 
 const AboutPage = lazy(() => import('./pages/AboutPage'))
 const ContactPage = lazy(() => import('./pages/ContactPage'))
@@ -80,7 +81,11 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
-          <Route path="/products/birthstone-pendant" element={<ConfiguratorPage />} />
+          {/* Configurator routes generated from the products matrix.
+              Pendant-form products share the pendant ConfiguratorPage. */}
+          {PRODUCTS.filter(p => p.available && p.productTypeId === 'pendant').map(p => (
+            <Route key={p.id} path={p.route} element={<ConfiguratorPage />} />
+          ))}
           <Route path="/technology" element={<TechnologyPage />} />
           <Route path="/collection" element={<CollectionPage />} />
           <Route path="/cart" element={<CartPage />} />

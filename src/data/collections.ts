@@ -14,7 +14,7 @@
  * `designApplicator` is a string id resolved to a real DesignApplicator in the
  * 3D layer, keeping three.js out of the data graph.
  */
-import { STONES } from './catalog'
+import { STONES, BIRTHSTONE_CHIPS } from './catalog'
 
 export type CollectionId   = 'birthstone' | 'diamond' | 'initial-letter'
 export type DesignKind     = 'gemstone' | 'glyph'
@@ -31,17 +31,28 @@ export interface DesignOption {
   caption?: string
 }
 
+/** Decorative month/stone chip shown on the collection list header. */
+export interface CollectionChip {
+  month: string
+  stone: string
+  color: string
+}
+
 export interface Collection {
   id:     CollectionId
   /** Display number, e.g. "01". */
   number: string
   name:   string
   tagline: string
+  /** Full description paragraph shown on the collection list page. */
+  description: string
   designKind: DesignKind
   designApplicator: DesignApplicatorId
   /** Step label in the configurator, e.g. "Birthstone" / "Initial". */
   designLabel: string
   designOptions: DesignOption[]
+  /** Optional decorative chip strip for the collection header. */
+  chips?: CollectionChip[]
   available: boolean
 }
 
@@ -51,6 +62,10 @@ export const BIRTHSTONE: Collection = {
   number: '01',
   name:   'The Birthstone Collection',
   tagline: 'Twelve stones. Twelve months.',
+  description:
+    'Twelve stones. Twelve months. Each piece carries the gemstone of the ' +
+    'moment your loved one entered the world — set in your chosen metal, ' +
+    'embedded with a private memory, and registered in the Tijoray vault forever.',
   designKind: 'gemstone',
   designApplicator: 'gem-material',
   designLabel: 'Birthstone',
@@ -60,6 +75,7 @@ export const BIRTHSTONE: Collection = {
     swatch:  s.color,
     caption: s.month,
   })),
+  chips: BIRTHSTONE_CHIPS,
   available: true,
 }
 
@@ -69,6 +85,10 @@ export const DIAMOND: Collection = {
   number: '02',
   name:   'The Diamond Collection',
   tagline: 'One stone. Endless clarity.',
+  description:
+    'A single brilliant-cut diamond, held in your chosen metal — the clearest ' +
+    'expression of a moment worth keeping. Each piece carries the same private ' +
+    'vault, registered to you forever.',
   designKind: 'gemstone',
   designApplicator: 'gem-material',
   designLabel: 'Diamond',
@@ -84,6 +104,10 @@ export const INITIAL_LETTER: Collection = {
   number: '03',
   name:   'The Initial Collection',
   tagline: 'A single letter, carried close.',
+  description:
+    'A single initial, sculpted and carried close — for a name, a place, or a ' +
+    'person who matters. Set in your chosen metal, with the same private vault ' +
+    'registered to you forever.',
   designKind: 'glyph',
   designApplicator: 'letter-glyph',
   designLabel: 'Initial',

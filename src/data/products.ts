@@ -28,6 +28,8 @@ export interface Product {
   priceFrom:     number
   /** Card image (collection-list page). */
   cardImage:     string
+  /** Card body copy on the collection-list page. */
+  cardDetail:    string
   /** Per-cell GLB overrides (defaults to the product type's models). */
   models?:       Partial<Record<Shape, string>>
   /** Live vs "coming soon". */
@@ -43,6 +45,9 @@ export const PRODUCTS: Product[] = [
     name:          'Birthstone Pendant',
     priceFrom:     1299,
     cardImage:     asset('/assets/jewelry/birthstone-pendant.png'),
+    cardDetail:
+      'Available in square and circle silhouettes. Set in steel, silver, ' +
+      '10K, or 18K gold — with your chosen birthstone at the center.',
     available:     true,
   },
   {
@@ -53,12 +58,30 @@ export const PRODUCTS: Product[] = [
     name:          'Birthstone Bracelet',
     priceFrom:     0,
     cardImage:     asset('/assets/jewelry/birthstone-bracelet.png'),
+    cardDetail:
+      'The same craft, the same vault — worn around the wrist. ' +
+      'Currently in development at the atelier.',
     available:     false,
   },
 ]
 
 export function productByRoute(route: string): Product | undefined {
   return PRODUCTS.find(p => p.route === route)
+}
+
+/** Products belonging to a collection, in matrix order. */
+export function productsByCollection(collectionId: string): Product[] {
+  return PRODUCTS.filter(p => p.collectionId === collectionId)
+}
+
+/** Collections that have at least one product, in display order. */
+export function collectionsWithProducts() {
+  const seen = new Set<string>()
+  const ordered: CollectionId[] = []
+  for (const p of PRODUCTS) {
+    if (!seen.has(p.collectionId)) { seen.add(p.collectionId); ordered.push(p.collectionId) }
+  }
+  return ordered.map(id => COLLECTIONS[id])
 }
 
 export function productById(id: string): Product | undefined {
