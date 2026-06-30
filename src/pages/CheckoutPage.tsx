@@ -6,6 +6,7 @@ import { supabase } from '../lib/supabase'
 import PendantThumbnail from '../components/PendantThumbnail'
 import PhoneInput from '../components/PhoneInput'
 import { isValidEmail, isValidPhone } from '../lib/validation'
+import { needsProfileCompletion } from '../lib/profile'
 import { SHAPE_LABELS } from '../data/catalog'
 import { PRODUCT_TYPES } from '../data/product-types'
 import styles from './CheckoutPage.module.css'
@@ -51,6 +52,14 @@ export default function CheckoutPage() {
   useEffect(() => {
     if (!authLoading && items.length === 0) navigate('/cart', { replace: true })
   }, [items, authLoading, navigate])
+
+  // A Google sign-in from checkout lands the user back here. Force OAuth users
+  // missing a phone/address through profile completion before they can pay.
+  useEffect(() => {
+    if (!authLoading && needsProfileCompletion(user)) {
+      navigate('/complete-profile', { state: { from: '/checkout' }, replace: true })
+    }
+  }, [user, authLoading, navigate])
 
   if (authLoading || items.length === 0) return null
 

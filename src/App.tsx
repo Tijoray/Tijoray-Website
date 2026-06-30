@@ -27,6 +27,7 @@ const PortalPiecePage = lazy(() => import('./pages/PortalPiecePage'))
 const SettingsPage = lazy(() => import('./pages/SettingsPage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
 const SignUpPage = lazy(() => import('./pages/SignUpPage'))
+const CompleteProfilePage = lazy(() => import('./pages/CompleteProfilePage'))
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 const FaqPage = lazy(() => import('./pages/FaqPage'))
 const CraftsmanshipPage = lazy(() => import('./pages/CraftsmanshipPage'))
@@ -106,6 +107,7 @@ export default function App() {
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/complete-profile" element={<CompleteProfilePage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>

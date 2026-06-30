@@ -3,7 +3,9 @@ import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import PhoneInput from '../components/PhoneInput'
+import AddressAutocomplete from '../components/AddressAutocomplete'
 import { isValidEmail, isValidPhone } from '../lib/validation'
+import type { Address } from '../lib/profile'
 import styles from './AuthPage.module.css'
 
 type Step = 'form' | 'verify-email'
@@ -34,6 +36,7 @@ export default function SignUpPage() {
   const [step,       setStep]       = useState<Step>('form')
   const [sentTo,     setSentTo]     = useState('')
   const [form,       setForm]       = useState({ name: '', email: '', phone: '', password: '', confirm: '' })
+  const [address,    setAddress]    = useState<Address | null>(null)
   const [errors,     setErrors]     = useState<Record<string, string>>({})
   const [apiError,   setApiError]   = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -70,6 +73,7 @@ export default function SignUpPage() {
     if (form.phone.trim() && !isValidPhone(form.phone)) {
       errs.phone = 'Enter a valid phone number'
     }
+    if (!address) errs.address = 'Please select your address'
     if (form.password.length < 8) errs.password = 'At least 8 characters'
     if (form.confirm !== form.password) errs.confirm = 'Passwords do not match'
     return errs
@@ -87,7 +91,7 @@ export default function SignUpPage() {
       email:    form.email,
       password: form.password,
       options: {
-        data:            { name: form.name, phone: form.phone },
+        data:            { name: form.name, phone: form.phone, address },
         emailRedirectTo: `${window.location.origin}/portal`,
       },
     })
@@ -198,6 +202,17 @@ export default function SignUpPage() {
               error={!!errors.phone}
             />
             {errors.phone && <span className={styles.errorMsg}>{errors.phone}</span>}
+          </div>
+
+          <div className={styles.field}>
+            <label className={styles.label} htmlFor="address">Shipping Address</label>
+            <AddressAutocomplete
+              id="address"
+              value={address}
+              onChange={a => { setAddress(a); setErrors(e => ({ ...e, address: '' })) }}
+              error={!!errors.address}
+            />
+            {errors.address && <span className={styles.errorMsg}>{errors.address}</span>}
           </div>
 
           <div className={styles.field}>
