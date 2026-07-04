@@ -141,8 +141,8 @@ export default function BraceletConfiguratorPage() {
     controls.dampingFactor = 0.07
     controls.enablePan = false
     controls.zoomToCursor = true
-    controls.minDistance = 0.8
-    controls.maxDistance = 2.0
+    controls.minDistance = 1.2
+    controls.maxDistance = 6.0  // bracelet is deeper than the pendant — allow standing back to see the band
     controls.minPolarAngle = Math.PI / 2 - 0.38  // ~22° above equator
     controls.maxPolarAngle = Math.PI / 2 + 0.38  // ~22° below equator
     controlsRef.current = controls
@@ -318,15 +318,22 @@ export default function BraceletConfiguratorPage() {
       // Include band materials so Effect 3 keeps band in sync on metal change
       if (bandGroupRef.current) applyMetal(bandGroupRef.current, bodyMats, gemMats, bodyColor)
 
-      // Camera: frame on the gem station at the front-centre of the band.
+      // Camera: frame on the gem station. The gem sits at the FRONT of the band
+      // loop (which recedes behind it), so we orbit the gem itself and stand back
+      // by a distance derived from the gem's size — a fixed offset would sit almost
+      // on the stone. The 2.4 margin leaves comfortable breathing room.
       const gemBox    = new THREE.Box3().setFromObject(pivot)
       const gemCenter = gemBox.getCenter(new THREE.Vector3())
-      if (cameraRef.current) {
-        cameraRef.current.position.set(gemCenter.x, gemCenter.y, 1.6)
-        cameraRef.current.lookAt(gemCenter.x, gemCenter.y, 0)
+      const gemSize   = gemBox.getSize(new THREE.Vector3())
+      const cam       = cameraRef.current
+      if (cam) {
+        const halfFov = (cam.fov * Math.PI / 180) / 2
+        const fitDist = (Math.max(gemSize.x, gemSize.y) / 2) / Math.tan(halfFov) * 2.4
+        cam.position.set(gemCenter.x, gemCenter.y, gemCenter.z + fitDist)
+        cam.lookAt(gemCenter)
       }
       if (controlsRef.current) {
-        controlsRef.current.target.set(gemCenter.x, gemCenter.y, 0)
+        controlsRef.current.target.copy(gemCenter)
         controlsRef.current.update()
       }
 
