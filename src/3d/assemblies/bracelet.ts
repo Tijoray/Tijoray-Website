@@ -33,6 +33,18 @@ const BAND_ROTATION_X = Math.PI / 2
 /** Depth nudge so the gem's setting overlaps the band rather than floating off it. */
 const GEM_SEAT_DEPTH = 0.18
 
+/**
+ * Fine alignment nudges between the gem's jump-rings and the chain's two ends.
+ * The gem is seated by its bounding-box back-face centre, but the authored
+ * jump-rings sit slightly forward of (and above) that reference, so the chain
+ * ends up sitting a touch low and in front of where the rings actually are.
+ * These world-space offsets pull the gem down and back so the rings meet the
+ * chain ends. Same GLB convention across all four shapes, so one pair fixes all.
+ * Positive Y raises the gem; positive Z pushes it toward the camera.
+ */
+const GEM_NUDGE_Y = -0.009
+const GEM_NUDGE_Z = -0.039
+
 export interface PreparedBand {
   /** Cloned, rotated, scaled, and centred band model — ready to add to a scene. */
   bandModel: THREE.Group
@@ -107,6 +119,9 @@ export function prepareBraceletGem(
   const offset = attach.clone().sub(gemBack)
   // Sink the gem slightly into the band so its setting overlaps rather than floats.
   offset.z -= gemSize.z * GEM_SEAT_DEPTH
+  // Fine alignment so the gem's jump-rings meet the chain ends (see constants).
+  offset.y += GEM_NUDGE_Y
+  offset.z += GEM_NUDGE_Z
   gemModel.position.add(offset)
   gemModel.updateMatrixWorld(true)
 
