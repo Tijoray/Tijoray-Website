@@ -56,12 +56,12 @@ export const PRODUCTS: Product[] = [
     collectionId:  'birthstone',
     productTypeId: 'bracelet',
     name:          'Birthstone Bracelet',
-    priceFrom:     0,
+    priceFrom:     299,
     cardImage:     asset('/assets/jewelry/birthstone-bracelet.png'),
     cardDetail:
-      'The same craft, the same vault — worn around the wrist. ' +
-      'Currently in development at the atelier.',
-    available:     false,
+      'The same craft, the same vault — worn around the wrist. Available in ' +
+      'asscher, circle, heart, and pear stations, set in steel, silver, 10K, or 18K gold.',
+    available:     true,
   },
 ]
 

@@ -6,6 +6,7 @@ import {
   METAL_LABELS_LONG       as METAL_LABELS,
   METAL_COLOR_LABELS_LONG as METAL_COLOR_LABELS,
   STONE_NAMES_SHORT       as BIRTHSTONE_NAMES,
+  PRODUCT_TYPE_LABELS,
 } from '../src/data/catalog'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2026-03-25.dahlia' })
@@ -73,7 +74,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const productType    = item.productType  ?? 'pendant'
     const collectionId   = item.collectionId ?? 'birthstone'
     const birthstoneName = BIRTHSTONE_NAMES[item.birthstoneIndex] ?? 'Unknown'
-    const shapeLabel     = item.shape.charAt(0).toUpperCase() + item.shape.slice(1)
+    const productLabel   = PRODUCT_TYPE_LABELS[productType] ?? 'Pendant'
+    // The bracelet's 'square' key is an asscher cut — label it accordingly.
+    const shapeLabel     = productType === 'bracelet' && item.shape === 'square'
+      ? 'Asscher'
+      : item.shape.charAt(0).toUpperCase() + item.shape.slice(1)
     const metalLine      = item.metal === 'steel'
       ? METAL_LABELS[item.metal]
       : `${METAL_COLOR_LABELS[item.metalColor]} ${METAL_LABELS[item.metal]}`
@@ -92,7 +97,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         currency:     'usd',
         unit_amount:  METAL_PRICES_CENTS[item.metal] ?? 129900,
         product_data: {
-          name:        `The Tijoray Pendant — ${shapeLabel}`,
+          name:        `The Tijoray ${productLabel} — ${shapeLabel}`,
           description: item.specLine ?? `${metalLine} · ${birthstoneName}`,
         },
       },

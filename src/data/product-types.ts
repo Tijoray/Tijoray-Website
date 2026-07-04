@@ -26,6 +26,25 @@ export const PENDANT_PATHS: Record<Shape, string> = {
   pear:   ASSETS.pendantPear,
 }
 
+/* ── Shared bracelet 3D model paths ────────────────────── */
+export const BRACELET_CHAIN_PATH = ASSETS.braceletChain
+
+export const BRACELET_PATHS: Record<Shape, string> = {
+  square: ASSETS.braceletSquare, // 'square' key renders the asscher-cut gem
+  circle: ASSETS.braceletCircle,
+  heart:  ASSETS.braceletHeart,
+  pear:   ASSETS.braceletPear,
+}
+
+/**
+ * Bracelet form labels. The bracelet reuses the shared `Shape` keys but its
+ * `square` slot is an asscher cut, so it is displayed as "Asscher" (mirrors how
+ * the pendant `square` already maps to pendant-asscher.glb).
+ */
+export const BRACELET_SHAPE_LABELS: Record<Shape, string> = {
+  square: 'Asscher', circle: 'Circle', heart: 'Heart', pear: 'Pear',
+}
+
 /** A single form option (e.g. a pendant silhouette). */
 export interface FormOption {
   value: Shape
@@ -50,7 +69,8 @@ export interface ProductType {
   available: boolean
 }
 
-const PENDANT_SHAPES: Shape[] = ['square', 'circle', 'heart', 'pear']
+const PENDANT_SHAPES:  Shape[] = ['square', 'circle', 'heart', 'pear']
+const BRACELET_SHAPES: Shape[] = ['square', 'circle', 'heart', 'pear']
 
 export const PENDANT: ProductType = {
   id:       'pendant',
@@ -63,16 +83,15 @@ export const PENDANT: ProductType = {
   available: true,
 }
 
-// Form scaffold for the next product type. The 3D assembly + GLB are added in the
-// product-type build-out; modelled here so the matrix and UI can reference it.
 export const BRACELET: ProductType = {
   id:       'bracelet',
   label:    'Bracelet',
   noun:     'bracelet',
   assembly: 'bracelet-band',
-  formOptions: [],
-  models:   {},
-  available: false,
+  formOptions: BRACELET_SHAPES.map(s => ({ value: s, label: BRACELET_SHAPE_LABELS[s] })),
+  models:   BRACELET_PATHS,
+  chain:    BRACELET_CHAIN_PATH,
+  available: true,
 }
 
 export const PRODUCT_TYPES: Record<ProductTypeId, ProductType> = {

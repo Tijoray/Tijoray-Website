@@ -17,6 +17,7 @@ import { PRODUCTS } from './data/products'
 const AboutPage = lazy(() => import('./pages/AboutPage'))
 const ContactPage = lazy(() => import('./pages/ContactPage'))
 const ConfiguratorPage = lazy(() => import('./pages/ConfiguratorPage'))
+const BraceletConfiguratorPage = lazy(() => import('./pages/BraceletConfiguratorPage'))
 const TechnologyPage = lazy(() => import('./pages/TechnologyPage'))
 const CollectionPage = lazy(() => import('./pages/CollectionPage'))
 const CartPage = lazy(() => import('./pages/CartPage'))
@@ -83,9 +84,12 @@ export default function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           {/* Configurator routes generated from the products matrix.
-              Pendant-form products share the pendant ConfiguratorPage. */}
+              Each product type maps to its own configurator page. */}
           {PRODUCTS.filter(p => p.available && p.productTypeId === 'pendant').map(p => (
             <Route key={p.id} path={p.route} element={<ConfiguratorPage />} />
+          ))}
+          {PRODUCTS.filter(p => p.available && p.productTypeId === 'bracelet').map(p => (
+            <Route key={p.id} path={p.route} element={<BraceletConfiguratorPage />} />
           ))}
           <Route path="/technology" element={<TechnologyPage />} />
           <Route path="/collection" element={<CollectionPage />} />

@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useCart } from '../contexts/CartContext'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
-import PendantThumbnail from '../components/PendantThumbnail'
+import PieceThumbnail from '../components/PieceThumbnail'
 import PhoneInput from '../components/PhoneInput'
 import { isValidEmail, isValidPhone } from '../lib/validation'
 import { needsProfileCompletion } from '../lib/profile'
@@ -378,7 +378,8 @@ export default function CheckoutPage() {
             {items.map((item, idx) => (
               <div key={idx} className={styles.summaryItem}>
                 <div className={styles.summaryThumb}>
-                  <PendantThumbnail
+                  <PieceThumbnail
+                    productType={item.productType}
                     shape={item.shape}
                     metal={item.metal}
                     metalColor={item.metalColor}

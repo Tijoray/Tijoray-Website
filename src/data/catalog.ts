@@ -204,6 +204,13 @@ export const SHAPE_LABELS: Record<Shape, string> = {
   square: 'Square', circle: 'Circle', heart: 'Heart', pear: 'Pear',
 }
 
+/* ── Product-type display labels ───────────────────────── */
+// Pure data mirror of the product-type labels, safe to import from `api/`
+// (the full product-types module pulls in assets.ts / import.meta.env).
+export const PRODUCT_TYPE_LABELS: Record<string, string> = {
+  pendant: 'Pendant', bracelet: 'Bracelet',
+}
+
 /* ── Collection list page — decorative chip strip ──────── */
 // NOTE: this is the *traditional* birthstone list used purely for the marketing
 // chip strip on the Collection page. It intentionally differs from the

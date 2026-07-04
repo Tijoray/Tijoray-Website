@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../contexts/CartContext'
-import PendantThumbnail from '../components/PendantThumbnail'
+import PieceThumbnail from '../components/PieceThumbnail'
 import styles from './CartPage.module.css'
 import {
   SHAPE_LABELS,
@@ -37,6 +37,14 @@ export default function CartPage() {
 
   const total = items.reduce((sum, i) => sum + i.price, 0)
 
+  // Heading noun: the shared product-type label when the cart is all one form,
+  // otherwise a generic "Piece" so a mixed pendant + bracelet cart still reads right.
+  const uniformType = items.every(i => i.productType === items[0].productType)
+    ? items[0].productType : null
+  const headingNoun = uniformType
+    ? PRODUCT_TYPES[uniformType as keyof typeof PRODUCT_TYPES]?.label ?? 'Piece'
+    : 'Piece'
+
   return (
     <main className={styles.page}>
       <div className={styles.inner}>
@@ -44,7 +52,7 @@ export default function CartPage() {
         {/* Left — item list */}
         <div className={styles.left}>
           <p className={styles.eyebrow}>Your Cart</p>
-          <h1 className={styles.title}>The <em>Tijoray</em> Pendant{items.length > 1 ? 's' : ''}</h1>
+          <h1 className={styles.title}>The <em>Tijoray</em> {headingNoun}{items.length > 1 ? 's' : ''}</h1>
 
           <ul className={styles.itemList}>
             {items.map((item, idx) => {
@@ -55,7 +63,8 @@ export default function CartPage() {
               return (
                 <li key={idx} className={styles.card}>
                   <div className={styles.cardThumb}>
-                    <PendantThumbnail
+                    <PieceThumbnail
+                      productType={item.productType}
                       shape={item.shape}
                       metal={item.metal}
                       metalColor={item.metalColor}

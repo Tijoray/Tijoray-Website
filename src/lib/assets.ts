@@ -16,4 +16,9 @@ export const ASSETS = {
   pendantHeart:   asset('/assets/3d/pendant-heart.glb'),
   pendantPear:    asset('/assets/3d/pendant-pear.glb'),
   pendantScroll:  asset('/assets/3d/pendant-scroll.glb'),
+  braceletChain:  asset('/assets/3d/bracelet-chain.glb'),
+  braceletSquare: asset('/assets/3d/bracelet-asscher.glb'), // 'square' key = asscher cut
+  braceletCircle: asset('/assets/3d/bracelet-circle.glb'),
+  braceletHeart:  asset('/assets/3d/bracelet-heart.glb'),
+  braceletPear:   asset('/assets/3d/bracelet-pear.glb'),
 } as const

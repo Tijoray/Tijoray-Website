@@ -109,7 +109,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       birthstoneIndex: item.birthstoneIndex,
     }
 
-    const shapeLabel = shape ? `${shape.charAt(0).toUpperCase()}${shape.slice(1)}` : 'Tijoray'
+    // The bracelet's 'square' key is an asscher cut — label it accordingly.
+    const shapeLabel = shape
+      ? (productType === 'bracelet' && shape === 'square'
+          ? 'Asscher'
+          : `${shape.charAt(0).toUpperCase()}${shape.slice(1)}`)
+      : 'Tijoray'
     emailItems.push({
       name:       `${shapeLabel} ${productLabel}`,
       priceCents: METAL_PRICES_CENTS[item.metal as Metal] ?? 129900,
