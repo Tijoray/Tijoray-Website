@@ -30,8 +30,12 @@ function applyMaterials(
       const col = std.color ?? new THREE.Color(1, 1, 1)
       if (col.r < 0.3 && col.g > 0.45 && col.b > 0.45) { child.visible = false; return }
 
+      // Gem placeholder colours differ across bracelet GLBs: circle/heart/pear are
+      // near-black, asscher is desaturated green. No metal finish is green-dominant,
+      // so near-black OR green-dominant reliably marks the gem.
       const isGem = GEM_RE.test(std.name) || GEM_RE.test(child.name)
         || (col.r < 0.12 && col.g < 0.12 && col.b < 0.12)
+        || (col.g > col.r && col.g > col.b)
 
       if (isGem) {
         const gemMat = new THREE.MeshPhysicalMaterial({

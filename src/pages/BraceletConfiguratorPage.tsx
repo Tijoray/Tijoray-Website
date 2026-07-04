@@ -277,8 +277,13 @@ export default function BraceletConfiguratorPage() {
           if (col.r < 0.3 && col.g > 0.45 && col.b > 0.45) { child.visible = false; return }
 
           const parentName = child.parent?.name ?? ''
+          // Gem placeholder colours are inconsistent across the bracelet GLBs:
+          // circle/heart/pear use near-black, asscher uses a desaturated green. Neither
+          // the gold body nor any metal finish (gold/steel/silver/rose/white) is ever
+          // green-dominant, so near-black OR green-dominant reliably marks the gem.
           const isGem = GEM_NAME_RE.test(std.name) || GEM_NAME_RE.test(child.name) || GEM_NAME_RE.test(parentName)
             || (col.r < 0.12 && col.g < 0.12 && col.b < 0.12)
+            || (col.g > col.r && col.g > col.b)
 
           if (isGem) {
             const gemMat = createGemMaterial(snapBirthstone, shapeKey)
