@@ -20,11 +20,15 @@ import * as THREE from 'three'
 const BAND_TARGET_SIZE = 2.5
 
 /**
- * Upright rotation applied to the band. The pendant chain needs Math.PI/2 to stand
- * a flat-lying chain up; the bracelet band is presented in its modelled orientation,
- * so this defaults to 0. Tune if the band imports lying flat.
+ * The band GLB is authored as a ring in the XY plane (opening faces the camera, +Z).
+ * Left flat, it would ring the gem in the SAME plane as the stone face — like a
+ * pendant's chain. Rotating +90° about X lays the loop down horizontally so it
+ * wraps INTO the screen (perpendicular to the stone face), the way a bracelet sits
+ * on a wrist. This also brings the band's authored top — where the gem station
+ * mounts — round to the front (+Z), which is exactly where the gem seats.
+ * Matches GEM_FACING_ROTATION so band and gem stay a rigid, consistent unit.
  */
-const BAND_ROTATION_X = 0
+const BAND_ROTATION_X = Math.PI / 2
 
 /** Depth nudge so the gem's setting overlaps the band rather than floating off it. */
 const GEM_SEAT_DEPTH = 0.18
