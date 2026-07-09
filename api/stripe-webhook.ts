@@ -2,9 +2,9 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
 import { randomBytes } from 'crypto'
-import { sendCraftingEmail, MEMORY_WINDOW_DAYS } from '../lib/email'
-import { METAL_PRICES_CENTS } from '../src/data/catalog'
-import type { Metal } from '../src/data/catalog'
+import { sendCraftingEmail, MEMORY_WINDOW_DAYS } from '../lib/email.js'
+import { METAL_PRICES_CENTS } from '../src/data/catalog.js'
+import type { Metal } from '../src/data/catalog.js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2026-03-25.dahlia' })
 

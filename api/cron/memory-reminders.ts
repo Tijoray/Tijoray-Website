@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { createClient } from '@supabase/supabase-js'
-import { sendMemoryReminder, MEMORY_WINDOW_DAYS } from '../../lib/email'
+import { sendMemoryReminder, MEMORY_WINDOW_DAYS } from '../../lib/email.js'
 
 /**
  * Daily cron (see vercel.json). For every piece still being crafted with NO

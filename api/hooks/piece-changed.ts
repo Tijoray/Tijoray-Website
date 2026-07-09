@@ -4,7 +4,7 @@ import {
   sendShippedEmail,
   sendRecipientLinkedEmail,
   sendRecipientViewedEmail,
-} from '../../lib/email'
+} from '../../lib/email.js'
 
 /**
  * Receiver for the Supabase Database Webhook on `Pieces` UPDATE. Diffs

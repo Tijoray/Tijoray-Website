@@ -7,7 +7,7 @@ import {
   METAL_COLOR_LABELS_LONG as METAL_COLOR_LABELS,
   STONE_NAMES_SHORT       as BIRTHSTONE_NAMES,
   PRODUCT_TYPE_LABELS,
-} from '../src/data/catalog'
+} from '../src/data/catalog.js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2026-03-25.dahlia' })
 
