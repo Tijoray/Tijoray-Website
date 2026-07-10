@@ -119,7 +119,7 @@ export default function BraceletThumbnail({ shape, metal, metalColor, birthstone
 
       // ── Build scene using the shared bracelet assembly ────────────────────
       const { bandModel, scale, attach } = prepareBraceletChain(chainGltf)
-      const gemModel = prepareBraceletGem(gemGltf, scale, attach)
+      const gemModel = prepareBraceletGem(gemGltf, scale, attach, shape)
 
       applyMaterials(bandModel, bodyColor, roughness, birthstoneIndex)
       applyMaterials(gemModel,  bodyColor, roughness, birthstoneIndex)

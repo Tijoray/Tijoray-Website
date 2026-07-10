@@ -104,7 +104,7 @@ export default function AboutPage() {
           <div className={styles.craftSpecs}>
             <p className={styles.eyebrow}>The Making</p>
             <p className={styles.bodyText}>
-              Each Tijoray pendant begins as raw metal and stone — responsibly sourced,
+              Each Tijoray piece begins as raw metal and stone — responsibly sourced,
               rigorously selected. Our jewellers work in stainless steel, sterling silver,
               and 10K or 18K gold, finishing every surface by hand before the birthstone
               is set.

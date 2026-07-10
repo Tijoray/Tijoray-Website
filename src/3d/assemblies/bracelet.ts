@@ -15,6 +15,7 @@
  * real GLBs. Adjust them if the band/gem orientation or seating looks off.
  */
 import * as THREE from 'three'
+import type { Shape } from '../../data/catalog'
 
 /** World-space size the band is normalised to (longest dimension). */
 const BAND_TARGET_SIZE = 2.5
@@ -44,6 +45,18 @@ const GEM_SEAT_DEPTH = 0.18
  */
 const GEM_NUDGE_Y = -0.009
 const GEM_NUDGE_Z = -0.039
+
+/**
+ * Per-shape extra nudge, on top of the global one above. Most gems author their
+ * jump-rings at the bezel's vertical centre, so the global nudge seats them on
+ * the chain axis. The pear is a teardrop — its rings sit ~0.046 BELOW its
+ * bounding-box centre — so seating it by that centre drops the rings under the
+ * chain and the stone floats above the links. Raising the pear lifts its rings
+ * back onto the chain axis. Shapes not listed use only the global nudge.
+ */
+const GEM_SHAPE_NUDGE: Partial<Record<Shape, { y?: number; z?: number }>> = {
+  pear: { y: 0.046 },
+}
 
 export interface PreparedBand {
   /** Cloned, rotated, scaled, and centred band model — ready to add to a scene. */
@@ -102,6 +115,7 @@ export function prepareBraceletGem(
   gemSrc: THREE.Group,
   scale: number,
   attach: THREE.Vector3,
+  shape?: Shape,
 ): THREE.Group {
   const gemModel = gemSrc.clone(true)
   gemModel.rotation.copy(GEM_FACING_ROTATION)
@@ -122,6 +136,12 @@ export function prepareBraceletGem(
   // Fine alignment so the gem's jump-rings meet the chain ends (see constants).
   offset.y += GEM_NUDGE_Y
   offset.z += GEM_NUDGE_Z
+  // Per-shape correction for gems whose rings aren't at their bbox centre (pear).
+  const shapeNudge = shape ? GEM_SHAPE_NUDGE[shape] : undefined
+  if (shapeNudge) {
+    offset.y += shapeNudge.y ?? 0
+    offset.z += shapeNudge.z ?? 0
+  }
   gemModel.position.add(offset)
   gemModel.updateMatrixWorld(true)
 

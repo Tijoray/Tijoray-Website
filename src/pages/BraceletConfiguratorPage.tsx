@@ -307,7 +307,7 @@ export default function BraceletConfiguratorPage() {
       if (cancelled || destroyedRef.current) return
 
       // Clone, scale, and seat the gem at the stored band attach point.
-      const gemModel = prepareBraceletGem(gemSrc, assemblyScaleRef.current, bandAttachRef.current!)
+      const gemModel = prepareBraceletGem(gemSrc, assemblyScaleRef.current, bandAttachRef.current!, shapeKey)
 
       const pivot = new THREE.Group()
       pivot.add(gemModel)

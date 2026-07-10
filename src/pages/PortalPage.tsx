@@ -106,7 +106,7 @@ export default function PortalPage() {
           <div className={styles.empty}>
             <p className={styles.emptyTitle}>No pieces yet</p>
             <p className={styles.emptyBody}>
-              Your Tijoray pendant will appear here once your order is confirmed and dispatched.
+              Your Tijoray piece will appear here once your order is confirmed and dispatched.
             </p>
             <Link to="/products/birthstone-pendant" className={styles.emptyLink}>Design a pendant</Link>
           </div>
@@ -130,7 +130,7 @@ export default function PortalPage() {
                       />
                     </div>
                     <div className={styles.cardBody}>
-                      <p className={styles.cardTitle}>{piece.collection ?? 'Tijoray Pendant'}</p>
+                      <p className={styles.cardTitle}>{piece.collection ?? 'Tijoray Piece'}</p>
                       <p className={styles.cardSerial}>
                         {piece.serial ?? `ID: ${piece.id.slice(0, 8).toUpperCase()}`}
                       </p>

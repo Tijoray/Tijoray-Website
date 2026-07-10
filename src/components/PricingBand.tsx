@@ -5,7 +5,7 @@ const TIERS = [
   {
     name: 'Steel & Silver',
     from: 'from $299',
-    desc: 'Stainless steel and sterling silver pendants — the same handcrafted form and memory vault, at an accessible entry point.',
+    desc: 'Stainless steel and sterling silver pieces — the same handcrafted form and memory vault, at an accessible entry point.',
     link: '/collection',
     cta: 'Explore Collection',
   },
