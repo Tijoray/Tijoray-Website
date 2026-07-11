@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import type { Piece, Stone, Metal } from '../lib/supabase'
-import PendantThumbnail from '../components/PendantThumbnail'
+import PieceThumbnail from '../components/PieceThumbnail'
 import { STONE_NAMES_SHORT as BIRTHSTONE_NAMES } from '../data/catalog'
 import styles from './PortalPage.module.css'
 
@@ -66,10 +66,14 @@ export default function PortalPage() {
   function thumbProps(piece: Piece) {
     // Prefer the stored config (source of truth, product-agnostic) when present.
     const cfg = piece.config
+    // Product type drives which 3D form renders (pendant vs bracelet). Prefer the
+    // stored config, then the dedicated column, defaulting to pendant for legacy rows.
+    const productType = cfg?.productType ?? piece.product_type ?? 'pendant'
     if (cfg?.shape) {
       const shapes: Shape[] = ['square', 'circle', 'heart', 'pear']
       const shape = shapes.includes(cfg.shape as Shape) ? (cfg.shape as Shape) : 'heart'
       return {
+        productType,
         shape,
         metal:           purityToMetal(cfg.metal ?? null),
         metalColor:      colourToMetalColor(cfg.metalColor ?? null),
@@ -84,7 +88,7 @@ export default function PortalPage() {
     const birthstoneIndex = stoneToIndex(stone?.name ?? null)
     const metalKey    = purityToMetal(metal?.purity ?? null)
     const metalColor  = colourToMetalColor(metal?.colour ?? null)
-    return { shape, metal: metalKey, metalColor, birthstoneIndex } as const
+    return { productType, shape, metal: metalKey, metalColor, birthstoneIndex } as const
   }
 
   return (
@@ -121,7 +125,8 @@ export default function PortalPage() {
                 <li key={piece.id} className={styles.card}>
                   <Link to={`/portal/piece/${piece.id}`} className={styles.cardLink}>
                     <div className={styles.cardThumb}>
-                      <PendantThumbnail
+                      <PieceThumbnail
+                        productType={tp.productType}
                         shape={tp.shape}
                         metal={tp.metal}
                         metalColor={tp.metalColor}

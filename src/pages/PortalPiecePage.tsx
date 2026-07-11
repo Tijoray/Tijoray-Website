@@ -484,7 +484,7 @@ export default function PortalPiecePage() {
             </Link>
             <div className={styles.headerText}>
               <p className={styles.eyebrow}>Memory Builder</p>
-              <h1 className={styles.title}>{piece?.collection ?? 'Your Pendant'}</h1>
+              <h1 className={styles.title}>{piece?.collection ?? 'Your Piece'}</h1>
             </div>
             <button className={styles.helpBtn} onClick={() => setShowTutorial(true)} aria-label="Show tutorial">
               <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">

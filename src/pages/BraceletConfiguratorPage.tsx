@@ -710,7 +710,7 @@ export default function BraceletConfiguratorPage() {
             </p>
           </div>
           <div className={styles.storyImageWrap}>
-            <img src={asset('/assets/editorial/lifestyle-worn.png')} alt="Tijoray bracelet worn at the wrist" />
+            <img src={asset('/assets/editorial/bracelet-lifestyle-worn.png')} alt="Tijoray bracelet worn at the wrist" />
           </div>
         </div>
       </section>
@@ -742,7 +742,7 @@ export default function BraceletConfiguratorPage() {
       <section className={styles.craftSection}>
         <div className={styles.craftInner}>
           <div className={styles.craftImageWrap}>
-            <img src={asset('/assets/editorial/macro-finish.png')} alt="Close-up of Tijoray bracelet surface finish" />
+            <img src={asset('/assets/editorial/bracelet-macro-finish.png')} alt="Close-up of Tijoray bracelet surface finish" />
           </div>
           <div className={styles.craftText}>
             <p className={styles.eyebrow}>Crafted to Last</p>
