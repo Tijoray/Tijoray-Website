@@ -35,6 +35,14 @@ const CraftsmanshipPage = lazy(() => import('./pages/CraftsmanshipPage'))
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage'))
 const TermsPage = lazy(() => import('./pages/TermsPage'))
 
+// Admin panel (operational dashboard) — lazy so it never ships in the public bundle path.
+const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'))
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
+const AdminPieces = lazy(() => import('./pages/admin/AdminPieces'))
+const AdminPieceDetail = lazy(() => import('./pages/admin/AdminPieceDetail'))
+const AdminCustomers = lazy(() => import('./pages/admin/AdminCustomers'))
+const AdminEmails = lazy(() => import('./pages/admin/AdminEmails'))
+
 function HomePage() {
   useEffect(() => {
     const bar = document.getElementById('progress-bar')
@@ -65,10 +73,28 @@ function HomePage() {
 
 export default function App() {
   const { pathname } = useLocation()
+  const isAdmin = pathname.startsWith('/admin')
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [pathname])
+
+  // The admin panel is a self-contained shell — no public navbar, footer, or progress bar.
+  if (isAdmin) {
+    return (
+      <Suspense fallback={null}>
+        <Routes>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="pieces" element={<AdminPieces />} />
+            <Route path="pieces/:pieceId" element={<AdminPieceDetail />} />
+            <Route path="customers" element={<AdminCustomers />} />
+            <Route path="emails" element={<AdminEmails />} />
+          </Route>
+        </Routes>
+      </Suspense>
+    )
+  }
 
   return (
     <>
