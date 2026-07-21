@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../contexts/CartContext'
+import { useCatalog } from '../contexts/CatalogContext'
 import * as THREE from 'three'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
@@ -12,7 +13,6 @@ import { createGltfLoader } from '../3d/engine'
 import { prepareBraceletChain, prepareBraceletGem } from '../3d/assemblies/bracelet'
 import type { Shape, Metal, MetalColor } from '../data/catalog'
 import {
-  METAL_PRICES,
   METAL_LABELS_SHORT       as METAL_LABELS,
   METAL_COLOR_HEX,
   METAL_COLOR_LABELS_SHORT as METAL_COLOR_LABELS,
@@ -36,6 +36,7 @@ function easeOutCubic(t: number) { return 1 - Math.pow(1 - Math.min(t, 1), 3) }
 
 export default function BraceletConfiguratorPage() {
   const { addItem } = useCart()
+  const catalog     = useCatalog()
   const navigate    = useNavigate()
 
   /* ── State ── */
@@ -469,7 +470,7 @@ export default function BraceletConfiguratorPage() {
   /* ── Derived values ── */
   const price = new Intl.NumberFormat('en-US', {
     style: 'currency', currency: 'USD', maximumFractionDigits: 0,
-  }).format(METAL_PRICES[metal])
+  }).format(catalog.priceDollars('birthstone', 'bracelet', metal))
 
   const specLine = [
     shape ? `${BRACELET_SHAPE_LABELS[shape]} bracelet` : 'No shape selected',
@@ -670,7 +671,7 @@ export default function BraceletConfiguratorPage() {
                   metal,
                   metalColor,
                   birthstoneIndex: birthstone,
-                  price: METAL_PRICES[metal],
+                  price: catalog.priceDollars('birthstone', 'bracelet', metal),
                   specLine,
                 })
                 navigate('/cart')

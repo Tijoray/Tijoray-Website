@@ -63,6 +63,8 @@ export type CatalogCollection = {
   designApplicator: string
   designLabel:      string
   designOptions:    { value: string | number; label: string; swatch?: string; caption?: string }[]
+  /** Decorative month/stone chip strip on the collection-list header. */
+  chips?:           { month: string; stone: string; color: string }[]
   available:        boolean
 }
 
@@ -172,7 +174,7 @@ export function buildDefaultCatalog(assetBase = ''): CatalogDoc {
     collections: Object.values(COLLECTIONS).map(c => ({
       id: c.id, number: c.number, name: c.name, tagline: c.tagline, description: c.description,
       designKind: c.designKind, designApplicator: c.designApplicator, designLabel: c.designLabel,
-      designOptions: c.designOptions, available: c.available,
+      designOptions: c.designOptions, chips: c.chips, available: c.available,
     })),
 
     metals: METALS.map(id => ({

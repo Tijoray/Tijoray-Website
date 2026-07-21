@@ -1,18 +1,17 @@
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './CollectionPage.module.css'
-import type { Collection } from '../data/collections'
-import type { Product } from '../data/products'
-import { PRODUCTS, collectionsWithProducts, productsByCollection } from '../data/products'
+import { useCatalog } from '../contexts/CatalogContext'
+import type { CatalogCollection, CatalogProduct } from '../data/catalog-doc'
 
 const fmt = (n: number) => new Intl.NumberFormat('en-US', {
   style: 'currency', currency: 'USD', maximumFractionDigits: 0,
 }).format(n)
 
-// First live product — drives the page's primary CTAs.
-const firstLiveProduct = PRODUCTS.find(p => p.available)
-
 export default function CollectionPage() {
+  const catalog = useCatalog()
+  // First live product — drives the page's primary CTAs.
+  const firstLiveProduct = catalog.doc.products.find(p => p.available)
   // Collect every fade-in element; the observer reveals each as it scrolls in.
   const fadeRefs = useRef<Set<HTMLElement>>(new Set())
   const addFade = (el: HTMLElement | null) => { if (el) fadeRefs.current.add(el) }
@@ -28,7 +27,7 @@ export default function CollectionPage() {
     return () => io.disconnect()
   }, [])
 
-  function ProductCard({ product, collection, index }: { product: Product; collection: Collection; index: number }) {
+  function ProductCard({ product, collection, index }: { product: CatalogProduct; collection: CatalogCollection; index: number }) {
     const series = `${collection.designLabel} Series`
     const delay  = index > 0 ? { transitionDelay: `${(index * 0.14).toFixed(2)}s` } : undefined
 
@@ -116,7 +115,7 @@ export default function CollectionPage() {
       </section>
 
       {/* ── Collections (data-driven from the products matrix) ── */}
-      {collectionsWithProducts().map(collection => (
+      {catalog.collectionsWithProducts().map(collection => (
         <section key={collection.id} className={`${styles.collectionSection} ${styles.fadeUp}`} ref={addFade as any}>
           <div className={styles.collectionInner}>
 
@@ -141,7 +140,7 @@ export default function CollectionPage() {
 
             {/* Product cards */}
             <div className={styles.productGrid}>
-              {productsByCollection(collection.id).map((product, i) => (
+              {catalog.productsByCollection(collection.id).map((product, i) => (
                 <ProductCard key={product.id} product={product} collection={collection} index={i} />
               ))}
             </div>
