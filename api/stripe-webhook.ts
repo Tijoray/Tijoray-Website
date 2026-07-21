@@ -3,8 +3,9 @@ import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
 import { randomBytes } from 'crypto'
 import { sendCraftingEmail, MEMORY_WINDOW_DAYS } from '../lib/email.js'
-import { METAL_PRICES_CENTS } from '../src/data/catalog.js'
 import type { Metal } from '../src/data/catalog.js'
+import { getCatalog } from '../lib/catalog-store.js'
+import { priceCents } from '../src/data/catalog-doc.js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2026-03-25.dahlia' })
 
@@ -95,6 +96,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     'initial-letter': 'Initial Collection',
   }
 
+  // Catalog document — used to itemise the confirmation email at the same
+  // per-product × metal prices checkout charged (falls back to code defaults).
+  const { doc: catalog } = await getCatalog()
+
   for (const item of itemList) {
     const { shape, stoneId, metalId } = item
     const productType  = item.productType ?? 'pendant'
@@ -117,7 +122,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       : 'Tijoray'
     emailItems.push({
       name:       `${shapeLabel} ${productLabel}`,
-      priceCents: METAL_PRICES_CENTS[item.metal as Metal] ?? 129900,
+      priceCents: priceCents(catalog, item.collectionId ?? 'birthstone', productType, item.metal as Metal),
     })
 
     const genSerial = () => 'TIJ-' + randomBytes(5).toString('hex').toUpperCase()

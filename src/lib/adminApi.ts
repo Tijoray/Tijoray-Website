@@ -1,4 +1,5 @@
 import { supabase } from './supabase'
+import type { CatalogDoc } from '../data/catalog-doc'
 
 /**
  * Client for the consolidated /api/admin router. Every call attaches the current
@@ -87,6 +88,15 @@ export type AdminCustomer = {
 
 export type EmailRow = { id: string; ref: string; type: string; recipient: string | null; sent_at: string }
 
+export type CatalogLoad = {
+  doc: CatalogDoc
+  version: number
+  updatedAt: string | null
+  updatedBy: string | null
+  isDefault: boolean
+}
+export type { CatalogDoc }
+
 /* ── API surface ─────────────────────────────────────────────────────────────── */
 
 export const adminApi = {
@@ -98,4 +108,7 @@ export const adminApi = {
   listCustomers: (p: { search?: string } = {}) => call<{ customers: AdminCustomer[] }>('list-customers', p),
   listEmails:    (p: { type?: string | null } = {}) => call<{ emails: EmailRow[] }>('list-emails', p),
   signFile:      (key: string) => call<{ url: string }>('sign-file', { key }),
+  getCatalog:    () => call<CatalogLoad>('get-catalog'),
+  saveCatalog:   (doc: CatalogDoc, expectedVersion: number) =>
+    call<{ version: number; updatedAt: string }>('save-catalog', { doc, expectedVersion }),
 }

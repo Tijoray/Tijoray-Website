@@ -5,6 +5,8 @@ import { admin, requireAdmin, audit, type AdminUser } from '../lib/admin.js'
 import { sendShippedEmail } from '../lib/email.js'
 import { METAL_PRICES_CENTS } from '../src/data/catalog.js'
 import type { Metal } from '../src/data/catalog.js'
+import { getCatalog, saveCatalog } from '../lib/catalog-store.js'
+import type { CatalogDoc } from '../src/data/catalog-doc.js'
 
 /**
  * Consolidated admin-panel API. ONE serverless function that routes on a
@@ -323,6 +325,28 @@ async function signFile(body: Record<string, unknown>) {
   return { url }
 }
 
+/* ── Catalog ───────────────────────────────────────────────────────────────── */
+
+async function getCatalogAction() {
+  const { doc, version, updatedAt, updatedBy, isDefault } = await getCatalog()
+  return { doc, version, updatedAt, updatedBy, isDefault }
+}
+
+async function saveCatalogAction(actor: AdminUser, body: Record<string, unknown>) {
+  const doc = body.doc as CatalogDoc
+  if (!doc) throw new Error('Missing catalog document')
+  const expectedVersion = typeof body.expectedVersion === 'number' ? body.expectedVersion : undefined
+
+  const { version: beforeVersion } = await getCatalog()
+  const result = await saveCatalog(doc, actor.email, expectedVersion)
+
+  await audit({
+    actor, action: 'catalog.save', entityType: 'catalog', entityId: 'live',
+    before: { version: beforeVersion }, after: { version: result.version },
+  })
+  return result
+}
+
 /* ── Entry point ───────────────────────────────────────────────────────────── */
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -344,6 +368,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       case 'list-customers':return res.status(200).json(await listCustomers(body))
       case 'list-emails':   return res.status(200).json(await listEmails(body))
       case 'sign-file':     return res.status(200).json(await signFile(body))
+      case 'get-catalog':   return res.status(200).json(await getCatalogAction())
+      case 'save-catalog':  return res.status(200).json(await saveCatalogAction(actor, body))
       default:              return res.status(400).json({ error: `Unknown action: ${action}` })
     }
   } catch (err) {

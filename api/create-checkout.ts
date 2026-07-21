@@ -2,12 +2,14 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
 import {
-  METAL_PRICES_CENTS,
   METAL_LABELS_LONG       as METAL_LABELS,
   METAL_COLOR_LABELS_LONG as METAL_COLOR_LABELS,
   STONE_NAMES_SHORT       as BIRTHSTONE_NAMES,
   PRODUCT_TYPE_LABELS,
 } from '../src/data/catalog.js'
+import type { Metal } from '../src/data/catalog.js'
+import { getCatalog } from '../lib/catalog-store.js'
+import { priceCents } from '../src/data/catalog-doc.js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2026-03-25.dahlia' })
 
@@ -69,6 +71,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }> = []
   const itemMeta: Record<string, string> = {}
 
+  // Prices come from the DB-backed catalog (per product × metal), with the code
+  // defaults as fallback. NEVER trust a price from the client `items` payload.
+  const { doc: catalog } = await getCatalog()
+
   for (let i = 0; i < items.length; i++) {
     const item = items[i]
     const productType    = item.productType  ?? 'pendant'
@@ -95,7 +101,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     lineItems.push({
       price_data: {
         currency:     'usd',
-        unit_amount:  METAL_PRICES_CENTS[item.metal] ?? 129900,
+        unit_amount:  priceCents(catalog, collectionId, productType, item.metal as Metal),
         product_data: {
           name:        `The Tijoray ${productLabel} — ${shapeLabel}`,
           description: item.specLine ?? `${metalLine} · ${birthstoneName}`,

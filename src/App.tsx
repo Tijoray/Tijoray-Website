@@ -42,6 +42,7 @@ const AdminPieces = lazy(() => import('./pages/admin/AdminPieces'))
 const AdminPieceDetail = lazy(() => import('./pages/admin/AdminPieceDetail'))
 const AdminCustomers = lazy(() => import('./pages/admin/AdminCustomers'))
 const AdminEmails = lazy(() => import('./pages/admin/AdminEmails'))
+const AdminCatalog = lazy(() => import('./pages/admin/AdminCatalog'))
 
 function HomePage() {
   useEffect(() => {
@@ -88,6 +89,7 @@ export default function App() {
             <Route index element={<AdminDashboard />} />
             <Route path="pieces" element={<AdminPieces />} />
             <Route path="pieces/:pieceId" element={<AdminPieceDetail />} />
+            <Route path="catalog" element={<AdminCatalog />} />
             <Route path="customers" element={<AdminCustomers />} />
             <Route path="emails" element={<AdminEmails />} />
           </Route>
