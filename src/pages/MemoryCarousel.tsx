@@ -3,6 +3,7 @@ import type { Map as LeafletMap } from 'leaflet'
 import type { MessageItem, MessageItemType } from '../lib/supabase'
 import MemoryIcon from '../components/MemoryIcon'
 import styles from './MemoryCarousel.module.css'
+import { useMediaSrc, mimeForItem } from '../lib/media'
 
 const LABEL: Record<MessageItemType, string> = {
   photo: 'Photo', video: 'Video', audio: 'Audio', voice_note: 'Voice Note',
@@ -12,28 +13,21 @@ const LABEL: Record<MessageItemType, string> = {
 
 /* ── Fetches a signed URL, reports media orientation ── */
 function CardMedia({
-  fileKey, type, token, onOrientation,
+  fileKey, type, token, pieceId, mime, onOrientation,
 }: {
   fileKey: string
   type: MessageItemType
   token: string
+  pieceId: string | null
+  mime?: string
   onOrientation?: (landscape: boolean) => void
 }) {
-  const [src, setSrc] = useState<string | null>(null)
-  const [err, setErr] = useState(false)
-
-  useEffect(() => {
-    let cancelled = false
-    fetch('/api/file-serve', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ key: fileKey }),
-    })
-      .then(r => r.ok ? r.json() : Promise.reject())
-      .then(({ signedUrl }) => { if (!cancelled) setSrc(signedUrl) })
-      .catch(() => { if (!cancelled) setErr(true) })
-    return () => { cancelled = true }
-  }, [fileKey, token])
+  // Stored objects are fetched and decrypted into an object URL rather than
+  // handed to the browser as a signed link — the bytes are a container no
+  // <img> or <video> would understand.
+  const { src, error: err } = useMediaSrc(fileKey, token, pieceId, {
+    mime: mimeForItem(type, mime ? { mime } : null),
+  })
 
   if (err) return <p className={styles.cardMeta}>Could not load file</p>
   if (!src)  return <div className={styles.loadingBox}><div className={styles.spinner}/></div>
@@ -166,10 +160,11 @@ function MapCard({ content }: { content: string }) {
 
 /* ── Single card ── */
 function MemoryCard({
-  item, token, position,
+  item, token, pieceId, position,
 }: {
   item: MessageItem
   token: string | null
+  pieceId: string | null
   position: number // -2, -1, 0, 1, 2
 }) {
   const [landscape, setLandscape] = useState(false)
@@ -199,6 +194,8 @@ function MemoryCard({
           fileKey={item.file_url!}
           type={item.type}
           token={token}
+          pieceId={pieceId}
+          mime={item.mime}
           onOrientation={setLandscape}
         />
       ) : item.type === 'google_maps' && item.content ? (
@@ -232,11 +229,15 @@ function MemoryCard({
 interface MemoryCarouselProps {
   items: MessageItem[]
   token: string | null
+  /// Needed to look up the piece's data key. The carousel receives items whose
+  /// text is already decrypted, but media is fetched lazily per card and so
+  /// has to be able to reach the key itself.
+  pieceId: string | null
   activeIndex: number
   onIndexChange: (i: number) => void
 }
 
-export default function MemoryCarousel({ items, token, activeIndex, onIndexChange }: MemoryCarouselProps) {
+export default function MemoryCarousel({ items, token, pieceId, activeIndex, onIndexChange }: MemoryCarouselProps) {
   if (items.length === 0) {
     return (
       <div className={styles.empty}>
@@ -287,7 +288,7 @@ export default function MemoryCarousel({ items, token, activeIndex, onIndexChang
               onClick={() => pos !== 0 && onIndexChange(i)}
               style={{ cursor: pos !== 0 ? 'pointer' : 'default' }}
             >
-              <MemoryCard item={item} token={token} position={pos}/>
+              <MemoryCard item={item} token={token} pieceId={pieceId} position={pos}/>
             </div>
           )
         })}

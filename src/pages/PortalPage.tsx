@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
+import { PIECE_COLUMNS } from '../lib/supabase'
 import type { Piece, Stone, Metal } from '../lib/supabase'
 import PieceThumbnail from '../components/PieceThumbnail'
 import { STONE_NAMES_SHORT as BIRTHSTONE_NAMES } from '../data/catalog'
@@ -51,7 +52,7 @@ export default function PortalPage() {
   useEffect(() => {
     if (!user) return
     Promise.all([
-      supabase.from('Pieces').select('*').eq('sender_id', user.id).order('created_at', { ascending: false }),
+      supabase.from('Pieces').select(PIECE_COLUMNS).eq('sender_id', user.id).order('created_at', { ascending: false }),
       supabase.from('Stones').select('*'),
       supabase.from('Metals').select('*'),
     ]).then(([piecesRes, stonesRes, metalsRes]) => {
@@ -112,7 +113,7 @@ export default function PortalPage() {
             <p className={styles.emptyBody}>
               Your Tijoray piece will appear here once your order is confirmed and dispatched.
             </p>
-            <Link to="/products/birthstone-pendant" className={styles.emptyLink}>Design a pendant</Link>
+            <Link to="/collection" className={styles.emptyLink}>Design a piece</Link>
           </div>
         ) : (
           <ul className={styles.grid}>

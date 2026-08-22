@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 import type { Session, User } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
+import { forgetPieceKeys } from '../lib/crypto'
 
 type AuthContextValue = {
   session: Session | null
@@ -28,7 +29,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     })
 
     // Keep in sync with Supabase auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, s) => {
+      // Covers every way a session can end (explicit sign-out, expiry, another
+      // tab), so decryption keys never outlive the account they belong to.
+      if (event === 'SIGNED_OUT') forgetPieceKeys()
       setSession(s)
     })
 

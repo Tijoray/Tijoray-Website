@@ -2,11 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useDropzone } from 'react-dropzone'
 import { useAuth } from '../contexts/AuthContext'
-import { supabase } from '../lib/supabase'
+import { supabase, PIECE_COLUMNS } from '../lib/supabase'
 import type { Piece, Message, MessageItem, MessageItemType } from '../lib/supabase'
 import TutorialModal from './TutorialModal'
 import MemoryCarousel from './MemoryCarousel'
 import MemoryIcon from '../components/MemoryIcon'
+import { encryptFile, encryptText, decryptText, pieceKeys, type PieceKeys } from '../lib/crypto'
+import { useMediaSrc, mimeForItem } from '../lib/media'
 import styles from './PortalPiecePage.module.css'
 
 /* ── Types ── */
@@ -54,46 +56,88 @@ function getRecordingFormat() {
 }
 
 /* ── Upload helper ── */
-async function uploadFile(file: File, pieceId: string, token: string): Promise<string> {
-  const res = await fetch('/api/s3-presign', {
+/// Encrypts the file, then uploads the container. Nothing readable leaves the
+/// browser: the server signs a PUT for an opaque blob and never holds a key
+/// that would open it.
+///
+/// The size check is against the plaintext, because that is the number the
+/// limit is expressed in and the one worth telling the user about.
+async function uploadFile(
+  file: File,
+  pieceId: string,
+  token: string,
+  keys: PieceKeys,
+): Promise<{ fileKey: string; encMeta: string }> {
+  const res = await fetch('/api/files', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-    body: JSON.stringify({ filename: file.name, contentType: file.type, pieceId }),
+    body: JSON.stringify({ action: 'presign', filename: file.name, contentType: file.type, pieceId }),
   })
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
     throw new Error(body.error ?? 'Could not get upload URL')
   }
-  const { uploadUrl, fileKey, contentType, maxBytes } = await res.json()
+  const { uploadUrl, fileKey, maxBytes, uploadHeaders } = await res.json()
   if (file.size > maxBytes) throw new Error(`File is too large (max ${Math.round(maxBytes / 1024 / 1024)}MB)`)
+
+  const sealed = await encryptFile(file, keys.file)
   const uploadRes = await fetch(uploadUrl, {
     method: 'PUT',
-    headers: { 'Content-Type': contentType },
-    body: file,
+    // Exactly the headers the presign signed — R2 rejects the PUT otherwise.
+    headers: uploadHeaders ?? { 'Content-Type': 'application/octet-stream' },
+    body: sealed,
   })
   if (!uploadRes.ok) {
     const errText = await uploadRes.text().catch(() => '')
     throw new Error(`Upload failed (${uploadRes.status}): ${errText.slice(0, 140)}`)
   }
-  return fileKey
+
+  // The true name and type no longer appear in the key or the object's
+  // Content-Type, so they travel here instead — encrypted, like everything
+  // else that describes the memory.
+  const encMeta = await encryptText(
+    JSON.stringify({ name: file.name, mime: file.type, size: file.size }),
+    keys.text,
+  )
+  return { fileKey, encMeta: encMeta! }
+}
+
+/// Turns rows off the wire into rows the UI can render, decrypting the text
+/// columns in place. Everything downstream — the carousel, the list, the edit
+/// fields — then works on plaintext exactly as it did before encryption.
+///
+/// A row that fails to decrypt is kept rather than dropped, showing a marker
+/// instead of vanishing: a memory the gifter can see is missing is far less
+/// alarming than one that silently disappeared.
+async function decryptItems(rows: MessageItem[], keys: PieceKeys): Promise<MessageItem[]> {
+  return Promise.all(rows.map(async row => {
+    try {
+      const [title, content, meta] = await Promise.all([
+        decryptText(row.title, keys.text),
+        decryptText(row.content, keys.text),
+        row.enc_meta ? decryptText(row.enc_meta, keys.text) : null,
+      ])
+      const mime = meta ? (JSON.parse(meta).mime as string | undefined) : undefined
+      return { ...row, title, content, mime }
+    } catch {
+      return { ...row, title: '\u2014', content: null }
+    }
+  }))
 }
 
 /* ── SignedMedia ── */
-function SignedMedia({ fileKey, type, token }: { fileKey: string; type: MessageItemType; token: string }) {
-  const [src, setSrc] = useState<string | null>(null)
-  const [err, setErr] = useState(false)
-  useEffect(() => {
-    let cancelled = false
-    fetch('/api/file-serve', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ key: fileKey }),
-    })
-      .then(r => r.ok ? r.json() : Promise.reject())
-      .then(({ signedUrl }) => { if (!cancelled) setSrc(signedUrl) })
-      .catch(() => { if (!cancelled) setErr(true) })
-    return () => { cancelled = true }
-  }, [fileKey, token])
+function SignedMedia({
+  fileKey, type, token, pieceId, mime,
+}: {
+  fileKey: string
+  type: MessageItemType
+  token: string
+  pieceId: string
+  mime?: string
+}) {
+  const { src, error: err } = useMediaSrc(fileKey, token, pieceId, {
+    mime: mimeForItem(type, mime ? { mime } : null),
+  })
 
   if (err) return <span className={styles.thumbMeta}>—</span>
   if (!src) return <div className={styles.thumbSpinner}/>
@@ -226,6 +270,12 @@ export default function PortalPiecePage() {
   const [notFound,      setNotFound]      = useState(false)
   const [token,         setToken]         = useState<string | null>(null)
   const [recipientName, setRecipientName] = useState<string | null>(null)
+  // The piece's data key, fetched once and reused. Nothing can be written or
+  // read without it, so every path below waits on it rather than falling back
+  // to plaintext — silently storing an unencrypted memory would be worse than
+  // failing to store one.
+  const [keys,          setKeys]          = useState<PieceKeys | null>(null)
+  const [keyError,      setKeyError]      = useState(false)
 
   const [activeType, setActiveType] = useState<MessageItemType>('photo')
   const [pending,    setPending]    = useState<PendingItem>(blank('photo'))
@@ -263,7 +313,7 @@ export default function PortalPiecePage() {
     if (!pieceId || !user) return
     Promise.all([
       supabase.auth.getSession(),
-      supabase.from('Pieces').select('*').eq('id', pieceId).eq('sender_id', user.id).single(),
+      supabase.from('Pieces').select(PIECE_COLUMNS).eq('id', pieceId).eq('sender_id', user.id).single(),
       supabase.from('Messages').select('*').eq('piece_id', pieceId).single(),
     ]).then(([{ data: sessionData }, { data: p, error: pErr }, { data: m }]) => {
       const tok = sessionData.session?.access_token ?? null
@@ -271,14 +321,21 @@ export default function PortalPiecePage() {
       if (pErr || !p) { setNotFound(true); setLoading(false); return }
       setPiece(p)
       setMessage(m ?? null)
-      if (m) {
-        supabase
-          .from('Message_Items')
-          .select('*')
-          .eq('message_id', m.id)
-          .order('sort_order', { ascending: true, nullsFirst: false })
-          .order('created_at', { ascending: true })
-          .then(({ data }) => setItems(sortItems(data ?? [])))
+      if (m && tok) {
+        Promise.all([
+          supabase
+            .from('Message_Items')
+            .select('*')
+            .eq('message_id', m.id)
+            .order('sort_order', { ascending: true, nullsFirst: false })
+            .order('created_at', { ascending: true }),
+          pieceKeys(pieceId, tok),
+        ])
+          .then(async ([{ data }, k]) => {
+            setKeys(k)
+            setItems(sortItems(await decryptItems(data ?? [], k)))
+          })
+          .catch(() => setKeyError(true))
       }
       // Fetch recipient name via API (requires service role, can't do client-side)
       if (tok) {
@@ -363,31 +420,52 @@ export default function PortalPiecePage() {
     setPending(p => ({ ...p, state: 'uploading', error: '' }))
 
     try {
+      // No key, no write. Falling back to storing this in the clear would
+      // quietly undo the guarantee for one memory in the middle of a reel,
+      // which is the worst possible failure: invisible and permanent.
+      if (!keys) throw new Error('Could not unlock this piece. Reload and try again.')
+
       let fileUrl: string | null = null
+      let encMeta: string | null = null
       if (typeDef.isFile && pending.file) {
         const { data: sessionData } = await supabase.auth.getSession()
         const tok = sessionData.session?.access_token
         if (!tok) throw new Error('Not authenticated')
-        fileUrl = await uploadFile(pending.file, pieceId, tok)
+        const uploaded = await uploadFile(pending.file, pieceId, tok, keys)
+        fileUrl = uploaded.fileKey
+        encMeta = uploaded.encMeta
       }
 
       const nextOrder = items.length
+      const plainTitle   = pending.title || null
+      const plainContent = (!typeDef.isFile && pending.content) ? pending.content : null
 
+      // A note's body, a place's coordinates and name, a Spotify link — all of
+      // it goes in encrypted. `type` and `sort_order` stay readable because the
+      // server orders by one and the app switches on the other, and they give
+      // away only shape, never content.
       const { data: newItem, error } = await supabase
         .from('Message_Items')
         .insert({
           message_id: message.id,
           type:       activeType,
-          title:      pending.title || null,
+          title:      await encryptText(plainTitle, keys.text),
           file_url:   fileUrl,
-          content:    (!typeDef.isFile && pending.content) ? pending.content : null,
+          content:    await encryptText(plainContent, keys.text),
           sort_order: nextOrder,
+          enc_v:      1,
+          enc_meta:   encMeta,
         })
         .select('*')
         .single()
 
       if (error) throw new Error(error.message)
-      setItems(prev => sortItems([...prev, newItem]))
+      // State holds plaintext, so the rest of the UI is unchanged by any of
+      // this. Swap the ciphertext the insert echoed back for what we sent.
+      setItems(prev => sortItems([
+        ...prev,
+        { ...newItem, title: plainTitle, content: plainContent },
+      ]))
       setCarouselIndex(nextOrder)
       setPending(blank(activeType))
       setAudioBlob(null)
@@ -402,10 +480,10 @@ export default function PortalPiecePage() {
   async function handleDelete(itemId: string) {
     const item = items.find(i => i.id === itemId)
     if (item?.file_url && token) {
-      await fetch('/api/file-delete', {
+      await fetch('/api/files', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ key: item.file_url }),
+        body: JSON.stringify({ action: 'delete', key: item.file_url }),
       })
     }
     await supabase.from('Message_Items').delete().eq('id', itemId)
@@ -463,7 +541,7 @@ export default function PortalPiecePage() {
   )
 
   const typeDef = ITEM_TYPES.find(t => t.type === activeType)!
-  const isAddDisabled = saving || (
+  const isAddDisabled = !keys || saving || (
     typeDef.isFile ? !pending.file : activeType !== 'voice_note' && !pending.content.trim()
   )
 
@@ -627,6 +705,13 @@ export default function PortalPiecePage() {
                 </div>
               )}
 
+              {keyError && (
+                <p className={styles.fieldError}>
+                  This piece could not be unlocked, so memories can&rsquo;t be shown or
+                  added right now. Reload the page to try again.
+                </p>
+              )}
+
               {pending.error && <p className={styles.fieldError}>{pending.error}</p>}
 
               <button className={styles.addBtn} disabled={isAddDisabled} onClick={handleAdd}>
@@ -654,6 +739,7 @@ export default function PortalPiecePage() {
                 <MemoryCarousel
                   items={items}
                   token={token}
+                  pieceId={pieceId ?? null}
                   activeIndex={carouselIndex}
                   onIndexChange={setCarouselIndex}
                 />
@@ -696,7 +782,13 @@ export default function PortalPiecePage() {
                         {/* Thumbnail */}
                         <div className={styles.thumb}>
                           {item.file_url && token ? (
-                            <SignedMedia fileKey={item.file_url} type={item.type} token={token}/>
+                            <SignedMedia
+                              fileKey={item.file_url}
+                              type={item.type}
+                              token={token}
+                              pieceId={pieceId!}
+                              mime={item.mime}
+                            />
                           ) : (
                             <span className={styles.thumbIcon}>
                               <MemoryIcon type={item.type} size={16}/>

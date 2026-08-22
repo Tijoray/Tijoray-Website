@@ -5,7 +5,6 @@ import { describeConfig, StatusPill, money, date, dateTime, estCents } from './f
 import styles from './admin.module.css'
 
 const CARRIERS = ['', 'usps', 'ups', 'fedex', 'dhl', 'other']
-const MEDIA_TYPES = new Set(['photo', 'video', 'audio', 'voice_note'])
 
 export default function AdminPieceDetail() {
   const { pieceId } = useParams<{ pieceId: string }>()
@@ -204,40 +203,24 @@ export default function AdminPieceDetail() {
   )
 }
 
-/* ── Memory row with lazy signed-URL loading for media ───────────────── */
+/* ── Memory row ──────────────────────────────────────────────────────── */
+/// Memories are not viewable from admin, and that is the intended result
+/// rather than a gap to work around. Admin holds the bucket and the database;
+/// it holds no key, so there is nothing here to render. What the row still
+/// shows is that a memory exists and what kind it is — which is what support
+/// actually needs, since "did their photo upload?" is answerable without
+/// looking at the photo.
 function MemoryRow({ item }: { item: MessageItem }) {
-  const [url, setUrl] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
-  const isMedia = MEDIA_TYPES.has(item.type)
-
-  const view = async () => {
-    if (!item.file_url) return
-    setLoading(true)
-    try {
-      const r = await adminApi.signFile(item.file_url)
-      setUrl(r.url)
-    } catch { /* ignore */ } finally { setLoading(false) }
-  }
-
   return (
     <div className={styles.memoryItem}>
       <div className={styles.memoryType}>{item.type.replace(/_/g, ' ')}</div>
       <div className={styles.memoryBody}>
-        {item.title && <div style={{ fontWeight: 600, color: 'var(--ink)' }}>{item.title}</div>}
-        {item.content && (
-          /^https?:\/\//.test(item.content)
-            ? <a className={styles.linkOut} href={item.content} target="_blank" rel="noreferrer">{item.content}</a>
-            : <div style={{ whiteSpace: 'pre-wrap' }}>{item.content}</div>
-        )}
-        {isMedia && (
-          url
-            ? (item.type === 'photo'
-                ? <img className={styles.memoryThumb} src={url} alt={item.title ?? 'photo'} />
-                : <a className={styles.linkOut} href={url} target="_blank" rel="noreferrer">Open {item.type}</a>)
-            : <button className={styles.filterBtn} onClick={view} disabled={loading}>
-                {loading ? 'Loading…' : `View ${item.type}`}
-              </button>
-        )}
+        <div style={{ color: 'var(--ink-soft, #888)', display: 'flex', gap: 6, alignItems: 'center' }}>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 015 0v2"/>
+          </svg>
+          Encrypted &mdash; readable only by the sender and recipient
+        </div>
       </div>
     </div>
   )

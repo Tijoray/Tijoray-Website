@@ -51,11 +51,26 @@ export type Piece = {
   metal_id: string | null
   sender_id: string | null
   receiver_id: string | null
-  hardware_id: string | null
+  /// Not readable from the browser — see PIECE_COLUMNS. Only the admin API,
+  /// which runs on the service role, ever sees this.
+  hardware_id?: string | null
   nfc_linked_at: string | null
   activated_at: string | null
   created_at: string
 }
+
+/**
+ * Columns the browser may read from `Pieces`, listed explicitly.
+ *
+ * `select('*')` cannot be used against this table. The encryption migration
+ * revokes the blanket SELECT from `authenticated` and re-grants a column list,
+ * deliberately withholding `hardware_id` so a piece's tag code can only be
+ * obtained by physically tapping it. `*` expands to every column including that
+ * one, and Postgres then refuses the entire query rather than omitting it.
+ */
+// One unbroken literal: supabase-js parses this string in the type system to
+// shape the result, and concatenation widens it to `string`, which it rejects.
+export const PIECE_COLUMNS = 'id,serial,collection,product_type,config,cover_image_url,model_3d_url,stone_id,metal_id,sender_id,receiver_id,nfc_linked_at,activated_at,created_at'
 
 export type Message = {
   id: string
@@ -73,12 +88,24 @@ export type MessageItemType =
 export type MessageItem = {
   id: string
   message_id: string
+  /// Ciphertext on the wire when enc_v is 1. Everything in the UI works with
+  /// these already decrypted — see decryptItems in PortalPiecePage.
   title: string | null
   type: MessageItemType
   file_url: string | null
   content: string | null
   sort_order: number | null
   created_at: string
+  /// Always 1 — the database refuses any other value. It exists so a future
+  /// format change has somewhere to declare itself.
+  enc_v: number
+  /// Encrypted JSON: the original filename and MIME type, which no longer
+  /// appear in the object key or its Content-Type. Null for rows with no file.
+  enc_meta: string | null
+  /// Populated client-side from enc_meta once decrypted; never written back.
+  /// Players need the real type — a .mov handed to <video> as video/mp4 is
+  /// refused by Chrome.
+  mime?: string
 }
 
 export type Vault = {
