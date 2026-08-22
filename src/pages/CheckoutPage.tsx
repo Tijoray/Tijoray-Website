@@ -388,7 +388,10 @@ export default function CheckoutPage() {
                   />
                 </div>
                 <div className={styles.summaryItemInfo}>
-                  <p className={styles.summaryItemName}>{SHAPE_LABELS[item.shape]} {PRODUCT_TYPES[item.productType]?.label ?? 'Pendant'}</p>
+                  <p className={styles.summaryItemName}>
+                    {item.productType === 'bracelet' && item.shape === 'square' ? 'Asscher' : SHAPE_LABELS[item.shape]}
+                    {' '}{PRODUCT_TYPES[item.productType]?.label ?? 'Pendant'}
+                  </p>
                   <p className={styles.summaryItemSpec}>{item.specLine}</p>
                 </div>
                 <span className={styles.summaryItemPrice}>{fmt(item.price)}</span>
@@ -397,13 +400,13 @@ export default function CheckoutPage() {
 
             <div className={styles.summaryRow} style={{ marginTop: 16 }}>
               <span>Shipping</span>
-              <span className={styles.summaryMuted}>Calculated at checkout</span>
+              <span className={styles.summaryMuted}>Complimentary</span>
             </div>
 
             <div className={styles.summaryDivider} />
 
             <div className={`${styles.summaryRow} ${styles.summaryTotal}`}>
-              <span>Estimated Total</span>
+              <span>Total</span>
               <span>{fmt(total)}</span>
             </div>
           </div>

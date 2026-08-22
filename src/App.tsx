@@ -28,6 +28,8 @@ const PortalPiecePage = lazy(() => import('./pages/PortalPiecePage'))
 const SettingsPage = lazy(() => import('./pages/SettingsPage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
 const SignUpPage = lazy(() => import('./pages/SignUpPage'))
+const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'))
+const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'))
 const CompleteProfilePage = lazy(() => import('./pages/CompleteProfilePage'))
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 const FaqPage = lazy(() => import('./pages/FaqPage'))
@@ -43,6 +45,20 @@ const AdminPieceDetail = lazy(() => import('./pages/admin/AdminPieceDetail'))
 const AdminCustomers = lazy(() => import('./pages/admin/AdminCustomers'))
 const AdminEmails = lazy(() => import('./pages/admin/AdminEmails'))
 const AdminCatalog = lazy(() => import('./pages/admin/AdminCatalog'))
+
+/** Shown while a lazy route's chunk downloads — a blank page reads as broken. */
+function RouteFallback() {
+  return (
+    <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div aria-label="Loading" style={{
+        width: 28, height: 28, borderRadius: '50%',
+        border: '2px solid rgba(0,0,0,0.12)', borderTopColor: 'var(--gold, #b08d57)',
+        animation: 'spin 0.8s linear infinite',
+      }} />
+      <style>{'@keyframes spin { to { transform: rotate(360deg) } }'}</style>
+    </div>
+  )
+}
 
 function HomePage() {
   useEffect(() => {
@@ -83,7 +99,7 @@ export default function App() {
   // The admin panel is a self-contained shell — no public navbar, footer, or progress bar.
   if (isAdmin) {
     return (
-      <Suspense fallback={null}>
+      <Suspense fallback={<RouteFallback />}>
         <Routes>
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
@@ -106,7 +122,7 @@ export default function App() {
         zIndex: 1000, transition: 'width 0.08s linear'
       }} />
       <Navbar />
-      <Suspense fallback={null}>
+      <Suspense fallback={<RouteFallback />}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
@@ -139,6 +155,8 @@ export default function App() {
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/complete-profile" element={<CompleteProfilePage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

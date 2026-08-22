@@ -31,7 +31,7 @@ export default function OrderSuccessPage() {
         <p className={styles.eyebrow}>Order Confirmed</p>
         <h1 className={styles.title}>Your piece is being crafted</h1>
         <p className={styles.body}>
-          A confirmation has been sent to your email. Your pendant will be handcrafted and dispatched within 10–14 business days.
+          A confirmation has been sent to your email. Your piece will be handcrafted and dispatched within 10–14 business days.
         </p>
         <p className={styles.body}>
           Once your piece arrives, return to your portal to compose the memory inside — photos, voice notes, music, and more.

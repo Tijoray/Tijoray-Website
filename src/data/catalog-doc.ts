@@ -135,12 +135,12 @@ export function buildDefaultCatalog(assetBase = ''): CatalogDoc {
       {
         id: 'birthstone-pendant', route: '/products/birthstone-pendant',
         collectionId: 'birthstone', productTypeId: 'pendant',
-        name: 'Birthstone Pendant', priceFrom: 1299,
+        name: 'Birthstone Pendant', priceFrom: 299,
         prices: allMetalPrices(),
         cardImage: a('/assets/jewelry/birthstone-pendant.png'),
         cardDetail:
-          'Available in square and circle silhouettes. Set in steel, silver, ' +
-          '10K, or 18K gold — with your chosen birthstone at the center.',
+          'Available in square, circle, heart, and pear silhouettes. Set in steel, ' +
+          'silver, 10K, or 18K gold — with your chosen birthstone at the center.',
         models: {}, available: true,
       },
       {

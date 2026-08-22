@@ -65,7 +65,7 @@ const STEPS = [
   {
     eyebrow: 'Step 3 of 3',
     title: 'Preview as your recipient',
-    body: 'The carousel on the right shows exactly how your memories will appear when your loved one taps their pendant. Drag to reorder anytime.',
+    body: 'The carousel on the right shows exactly how your memories will appear when your loved one taps their piece. Drag to reorder anytime.',
     visual: (
       <div className={styles.visualCarousel}>
         <div className={styles.visualCard}>

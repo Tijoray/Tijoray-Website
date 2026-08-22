@@ -109,7 +109,7 @@ export default function BraceletConfiguratorPage() {
     const pmrem = new THREE.PMREMGenerator(renderer)
     pmrem.compileEquirectangularShader()
     new RGBELoader().load(
-      'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_09_1k.hdr',
+      '/assets/hdr/studio_small_09_1k.hdr',
       (hdr) => {
         scene.environment = pmrem.fromEquirectangular(hdr).texture
         hdr.dispose()
@@ -530,7 +530,7 @@ export default function BraceletConfiguratorPage() {
                 <span className={styles.tooltipWrap}>
                   <span className={styles.tooltipIcon} aria-label="About shape">?</span>
                   <span className={styles.tooltip} role="tooltip">
-                    The foundation of your piece. The <strong>Asscher</strong> offers clean architectural lines and bold geometry. The <strong>Circle</strong> is a symbol of continuity — a loop with no beginning or end.
+                    The foundation of your piece. The <strong>Asscher</strong> offers clean architectural lines. The <strong>Circle</strong> is a symbol of continuity. The <strong>Heart</strong> wears its meaning openly, and the <strong>Pear</strong> tapers to a single point of light.
                   </span>
                 </span>
               </div>
@@ -654,7 +654,7 @@ export default function BraceletConfiguratorPage() {
           {/* Price + CTA */}
           <div className={styles.priceBlock}>
             <div className={styles.priceRow}>
-              <span className={styles.priceLabel}>From</span>
+              <span className={styles.priceLabel}>Price</span>
               <span className={styles.priceValue}>{price}</span>
             </div>
             <p className={styles.specLine}>{specLine}</p>
@@ -749,16 +749,14 @@ export default function BraceletConfiguratorPage() {
             <p className={styles.eyebrow}>Crafted to Last</p>
             <h2 className={styles.storyTitle}>Built for <em>a lifetime</em> of wear.</h2>
             <p className={styles.storyBody}>
-              Every Tijoray bracelet undergoes a multi-stage surface treatment before it
-              leaves our atelier. Steel pieces are finished with PVD coating — a process
-              used in aerospace and surgical instruments — achieving a hardness that
-              resists daily scratching far beyond standard plating.
+              Every Tijoray bracelet passes through multi-stage finishing before it
+              leaves our atelier — cut, set, polished, and inspected by hand, with
+              each stage checked before the next begins.
             </p>
             <p className={styles.storyBody}>
-              Gold and silver bracelets receive a final micron-thick rhodium or IP gold
-              layer, bonded at the molecular level. The result is a surface that holds
-              its color, its luster, and its precision-set stone through years of
-              continuous wear.
+              The result is a surface that holds its color, its luster, and its
+              precision-set stone through years of continuous wear — a piece made
+              for every day, not for the drawer.
             </p>
             <p className={styles.storyBody}>
               Every piece leaves under our Lifetime Heritage Guarantee — not a warranty,
@@ -788,7 +786,6 @@ export default function BraceletConfiguratorPage() {
           <p className={styles.dimsNote}>
             The station face is consistent across all four shapes — Asscher, Circle, Heart, and Pear —
             so pieces read cleanly on the wrist.
-            Chain length can be adjusted at checkout.
           </p>
         </div>
       </section>

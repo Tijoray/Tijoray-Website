@@ -56,9 +56,8 @@ export default function AboutPage() {
               the moments and voices that define a life.
             </p>
             <p className={styles.bodyText}>
-              Our atelier brings together master jewellers, materials scientists, and
-              cryptographic engineers under a single conviction — that permanence is
-              the highest form of luxury.
+              Our atelier brings jewelry craft and modern encryption together under a
+              single conviction — that permanence is the highest form of luxury.
             </p>
           </div>
         </div>
@@ -76,7 +75,7 @@ export default function AboutPage() {
             {
               num: '02',
               title: 'Private by Design',
-              body: 'Your vault belongs to you alone. Passive NFC means no app is required to read what you have stored — only the piece itself, held close, unlocks what is inside.',
+              body: 'Your vault belongs to you alone. Memories are encrypted before they ever leave your device, and only the piece itself — held close and tapped — unlocks what is inside.',
             },
             {
               num: '03',
@@ -114,7 +113,7 @@ export default function AboutPage() {
               It exists entirely within the piece — passive, permanent, and yours alone to open.
             </p>
             <p className={styles.bodyText}>
-              Every pendant leaves our atelier under a Lifetime Heritage Guarantee.
+              Every piece leaves our atelier under a Lifetime Heritage Guarantee.
               Not a warranty — a promise that what you create today will still be
               readable a generation from now.
             </p>
@@ -142,7 +141,7 @@ export default function AboutPage() {
           </p>
           <div className={styles.ctaBtns}>
             <Link to="/contact" className={styles.btnPrimary}>Speak with the Atelier</Link>
-            <Link to="/" className={styles.btnSecondary}>Explore the Collection</Link>
+            <Link to="/collection" className={styles.btnSecondary}>Explore the Collection</Link>
           </div>
         </div>
       </section>

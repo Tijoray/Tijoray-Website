@@ -12,7 +12,7 @@ const STEPS = [
   {
     num: '02',
     title: 'Upload Memories Securely',
-    body: 'Add photographs, voice notes, letters, and certificates to your private encrypted vault — accessible only by you.',
+    body: 'Add photographs, voice notes, letters, and certificates to your private encrypted vault — seen only by you and the person you give it to.',
     illustration: asset('/assets/illustrations/how-it-works-2-upload.png'),
   },
   {

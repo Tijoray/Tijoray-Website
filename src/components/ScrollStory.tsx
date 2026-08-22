@@ -73,7 +73,7 @@ export default function ScrollStory() {
     const pmrem = new THREE.PMREMGenerator(renderer)
     pmrem.compileEquirectangularShader()
     new RGBELoader().load(
-      'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_09_1k.hdr',
+      '/assets/hdr/studio_small_09_1k.hdr',
       (hdr) => {
         const envMap = pmrem.fromEquirectangular(hdr).texture
         scene.environment = envMap

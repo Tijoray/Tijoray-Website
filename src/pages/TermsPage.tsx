@@ -29,7 +29,7 @@ export default function TermsPage() {
 
         <div className={styles.section}>
           <h2>Returns and refunds</h2>
-          <p>Because each piece is made to order, we do not accept returns for change of mind. If your piece arrives damaged or with a manufacturing defect, contact us at <a href="mailto:curator@tijoray.com">curator@tijoray.com</a> within 14 days of delivery with photographs and we will arrange a replacement or full refund.</p>
+          <p>Because each piece is made to order, we do not accept returns for change of mind. If your piece arrives damaged or with a manufacturing defect, contact us at <a href="mailto:support@tijoray.com">support@tijoray.com</a> within 14 days of delivery with photographs and we will arrange a replacement or full refund.</p>
         </div>
 
         <div className={styles.section}>
@@ -41,7 +41,7 @@ export default function TermsPage() {
 
         <div className={styles.section}>
           <h2>NFC and hardware</h2>
-          <p>The NFC chip embedded in your piece is a physical component subject to normal wear. It is rated for decades of typical use. Tijoray is not responsible for damage caused by physical impact, exposure to extreme conditions, or tampering. Tampering with the chip voids any warranty and invalidates the piece's cryptographic certificate.</p>
+          <p>The NFC chip embedded in your piece is a physical component subject to normal wear. It is rated for decades of typical use. Tijoray is not responsible for damage caused by physical impact, exposure to extreme conditions, or tampering. Tampering with the chip voids any warranty.</p>
         </div>
 
         <div className={styles.section}>
@@ -66,7 +66,7 @@ export default function TermsPage() {
 
         <div className={styles.section}>
           <h2>Contact</h2>
-          <p>Questions about these Terms: <a href="mailto:curator@tijoray.com">curator@tijoray.com</a></p>
+          <p>Questions about these Terms: <a href="mailto:support@tijoray.com">support@tijoray.com</a></p>
         </div>
 
       </div>

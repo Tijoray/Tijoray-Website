@@ -9,8 +9,8 @@ const TRUST_POINTS = [
         <path d="M7 11V7a5 5 0 0 1 10 0v4" />
       </svg>
     ),
-    label: 'AES-256 Encrypted Storage',
-    detail: 'Your memories are encrypted with AES-256, the same standard used by governments and financial institutions worldwide. No one — including Tijoray — can access your vault.',
+    label: 'AES-256 Encrypted Memories',
+    detail: 'Memories are encrypted with AES-256 in your browser before they are uploaded — the same encryption standard used by governments and financial institutions. What reaches our servers is ciphertext, not your photos and voices.',
   },
   {
     icon: (
@@ -19,8 +19,8 @@ const TRUST_POINTS = [
         <circle cx="12" cy="7" r="4" />
       </svg>
     ),
-    label: 'Private Owner-Controlled Access',
-    detail: 'Access keys are generated on your device and never stored on our servers. You hold the only copy. If you choose to share, you control exactly who sees what.',
+    label: 'Private by Design',
+    detail: 'Decryption keys are issued only to the sender and the recipient of a piece, after their identity is verified. Our support and admin tools hold no key — they can see that a memory exists, never what it contains.',
   },
   {
     icon: (
@@ -40,8 +40,8 @@ const TRUST_POINTS = [
         <path d="M21 13v2a4 4 0 0 1-4 4H3" />
       </svg>
     ),
-    label: 'Secure Transfer to Future Owner',
-    detail: 'When you pass your piece to the next generation, ownership transfer is cryptographically verified. The vault transfers intact — memories and provenance preserved.',
+    label: 'Made to Be Passed On',
+    detail: 'A Tijoray piece is designed to outlive its first owner. When it is handed to the next generation, the vault travels with it — memories and provenance intact, tied to the piece rather than to a single account.',
   },
   {
     icon: (
@@ -50,8 +50,8 @@ const TRUST_POINTS = [
         <polyline points="9 12 11 14 15 10" />
       </svg>
     ),
-    label: 'Tamper-Aware Authentication',
-    detail: 'Each piece carries a cryptographic certificate of authenticity. Any tampering with the NFC chip invalidates the certificate, protecting both the vault and the piece\'s provenance.',
+    label: 'Registered & Authenticated',
+    detail: 'Every piece carries a unique serial identity, registered with our atelier at the moment of creation and verified on every tap — so a Tijoray can always be told from an imitation.',
   },
 ]
 

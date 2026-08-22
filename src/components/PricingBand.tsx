@@ -25,7 +25,7 @@ export default function PricingBand() {
     {
       name: 'Gold Collection',
       from: dollars(lowestAcross(['10k', '18k'])),
-      desc: '10K and 18K gold settings in white, yellow, or rose. Each piece carries a genuine birthstone and a lifetime memory vault.',
+      desc: '10K and 18K gold settings in white, yellow, or rose. Each piece carries your chosen birthstone and a lifetime memory vault.',
       link: '/products/birthstone-pendant',
       cta: 'Configure Yours',
     },

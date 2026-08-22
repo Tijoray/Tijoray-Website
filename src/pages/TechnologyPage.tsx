@@ -36,14 +36,14 @@ const APP_FEATURES = [
     img: asset('/assets/app/app-atelier.png'),
     label: 'Stone Intelligence',
     title: 'Every stone, documented.',
-    body: "Tap your piece and unlock a complete gemological record. Stone type, clarity grade, color range, carat weight, and cut quality — all sourced directly from the artisan's certification at the moment of creation.",
-    pills: ['Stone Type', 'Clarity Grade', 'GIA Certificate', 'Carat Weight'],
+    body: 'Tap your piece and unlock its stone record. Stone type, cut, colour, and setting — recorded by the atelier at the moment of creation and bound permanently to the piece.',
+    pills: ['Stone Type', 'Cut & Colour', 'Setting', 'Atelier Record'],
   },
   {
     img: asset('/assets/app/app-gold.png'),
     label: 'Gold Composition',
     title: 'Know what you wear.',
-    body: "Every alloy in your Tijoray piece is catalogued — metal purity, color composition, and total mass. Our Craftsmanship Guarantee is embedded directly in the record, verified by the Atelier's Master Smith.",
+    body: 'Every alloy in your Tijoray piece is catalogued — metal purity, colour composition, and total mass. Our Craftsmanship Guarantee is embedded directly in the record, verified by the atelier before the piece ships.',
     pills: ['Metal Purity', 'Composition', 'Weight', 'Craftsmanship Guarantee'],
   },
   {

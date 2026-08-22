@@ -160,8 +160,11 @@ async function dispatch(
   }
 
   if (!resend) {
-    console.warn(`[email] RESEND_API_KEY missing — would have sent "${type}" to ${to}`)
-    return 'sent'
+    // Release the claim: leaving it would mark this email "sent" forever, so
+    // even after the key is configured no retry would ever deliver it.
+    await supabase.from('Email_Log').delete().eq('ref', ref).eq('type', type)
+    console.error(`[email] RESEND_API_KEY missing — could NOT send "${type}" to ${to}`)
+    return 'skipped'
   }
 
   try {

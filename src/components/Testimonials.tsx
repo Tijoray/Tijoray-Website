@@ -1,21 +1,23 @@
 import { useEffect, useRef } from 'react'
 import styles from './Testimonials.module.css'
 
+// Honest editorial voice — not customer reviews. Swap in real, permissioned
+// testimonials (name + purchase verified) once the first pieces are worn.
 const TESTIMONIALS = [
   {
-    quote: "A piece of extraordinary craftsmanship and ingenuity. The ability to carry my grandmother's voice inside a jewel I wear every day is something I could not have imagined before Tijoray.",
-    name: 'Isabelle M.',
-    detail: 'Birthstone Pendant — Circle, 18k Yellow Gold',
+    quote: 'A photograph fades. A voice recording sits forgotten in a phone. We built Tijoray so the moments that matter most live inside something you reach for every day.',
+    name: 'Why we make this',
+    detail: 'The idea behind every piece',
   },
   {
-    quote: 'I gifted my mother a Tijoray pendant for her 60th birthday. She wept when she unlocked it and found photographs from her childhood she thought were lost. Nothing has ever moved her like this.',
-    name: 'James A.',
-    detail: 'Bespoke Commission — Sapphire & Platinum',
+    quote: 'Every piece is finished by hand and carries its own vault — a private, encrypted archive that opens with a tap and asks nothing of you. No battery. No charging. No subscription.',
+    name: 'How it is made',
+    detail: 'Craft first, technology concealed',
   },
   {
-    quote: 'As someone who owns pieces from Cartier and Van Cleef, I can say Tijoray stands apart — not just in concept, but in the quality of the handwork. The finishing is immaculate.',
-    name: 'Priya S.',
-    detail: 'Diamond Edition — Pear Silhouette',
+    quote: 'A Tijoray is meant to be given twice: once when it is clasped for the first time, and again decades later, when the memories inside it are worth more than the metal.',
+    name: 'What it is for',
+    detail: 'Made to be passed on',
   },
 ]
 
@@ -38,7 +40,7 @@ export default function Testimonials() {
     <section className={styles.section}>
       <div className={styles.inner}>
         <header className={styles.header}>
-          <p className={styles.eyebrow}>From Our Clients</p>
+          <p className={styles.eyebrow}>From the Atelier</p>
           <h2 className={styles.title}>Worn and <em>remembered.</em></h2>
         </header>
 

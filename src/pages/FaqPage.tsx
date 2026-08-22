@@ -5,7 +5,7 @@ import styles from './FaqPage.module.css'
 const FAQS = [
   {
     q: 'Does it work on iPhone and Android?',
-    a: 'Yes. Tijoray uses standard NFC technology supported natively on all modern iPhones (XS and later) and Android devices. No app download is required — simply tap your phone to the piece to unlock your vault.',
+    a: 'Yes. Tijoray uses standard NFC technology supported natively on modern iPhones (XS and later) and NFC-enabled Android devices. Tapping your phone to the piece opens the Tijoray experience, where your memories are waiting.',
   },
   {
     q: 'What happens if I lose my jewelry?',
@@ -13,11 +13,11 @@ const FAQS = [
   },
   {
     q: 'Is my data stored online?',
-    a: 'Your vault contents are encrypted with AES-256 before leaving your device and stored in a private, owner-controlled cloud vault. The NFC chip itself holds only encrypted authentication credentials — not your memories. Tijoray staff cannot access your vault.',
+    a: 'Your memories are encrypted with AES-256 on your device before they are uploaded, and stored as ciphertext in secure cloud storage. The NFC chip itself holds only the piece\'s identity — never your memories. Decryption keys are issued only to the sender and recipient of a piece; our support tools can see that a memory exists, not what it contains.',
   },
   {
     q: 'Can I transfer ownership to someone else?',
-    a: "Yes. Tijoray pieces are designed to be passed down through generations. Our ownership transfer process is cryptographically verified, ensuring both the piece's provenance and vault access transfer securely to the new owner. You control exactly what memories are included.",
+    a: 'Yes. Tijoray pieces are designed to be passed down through generations — the vault belongs to the piece, not to a single account. When you are ready to hand a piece on, contact the atelier and we will transfer the vault and its provenance to the new owner.',
   },
   {
     q: 'Are you able to make custom orders with this technology?',
@@ -25,11 +25,11 @@ const FAQS = [
   },
   {
     q: 'How secure is NFC technology?',
-    a: 'The NFC chip uses encrypted authentication — it will only respond to authenticated requests from authorised devices. Physical tampering with the chip invalidates its cryptographic certificate, triggering a tamper alert. The chip is also entirely passive, meaning it emits no signal unless actively read by your phone.',
+    a: 'The chip is entirely passive — it has no battery and emits no signal unless it is actively read by a phone held against it. It carries only the piece\'s identity: your memories are never stored on the chip, and viewing them always requires a verified, authorised account.',
   },
   {
     q: 'How long does it last?',
-    a: 'The NFC chip itself is rated for decades of use with no maintenance — it requires no battery or charging. The jewelry is handcrafted from materials chosen for longevity: 18k gold, platinum, and sterling silver. Your vault subscription is covered for the lifetime of the piece.',
+    a: 'The NFC chip is rated for decades of use with no maintenance — no battery, no charging. The jewelry is crafted from materials chosen for longevity: stainless steel, sterling silver, and 10K or 18K gold. The memory vault is included with your piece — there is no subscription and nothing further to pay.',
   },
 ]
 

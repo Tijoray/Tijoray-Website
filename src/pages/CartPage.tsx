@@ -10,9 +10,15 @@ import {
 } from '../data/catalog'
 import { PRODUCT_TYPES } from '../data/product-types'
 
-/** "Square Pendant", "Heart Bracelet", … from a cart item's product identity. */
-const itemTitle = (shape: string, productType: string) =>
-  `${SHAPE_LABELS[shape as keyof typeof SHAPE_LABELS]} ${PRODUCT_TYPES[productType as keyof typeof PRODUCT_TYPES]?.label ?? 'Pendant'}`
+/** "Square Pendant", "Asscher Bracelet", … from a cart item's product identity. */
+const itemTitle = (shape: string, productType: string) => {
+  // The bracelet's 'square' key is an asscher cut — label it the way the
+  // configurator (and the Stripe receipt) do.
+  const shapeLabel = productType === 'bracelet' && shape === 'square'
+    ? 'Asscher'
+    : SHAPE_LABELS[shape as keyof typeof SHAPE_LABELS]
+  return `${shapeLabel} ${PRODUCT_TYPES[productType as keyof typeof PRODUCT_TYPES]?.label ?? 'Pendant'}`
+}
 
 const fmt = (n: number) => new Intl.NumberFormat('en-US', {
   style: 'currency', currency: 'USD', maximumFractionDigits: 0,
@@ -28,8 +34,8 @@ export default function CartPage() {
         <div className={styles.empty}>
           <p className={styles.eyebrow}>Your Cart</p>
           <h1 className={styles.title}>Nothing here yet</h1>
-          <p className={styles.body}>Configure your pendant and add it to begin.</p>
-          <Link to="/products/birthstone-pendant" className={styles.ctaBtn}>Design Your Pendant</Link>
+          <p className={styles.body}>Configure a piece and add it to begin.</p>
+          <Link to="/collection" className={styles.ctaBtn}>Build Your Tijoray</Link>
         </div>
       </main>
     )
@@ -118,11 +124,11 @@ export default function CartPage() {
             ))}
             <div className={styles.summaryRow}>
               <span>Shipping</span>
-              <span className={styles.summaryMuted}>Calculated at checkout</span>
+              <span className={styles.summaryMuted}>Complimentary</span>
             </div>
             <div className={styles.summaryDivider} />
             <div className={`${styles.summaryRow} ${styles.summaryTotal}`}>
-              <span>Estimated Total</span>
+              <span>Total</span>
               <span>{fmt(total)}</span>
             </div>
           </div>

@@ -40,7 +40,7 @@ export default function Footer() {
             <li><Link to="/contact">Contact Us</Link></li>
             <li><span className={styles.linkSoon}>Care Guide<span className={styles.soonBadge}>Soon</span></span></li>
             <li><Link to="/faq">FAQ</Link></li>
-            <li><a href="mailto:curator@tijoray.com">curator@tijoray.com</a></li>
+            <li><a href="mailto:support@tijoray.com">support@tijoray.com</a></li>
           </ul>
         </div>
 

@@ -13,7 +13,7 @@ export default function PrivacyPage() {
 
         <div className={styles.section}>
           <h2>Who we are</h2>
-          <p>Tijoray ("we", "us", "our") operates tijoray.com and the Tijoray vault platform. Our registered correspondence address is available on request at <a href="mailto:curator@tijoray.com">curator@tijoray.com</a>.</p>
+          <p>Tijoray ("we", "us", "our") operates tijoray.com and the Tijoray vault platform. Our registered correspondence address is available on request at <a href="mailto:support@tijoray.com">support@tijoray.com</a>.</p>
         </div>
 
         <div className={styles.section}>
@@ -43,7 +43,7 @@ export default function PrivacyPage() {
         <div className={styles.section}>
           <h2>How we store and protect your data</h2>
           <p>Account data and vault metadata are stored in Supabase (EU region). Vault media files are stored in Cloudflare R2 with private-access controls. All data in transit is encrypted via TLS. Vault contents are encrypted at rest with AES-256.</p>
-          <p><strong>Your vault is yours alone.</strong> All memories and media you upload — photos, videos, voice notes, and written messages — are encrypted and accessible only by you. Tijoray staff have no ability to view, access, or read the contents of your vault. Not now, not ever.</p>
+          <p><strong>Your vault is yours alone.</strong> Memories and media you upload — photos, videos, voice notes, and written messages — are encrypted on your device before they are uploaded, and decryption keys are issued only to the sender and recipient of a piece after their identity is verified. Our staff and support tools hold no such key and cannot display the contents of your vault.</p>
           <p>We retain your data for as long as your account is active. If you delete your account, your vault contents and personal data are permanently deleted within 30 days.</p>
         </div>
 
@@ -66,7 +66,7 @@ export default function PrivacyPage() {
 
         <div className={styles.section}>
           <h2>Your rights</h2>
-          <p>You have the right to access, correct, export, or delete your personal data at any time. You can manage most data directly in your account settings. For anything else — including full account deletion — email <a href="mailto:curator@tijoray.com">curator@tijoray.com</a> and we will respond within 30 days.</p>
+          <p>You have the right to access, correct, export, or delete your personal data at any time. You can manage most data directly in your account settings. For anything else — including full account deletion — email <a href="mailto:support@tijoray.com">support@tijoray.com</a> and we will respond within 30 days.</p>
           <p>If you are in the UK or EU, you also have the right to lodge a complaint with your local data protection authority.</p>
         </div>
 
@@ -77,7 +77,7 @@ export default function PrivacyPage() {
 
         <div className={styles.section}>
           <h2>Contact</h2>
-          <p>Questions about this policy: <a href="mailto:curator@tijoray.com">curator@tijoray.com</a></p>
+          <p>Questions about this policy: <a href="mailto:support@tijoray.com">support@tijoray.com</a></p>
         </div>
 
       </div>

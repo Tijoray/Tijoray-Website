@@ -148,6 +148,10 @@ export default function LoginPage() {
           <button type="submit" className={styles.submitBtn} disabled={submitting}>
             {submitting ? 'Signing in…' : 'Sign In'}
           </button>
+
+          <p className={styles.switchText}>
+            <Link to="/forgot-password" className={styles.switchLink}>Forgot your password?</Link>
+          </p>
         </form>
 
         <p className={styles.switchText}>

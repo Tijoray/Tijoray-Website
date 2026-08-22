@@ -5,33 +5,33 @@ import styles from './CraftsmanshipPage.module.css'
 const PILLARS = [
   {
     num: '01',
-    title: 'Alloy Composition',
-    body: 'Every Tijoray piece begins with metallurgy. Our goldsmiths work in 18k yellow, white, and rose gold, each with a proprietary alloy blend that enhances durability without sacrificing warmth. Platinum pieces are crafted in 950Pt — the purest standard for fine jewelry.',
+    title: 'Metals',
+    body: 'Every Tijoray piece begins with its metal. We work in stainless steel, sterling silver, and 10K or 18K gold — in white, yellow, and rose — each chosen for how it wears over years of daily contact, not just how it photographs on day one.',
   },
   {
     num: '02',
-    title: 'Gemstone Sourcing',
-    body: 'We source only ethically certified gemstones — conflict-free diamonds graded by GIA, and colored stones from traceable mines across Sri Lanka, Colombia, and East Africa. Each stone is hand-selected by our gemologist for cut, clarity, and character.',
+    title: 'Birthstones',
+    body: 'Twelve stones, one for every month, each selected for colour and character and set by hand at the centre of the piece. The stone you choose — and the month it stands for — is recorded in the piece\'s digital profile the moment it is made.',
   },
   {
     num: '03',
     title: 'Hand Finishing',
-    body: 'Settings are hand-finished by our master craftspeople — a process that cannot be replicated by machine. Bezels are polished to a mirror standard on the exterior and brushed on hidden surfaces, creating depth that rewards close inspection.',
+    body: 'Settings are finished by hand in our atelier — a process that cannot be replicated by machine. Surfaces are polished to a mirror standard on the exterior and softened on hidden edges, creating depth that rewards close inspection.',
   },
   {
     num: '04',
-    title: 'Hallmarking & Certification',
-    body: "Every Tijoray piece carries our atelier hallmark alongside the metal fineness stamp. Bespoke pieces include a certificate of provenance detailing the alloy composition, gemstone grading report, and the artisan's signature.",
+    title: 'Identity & Record',
+    body: 'Every Tijoray piece carries a unique serial identity, bound to the NFC vault sealed inside it. Its metal, stone, and configuration are registered with the atelier at creation — a provenance record that travels with the piece for life.',
   },
 ]
 
 const SPECS = [
-  { label: 'Metal Standards', value: '18k Gold (750/1000) · Platinum (950Pt) · Sterling Silver (925)' },
-  { label: 'Diamond Grading', value: 'GIA Certified · Conflict-Free · Minimum VS2 Clarity' },
-  { label: 'Coloured Stones', value: 'Ethically Sourced · Traceable Origin · Gemological Report Included' },
-  { label: 'NFC Integration', value: 'Passive Chip · IP68 Rated · Decade-Rated Durability' },
-  { label: 'Finishing', value: 'Hand-Polished · 24-Hour Quality Inspection · Artisan Signed' },
-  { label: 'Hallmarking', value: 'Atelier Mark + Metal Fineness + Year of Creation' },
+  { label: 'Metals', value: 'Stainless Steel · Sterling Silver (925) · 10K & 18K Gold' },
+  { label: 'Birthstones', value: 'Twelve Stones · Hand-Set · Recorded in the Piece\'s Profile' },
+  { label: 'NFC Integration', value: 'Passive Chip · No Battery · Rated for Decades of Use' },
+  { label: 'Finishing', value: 'Hand-Finished · Inspected Before Dispatch' },
+  { label: 'Identity', value: 'Unique Serial · Digital Provenance Record' },
+  { label: 'Bespoke', value: 'Platinum & Rare Gemstones by Private Consultation' },
 ]
 
 export default function CraftsmanshipPage() {

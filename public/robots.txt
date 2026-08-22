@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.tijoray.com/sitemap.xml
+Sitemap: https://tijoray.com/sitemap.xml

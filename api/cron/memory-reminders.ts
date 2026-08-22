@@ -26,8 +26,15 @@ const TIERS: { tier: 1 | 2 | 3; day: number }[] = [
 const SITE = (process.env.VITE_SITE_URL ?? 'https://tijoray.com').replace(/\/+$/, '')
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // Fail closed: without a configured secret this endpoint would be publicly
+  // triggerable, and a stranger being able to fire customer emails at will is
+  // worse than a cron that refuses to run until the env var is set.
   const secret = process.env.CRON_SECRET
-  if (secret && req.headers.authorization !== `Bearer ${secret}`) {
+  if (!secret) {
+    console.error('reminders: CRON_SECRET is not set — refusing to run')
+    return res.status(500).json({ error: 'Cron not configured' })
+  }
+  if (req.headers.authorization !== `Bearer ${secret}`) {
     return res.status(401).json({ error: 'Unauthorized' })
   }
 
