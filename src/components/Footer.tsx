@@ -21,7 +21,6 @@ export default function Footer() {
             <li><Link to="/products/birthstone-pendant">Pendants</Link></li>
             <li><Link to="/products/birthstone-bracelet">Bracelets</Link></li>
             <li><Link to="/collection">Build Your Tijoray</Link></li>
-            <li><span className={styles.linkSoon}>Gift a Legacy Piece<span className={styles.soonBadge}>Soon</span></span></li>
           </ul>
         </div>
 
@@ -38,7 +37,7 @@ export default function Footer() {
           <p className={styles.footerColHead}>Support</p>
           <ul className={styles.footerLinks}>
             <li><Link to="/contact">Contact Us</Link></li>
-            <li><span className={styles.linkSoon}>Care Guide<span className={styles.soonBadge}>Soon</span></span></li>
+            <li><Link to="/faq#care">Care Guide</Link></li>
             <li><Link to="/faq">FAQ</Link></li>
             <li><a href="mailto:support@tijoray.com">support@tijoray.com</a></li>
           </ul>

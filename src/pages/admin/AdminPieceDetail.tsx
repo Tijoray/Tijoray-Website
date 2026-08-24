@@ -149,11 +149,21 @@ export default function AdminPieceDetail() {
               </select>
             </div>
 
+            {/* Two identifiers, easily confused, so the difference is spelled
+                out here: the UID is the chip's own, burned in by the
+                manufacturer and only readable from the tag; the serial above
+                is ours, and is what gets written onto the tag. */}
             <div className={styles.formRow}>
-              <label>NFC tag ID (hardware)</label>
-              <input className={styles.input} style={{ minWidth: 0 }} value={form.hardware_id}
-                placeholder="Scan or paste tag UID"
-                onChange={e => setForm(f => ({ ...f, hardware_id: e.target.value }))} />
+              <label>Tag UID (from manufacturer)</label>
+              <div style={{ minWidth: 0 }}>
+                <input className={styles.input} style={{ width: '100%', minWidth: 0 }} value={form.hardware_id}
+                  placeholder="e.g. 04A224B2C13D80"
+                  onChange={e => setForm(f => ({ ...f, hardware_id: e.target.value }))} />
+                <p style={{ margin: '6px 0 0', fontSize: 11.5, lineHeight: 1.5, color: 'var(--ink-soft, #888)' }}>
+                  The chip&rsquo;s own identifier. Not the serial &mdash; write{' '}
+                  <span className={styles.mono}>{piece.serial ?? 'TIJ-…'}</span> onto the tag.
+                </p>
+              </div>
             </div>
 
             <div className={styles.formRow}>

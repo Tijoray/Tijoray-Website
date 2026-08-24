@@ -89,12 +89,32 @@ function HomePage() {
 }
 
 export default function App() {
-  const { pathname } = useLocation()
+  const { pathname, hash } = useLocation()
   const isAdmin = pathname.startsWith('/admin')
 
   useEffect(() => {
+    // A hash means the link is aimed at a section (the footer's /faq#care), so
+    // jumping to the top would land in the wrong place. The target page is
+    // lazy-loaded and usually not mounted on this tick, so poll briefly for the
+    // element rather than scrolling once and missing it.
+    if (hash) {
+      const id = hash.slice(1)
+      let frames = 0
+      let raf = 0
+      const find = () => {
+        const el = document.getElementById(id)
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          return
+        }
+        // ~1s at 60fps, then give up and leave the page where it is.
+        if (frames++ < 60) raf = requestAnimationFrame(find)
+      }
+      raf = requestAnimationFrame(find)
+      return () => cancelAnimationFrame(raf)
+    }
     window.scrollTo(0, 0)
-  }, [pathname])
+  }, [pathname, hash])
 
   // The admin panel is a self-contained shell — no public navbar, footer, or progress bar.
   if (isAdmin) {

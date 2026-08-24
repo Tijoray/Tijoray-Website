@@ -222,6 +222,30 @@ async function updatePiece(actor: AdminUser, body: Record<string, unknown>) {
     if (key in patch) update[key] = patch[key] === '' ? null : patch[key]
   }
 
+  // `hardware_id` is the tag's own identifier as it comes from the
+  // manufacturer — a chip UID, not anything we mint. It is recorded so a
+  // physical tag can be traced back to a piece; it is NOT the value written
+  // onto the tag, and it is NOT what the app matches a tap against.
+  //
+  // Normalised because a UID gets read off a datasheet or a scanner and
+  // transcribed by hand, and separator and case conventions vary by vendor.
+  // Rejecting a TIJ- value here is deliberate: pasting the serial into this
+  // field is the exact confusion this pair of columns invites, and it would
+  // otherwise look like it worked.
+  if (typeof update.hardware_id === 'string') {
+    const uid = update.hardware_id.trim().toUpperCase().replace(/[\s:.-]/g, '')
+    if (!uid) {
+      update.hardware_id = null
+    } else if (uid.startsWith('TIJ')) {
+      throw new Error(
+        'That looks like a serial, not a tag UID. The TIJ- code belongs in ' +
+        'Serial; Tag UID is the identifier printed by the tag manufacturer.',
+      )
+    } else {
+      update.hardware_id = uid
+    }
+  }
+
   // Marking shipped stamps shipped_at if not already set.
   if (update.status === 'shipped' && !before.shipped_at) {
     update.shipped_at = new Date().toISOString()

@@ -177,3 +177,80 @@
     padding-right: 24px;
   }
 }
+
+/* ── Care guide ─────────────────────────────────────────────── */
+/* Linked from the footer as /faq#care, so it needs scroll-margin to clear
+   the fixed navbar when the browser jumps to it. */
+.careSection {
+  scroll-margin-top: 96px;
+  margin-top: 72px;
+  padding-top: 56px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.careHeader {
+  margin-bottom: 36px;
+}
+
+.careTitle {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(26px, 3.4vw, 38px);
+  line-height: 1.15;
+  margin: 6px 0 10px;
+}
+
+.careTitle em {
+  font-style: italic;
+  color: var(--gold, #b08d57);
+}
+
+.careIntro {
+  max-width: 62ch;
+  color: var(--ink-soft, #6b6b66);
+  font-size: 15px;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.careGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 28px 40px;
+}
+
+.careCard h3 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 500;
+  font-size: 20px;
+  margin: 0 0 10px;
+}
+
+.careCard p {
+  color: var(--ink-soft, #6b6b66);
+  font-size: 14.5px;
+  line-height: 1.72;
+  margin: 0 0 10px;
+}
+
+.careCard ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--ink-soft, #6b6b66);
+  font-size: 14.5px;
+  line-height: 1.72;
+}
+
+.careCard li {
+  margin-bottom: 6px;
+}
+
+.careNote {
+  margin-top: 36px;
+  padding: 18px 22px;
+  background: rgba(176, 141, 87, 0.06);
+  border-left: 2px solid var(--gold, #b08d57);
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--ink-soft, #6b6b66);
+}

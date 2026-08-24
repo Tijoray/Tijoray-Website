@@ -167,11 +167,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       title:     'Your Gift Message',
     })
 
-    await supabase.from('Vault').insert({
-      piece_id: piece.id,
-      owner_id: userId,
-      name:     'Memory Vault',
-    })
+    // No Vault row is created here, deliberately.
+    //
+    // The vault is the RECIPIENT's private storage, not the buyer's — the app
+    // never issues the `vault` data key to a piece's sender, so a vault owned
+    // by the buyer is one nobody can ever open. The app's VaultService
+    // .ensureVault creates the row on first use, keyed on
+    // (piece_id, owner_id = the signed-in recipient).
+    //
+    // Creating one here was worse than redundant: the recipient's ensureVault
+    // filters on their own owner_id, so it would not find the buyer's row and
+    // would insert a second one for the same piece — or, if piece_id carries a
+    // unique constraint, fail outright and leave the recipient with no vault.
   }
 
   // Order-confirmation email (being crafted + start-building CTA). Keyed on the

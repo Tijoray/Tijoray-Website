@@ -20,3 +20,6 @@ PRE_LAUNCH_CHECKLIST.md
 TIJORAY_WEBSITE_PLAN.md
 claude review.md
 mobile-responsiveness.md
+
+# Supabase CLI local state
+supabase/.temp/

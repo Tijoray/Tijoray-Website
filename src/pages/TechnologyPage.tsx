@@ -8,7 +8,7 @@ const NFC_STEPS = [
     num: '01',
     img: asset('/assets/app/app-tap.png'),
     title: 'Tap Your Piece',
-    desc: 'Hold your Tijoray jewel to the back of your phone. No app launch required — the connection begins the moment metal meets signal.',
+    desc: 'Open the Tijoray app and hold your jewel to the back of your phone. No pairing, no setup, no battery — the connection begins the moment metal meets signal.',
   },
   {
     num: '02',
@@ -50,7 +50,7 @@ const APP_FEATURES = [
     img: asset('/assets/app/app-vault.png'),
     label: 'The Vault',
     title: 'A private archive, secured forever.',
-    body: 'Your personal vault holds every memory, certificate, and document tied to your collection. Organized by date, accessible anywhere, and protected by the Tijoray security infrastructure. Your legacy, archived.',
+    body: 'Beyond the memories they were given, whoever wears the piece has a private vault of their own — space to add their own photographs, recordings and documents as the years go on. It belongs to the wearer alone: encrypted on their device, and closed even to the person who gave the piece.',
     pills: ['Personal Storage', 'Certificate Archive', 'Date Organized', 'Secure Access'],
   },
 ]

@@ -5,7 +5,11 @@ import styles from './FaqPage.module.css'
 const FAQS = [
   {
     q: 'Does it work on iPhone and Android?',
-    a: 'Yes. Tijoray uses standard NFC technology supported natively on modern iPhones (XS and later) and NFC-enabled Android devices. Tapping your phone to the piece opens the Tijoray experience, where your memories are waiting.',
+    a: 'Yes. Tijoray uses standard NFC, supported on modern iPhones (XS and later) and NFC-enabled Android devices. You will need the free Tijoray app installed — open it, hold your phone to the piece, and your memories appear. There is nothing to pair and nothing to charge.',
+  },
+  {
+    q: 'Do I need an app, and who needs it — me or the person I gift it to?',
+    a: 'Whoever wears the piece needs the free Tijoray app on their phone; that is what reads the tag and opens the memories. You compose the memories here on the website after ordering, so you do not need the app yourself unless the piece is for you. When a gift arrives, the recipient installs the app, taps the piece, and everything you prepared is waiting for them.',
   },
   {
     q: 'What happens if I lose my jewelry?',
@@ -30,6 +34,68 @@ const FAQS = [
   {
     q: 'How long does it last?',
     a: 'The NFC chip is rated for decades of use with no maintenance — no battery, no charging. The jewelry is crafted from materials chosen for longevity: stainless steel, sterling silver, and 10K or 18K gold. The memory vault is included with your piece — there is no subscription and nothing further to pay.',
+  },
+]
+
+/**
+ * Care guidance, written against what we actually sell: stainless steel,
+ * sterling silver, 10K and 18K gold, the twelve birthstones, and a passive
+ * NFC chip sealed inside the piece.
+ */
+const CARE: { title: string; body?: string; points?: string[] }[] = [
+  {
+    title: 'Everyday wear',
+    body: 'Your piece is made to be worn, not stored. A few habits keep it looking new for far longer:',
+    points: [
+      'Put it on last, after perfume, lotion, hairspray and sunscreen have dried.',
+      'Take it off before swimming — chlorine and salt water are hard on metal and can loosen a setting over time.',
+      'Take it off for the gym, gardening, and anything with knocks or heavy lifting.',
+      'Remove it before sleeping. Most broken chains are broken overnight.',
+    ],
+  },
+  {
+    title: 'Cleaning',
+    body: 'Warm water, a drop of mild washing-up liquid, and a soft toothbrush is all that is needed. Rinse, then dry thoroughly with a soft lint-free cloth before wearing or storing.',
+    points: [
+      'Never use bleach, ammonia, or abrasive polish — they pit the metal and dull a stone.',
+      'Avoid home ultrasonic and steam cleaners. They can crack included or treated stones and loosen settings.',
+    ],
+  },
+  {
+    title: 'Stones that need a gentler hand',
+    body: 'Most of our birthstones are hard-wearing. Four are not, and are worth knowing about:',
+    points: [
+      'Mother of Pearl (June) and Turquoise (December) are soft and porous. Keep them away from water, perfume and household chemicals, and wipe with a barely damp cloth only.',
+      'Emerald (May) is commonly included and should never see an ultrasonic cleaner or hot water.',
+      'Peridot (August) scratches more easily than the rest — store it apart from harder stones.',
+      'Ruby, sapphire, topaz, garnet, amethyst, citrine, aquamarine and tourmaline are all durable enough for daily wear.',
+    ],
+  },
+  {
+    title: 'By metal',
+    points: [
+      'Stainless steel is the most resilient of the four and needs little beyond an occasional wipe.',
+      'Sterling silver tarnishes — that is the metal behaving normally, not a fault. Store it dry and away from air, and bring the shine back with a proper silver cloth.',
+      '10K gold is the harder, more scratch-resistant gold; 18K is softer and warmer in colour, so treat it a little more carefully.',
+      'Rose and white finishes are best kept away from chlorine, which attacks the alloy over time.',
+    ],
+  },
+  {
+    title: 'The chip inside',
+    body: 'The NFC chip is passive and sealed within the piece. It has no battery, never needs charging, and requires no maintenance at all.',
+    points: [
+      'Water, everyday knocks and airport scanners will not harm it.',
+      'Do not attempt to drill, bend, cut, or heat the piece — any of those can destroy the chip, and doing so voids the warranty.',
+      'If a tap stops working, try again with the phone held still against the piece before assuming a fault, then contact us.',
+    ],
+  },
+  {
+    title: 'Storage',
+    body: 'Keep each piece separately in a soft pouch or a lined box. Stones scratch other stones, and chains left loose in a drawer knot and kink.',
+    points: [
+      'Store somewhere dry — a bathroom cabinet is the worst place in most homes.',
+      'For a piece being put away for years, a sealed bag with the air pressed out slows tarnish considerably.',
+    ],
   },
 ]
 
@@ -81,6 +147,41 @@ export default function FaqPage() {
             </div>
           ))}
         </dl>
+
+        {/* Linked from the footer as /faq#care. Kept on this page rather than
+            given its own route so support has one place to send people. */}
+        <section id="care" className={styles.careSection}>
+          <header className={styles.careHeader}>
+            <p className={styles.eyebrow}>Care Guide</p>
+            <h2 className={styles.careTitle}>Looking after <em>your piece.</em></h2>
+            <p className={styles.careIntro}>
+              A Tijoray piece is made to be worn every day and handed on. These are
+              the habits that keep the metal bright, the stone secure, and the chip
+              inside reading cleanly for decades.
+            </p>
+          </header>
+
+          <div className={styles.careGrid}>
+            {CARE.map(section => (
+              <article key={section.title} className={styles.careCard}>
+                <h3>{section.title}</h3>
+                {section.body && <p>{section.body}</p>}
+                {section.points && (
+                  <ul>
+                    {section.points.map(point => <li key={point}>{point}</li>)}
+                  </ul>
+                )}
+              </article>
+            ))}
+          </div>
+
+          <p className={styles.careNote}>
+            Something wrong with your piece? Don&rsquo;t attempt a repair yourself —
+            prising at a setting is the most common way a stone is lost. Write to{' '}
+            <a href="mailto:support@tijoray.com">support@tijoray.com</a> and we will
+            look after it.
+          </p>
+        </section>
 
         <div className={styles.cta}>
           <p className={styles.ctaText}>Still have questions?</p>

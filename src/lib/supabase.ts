@@ -41,7 +41,10 @@ export type PieceConfig = {
 
 export type Piece = {
   id: string
-  serial: string | null
+  /// Not readable from the browser once the serial becomes the tag credential
+  /// — see PIECE_COLUMNS. Reachable through the `piece_serial` function, which
+  /// returns it only to a piece's sender or receiver.
+  serial?: string | null
   collection: string | null
   product_type: string | null
   config: PieceConfig | null
@@ -62,15 +65,20 @@ export type Piece = {
 /**
  * Columns the browser may read from `Pieces`, listed explicitly.
  *
- * `select('*')` cannot be used against this table. The encryption migration
- * revokes the blanket SELECT from `authenticated` and re-grants a column list,
- * deliberately withholding `hardware_id` so a piece's tag code can only be
- * obtained by physically tapping it. `*` expands to every column including that
- * one, and Postgres then refuses the entire query rather than omitting it.
+ * `select('*')` cannot be used against this table. The migrations revoke the
+ * blanket SELECT from `authenticated` and re-grant a column list, deliberately
+ * withholding both `hardware_id` (the chip's own UID) and `serial` (the code
+ * written onto the tag, and therefore the credential that opens an unclaimed
+ * piece). `*` expands to every column including those, and Postgres then
+ * refuses the entire query rather than omitting them.
+ *
+ * The portal falls back to a shortened piece id where it used to print the
+ * serial. To show a real serial again, call the `piece_serial` function, which
+ * returns it only to the piece's sender or receiver.
  */
 // One unbroken literal: supabase-js parses this string in the type system to
 // shape the result, and concatenation widens it to `string`, which it rejects.
-export const PIECE_COLUMNS = 'id,serial,collection,product_type,config,cover_image_url,model_3d_url,stone_id,metal_id,sender_id,receiver_id,nfc_linked_at,activated_at,created_at'
+export const PIECE_COLUMNS = 'id,collection,product_type,config,cover_image_url,model_3d_url,stone_id,metal_id,sender_id,receiver_id,nfc_linked_at,activated_at,created_at'
 
 export type Message = {
   id: string
