@@ -14,7 +14,7 @@
  * `designApplicator` is a string id resolved to a real DesignApplicator in the
  * 3D layer, keeping three.js out of the data graph.
  */
-import { STONES, BIRTHSTONE_CHIPS } from './catalog'
+import { STONES, BIRTHSTONE_CHIPS } from './catalog.js'
 
 export type CollectionId   = 'birthstone' | 'diamond' | 'initial-letter'
 export type DesignKind     = 'gemstone' | 'glyph'

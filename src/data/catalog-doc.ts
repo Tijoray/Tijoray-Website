@@ -13,13 +13,13 @@
  * URLs are built from an `assetBase` argument passed by the caller (the frontend
  * passes VITE_ASSETS_BASE_URL; the server passes process.env.VITE_ASSETS_BASE_URL).
  */
-import type { Shape, Metal, MetalColor, GemProps, GemThumbProps } from './catalog'
+import type { Shape, Metal, MetalColor, GemProps, GemThumbProps } from './catalog.js'
 import {
   STONES, METAL_PRICES_CENTS, METAL_LABELS_SHORT, METAL_LABELS_LONG,
   METAL_COLOR_LABELS_SHORT, METAL_COLOR_LABELS_LONG, METAL_COLOR_HEX,
   ROUGHNESS, SHAPE_LABELS,
-} from './catalog'
-import { COLLECTIONS } from './collections'
+} from './catalog.js'
+import { COLLECTIONS } from './collections.js'
 
 /* ── Document shape ──────────────────────────────────────────── */
 

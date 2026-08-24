@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { createClient } from '@supabase/supabase-js'
-import { getOrCreatePieceDek, type KeyScope } from './_envelope'
+import { getOrCreatePieceDek, type KeyScope } from './_envelope.js'
 
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL!,
