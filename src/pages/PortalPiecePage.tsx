@@ -56,6 +56,9 @@ function getRecordingFormat() {
 }
 
 /* ── Upload helper ── */
+/// How long the presigned PUT stays valid, mirroring `expiresIn` in api/files.ts.
+const PRESIGN_TTL_MS = 300_000
+
 /// Encrypts the file, then uploads the container. Nothing readable leaves the
 /// browser: the server signs a PUT for an opaque blob and never holds a key
 /// that would open it.
@@ -81,12 +84,28 @@ async function uploadFile(
   if (file.size > maxBytes) throw new Error(`File is too large (max ${Math.round(maxBytes / 1024 / 1024)}MB)`)
 
   const sealed = await encryptFile(file, keys.file)
-  const uploadRes = await fetch(uploadUrl, {
-    method: 'PUT',
-    // Exactly the headers the presign signed — R2 rejects the PUT otherwise.
-    headers: uploadHeaders ?? { 'Content-Type': 'application/octet-stream' },
-    body: sealed,
-  })
+
+  // Bounded at the signed URL's own lifetime. A PUT still in flight past that
+  // point cannot succeed — the signature has expired — so letting it run on
+  // only leaves the button spinning on an upload that is already lost.
+  let uploadRes: Response
+  try {
+    uploadRes = await fetch(uploadUrl, {
+      method: 'PUT',
+      // Exactly the headers the presign signed — R2 rejects the PUT otherwise.
+      headers: uploadHeaders ?? { 'Content-Type': 'application/octet-stream' },
+      body: sealed,
+      signal: AbortSignal.timeout(PRESIGN_TTL_MS),
+    })
+  } catch (err) {
+    // fetch rejects without a status for both a dropped connection and a
+    // refused CORS preflight, and the browser withholds which. Say what the
+    // gifter can act on rather than guessing at a cause.
+    if (err instanceof DOMException && err.name === 'TimeoutError') {
+      throw new Error('Upload timed out. Check your connection and try again.')
+    }
+    throw new Error('Could not reach storage to upload this file. Please try again.')
+  }
   if (!uploadRes.ok) {
     const errText = await uploadRes.text().catch(() => '')
     throw new Error(`Upload failed (${uploadRes.status}): ${errText.slice(0, 140)}`)

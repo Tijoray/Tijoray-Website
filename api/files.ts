@@ -131,16 +131,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Everything is stored application/octet-stream: the bytes genuinely are
     // opaque now, and labelling them image/jpeg would be a lie that only helps
     // someone trying to get our storage domain to render their content.
-    // `declared-type` records the type this function approved, fixed at signing
-    // time — both it and Content-Type are signed headers, so R2 rejects a PUT
-    // that sends anything else.
+    //
+    // Content-Type is the ONLY header signed here, and deliberately so. Signing
+    // `Metadata` puts x-amz-meta-* on the PUT, and those are not CORS-safelisted
+    // request headers: the browser then asks R2 for permission on them in the
+    // preflight, and a bucket whose AllowedHeaders lists only content-type
+    // refuses — the upload dies before a byte is sent. The metadata bought us
+    // nothing to pay that with. Every object is octet-stream regardless, and the
+    // true name and type already travel in the encrypted enc_meta column; the
+    // container's own TJE1 magic bytes say the rest.
     const uploadUrl = await getSignedUrl(
       s3,
       new PutObjectCommand({
         Bucket:      bucket,
         Key:         key,
         ContentType: 'application/octet-stream',
-        Metadata:    { 'declared-type': contentType, enc: 'tje1' },
       }),
       { expiresIn: 300 },
     )
@@ -152,8 +157,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       maxBytes: MAX_BYTES,
       uploadHeaders: {
         'Content-Type': 'application/octet-stream',
-        'x-amz-meta-declared-type': contentType,
-        'x-amz-meta-enc': 'tje1',
       },
     })
   }
