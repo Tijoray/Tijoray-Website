@@ -184,6 +184,9 @@ export async function sendCraftingEmail(opts: {
   buyerName?: string | null
   items:     { name: string; priceCents: number }[]
   totalCents: number
+  /** Sales tax Stripe collected, in cents. Omitted/0 renders no tax row —
+   *  exports out of Canada are zero-rated, so most orders have none. */
+  taxCents?: number
 }): Promise<SendResult> {
   const portal = `${SITE}/portal`
   const rows = opts.items.map(i => `
@@ -192,11 +195,21 @@ export async function sendCraftingEmail(opts: {
       <td align="right" style="padding:10px 0;border-bottom:1px solid ${C.border};font-family:${SERIF};font-size:17px;color:${C.ink};">${fmtUSD(i.priceCents)}</td>
     </tr>`).join('')
 
+  // Only rendered when tax was actually collected. Without it the itemised
+  // lines would not sum to the total, which reads as a billing error.
+  const taxCents = opts.taxCents ?? 0
+  const taxRow = taxCents > 0 ? `
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid ${C.border};font-family:${SERIF};font-size:17px;color:${C.inkMid};">Tax</td>
+        <td align="right" style="padding:10px 0;border-bottom:1px solid ${C.border};font-family:${SERIF};font-size:17px;color:${C.inkMid};">${fmtUSD(taxCents)}</td>
+      </tr>` : ''
+
   const bodyHtml = `
     <p style="margin:0 0 16px;">Hi ${firstName(opts.buyerName)},</p>
     <p style="margin:0 0 16px;">Thank you for your order. Your piece is now in the hands of our atelier, where it's being crafted by hand. We'll email you again the moment it ships.</p>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0 4px;">
       ${rows}
+      ${taxRow}
       <tr>
         <td style="padding:14px 0 0;font-family:${SANS};font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:${C.inkMid};">Total</td>
         <td align="right" style="padding:14px 0 0;font-family:${SERIF};font-size:20px;color:${C.ink};">${fmtUSD(opts.totalCents)}</td>
@@ -209,7 +222,7 @@ export async function sendCraftingEmail(opts: {
 
 Thank you for your order. Your piece is being crafted by hand and we'll email you when it ships.
 
-Order total: ${fmtUSD(opts.totalCents)}
+${taxCents > 0 ? `Tax: ${fmtUSD(taxCents)}\n` : ''}Order total: ${fmtUSD(opts.totalCents)}
 
 While we craft it, start building the memory inside your piece's portal:
 ${portal}

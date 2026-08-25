@@ -66,7 +66,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // key (item_0, item_1, …) rather than one combined value — Stripe caps each
   // metadata value at 500 chars, which a multi-item cart would otherwise blow.
   const lineItems: Array<{
-    price_data: { currency: string; unit_amount: number; product_data: { name: string; description: string } }
+    price_data: {
+      currency: string
+      unit_amount: number
+      tax_behavior: 'exclusive' | 'inclusive'
+      product_data: { name: string; description: string; tax_code: string }
+    }
     quantity: number
   }> = []
   const itemMeta: Record<string, string> = {}
@@ -102,9 +107,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       price_data: {
         currency:     'usd',
         unit_amount:  priceCents(catalog, collectionId, productType, item.metal as Metal),
+        // Catalog prices are pre-tax; Stripe adds tax on top at checkout. This
+        // is required once automatic_tax is on, and is inert while it is off.
+        tax_behavior: 'exclusive',
         product_data: {
           name:        `The Tijoray ${productLabel} — ${shapeLabel}`,
           description: item.specLine ?? `${metalLine} · ${birthstoneName}`,
+          // Jewellery has no dedicated Stripe tax code; physical goods is the
+          // correct classification for a shipped piece.
+          tax_code:    'txcd_99999999', // General - Tangible Goods
         },
       },
       quantity: 1,
@@ -123,10 +134,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     })
   }
 
+  // Stripe Tax. Kept behind a flag because enabling it before the account's
+  // head office + registrations are configured does NOT fail at session
+  // creation — the session is created happily and the calculation then fails
+  // for the customer mid-checkout. Flip STRIPE_TAX_ENABLED to 'true' only once
+  // https://dashboard.stripe.com/settings/tax shows the account as active.
+  //
+  // Registered in Ontario: Stripe charges the destination province's GST/HST on
+  // Canadian orders and zero-rates exports, so most international orders come
+  // through with no tax line.
+  const taxEnabled = process.env.STRIPE_TAX_ENABLED === 'true'
+
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',
     payment_method_types: ['card'],
     line_items: lineItems,
+    automatic_tax: { enabled: taxEnabled },
     shipping_address_collection: {
       allowed_countries: ['US', 'CA', 'GB', 'AU'],
     },
