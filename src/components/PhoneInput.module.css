@@ -65,3 +65,28 @@
 .numberInput:focus {
   outline: none;
 }
+
+/* The dial select carries 245 options, so it shows a flag and a code and lets
+   the hint below spell out the country. Widened from the old two-letter form:
+   the selected option's text is all a native select can render, and "GB +44"
+   alone was too easy to leave wrong. */
+.dialSelect {
+  width: 132px;
+  text-overflow: ellipsis;
+}
+
+.hint {
+  margin: 6px 0 0;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.hintCountry {
+  color: var(--ink-mid);
+}
+
+.hintProblem {
+  color: var(--rose);
+}

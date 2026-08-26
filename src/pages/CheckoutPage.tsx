@@ -6,6 +6,7 @@ import { supabase } from '../lib/supabase'
 import PieceThumbnail from '../components/PieceThumbnail'
 import PhoneInput from '../components/PhoneInput'
 import { isValidEmail, isValidPhone } from '../lib/validation'
+import { verifyPhone } from '../lib/phone-check'
 import { needsProfileCompletion } from '../lib/profile'
 import { SHAPE_LABELS } from '../data/catalog'
 import { PRODUCT_TYPES } from '../data/product-types'
@@ -90,6 +91,26 @@ export default function CheckoutPage() {
   }
 
   async function proceedToStripe(accessToken: string) {
+    // Last chance to catch a number that can never receive its verification
+    // code. The giftee unlocks the piece by verifying this number, so a
+    // landline or a dead range here is a gift that never opens — and the
+    // failure is invisible until someone complains weeks later.
+    //
+    // Runs here rather than in validate() because the check is for signed-in
+    // callers only, and until the account exists there is no token to send.
+    // It fails open, so a slow or unfunded third party cannot block a sale.
+    let recipientPhone = form.forSelf ? '' : form.recipientPhone.trim()
+    if (recipientPhone) {
+      const verdict = await verifyPhone(recipientPhone)
+      if (!verdict.allowed) {
+        setErrors(e => ({ ...e, recipientPhone: verdict.problem ?? 'Enter a valid mobile number' }))
+        throw new Error(verdict.problem ?? 'That recipient number could not be verified.')
+      }
+      // Store what the checker calls canonical, not what we composed. Both
+      // sides of the match then agree on one spelling of the number.
+      if (verdict.e164) recipientPhone = verdict.e164
+    }
+
     const res = await fetch('/api/create-checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
@@ -97,7 +118,7 @@ export default function CheckoutPage() {
         items,
         forSelf:        form.forSelf,
         recipientName:  form.forSelf ? '' : form.recipientName.trim(),
-        recipientPhone: form.forSelf ? '' : form.recipientPhone.trim(),
+        recipientPhone,
       }),
     })
     if (!res.ok) {
