@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { adminApi, type AdminPieceRow } from '../../lib/adminApi'
 import { describeConfig, StatusPill, Pill, date } from './format'
+import BindTagPanel from './BindTagPanel'
 import styles from './admin.module.css'
 
 const STATUSES = ['all', 'crafting', 'shipped', 'delivered'] as const
@@ -35,6 +36,8 @@ export default function AdminPieces() {
     <>
       <h1 className={styles.h1}>Pieces &amp; Orders</h1>
       <p className={styles.subtle}>Every piece ever ordered. Click a row to manage status, shipping, NFC tag, and memories.</p>
+
+      <BindTagPanel onBound={load} />
 
       <div className={styles.toolbar}>
         {STATUSES.map(s => (

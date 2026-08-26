@@ -97,6 +97,15 @@ export type CatalogLoad = {
 }
 export type { CatalogDoc }
 
+export type BindResult = {
+  pieceId: string
+  serial: string
+  hardwareId: string
+  nfcLinkedAt: string | null
+  /** True when this exact tag was already recorded — nothing changed. */
+  alreadyBound: boolean
+}
+
 /* ── API surface ─────────────────────────────────────────────────────────────── */
 
 export const adminApi = {
@@ -105,6 +114,7 @@ export const adminApi = {
   listPieces:    (p: { status?: string | null; search?: string } = {}) => call<{ pieces: AdminPieceRow[] }>('list-pieces', p),
   getPiece:      (id: string) => call<PieceDetail>('get-piece', { id }),
   updatePiece:   (id: string, patch: Record<string, unknown>) => call<{ piece: AdminPieceRow; emailResult: string | null }>('update-piece', { id, patch }),
+  bindHardware:  (serial: string, hardwareId: string) => call<BindResult>('bind-hardware', { serial, hardwareId }),
   listCustomers: (p: { search?: string } = {}) => call<{ customers: AdminCustomer[] }>('list-customers', p),
   listEmails:    (p: { type?: string | null } = {}) => call<{ emails: EmailRow[] }>('list-emails', p),
   signFile:      (key: string) => call<{ url: string }>('sign-file', { key }),

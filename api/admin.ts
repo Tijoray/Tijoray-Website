@@ -288,6 +288,47 @@ async function updatePiece(actor: AdminUser, body: Record<string, unknown>) {
   return { piece: after, emailResult }
 }
 
+/**
+ * Binds a chip UID to a piece by its serial, for the bench flow: the operator
+ * holds the tag they just wrote and the UID they just read, and neither of
+ * those is a piece id. Every check lives in the database function so a second
+ * caller cannot skip them — see migration 0007.
+ */
+async function bindHardware(actor: AdminUser, body: Record<string, unknown>) {
+  const serial = String(body.serial ?? '').trim()
+  const hardwareId = String(body.hardwareId ?? '').trim()
+  if (!serial || !hardwareId) throw new Error('Both a serial and a tag UID are required')
+
+  const { data, error } = await admin.rpc('piece_bind_hardware', {
+    p_serial: serial,
+    p_hardware_id: hardwareId,
+  })
+  // The function raises with sentences meant for the operator, so pass its
+  // message through rather than replacing it with a generic failure.
+  if (error) throw new Error(error.message)
+
+  const row = Array.isArray(data) ? data[0] : data
+  if (!row) throw new Error('Bind returned no result')
+
+  // A no-op rebind is not a change, so it does not belong in the audit trail —
+  // logging it would bury the real binds under bench re-scans.
+  if (!row.already_bound) {
+    await audit({
+      actor, action: 'piece.bind_hardware', entityType: 'piece', entityId: row.piece_id,
+      before: { hardware_id: null },
+      after: { hardware_id: row.hardware_id, nfc_linked_at: row.nfc_linked_at },
+    })
+  }
+
+  return {
+    pieceId:     row.piece_id,
+    serial:      row.serial,
+    hardwareId:  row.hardware_id,
+    nfcLinkedAt: row.nfc_linked_at,
+    alreadyBound: row.already_bound === true,
+  }
+}
+
 async function listCustomers(body: Record<string, unknown>) {
   const search = typeof body.search === 'string' ? body.search.trim().toLowerCase() : ''
 
@@ -389,6 +430,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       case 'list-pieces':   return res.status(200).json(await listPieces(body))
       case 'get-piece':     return res.status(200).json(await getPiece(body))
       case 'update-piece':  return res.status(200).json(await updatePiece(actor, body))
+      case 'bind-hardware': return res.status(200).json(await bindHardware(actor, body))
       case 'list-customers':return res.status(200).json(await listCustomers(body))
       case 'list-emails':   return res.status(200).json(await listEmails(body))
       case 'sign-file':     return res.status(200).json(await signFile(body))
