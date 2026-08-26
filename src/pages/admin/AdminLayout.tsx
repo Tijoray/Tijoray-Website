@@ -57,7 +57,9 @@ export default function AdminLayout() {
           <NavLink to="/admin/emails" className={link}>Emails</NavLink>
         </nav>
         <button className={styles.signOut} onClick={() => signOut()}>
-          {email} · Sign out
+          {/* The address is hidden on a phone, where it wrapped onto two lines
+              in the corner and told the operator nothing they did not know. */}
+          <span className={styles.signOutEmail}>{email} · </span>Sign out
         </button>
       </aside>
       <main className={styles.main}>

@@ -48,10 +48,10 @@ export default function AdminEmails() {
                 <tr><td colSpan={4} className={styles.empty}>No emails logged.</td></tr>
               ) : rows.map(e => (
                 <tr key={e.id}>
-                  <td>{dateTime(e.sent_at)}</td>
-                  <td>{e.type.replace(/_/g, ' ')}</td>
-                  <td>{e.recipient ?? '—'}</td>
-                  <td className={styles.mono}>{e.ref.slice(0, 12)}</td>
+                  <td data-label="Sent">{dateTime(e.sent_at)}</td>
+                  <td data-label="Type">{e.type.replace(/_/g, ' ')}</td>
+                  <td data-label="Recipient">{e.recipient ?? '—'}</td>
+                  <td data-label="Ref" className={styles.mono}>{e.ref.slice(0, 12)}</td>
                 </tr>
               ))}
             </tbody>

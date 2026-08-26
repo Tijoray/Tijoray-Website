@@ -51,13 +51,13 @@ export default function AdminCustomers() {
                 <tr><td colSpan={7} className={styles.empty}>No customers match.</td></tr>
               ) : rows.map(c => (
                 <tr key={c.id}>
-                  <td>{c.name ?? '—'}</td>
-                  <td>{c.email ?? '—'}</td>
-                  <td>{c.phone_number ?? '—'}</td>
-                  <td>{addrLine(c.address) || '—'}</td>
-                  <td>{c.piecesBought}</td>
-                  <td>{money(c.estSpendCents)}</td>
-                  <td>{date(c.created_at)}</td>
+                  <td data-label="Name">{c.name ?? '—'}</td>
+                  <td data-label="Email">{c.email ?? '—'}</td>
+                  <td data-label="Phone">{c.phone_number ?? '—'}</td>
+                  <td data-label="Location">{addrLine(c.address) || '—'}</td>
+                  <td data-label="Pieces">{c.piecesBought}</td>
+                  <td data-label="Est. spend">{money(c.estSpendCents)}</td>
+                  <td data-label="Joined">{date(c.created_at)}</td>
                 </tr>
               ))}
             </tbody>

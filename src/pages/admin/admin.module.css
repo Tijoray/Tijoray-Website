@@ -231,3 +231,149 @@
 
 /* ── Gate (non-admin / loading) ─────────────────────────────── */
 .gate { min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; font-family: var(--font-sans); color: var(--ink-mid); }
+
+/* ── Phones and small tablets ────────────────────────────────
+ *
+ * The panel was built for a desk, and then the tag-binding flow arrived, which
+ * only runs on a phone — Web NFC is Chrome-on-Android only. So the one screen
+ * an operator most needs at the bench was the one that did not fit on it: a
+ * fixed 220px sidebar against a 390px phone left 170px for the content, and
+ * everything else scrolled off sideways.
+ *
+ * Two breakpoints. At 860px the shell stops being a sidebar and becomes a top
+ * bar; at 640px the tables stop being tables. Nothing above 860px changes.
+ */
+
+@media (max-width: 860px) {
+  /* Shell: column, and dvh so a phone's collapsing address bar doesn't leave a
+     gap at the bottom of the viewport. */
+  .shell { flex-direction: column; min-height: 100dvh; }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    padding: 12px 0 0;
+  }
+
+  .brand { font-size: 17px; letter-spacing: 3px; padding: 0 16px 1px; }
+  .brandSub { padding: 0 16px 10px; }
+
+  /* Nav scrolls sideways rather than stacking: five items stacked would push
+     the actual page below the fold on every load. */
+  .nav {
+    flex-direction: row;
+    gap: 6px;
+    padding: 0 12px 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+
+  .navLink {
+    white-space: nowrap;
+    border-radius: 999px;
+    padding: 9px 15px;
+    flex-shrink: 0;
+  }
+
+  /* Sign-out moves to the corner the brand leaves free. The address it used to
+     show is hidden by AdminLayout at this width — it wrapped onto two lines and
+     told the operator nothing they did not know. */
+  .signOut {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    margin-top: 0;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  .signOutEmail { display: none; }
+
+  .main { padding: 20px 16px 56px; max-width: none; }
+
+  .h1 { font-size: 24px; }
+  .subtle { margin-bottom: 18px; }
+
+  .panel { padding: 18px 16px; }
+  .itemCard { padding: 16px 14px; }
+
+  .cards { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+  .cardValue { font-size: 27px; }
+
+  /* 16px is the threshold below which iOS zooms the page in on focus, which
+     then leaves the operator scrolled sideways on a form they were typing in. */
+  .input, .select, .textarea {
+    font-size: 16px;
+    min-width: 0;
+    width: 100%;
+  }
+
+  /* Search takes its own row instead of squeezing between the filter pills. */
+  .toolbar > .input { flex: 1 1 100%; }
+  .toolbar { gap: 8px; }
+
+  /* Comfortable thumb targets. */
+  .btn, .btnGhost, .filterBtn, .dangerBtn { min-height: 42px; }
+  .filterBtn { padding: 9px 15px; }
+
+  .saveBar { flex-wrap: wrap; gap: 10px; }
+  .itemHead { flex-wrap: wrap; }
+  .priceGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  /* Tables become cards.
+   *
+   * Eight columns cannot be read on a phone, and a sideways-scrolling table
+   * hides the column you are looking for behind the one you are not. Each row
+   * becomes a stacked label/value card instead, with the labels coming from
+   * data-label on the cells — the header row is what supplies them, so the two
+   * cannot drift apart without someone noticing. */
+  .tableScroll { overflow-x: visible; }
+  .table, .table tbody, .table tr, .table td { display: block; width: 100%; }
+  .table thead { display: none; }
+
+  .table tr { padding: 12px 14px; border-bottom: 1px solid var(--border-soft); }
+  .table tr:last-child { border-bottom: none; }
+
+  .table td {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 5px 0;
+    border: none;
+    text-align: right;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    flex-shrink: 0;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: left;
+  }
+
+  /* A cell with nothing to say on a phone — the label alone is the row. */
+  .table td:empty { display: none; }
+
+  /* Full-width status rows carry no label and must not be laid out as a pair. */
+  .table td.loading, .table td.empty { display: block; text-align: center; }
+  .table td.loading::before, .table td.empty::before { content: none; }
+
+  /* Detail pairs stack rather than pushing the value off the right edge. */
+  .field { flex-direction: column; gap: 2px; }
+  .fieldValue { text-align: left; }
+
+  /* The type column is a fixed 90px, which leaves nothing for the body. */
+  .memoryItem { flex-direction: column; gap: 6px; }
+  .memoryType { width: auto; }
+
+  .grid2, .grid3, .grid4, .priceGrid { grid-template-columns: 1fr; }
+}

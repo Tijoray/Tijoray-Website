@@ -75,16 +75,16 @@ export default function AdminPieces() {
                 <tr><td colSpan={8} className={styles.empty}>No pieces match.</td></tr>
               ) : pieces.map(p => (
                 <tr key={p.id} className={styles.rowLink} onClick={() => navigate(`/admin/pieces/${p.id}`)}>
-                  <td className={styles.mono}>{p.serial ?? '—'}</td>
-                  <td>{describeConfig(p.config, p.product_type)}</td>
-                  <td>{p.buyerName ?? p.buyerEmail ?? '—'}</td>
-                  <td>{p.recipient_name ?? (p.receiver_id ? 'Linked' : '—')}</td>
-                  <td><StatusPill status={p.status} /></td>
-                  <td>{p.memoryCount === 0 ? <Pill tone="warn">0</Pill> : p.memoryCount}</td>
-                  <td>{p.hardware_id
+                  <td data-label="Serial" className={styles.mono}>{p.serial ?? '—'}</td>
+                  <td data-label="Piece">{describeConfig(p.config, p.product_type)}</td>
+                  <td data-label="Buyer">{p.buyerName ?? p.buyerEmail ?? '—'}</td>
+                  <td data-label="Recipient">{p.recipient_name ?? (p.receiver_id ? 'Linked' : '—')}</td>
+                  <td data-label="Status"><StatusPill status={p.status} /></td>
+                  <td data-label="Memories">{p.memoryCount === 0 ? <Pill tone="warn">0</Pill> : p.memoryCount}</td>
+                  <td data-label="NFC tag">{p.hardware_id
                     ? <span className={styles.mono}>{p.hardware_id}</span>
                     : (p.status !== 'crafting' ? <Pill tone="warn">missing</Pill> : '—')}</td>
-                  <td>{date(p.created_at)}</td>
+                  <td data-label="Ordered">{date(p.created_at)}</td>
                 </tr>
               ))}
             </tbody>
