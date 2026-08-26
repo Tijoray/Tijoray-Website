@@ -272,6 +272,48 @@
   line-height: 1.5;
 }
 
+/* Place name takes the room it needs and pushes the credit to the far end,
+   truncating rather than wrapping the bar onto a second line. */
+.mapPlace {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Attribution.
+ *
+ * A sibling of the map rather than a control inside it, deliberately: the map
+ * container carries a `filter`, which makes it a stacking context, so anything
+ * Leaflet renders in there is stuck below this label's gradient and comes out
+ * muddy. Out here it sits on top, keeps its true white, and escapes the sepia.
+ *
+ * Quieter than the place name — it is a legal credit, not information anyone
+ * came for — but held above the contrast floor rather than hidden. */
+.mapAttribution {
+  flex-shrink: 0;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.66);
+  /* The label bar is click-through so the map can be dragged under it; the
+     links are the one part that has to take a click. */
+  pointer-events: auto;
+}
+
+.mapAttribution a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.mapAttribution a:hover,
+.mapAttribution a:focus-visible {
+  color: #fff;
+  text-decoration: underline;
+}
+
 /* ── Loading ── */
 .loadingBox {
   width: 100%;

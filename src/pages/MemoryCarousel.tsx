@@ -98,6 +98,11 @@ function LeafletMapInner({ lat, lon }: { lat: number; lon: number }) {
         center:             [lat, lon],
         zoom:               15,
         zoomControl:        false,
+        // Off because the credit is rendered as a sibling of the map instead —
+        // see MapCard. Leaflet's own control lives inside this container, which
+        // carries a `filter` and therefore its own stacking context, so it
+        // cannot be lifted above the label's gradient and gets painted under
+        // it. Outside, it is legible, unfiltered and cannot wrap.
         attributionControl: false,
         dragging:           true,
         scrollWheelZoom:    false,  // off — avoids hijacking page scroll
@@ -106,11 +111,27 @@ function LeafletMapInner({ lat, lon }: { lat: number; lon: number }) {
         keyboard:           false,
       })
 
-      // CartoDB Positron — clean, minimal, no API key required
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        subdomains: 'abcd',
-        maxZoom:    19,
-      }).addTo(map)
+      // CARTO Positron — clean and minimal, and the style the sepia filter on
+      // this container was tuned against. CARTO's own sample URL is the
+      // `voyager` style; keeping `light_all` is deliberate, because voyager is
+      // full-colour and comes out muddy under that filter.
+      //
+      // The key stops CARTO stamping "API KEY REQUIRED" across every tile. It
+      // is a browser key and ends up in the bundle — unavoidable for a
+      // client-side map, and what CARTO issues these for — so it lives in an
+      // env var for rotation rather than secrecy. Without it the map still
+      // works, just watermarked, which is the right way to degrade.
+      //
+      // Single host, not the old {s}.basemaps sharding: subdomain sharding
+      // exists to dodge HTTP/1.1 connection limits and is counterproductive
+      // over HTTP/2. Note CARTO are retiring raster basemaps in favour of
+      // vector ones, so this will want revisiting.
+      const cartoKey = import.meta.env.VITE_CARTO_KEY as string | undefined
+      L.tileLayer(
+        'https://basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}{r}.png'
+          + (cartoKey ? `?key=${cartoKey}` : ''),
+        { maxZoom: 19, detectRetina: true },
+      ).addTo(map)
 
       // Custom rose/burgundy pin
       const icon = L.divIcon({
@@ -152,7 +173,16 @@ function MapCard({ content }: { content: string }) {
         <svg width="10" height="10" viewBox="0 0 20 20" fill="currentColor" style={{ flexShrink: 0 }}>
           <path d="M10 2a6 6 0 016 6c0 4-6 10-6 10S4 12 4 8a6 6 0 016-6z"/>
         </svg>
-        <span>{shortName}</span>
+        <span className={styles.mapPlace}>{shortName}</span>
+        {/* Required by both licences: OpenStreetMap for the data underneath,
+            CARTO for the cartography on top. Shortened to the two names and
+            their licence links — the card is narrow, and a credit nobody can
+            read satisfies nobody. */}
+        <span className={styles.mapAttribution}>
+          <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>
+          {' · '}
+          <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer">CARTO</a>
+        </span>
       </div>
     </div>
   )
