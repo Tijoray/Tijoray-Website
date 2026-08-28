@@ -148,3 +148,21 @@
     text-align: center;
   }
 }
+
+
+/* Bespoke as a quiet second path rather than the primary button. */
+.ctaAside {
+  margin: 28px 0 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.ctaAside a {
+  color: var(--rose-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ctaAside a:hover { color: var(--ink); }

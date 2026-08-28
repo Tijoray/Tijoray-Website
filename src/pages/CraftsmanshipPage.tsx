@@ -1,17 +1,18 @@
-import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './CraftsmanshipPage.module.css'
+import { useReveal } from '../lib/useReveal'
+import { usePageMeta } from '../lib/usePageMeta'
 
 const PILLARS = [
   {
     num: '01',
     title: 'Metals',
-    body: 'Every Tijoray piece begins with its metal. We work in stainless steel, sterling silver, and 10K or 18K gold — in white, yellow, and rose — each chosen for how it wears over years of daily contact, not just how it photographs on day one.',
+    body: 'Every Tijoray piece begins with its metal. We work in sterling silver and 10K or 18K gold — in white, yellow, and rose — each chosen for how it wears over years of daily contact, not just how it photographs on day one.',
   },
   {
     num: '02',
     title: 'Birthstones',
-    body: 'Twelve stones, one for every month, each selected for colour and character and set by hand at the centre of the piece. The stone you choose — and the month it stands for — is recorded in the piece\'s digital profile the moment it is made.',
+    body: 'Twelve stones, one for every month, each selected for color and character and set by hand at the center of the piece. The stone you choose — and the month it stands for — is recorded in the piece\'s digital profile the moment it is made.',
   },
   {
     num: '03',
@@ -26,7 +27,7 @@ const PILLARS = [
 ]
 
 const SPECS = [
-  { label: 'Metals', value: 'Stainless Steel · Sterling Silver (925) · 10K & 18K Gold' },
+  { label: 'Metals', value: 'Sterling Silver (925) · 10K & 18K Gold' },
   { label: 'Birthstones', value: 'Twelve Stones · Hand-Set · Recorded in the Piece\'s Profile' },
   { label: 'NFC Integration', value: 'Passive Chip · No Battery · Rated for Decades of Use' },
   { label: 'Finishing', value: 'Hand-Finished · Inspected Before Dispatch' },
@@ -35,24 +36,8 @@ const SPECS = [
 ]
 
 export default function CraftsmanshipPage() {
-  const pillarRefs = useRef<(HTMLElement | null)[]>([])
-  const specsRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    const els = [
-      ...pillarRefs.current.filter(Boolean) as HTMLElement[],
-      specsRef.current,
-    ].filter(Boolean) as HTMLElement[]
-
-    const io = new IntersectionObserver(
-      entries => entries.forEach(e => {
-        if (e.isIntersecting) e.target.classList.add(styles.inView)
-      }),
-      { threshold: 0.12 }
-    )
-    els.forEach(el => io.observe(el))
-    return () => io.disconnect()
-  }, [])
+  usePageMeta('Craftsmanship', 'How a Tijoray piece is made: hand-set stones, multi-stage finishing, and the Lifetime Heritage Guarantee that follows it.')
+  const reveal = useReveal(styles.inView)
 
   return (
     <div className={styles.page}>
@@ -71,9 +56,9 @@ export default function CraftsmanshipPage() {
             {PILLARS.map((p, i) => (
               <article
                 key={p.num}
-                ref={el => { pillarRefs.current[i] = el }}
+                ref={reveal}
                 className={styles.pillarCard}
-                style={{ transitionDelay: `${i * 0.1}s` }}
+                style={{ transitionDelay: `${i * 0.05}s` }}
               >
                 <div className={styles.pillarNum}>{p.num}</div>
                 <h2 className={styles.pillarTitle}>{p.title}</h2>
@@ -85,7 +70,7 @@ export default function CraftsmanshipPage() {
       </section>
 
       <section
-        ref={specsRef}
+        ref={reveal}
         className={styles.specsSection}
       >
         <div className={styles.inner}>

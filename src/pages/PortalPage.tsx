@@ -9,7 +9,7 @@ import { STONE_NAMES_SHORT as BIRTHSTONE_NAMES } from '../data/catalog'
 import styles from './PortalPage.module.css'
 
 type Shape      = 'square' | 'circle' | 'heart' | 'pear'
-type MetalKey   = 'steel' | 'silver' | '10k' | '18k'
+type MetalKey   = 'silver' | '10k' | '18k'
 type MetalColor = 'white' | 'gold' | 'rose'
 
 const COLLECTION_TO_SHAPE: Record<string, Shape> = {
@@ -30,7 +30,6 @@ function stoneToIndex(name: string | null): number {
 }
 
 function purityToMetal(purity: string | null): MetalKey {
-  if (purity === 'steel')  return 'steel'
   if (purity === 'silver') return 'silver'
   if (purity === '10k')    return '10k'
   return '18k'

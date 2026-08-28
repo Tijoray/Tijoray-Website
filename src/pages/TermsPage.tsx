@@ -18,8 +18,8 @@ export default function TermsPage() {
 
         <div className={styles.section}>
           <h2>Products and orders</h2>
-          <p>All pieces are handcrafted to order. Lead times are 10–14 business days from payment confirmation. We reserve the right to cancel any order and issue a full refund if we are unable to fulfil it for any reason.</p>
-          <p>Product images and 3D previews are representative. Slight variations in stone colour, metal finish, and proportions are inherent to handcrafted jewellery and are not grounds for return.</p>
+          <p>All pieces are handcrafted to order. Lead times are 10–14 business days from payment confirmation. We reserve the right to cancel any order and issue a full refund if we are unable to fulfill it for any reason.</p>
+          <p>Product images and 3D previews are representative. Slight variations in stone color, metal finish, and proportions are inherent to handcrafted jewelry and are not grounds for return.</p>
         </div>
 
         <div className={styles.section}>

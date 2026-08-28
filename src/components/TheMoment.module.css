@@ -1,0 +1,146 @@
+.section {
+  padding: var(--space-section) 0;
+  background: var(--cream-warm);
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 56px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  align-items: center;
+}
+
+.fadeUp {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.fadeUp.inView {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.media { min-width: 0; }
+
+.image {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.caption {
+  margin: 14px 0 0;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.text { min-width: 0; }
+
+.eyebrow {
+  margin: 0 0 18px;
+  font-family: var(--font-sans);
+  font-size: var(--eyebrow-size);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--rose-deep);
+}
+
+.title {
+  margin: 0 0 20px;
+  font-family: var(--font-serif);
+  font-size: clamp(32px, 3.9vw, 50px);
+  font-weight: 300;
+  line-height: 1.14;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.title em {
+  font-style: italic;
+  color: var(--rose);
+}
+
+.lede {
+  margin: 0 0 34px;
+  font-family: var(--font-sans);
+  font-size: var(--text-md);
+  line-height: 1.75;
+  color: var(--ink-mid);
+  max-width: 46ch;
+}
+
+/* Contrast pairs — what you'd otherwise have, against what this is. */
+.contrasts {
+  margin: 0 0 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contrastRow {
+  display: grid;
+  gap: 5px;
+  padding-left: 20px;
+  border-left: 2px solid var(--gold);
+}
+
+.before {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(29, 26, 25, 0.3);
+}
+
+.after {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 22px;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.link {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: var(--tracking-sm);
+  text-transform: uppercase;
+  color: var(--rose-deep);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(154, 95, 81, 0.35);
+  padding-bottom: 3px;
+  transition: border-color 0.25s, color 0.25s;
+}
+
+.link:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--rose-deep);
+  outline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  .inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 0 24px;
+  }
+  .media { order: 2; }
+  .text  { order: 1; }
+  .image { aspect-ratio: 4 / 3; }
+  .after { font-size: 20px; }
+}

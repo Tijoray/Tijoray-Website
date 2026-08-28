@@ -1,22 +1,8 @@
-import { useEffect, useRef } from 'react'
 import styles from './Features.module.css'
+import { useReveal } from '../lib/useReveal'
 
 export default function Features() {
-  const card1Ref = useRef<HTMLElement>(null)
-  const card2Ref = useRef<HTMLElement>(null)
-  const card3Ref = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    const cards = [card1Ref.current, card2Ref.current, card3Ref.current].filter(Boolean) as HTMLElement[]
-    const io = new IntersectionObserver(
-      (entries) => entries.forEach(e => {
-        if (e.isIntersecting) e.target.classList.add(styles.inView)
-      }),
-      { threshold: 0.18 }
-    )
-    cards.forEach(c => io.observe(c))
-    return () => io.disconnect()
-  }, [])
+  const reveal = useReveal(styles.inView)
 
   return (
     <section className={styles.features}>
@@ -27,7 +13,7 @@ export default function Features() {
         </header>
 
         <div className={styles.featuresGrid}>
-          <article ref={card1Ref} className={styles.featureCard}>
+          <article ref={reveal} className={styles.featureCard}>
             <div className={styles.featureNum}>01</div>
             <h3 className={styles.featureTitle}>The Jewel</h3>
             <p className={styles.featureBody}>
@@ -37,7 +23,7 @@ export default function Features() {
             </p>
           </article>
 
-          <article ref={card2Ref} className={styles.featureCard} style={{ transitionDelay: '0.12s' }}>
+          <article ref={reveal} className={styles.featureCard} style={{ transitionDelay: '0.06s' }}>
             <div className={styles.featureNum}>02</div>
             <h3 className={styles.featureTitle}>The Vault</h3>
             <p className={styles.featureBody}>
@@ -47,7 +33,7 @@ export default function Features() {
             </p>
           </article>
 
-          <article ref={card3Ref} className={styles.featureCard} style={{ transitionDelay: '0.24s' }}>
+          <article ref={reveal} className={styles.featureCard} style={{ transitionDelay: '0.12s' }}>
             <div className={styles.featureNum}>03</div>
             <h3 className={styles.featureTitle}>The Legacy</h3>
             <p className={styles.featureBody}>

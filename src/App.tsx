@@ -4,14 +4,16 @@ import Navbar from './components/Navbar'
 import ProtectedRoute from './components/ProtectedRoute'
 import Hero from './components/Hero'
 // import ScrollStory from './components/ScrollStory'
-import Features from './components/Features'
 import HowItWorks from './components/HowItWorks'
+import FeaturedPieces from './components/FeaturedPieces'
+import TheMoment from './components/TheMoment'
 import TrustSection from './components/TrustSection'
 import PricingBand from './components/PricingBand'
 import StickyMobileCta from './components/StickyMobileCta'
 import Testimonials from './components/Testimonials'
 import CtaSection from './components/CtaSection'
 import Footer from './components/Footer'
+import CartDrawer from './components/CartDrawer'
 import { PRODUCTS } from './data/products'
 
 const AboutPage = lazy(() => import('./pages/AboutPage'))
@@ -78,7 +80,13 @@ function HomePage() {
       <Hero />
       <HowItWorks />
       {/* <ScrollStory /> */}
-      <Features />
+      {/* Jewelry is bought with the eyes — show something buyable before the
+          essays. Features (Craft / Vault / Legacy) was retired from the home
+          page: it restated HowItWorks in prose, and TheMoment now carries the
+          argument it was reaching for. The component is still in the tree if
+          you want it back. */}
+      <FeaturedPieces />
+      <TheMoment />
       <PricingBand />
       <TrustSection />
       <Testimonials />
@@ -142,6 +150,7 @@ export default function App() {
         zIndex: 1000, transition: 'width 0.08s linear'
       }} />
       <Navbar />
+      <CartDrawer />
       <Suspense fallback={<RouteFallback />}>
         <Routes>
           <Route path="/" element={<HomePage />} />

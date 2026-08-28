@@ -1,7 +1,9 @@
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './TechnologyPage.module.css'
+import { useReveal } from '../lib/useReveal'
 import { asset } from '../lib/assets'
+import { usePageMeta } from '../lib/usePageMeta'
 
 const NFC_STEPS = [
   {
@@ -36,14 +38,14 @@ const APP_FEATURES = [
     img: asset('/assets/app/app-atelier.png'),
     label: 'Stone Intelligence',
     title: 'Every stone, documented.',
-    body: 'Tap your piece and unlock its stone record. Stone type, cut, colour, and setting — recorded by the atelier at the moment of creation and bound permanently to the piece.',
-    pills: ['Stone Type', 'Cut & Colour', 'Setting', 'Atelier Record'],
+    body: 'Tap your piece and unlock its stone record. Stone type, cut, color, and setting — recorded by the atelier at the moment of creation and bound permanently to the piece.',
+    pills: ['Stone Type', 'Cut & Color', 'Setting', 'Atelier Record'],
   },
   {
     img: asset('/assets/app/app-gold.png'),
     label: 'Gold Composition',
     title: 'Know what you wear.',
-    body: 'Every alloy in your Tijoray piece is catalogued — metal purity, colour composition, and total mass. Our Craftsmanship Guarantee is embedded directly in the record, verified by the atelier before the piece ships.',
+    body: 'Every alloy in your Tijoray piece is catalogued — metal purity, color composition, and total mass. Our Craftsmanship Guarantee is embedded directly in the record, verified by the atelier before the piece ships.',
     pills: ['Metal Purity', 'Composition', 'Weight', 'Craftsmanship Guarantee'],
   },
   {
@@ -62,19 +64,9 @@ const STATS = [
 ]
 
 export default function TechnologyPage() {
-  const fadeRefs    = useRef<(HTMLElement | null)[]>([])
+  usePageMeta('The Technology', 'How the Tijoray vault works: a passive NFC chip sealed into the piece, AES-256 encrypted memories, and a provenance record verified on every tap.')
+  const reveal      = useReveal(styles.inView)
   const scrollImgs  = useRef<(HTMLImageElement | null)[]>([])
-
-  useEffect(() => {
-    const io = new IntersectionObserver(
-      (entries) => entries.forEach(e => {
-        if (e.isIntersecting) e.target.classList.add(styles.inView)
-      }),
-      { threshold: 0.15 }
-    )
-    fadeRefs.current.forEach(el => { if (el) io.observe(el) })
-    return () => io.disconnect()
-  }, [])
 
   // Scroll-driven image reveal — image starts at top and slides up as user scrolls
   useEffect(() => {
@@ -100,10 +92,6 @@ export default function TechnologyPage() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  function ref(i: number) {
-    return (el: HTMLElement | null) => { fadeRefs.current[i] = el }
-  }
-
   function scrollImgRef(i: number) {
     return (el: HTMLImageElement | null) => { scrollImgs.current[i] = el }
   }
@@ -128,7 +116,7 @@ export default function TechnologyPage() {
       </section>
 
       {/* ── NFC Flow ── */}
-      <section className={`${styles.nfcSection} ${styles.fadeUp}`} ref={ref(0) as any}>
+      <section className={`${styles.nfcSection} ${styles.fadeUp}`} ref={reveal}>
         <div className={styles.nfcInner}>
           <div className={styles.nfcHeader}>
             <p className={styles.eyebrow}>How It Works</p>
@@ -139,8 +127,8 @@ export default function TechnologyPage() {
               <article
                 key={step.num}
                 className={`${styles.nfcCard} ${styles.fadeUp}`}
-                ref={ref(i + 1) as any}
-                style={{ transitionDelay: `${i * 0.12}s` }}
+                ref={reveal}
+                style={{ transitionDelay: `${i * 0.06}s` }}
               >
                 <div className={styles.nfcStepNum}>{step.num}</div>
                 <div className={styles.phoneFrame}>
@@ -157,7 +145,7 @@ export default function TechnologyPage() {
       {/* ── App Features ── */}
       <section className={styles.appSection}>
         <div className={styles.appInner}>
-          <div className={`${styles.appHeader} ${styles.fadeUp}`} ref={ref(4) as any}>
+          <div className={`${styles.appHeader} ${styles.fadeUp}`} ref={reveal}>
             <p className={styles.eyebrow}>The App</p>
             <h2 className={styles.sectionTitle}>Your Digital Atelier</h2>
             <p className={styles.appHeaderSub}>
@@ -169,7 +157,7 @@ export default function TechnologyPage() {
             <div
               key={feature.title}
               className={`${styles.featureRow} ${i % 2 !== 0 ? styles.featureReverse : ''} ${styles.fadeUp}`}
-              ref={ref(5 + i) as any}
+              ref={reveal}
             >
               <div className={styles.featurePhone}>
                 <div className={styles.appPhoneFrame}>
@@ -180,7 +168,9 @@ export default function TechnologyPage() {
                       loop
                       muted
                       playsInline
-                      aria-label="Tijoray memory feature — a personalised message revealing on first tap"
+                      preload="auto"
+                      poster={feature.img}
+                      aria-label="Tijoray memory feature — a personalized message revealing on first tap"
                     >
                       <source src={asset('/assets/video/memory-page.mp4')} type="video/mp4" />
                       <source src={asset('/assets/video/memory-page.mov')} type="video/quicktime" />
@@ -211,7 +201,7 @@ export default function TechnologyPage() {
       </section>
 
       {/* ── Heritage Guarantee ── */}
-      <section className={`${styles.heritageSection} ${styles.fadeUp}`} ref={ref(9) as any}>
+      <section className={`${styles.heritageSection} ${styles.fadeUp}`} ref={reveal}>
         <div className={styles.heritageInner}>
           <blockquote className={styles.heritageQuote}>
             "Every Tijoray piece is registered in our permanent digital archive, ensuring
@@ -229,7 +219,7 @@ export default function TechnologyPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className={`${styles.ctaSection} ${styles.fadeUp}`} ref={ref(10) as any}>
+      <section className={`${styles.ctaSection} ${styles.fadeUp}`} ref={reveal}>
         <div className={styles.ctaInner}>
           <p className={styles.eyebrow}>Begin</p>
           <h2 className={styles.ctaTitle}>

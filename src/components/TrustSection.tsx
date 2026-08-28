@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import styles from './TrustSection.module.css'
+import { useReveal } from '../lib/useReveal'
 
 const TRUST_POINTS = [
   {
@@ -57,29 +58,17 @@ const TRUST_POINTS = [
 
 export default function TrustSection() {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
-  const sectionRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    const el = sectionRef.current
-    if (!el) return
-    const io = new IntersectionObserver(
-      entries => entries.forEach(e => {
-        if (e.isIntersecting) el.classList.add(styles.inView)
-      }),
-      { threshold: 0.1 }
-    )
-    io.observe(el)
-    return () => io.disconnect()
-  }, [])
+  const reveal = useReveal(styles.inView)
 
   return (
-    <section ref={sectionRef} className={styles.section}>
+    <section ref={reveal} className={styles.section}>
       <div className={styles.inner}>
         <header className={styles.header}>
           <p className={styles.eyebrow}>Security &amp; Privacy</p>
           <h2 className={styles.title}>Built for the <em>long run.</em></h2>
           <p className={styles.subtitle}>
-            Your memories deserve the same protection as your most prized possessions.
+            Encrypted before they leave your phone. Readable by no one but you
+            and the person you give the piece to.
           </p>
         </header>
 

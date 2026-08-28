@@ -49,8 +49,8 @@
   padding: 48px 40px;
   overflow: hidden;
   opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .featureCard.inView {

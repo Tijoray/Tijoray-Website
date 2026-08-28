@@ -90,17 +90,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const shapeLabel     = productType === 'bracelet' && item.shape === 'square'
       ? 'Asscher'
       : item.shape.charAt(0).toUpperCase() + item.shape.slice(1)
-    const metalLine      = item.metal === 'steel'
-      ? METAL_LABELS[item.metal]
-      : `${METAL_COLOR_LABELS[item.metalColor]} ${METAL_LABELS[item.metal]}`
+    const metalLine      = `${METAL_COLOR_LABELS[item.metalColor]} ${METAL_LABELS[item.metal]}`
 
     // Look up IDs
     const { data: stones } = await supabase.from('Stones').select('id').ilike('name', birthstoneName).limit(1)
     const stoneId = stones?.[0]?.id ?? ''
 
-    const metalColour = item.metal === 'steel' ? 'silver' : item.metalColor
     const { data: metals } = await supabase.from('Metals').select('id')
-      .eq('purity', item.metal).eq('colour', metalColour).limit(1)
+      .eq('purity', item.metal).eq('colour', item.metalColor).limit(1)
     const metalId = metals?.[0]?.id ?? ''
 
     lineItems.push({

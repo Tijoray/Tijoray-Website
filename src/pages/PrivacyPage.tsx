@@ -31,7 +31,7 @@ export default function PrivacyPage() {
         <div className={styles.section}>
           <h2>How we use your data</h2>
           <ul>
-            <li>To fulfil and ship your order</li>
+            <li>To fulfill and ship your order</li>
             <li>To operate your digital vault and authenticate NFC tap events</li>
             <li>To send transactional emails (order confirmation, shipping updates) via Resend</li>
             <li>To respond to support enquiries</li>

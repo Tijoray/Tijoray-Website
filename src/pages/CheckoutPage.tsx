@@ -11,6 +11,7 @@ import { needsProfileCompletion } from '../lib/profile'
 import { SHAPE_LABELS } from '../data/catalog'
 import { PRODUCT_TYPES } from '../data/product-types'
 import styles from './CheckoutPage.module.css'
+import { usePageMeta } from '../lib/usePageMeta'
 
 function GoogleIcon() {
   return (
@@ -30,6 +31,7 @@ const fmt = (n: number) => new Intl.NumberFormat('en-US', {
 type Step = 'form' | 'verify-email'
 
 export default function CheckoutPage() {
+  usePageMeta('Checkout')
   const { items } = useCart()
   const { user, loading: authLoading } = useAuth()
   const navigate = useNavigate()

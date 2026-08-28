@@ -67,6 +67,20 @@
   z-index: 2;
 }
 
+/* The wordmark is centred absolutely, so the link row has to stay clear of it
+   on its own. Measured left-gap to the logo at 1280px: 44px gap/17px type
+   overlapped it by 12px; this lands it at +84px. */
+@media (max-width: 1500px) {
+  .links {
+    gap: 26px;
+  }
+
+  .links a {
+    font-size: 15px;
+    letter-spacing: 1px;
+  }
+}
+
 .links a {
   font-family: var(--font-sans);
   font-size: var(--text-md);
@@ -258,6 +272,18 @@
   color: var(--ink-mid);
   text-decoration: none;
   transition: color 0.3s;
+  /* Rendered as a <button> so it can open the cart drawer in place. */
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  line-height: 0;
+}
+
+.cartIcon:focus-visible {
+  outline: 2px solid var(--rose);
+  outline-offset: 4px;
+  border-radius: 2px;
 }
 
 .cartIcon:hover {
@@ -527,6 +553,16 @@
     padding: 14px 24px;
   }
 
+  .logo img {
+    height: 200px;
+    max-width: 88vw;
+  }
+}
+
+/* Below this the link row, the wordmark and the CTA block cannot all fit —
+   at 1180px the right-hand gap is already down to ~56px and it goes negative
+   by 1024px. The mobile menu carries the full set of links instead. */
+@media (max-width: 1240px) {
   .links {
     display: none;
   }
@@ -538,11 +574,6 @@
   .hamburger {
     display: flex;
     margin-left: auto;
-  }
-
-  .logo img {
-    height: 200px;
-    max-width: 88vw;
   }
 }
 

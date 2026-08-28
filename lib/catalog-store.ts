@@ -46,7 +46,7 @@ export function validateCatalog(doc: unknown): asserts doc is CatalogDoc {
   for (const key of ['products', 'productTypes', 'collections', 'metals', 'stones'] as const) {
     if (!Array.isArray(d[key])) throw new Error(`Catalog.${key} must be an array`)
   }
-  const METALS: Metal[] = ['steel', 'silver', '10k', '18k']
+  const METALS: Metal[] = ['silver', '10k', '18k']
   for (const p of d.products) {
     if (!p.id) throw new Error('Every product needs an id')
     if (!p.collectionId || !p.productTypeId) throw new Error(`Product "${p.id}" needs collectionId + productTypeId`)

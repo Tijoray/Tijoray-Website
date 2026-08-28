@@ -9,8 +9,8 @@
  *
  * Several display strings intentionally differ between surfaces and are preserved
  * here as separate exports — do not "simplify" them into one value:
- *   • Metal labels  — short ("Steel") in the configurator vs long ("Stainless
- *     Steel") in the cart/checkout/receipt.
+ *   • Metal labels  — short ("Silver") in the configurator vs long ("Sterling
+ *     Silver") in the cart/checkout/receipt.
  *   • Metal colours — "Gold" in the configurator vs "Yellow" in cart/checkout/API.
  *   • Stone #5      — "Mother of Pearl" in the configurator vs "Pearl" everywhere
  *     else. The short name is also used to look up the row in the Supabase
@@ -21,7 +21,7 @@
 
 /* ── Types ─────────────────────────────────────────────── */
 export type Shape      = 'square' | 'circle' | 'heart' | 'pear'
-export type Metal      = 'steel' | 'silver' | '10k' | '18k'
+export type Metal      = 'silver' | '10k' | '18k'
 export type MetalColor = 'white' | 'gold' | 'rose'
 
 /** Physically-based gem material used by the interactive 3D configurator. */
@@ -162,21 +162,21 @@ export const GEM_PROPS_THUMB   = STONES.map(s => s.gemThumb)
 
 /* ── Metals ────────────────────────────────────────────── */
 export const METAL_PRICES: Record<Metal, number> = {
-  steel: 299, silver: 399, '10k': 799, '18k': 1299,
+  silver: 399, '10k': 799, '18k': 1299,
 }
 
 export const METAL_PRICES_CENTS: Record<Metal, number> = {
-  steel: 29900, silver: 39900, '10k': 79900, '18k': 129900,
+  silver: 39900, '10k': 79900, '18k': 129900,
 }
 
 /** Short labels — configurator option buttons. */
 export const METAL_LABELS_SHORT: Record<Metal, string> = {
-  steel: 'Steel', silver: 'Silver', '10k': '10K Gold', '18k': '18K Gold',
+  silver: 'Silver', '10k': '10K Gold', '18k': '18K Gold',
 }
 
 /** Long labels — cart, checkout, and Stripe receipt. */
 export const METAL_LABELS_LONG: Record<Metal, string> = {
-  steel: 'Stainless Steel', silver: 'Sterling Silver', '10k': '10K Gold', '18k': '18K Gold',
+  silver: 'Sterling Silver', '10k': '10K Gold', '18k': '18K Gold',
 }
 
 /** Short colour labels — configurator. */
@@ -189,15 +189,31 @@ export const METAL_COLOR_LABELS_LONG: Record<MetalColor, string> = {
   white: 'White', gold: 'Yellow', rose: 'Rose',
 }
 
+/**
+ * One human phrase for a metal + colour pair.
+ *
+ * Joining the two labels naively produces a stutter in the configurator's spec
+ * line ("18K Gold · Gold"), so gold reads as a karat sandwich ("18K Yellow
+ * Gold") and silver keeps its finish as a qualifier.
+ */
+export function metalPhrase(metal: Metal, color: MetalColor): string {
+  if (metal === 'silver') {
+    return color === 'white'
+      ? METAL_LABELS_LONG.silver
+      : `${METAL_COLOR_LABELS_LONG[color]}-Finished ${METAL_LABELS_LONG.silver}`
+  }
+  const karat = metal === '10k' ? '10K' : '18K'
+  return `${karat} ${METAL_COLOR_LABELS_LONG[color]} Gold`
+}
+
 export const METAL_COLOR_HEX: Record<MetalColor, string> = {
   white: '#D0CFCD', gold: '#D4AF37', rose: '#C4786A',
 }
 
 export const ROUGHNESS: Record<Metal, number> = {
-  steel: 0.45, silver: 0.28, '10k': 0.28, '18k': 0.18,
+  silver: 0.28, '10k': 0.28, '18k': 0.18,
 }
 
-export const STEEL_COLOR = '#8A8A8A'
 
 /* ── Shapes ────────────────────────────────────────────── */
 export const SHAPE_LABELS: Record<Shape, string> = {

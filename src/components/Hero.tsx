@@ -28,16 +28,17 @@ export default function Hero() {
       <div className={styles.heroLayout}>
         <div className={styles.heroContent}>
           <h1 className={styles.heroTitle}>
-            Luxury jewelry made<br />
-            to hold your private<br />
-            memories <em>forever.</em>
+            Tap it with<br />
+            your phone.<br />
+            Your memories <em>appear.</em>
           </h1>
           <p className={styles.heroSub}>
-            Handcrafted pendants and bracelets with encrypted NFC vaults
-            for photos, voice notes, letters, and legacy.
+            Handcrafted gold and silver jewelry with an encrypted vault sealed
+            inside — photographs, voice notes and letters, opened by a touch.
+            No charging, no pairing, nothing to set up.
           </p>
           <div className={styles.heroCtas}>
-            <Link to="/collection" className={styles.heroBtnPrimary}>Build Your Tijoray</Link>
+            <Link to="/collection" className={styles.heroBtnPrimary}>Design your piece</Link>
             <a href="#how-it-works" className={styles.heroBtnSecondary} onClick={scrollToHowItWorks}>How It Works</a>
           </div>
         </div>

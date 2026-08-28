@@ -37,9 +37,7 @@ export function describeConfig(config: PieceConfig | null, productType?: string 
   const metal = config.metal as Metal | undefined
   const metalColor = config.metalColor as MetalColor | undefined
   const metalLine = metal
-    ? (metal === 'steel'
-        ? METAL_LABELS_LONG[metal]
-        : `${metalColor ? METAL_COLOR_LABELS_LONG[metalColor] + ' ' : ''}${METAL_LABELS_LONG[metal]}`)
+    ? `${metalColor ? METAL_COLOR_LABELS_LONG[metalColor] + ' ' : ''}${METAL_LABELS_LONG[metal] ?? metal}`
     : ''
 
   const stone = typeof config.birthstoneIndex === 'number' ? STONE_NAMES[config.birthstoneIndex] : ''

@@ -43,10 +43,10 @@ export const PRODUCTS: Product[] = [
     collectionId:  'birthstone',
     productTypeId: 'pendant',
     name:          'Birthstone Pendant',
-    priceFrom:     299,
+    priceFrom:     399,
     cardImage:     asset('/assets/jewelry/birthstone-pendant.png'),
     cardDetail:
-      'Available in square, circle, heart, and pear silhouettes. Set in steel, ' +
+      'Available in square, circle, heart, and pear silhouettes. Set in ' +
       'silver, 10K, or 18K gold — with your chosen birthstone at the center.',
     available:     true,
   },
@@ -56,11 +56,11 @@ export const PRODUCTS: Product[] = [
     collectionId:  'birthstone',
     productTypeId: 'bracelet',
     name:          'Birthstone Bracelet',
-    priceFrom:     299,
+    priceFrom:     399,
     cardImage:     asset('/assets/jewelry/birthstone-bracelet.png'),
     cardDetail:
       'The same craft, the same vault — worn around the wrist. Available in ' +
-      'asscher, circle, heart, and pear stations, set in steel, silver, 10K, or 18K gold.',
+      'asscher, circle, heart, and pear stations, set in silver, 10K, or 18K gold.',
     available:     true,
   },
 ]

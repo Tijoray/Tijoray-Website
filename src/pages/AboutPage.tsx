@@ -1,24 +1,11 @@
-import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './AboutPage.module.css'
+import { useReveal } from '../lib/useReveal'
+import { usePageMeta } from '../lib/usePageMeta'
 
 export default function AboutPage() {
-  const fadeRefs = useRef<(HTMLElement | null)[]>([])
-
-  useEffect(() => {
-    const io = new IntersectionObserver(
-      (entries) => entries.forEach(e => {
-        if (e.isIntersecting) e.target.classList.add(styles.inView)
-      }),
-      { threshold: 0.15 }
-    )
-    fadeRefs.current.forEach(el => { if (el) io.observe(el) })
-    return () => io.disconnect()
-  }, [])
-
-  function ref(i: number) {
-    return (el: HTMLElement | null) => { fadeRefs.current[i] = el }
-  }
+  usePageMeta('Our Story', 'Atelier Tijoray was founded at the intersection of fine jewelry and encrypted memory. This is why we make what we make.')
+  const reveal = useReveal(styles.inView)
 
   return (
     <main className={styles.about}>
@@ -41,7 +28,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── Mission ── */}
-      <section className={styles.missionSection} ref={ref(0) as any}>
+      <section className={styles.missionSection} ref={reveal}>
         <div className={styles.missionInner}>
           <div className={styles.missionLeft}>
             <p className={styles.eyebrow}>The Atelier</p>
@@ -86,8 +73,8 @@ export default function AboutPage() {
             <article
               key={p.num}
               className={`${styles.pillarCard} ${styles.fadeUp}`}
-              ref={ref(i + 1) as any}
-              style={{ transitionDelay: `${i * 0.12}s` }}
+              ref={reveal}
+              style={{ transitionDelay: `${i * 0.06}s` }}
             >
               <div className={styles.pillarNum}>{p.num}</div>
               <h3 className={styles.pillarTitle}>{p.title}</h3>
@@ -98,14 +85,14 @@ export default function AboutPage() {
       </section>
 
       {/* ── Craftsmanship callout ── */}
-      <section className={`${styles.craftSection} ${styles.fadeUp}`} ref={ref(4) as any}>
+      <section className={`${styles.craftSection} ${styles.fadeUp}`} ref={reveal}>
         <div className={styles.craftInner}>
           <div className={styles.craftSpecs}>
             <p className={styles.eyebrow}>The Making</p>
             <p className={styles.bodyText}>
               Each Tijoray piece begins as raw metal and stone — responsibly sourced,
-              rigorously selected. Our jewellers work in stainless steel, sterling silver,
-              and 10K or 18K gold, finishing every surface by hand before the birthstone
+              rigorously selected. Our jewellers work in sterling silver and 10K or 18K
+              gold, finishing every surface by hand before the birthstone
               is set.
             </p>
             <p className={styles.bodyText}>
@@ -129,7 +116,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className={`${styles.ctaSection} ${styles.fadeUp}`} ref={ref(5) as any}>
+      <section className={`${styles.ctaSection} ${styles.fadeUp}`} ref={reveal}>
         <div className={styles.ctaInner}>
           <p className={styles.eyebrow}>Begin Your Legacy</p>
           <h2 className={styles.ctaTitle}>

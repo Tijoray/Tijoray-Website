@@ -141,11 +141,11 @@ function Num({ label, value, onChange, step }: { label: string; value: number; o
 function ProductsTab({ doc, edit }: { doc: CatalogDoc; edit: EditFn }) {
   const metals = doc.metals.map(m => m.id)
   const addProduct = () => edit(d => {
-    const prices = Object.fromEntries(d.metals.map(m => [m.id, 29900])) as CatalogDoc['products'][number]['prices']
+    const prices = Object.fromEntries(d.metals.map(m => [m.id, 39900])) as CatalogDoc['products'][number]['prices']
     d.products.push({
       id: `product-${d.products.length + 1}`, route: '/products/new-product',
       collectionId: d.collections[0]?.id ?? 'birthstone', productTypeId: d.productTypes[0]?.id ?? 'pendant',
-      name: 'New Product', priceFrom: 299, prices, cardImage: '', cardDetail: '', models: {}, available: false,
+      name: 'New Product', priceFrom: 399, prices, cardImage: '', cardDetail: '', models: {}, available: false,
     })
   })
 

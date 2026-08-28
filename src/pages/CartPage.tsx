@@ -9,6 +9,7 @@ import {
   STONE_NAMES_SHORT       as BIRTHSTONE_NAMES,
 } from '../data/catalog'
 import { PRODUCT_TYPES } from '../data/product-types'
+import { usePageMeta } from '../lib/usePageMeta'
 
 /** "Square Pendant", "Asscher Bracelet", … from a cart item's product identity. */
 const itemTitle = (shape: string, productType: string) => {
@@ -25,6 +26,7 @@ const fmt = (n: number) => new Intl.NumberFormat('en-US', {
 }).format(n)
 
 export default function CartPage() {
+  usePageMeta('Your Cart')
   const { items, removeItem } = useCart()
   const navigate = useNavigate()
 
@@ -62,9 +64,7 @@ export default function CartPage() {
 
           <ul className={styles.itemList}>
             {items.map((item, idx) => {
-              const metalLine = item.metal === 'steel'
-                ? METAL_LABELS[item.metal]
-                : `${METAL_COLOR_LABELS[item.metalColor]} ${METAL_LABELS[item.metal]}`
+              const metalLine = `${METAL_COLOR_LABELS[item.metalColor]} ${METAL_LABELS[item.metal]}`
 
               return (
                 <li key={idx} className={styles.card}>

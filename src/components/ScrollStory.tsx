@@ -23,7 +23,7 @@ const P = {
 
 /* ── Caption data ──────────────────────────────────────── */
 const CAPTIONS = [
-  { eyebrow: 'Fine Jewellery', title: 'Crafted to last.<br><em>Built to remember.</em>' },
+  { eyebrow: 'Fine Jewelry', title: 'Crafted to last.<br><em>Built to remember.</em>' },
   { eyebrow: 'Your Private Vault', title: 'Tap your piece.<br><em>Your memories open.</em>' },
 ]
 

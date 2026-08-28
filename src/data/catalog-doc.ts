@@ -93,7 +93,7 @@ export type CatalogDoc = {
 
 /* ── Default document (seed + fallback), built from the code constants ──────── */
 
-const METALS: Metal[]        = ['steel', 'silver', '10k', '18k']
+const METALS: Metal[]        = ['silver', '10k', '18k']
 const METAL_COLORS: MetalColor[] = ['white', 'gold', 'rose']
 const PENDANT_SHAPES:  Shape[] = ['square', 'circle', 'heart', 'pear']
 const BRACELET_SHAPES: Shape[] = ['square', 'circle', 'heart', 'pear']
@@ -135,23 +135,23 @@ export function buildDefaultCatalog(assetBase = ''): CatalogDoc {
       {
         id: 'birthstone-pendant', route: '/products/birthstone-pendant',
         collectionId: 'birthstone', productTypeId: 'pendant',
-        name: 'Birthstone Pendant', priceFrom: 299,
+        name: 'Birthstone Pendant', priceFrom: 399,
         prices: allMetalPrices(),
         cardImage: a('/assets/jewelry/birthstone-pendant.png'),
         cardDetail:
-          'Available in square, circle, heart, and pear silhouettes. Set in steel, ' +
+          'Available in square, circle, heart, and pear silhouettes. Set in ' +
           'silver, 10K, or 18K gold — with your chosen birthstone at the center.',
         models: {}, available: true,
       },
       {
         id: 'birthstone-bracelet', route: '/products/birthstone-bracelet',
         collectionId: 'birthstone', productTypeId: 'bracelet',
-        name: 'Birthstone Bracelet', priceFrom: 299,
+        name: 'Birthstone Bracelet', priceFrom: 399,
         prices: allMetalPrices(),
         cardImage: a('/assets/jewelry/birthstone-bracelet.png'),
         cardDetail:
           'The same craft, the same vault — worn around the wrist. Available in ' +
-          'asscher, circle, heart, and pear stations, set in steel, silver, 10K, or 18K gold.',
+          'asscher, circle, heart, and pear stations, set in silver, 10K, or 18K gold.',
         models: {}, available: true,
       },
     ],

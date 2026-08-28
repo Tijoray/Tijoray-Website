@@ -15,8 +15,8 @@
 
 .fadeUp {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.85s ease, transform 0.85s ease;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .fadeUp.inView {
@@ -70,8 +70,8 @@
   padding: 96px 56px;
   background: var(--cream-warm);
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.85s ease, transform 0.85s ease;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .missionSection.inView {
@@ -133,8 +133,8 @@
   padding: 48px 40px;
   position: relative;
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.85s ease, transform 0.85s ease;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .pillarCard.inView {

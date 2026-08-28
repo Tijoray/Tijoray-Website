@@ -1,78 +1,35 @@
-import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './CollectionPage.module.css'
+import { useReveal } from '../lib/useReveal'
 import { useCatalog } from '../contexts/CatalogContext'
 import type { CatalogCollection, CatalogProduct } from '../data/catalog-doc'
+import { usePageMeta } from '../lib/usePageMeta'
 
 const fmt = (n: number) => new Intl.NumberFormat('en-US', {
   style: 'currency', currency: 'USD', maximumFractionDigits: 0,
 }).format(n)
 
-export default function CollectionPage() {
-  const catalog = useCatalog()
-  // First live product — drives the page's primary CTAs.
-  const firstLiveProduct = catalog.doc.products.find(p => p.available)
-  // Collect every fade-in element; the observer reveals each as it scrolls in.
-  const fadeRefs = useRef<Set<HTMLElement>>(new Set())
-  const addFade = (el: HTMLElement | null) => { if (el) fadeRefs.current.add(el) }
+type ProductCardProps = {
+  product:    CatalogProduct
+  collection: CatalogCollection
+  index:      number
+  reveal:     (el: HTMLElement | null) => void
+}
 
-  useEffect(() => {
-    const io = new IntersectionObserver(
-      entries => entries.forEach(e => {
-        if (e.isIntersecting) e.target.classList.add(styles.inView)
-      }),
-      { threshold: 0.12 }
-    )
-    fadeRefs.current.forEach(el => io.observe(el))
-    return () => io.disconnect()
-  }, [])
+function ProductCard({ product, collection, index, reveal }: ProductCardProps) {
+  const series = `${collection.designLabel} Series`
+  const delay  = index > 0 ? { transitionDelay: `${(index * 0.07).toFixed(2)}s` } : undefined
 
-  function ProductCard({ product, collection, index }: { product: CatalogProduct; collection: CatalogCollection; index: number }) {
-    const series = `${collection.designLabel} Series`
-    const delay  = index > 0 ? { transitionDelay: `${(index * 0.14).toFixed(2)}s` } : undefined
-
-    if (product.available) {
-      return (
-        <Link
-          to={product.route}
-          className={`${styles.productCard} ${styles.fadeUp}`}
-          ref={addFade as any}
-          style={delay}
-        >
-          <div className={styles.cardVisual}>
-            <img src={product.cardImage} alt={product.name} className={styles.cardPhoto} />
-            <div className={styles.cardLabel}>
-              <p className={styles.cardSeries}>{series}</p>
-            </div>
-          </div>
-          <div className={styles.cardInfo}>
-            <div>
-              <p className={styles.cardCollection}>{collection.name}</p>
-              <h3 className={styles.cardName}>{product.name}</h3>
-              <p className={styles.cardDetail}>{product.cardDetail}</p>
-            </div>
-            <div className={styles.cardBottom}>
-              <div className={styles.cardPrice}>
-                <span className={styles.priceFrom}>From</span>
-                <span className={styles.priceNum}>{fmt(product.priceFrom)}</span>
-              </div>
-              <span className={styles.cardCta}>Build Your Piece</span>
-            </div>
-          </div>
-        </Link>
-      )
-    }
-
-    // Coming soon
+  if (product.available) {
     return (
-      <article
-        className={`${styles.productCard} ${styles.productCardSoon} ${styles.fadeUp}`}
-        ref={addFade as any}
+      <Link
+        to={product.route}
+        className={`${styles.productCard} ${styles.fadeUp}`}
+        ref={reveal}
         style={delay}
       >
-        <div className={`${styles.cardVisual} ${styles.cardVisualSoon}`}>
+        <div className={styles.cardVisual}>
           <img src={product.cardImage} alt={product.name} className={styles.cardPhoto} />
-          <div className={styles.soonBadge}>Coming Soon</div>
           <div className={styles.cardLabel}>
             <p className={styles.cardSeries}>{series}</p>
           </div>
@@ -85,15 +42,54 @@ export default function CollectionPage() {
           </div>
           <div className={styles.cardBottom}>
             <div className={styles.cardPrice}>
-              <span className={styles.priceFrom}>Pricing</span>
-              <span className={styles.priceNum}>TBA</span>
+              <span className={styles.priceFrom}>From</span>
+              <span className={styles.priceNum}>{fmt(product.priceFrom)}</span>
             </div>
-            <Link to="/contact" className={styles.cardCtaGhost}>Register Your Interest</Link>
+            <span className={styles.cardCta}>Build Your Piece</span>
           </div>
         </div>
-      </article>
+      </Link>
     )
   }
+
+  // Coming soon
+  return (
+    <article
+      className={`${styles.productCard} ${styles.productCardSoon} ${styles.fadeUp}`}
+      ref={reveal}
+      style={delay}
+    >
+      <div className={`${styles.cardVisual} ${styles.cardVisualSoon}`}>
+        <img src={product.cardImage} alt={product.name} className={styles.cardPhoto} />
+        <div className={styles.soonBadge}>Coming Soon</div>
+        <div className={styles.cardLabel}>
+          <p className={styles.cardSeries}>{series}</p>
+        </div>
+      </div>
+      <div className={styles.cardInfo}>
+        <div>
+          <p className={styles.cardCollection}>{collection.name}</p>
+          <h3 className={styles.cardName}>{product.name}</h3>
+          <p className={styles.cardDetail}>{product.cardDetail}</p>
+        </div>
+        <div className={styles.cardBottom}>
+          <div className={styles.cardPrice}>
+            <span className={styles.priceFrom}>Pricing</span>
+            <span className={styles.priceNum}>TBA</span>
+          </div>
+          <Link to="/contact" className={styles.cardCtaGhost}>Register Your Interest</Link>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+export default function CollectionPage() {
+  usePageMeta('The Collection', 'Configurable birthstone pendants and bracelets, handmade to order in sterling silver, 10K and 18K gold — each with an encrypted memory vault sealed inside.')
+  const catalog = useCatalog()
+  // First live product — drives the page's primary CTAs.
+  const firstLiveProduct = catalog.doc.products.find(p => p.available)
+  const reveal = useReveal(styles.inView)
 
   return (
     <main className={styles.collection}>
@@ -103,12 +99,12 @@ export default function CollectionPage() {
         <div className={styles.heroInner}>
           <p className={styles.eyebrow}>The Collection</p>
           <h1 className={styles.heroTitle}>
-            Every piece tells a <em>story.</em>
+            Every piece <em>carries</em> its story.
           </h1>
           <p className={styles.heroSub}>
-            Each Tijoray collection is built around a single idea — that fine jewelry
-            should carry more than beauty. Browse our series below, each crafted to hold
-            memory, provenance, and meaning for generations.
+            Not as a figure of speech. Each piece is configured by you, handmade to
+            that order, and sealed with an encrypted vault that holds the
+            photographs, recordings and letters you put inside it.
           </p>
         </div>
         <hr className={styles.heroRule} />
@@ -116,7 +112,7 @@ export default function CollectionPage() {
 
       {/* ── Collections (data-driven from the products matrix) ── */}
       {catalog.collectionsWithProducts().map(collection => (
-        <section key={collection.id} className={`${styles.collectionSection} ${styles.fadeUp}`} ref={addFade as any}>
+        <section key={collection.id} className={`${styles.collectionSection} ${styles.fadeUp}`} ref={reveal}>
           <div className={styles.collectionInner}>
 
             {/* Collection header */}
@@ -141,7 +137,7 @@ export default function CollectionPage() {
             {/* Product cards */}
             <div className={styles.productGrid}>
               {catalog.productsByCollection(collection.id).map((product, i) => (
-                <ProductCard key={product.id} product={product} collection={collection} index={i} />
+                <ProductCard key={product.id} product={product} collection={collection} index={i} reveal={reveal} />
               ))}
             </div>
           </div>
@@ -149,9 +145,9 @@ export default function CollectionPage() {
       ))}
 
       {/* ── More collections coming ── */}
-      <section className={`${styles.comingSection} ${styles.fadeUp}`} ref={addFade as any}>
+      <section className={`${styles.comingSection} ${styles.fadeUp}`} ref={reveal}>
         <div className={styles.comingInner}>
-          <p className={styles.eyebrow}>The Archive</p>
+          <p className={styles.eyebrow}>In the Atelier</p>
           <h2 className={styles.comingTitle}>
             More collections <em>in the atelier.</em>
           </h2>
@@ -164,7 +160,7 @@ export default function CollectionPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className={`${styles.ctaSection} ${styles.fadeUp}`} ref={addFade as any}>
+      <section className={`${styles.ctaSection} ${styles.fadeUp}`} ref={reveal}>
         <div className={styles.ctaInner}>
           <p className={styles.eyebrow}>Begin</p>
           <h2 className={styles.ctaTitle}>

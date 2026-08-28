@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './FaqPage.module.css'
+import { usePageMeta } from '../lib/usePageMeta'
 
 const FAQS = [
   {
@@ -10,6 +11,10 @@ const FAQS = [
   {
     q: 'Do I need an app, and who needs it — me or the person I gift it to?',
     a: 'Whoever wears the piece needs the free Tijoray app on their phone; that is what reads the tag and opens the memories. You compose the memories here on the website after ordering, so you do not need the app yourself unless the piece is for you. When a gift arrives, the recipient installs the app, taps the piece, and everything you prepared is waiting for them.',
+  },
+  {
+    q: 'How long does it take to arrive, and can I return it?',
+    a: 'Every piece is made to your configuration, so allow 10–14 business days from payment before it ships. Shipping is complimentary. Because each piece is made to order we cannot accept returns for a change of mind — please configure carefully. If a piece arrives damaged or with a manufacturing defect, email support@tijoray.com within 14 days with photographs and we will arrange a replacement or a full refund.',
   },
   {
     q: 'What happens if I lose my jewelry?',
@@ -33,14 +38,14 @@ const FAQS = [
   },
   {
     q: 'How long does it last?',
-    a: 'The NFC chip is rated for decades of use with no maintenance — no battery, no charging. The jewelry is crafted from materials chosen for longevity: stainless steel, sterling silver, and 10K or 18K gold. The memory vault is included with your piece — there is no subscription and nothing further to pay.',
+    a: 'The NFC chip is rated for decades of use with no maintenance — no battery, no charging. The jewelry is crafted from materials chosen for longevity: sterling silver and 10K or 18K gold. The memory vault is included with your piece — there is no subscription and nothing further to pay.',
   },
 ]
 
 /**
- * Care guidance, written against what we actually sell: stainless steel,
- * sterling silver, 10K and 18K gold, the twelve birthstones, and a passive
- * NFC chip sealed inside the piece.
+ * Care guidance, written against what we actually sell: sterling silver,
+ * 10K and 18K gold, the twelve birthstones, and a passive NFC chip sealed
+ * inside the piece.
  */
 const CARE: { title: string; body?: string; points?: string[] }[] = [
   {
@@ -74,9 +79,8 @@ const CARE: { title: string; body?: string; points?: string[] }[] = [
   {
     title: 'By metal',
     points: [
-      'Stainless steel is the most resilient of the four and needs little beyond an occasional wipe.',
       'Sterling silver tarnishes — that is the metal behaving normally, not a fault. Store it dry and away from air, and bring the shine back with a proper silver cloth.',
-      '10K gold is the harder, more scratch-resistant gold; 18K is softer and warmer in colour, so treat it a little more carefully.',
+      '10K gold is the harder, more scratch-resistant gold; 18K is softer and warmer in color, so treat it a little more carefully.',
       'Rose and white finishes are best kept away from chlorine, which attacks the alloy over time.',
     ],
   },
@@ -100,6 +104,7 @@ const CARE: { title: string; body?: string; points?: string[] }[] = [
 ]
 
 export default function FaqPage() {
+  usePageMeta('FAQ & Care Guide', 'Answers on NFC taps, phone compatibility, encryption, ownership transfer, and how to care for each metal and stone.')
   const [open, setOpen] = useState<number | null>(null)
 
   function toggle(i: number) {

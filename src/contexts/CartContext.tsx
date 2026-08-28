@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react'
 import { z } from 'zod'
 
 const CartItemSchema = z.object({
@@ -7,7 +7,7 @@ const CartItemSchema = z.object({
   productType:     z.enum(['pendant', 'bracelet']).default('pendant'),
   collectionId:    z.string().default('birthstone'),
   shape:           z.enum(['square', 'circle', 'heart', 'pear']),
-  metal:           z.enum(['steel', 'silver', '10k', '18k']),
+  metal:           z.enum(['silver', '10k', '18k']),
   metalColor:      z.enum(['white', 'gold', 'rose']),
   birthstoneIndex: z.number().int().min(0).max(11),
   price:           z.number().positive(),
@@ -21,6 +21,11 @@ type CartContextValue = {
   addItem:    (item: CartItem) => void
   removeItem: (index: number) => void
   clearCart:  () => void
+  /** Slide-over cart. Adding a piece opens it instead of leaving the page, so a
+   *  shopper can keep designing (people buy pendants in sets, one stone each). */
+  cartOpen:   boolean
+  openCart:   () => void
+  closeCart:  () => void
 }
 
 const STORAGE_KEY = 'tijoray_cart'
@@ -30,6 +35,9 @@ const CartContext = createContext<CartContextValue>({
   addItem:    () => {},
   removeItem: () => {},
   clearCart:  () => {},
+  cartOpen:   false,
+  openCart:   () => {},
+  closeCart:  () => {},
 })
 
 export function CartProvider({ children }: { children: ReactNode }) {
@@ -50,12 +58,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
     else localStorage.removeItem(STORAGE_KEY)
   }, [items])
 
+  const [cartOpen, setCartOpen] = useState(false)
+
   const addItem    = (newItem: CartItem) => setItems(prev => [...prev, newItem])
   const removeItem = (index: number)    => setItems(prev => prev.filter((_, i) => i !== index))
-  const clearCart  = ()                 => setItems([])
+  const clearCart  = ()                 => { setItems([]); setCartOpen(false) }
+  // Stable identities — consumers use these in effect dependency lists.
+  const openCart   = useCallback(() => setCartOpen(true),  [])
+  const closeCart  = useCallback(() => setCartOpen(false), [])
 
   return (
-    <CartContext.Provider value={{ items, addItem, removeItem, clearCart }}>
+    <CartContext.Provider
+      value={{ items, addItem, removeItem, clearCart, cartOpen, openCart, closeCart }}
+    >
       {children}
     </CartContext.Provider>
   )

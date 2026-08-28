@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useCart } from '../contexts/CartContext'
 import { useCatalog } from '../contexts/CatalogContext'
 import * as THREE from 'three'
@@ -13,18 +13,33 @@ import { createGltfLoader } from '../3d/engine'
 import { prepareBraceletChain, prepareBraceletGem } from '../3d/assemblies/bracelet'
 import type { Shape, Metal, MetalColor } from '../data/catalog'
 import {
+  readDesign, writeDesign, BRACELET_SHAPE_NOTES as SHAPE_NOTES,
+  METAL_NOTES, METAL_COLOR_NOTES, METALS, METAL_COLORS,
+} from '../lib/design'
+import {
   METAL_LABELS_SHORT       as METAL_LABELS,
   METAL_COLOR_HEX,
   METAL_COLOR_LABELS_SHORT as METAL_COLOR_LABELS,
   ROUGHNESS,
-  STEEL_COLOR,
   STONE_COLORS             as BIRTHSTONE_COLORS,
   STONE_NAMES              as BIRTHSTONE_NAMES,
   MONTH_NAMES,
   STONE_MEANINGS,
+  metalPhrase,
 } from '../data/catalog'
+import { usePageMeta } from '../lib/usePageMeta'
 
 /* ── Constants ─────────────────────────────────────────── */
+/* A shopper deciding on a $1,299 piece should see the real thing, not only a
+   render. These sit beside the 3D view rather than far below the fold. */
+const PHOTOS = [
+  { src: asset('/assets/editorial/product-bracelet-worn.png'),     label: 'Worn',      alt: 'Tijoray bracelet on the wrist' },
+  { src: asset('/assets/editorial/bracelet-macro-finish.png'),     label: 'Detail',    alt: 'Macro close-up of the bracelet stations and finish' },
+  { src: asset('/assets/editorial/product-nfc-tap.png'),           label: 'The tap',   alt: 'A phone tapped against the piece, opening the vault' },
+  { src: asset('/assets/editorial/product-unboxing.png'),          label: 'Packaging', alt: 'Tijoray packaging as it arrives' },
+]
+
+
 const BUILD_DURATION  = 900 // ms — fade + drift animation
 const BUILD_DRIFT_Y   = -0.07 // world-units below final position at animation start
 
@@ -35,17 +50,25 @@ const BRACELET_SHAPES: Shape[] = ['square', 'circle', 'heart', 'pear']
 function easeOutCubic(t: number) { return 1 - Math.pow(1 - Math.min(t, 1), 3) }
 
 export default function BraceletConfiguratorPage() {
-  const { addItem } = useCart()
+  usePageMeta('Design Your Bracelet', 'Configure a Tijoray birthstone bracelet — station, metal and stone — with an encrypted memory vault sealed inside. From $399.')
+  const { addItem, openCart } = useCart()
   const catalog     = useCatalog()
-  const navigate    = useNavigate()
 
   /* ── State ── */
-  const [shape,       setShape]       = useState<Shape | null>(null)
-  const [metal,       setMetal]       = useState<Metal>('18k')
-  const [metalColor,  setMetalColor]  = useState<MetalColor>('gold')
-  const [birthstone,  setBirthstone]  = useState<number>(0)
+  // Seeded from the URL so a shared design link opens exactly what was sent,
+  // and defaulted to a real configuration so the page never opens on an empty
+  // canvas and a disabled buy button.
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [initial] = useState(() => readDesign(searchParams))
+  const [shape,       setShape]       = useState<Shape>(initial.shape)
+  const [metal,       setMetal]       = useState<Metal>(initial.metal)
+  const [metalColor,  setMetalColor]  = useState<MetalColor>(initial.metalColor)
+  const [birthstone,  setBirthstone]  = useState<number>(initial.birthstone)
   const [loading,     setLoading]     = useState(false)
   const [isTouch,     setIsTouch]     = useState(false)
+  const [shareState,  setShareState]  = useState<'idle' | 'copied' | 'failed'>('idle')
+  /** null = the interactive 3D view; a number selects a photograph. */
+  const [photo,       setPhoto]       = useState<number | null>(null)
 
   /* ── Three.js infrastructure refs (created once) ── */
   const canvasRef    = useRef<HTMLCanvasElement>(null)
@@ -280,7 +303,7 @@ export default function BraceletConfiguratorPage() {
           const parentName = child.parent?.name ?? ''
           // Gem placeholder colours are inconsistent across the bracelet GLBs:
           // circle/heart/pear use near-black, asscher uses a desaturated green. Neither
-          // the gold body nor any metal finish (gold/steel/silver/rose/white) is ever
+          // the gold body nor any metal finish (gold/silver/rose/white) is ever
           // green-dominant, so near-black OR green-dominant reliably marks the gem.
           const isGem = GEM_NAME_RE.test(std.name) || GEM_NAME_RE.test(child.name) || GEM_NAME_RE.test(parentName)
             || (col.r < 0.12 && col.g < 0.12 && col.b < 0.12)
@@ -316,9 +339,7 @@ export default function BraceletConfiguratorPage() {
 
       const gemMats:  THREE.MeshPhysicalMaterial[] = []
       const bodyMats: THREE.MeshStandardMaterial[]  = []
-      const bodyColor = snapMetal === 'steel'
-        ? new THREE.Color(STEEL_COLOR)
-        : new THREE.Color(METAL_COLOR_HEX[snapColor])
+      const bodyColor = new THREE.Color(METAL_COLOR_HEX[snapColor])
 
       applyMetal(pivot, bodyMats, gemMats, bodyColor)
       // Include band materials so Effect 3 keeps band in sync on metal change
@@ -431,9 +452,7 @@ export default function BraceletConfiguratorPage() {
   useEffect(() => {
     const mats = bodyMatsRef.current
     if (!mats.length) return
-    const color = metal === 'steel'
-      ? new THREE.Color(STEEL_COLOR)
-      : new THREE.Color(METAL_COLOR_HEX[metalColor])
+    const color = new THREE.Color(METAL_COLOR_HEX[metalColor])
     mats.forEach(m => {
       m.color.set(color)
       m.roughness = ROUGHNESS[metal]
@@ -467,17 +486,60 @@ export default function BraceletConfiguratorPage() {
     ref.dispose()
   }, [birthstone, shape])
 
+  /* ── Keep the address bar in step so the design is always shareable ── */
+  useEffect(() => {
+    setSearchParams(writeDesign({ shape, metal, metalColor, birthstone }), { replace: true })
+    setShareState('idle')
+  // setSearchParams identity changes each render — including it would loop.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shape, metal, metalColor, birthstone])
+
   /* ── Derived values ── */
-  const price = new Intl.NumberFormat('en-US', {
+  const fmtPrice = (n: number) => new Intl.NumberFormat('en-US', {
     style: 'currency', currency: 'USD', maximumFractionDigits: 0,
-  }).format(catalog.priceDollars('birthstone', 'bracelet', metal))
+  }).format(n)
+
+  /** Charged price for any metal — also drives the per-option price labels, so
+   *  the 3x jump between silver and 18K is visible before it is committed to. */
+  const priceOf = (m: Metal) => catalog.priceDollars('birthstone', 'bracelet', m)
+  const price   = fmtPrice(priceOf(metal))
 
   const specLine = [
-    shape ? `${BRACELET_SHAPE_LABELS[shape]} bracelet` : 'No shape selected',
-    METAL_LABELS[metal],
-    metal !== 'steel' ? METAL_COLOR_LABELS[metalColor] : null,
+    `${BRACELET_SHAPE_LABELS[shape]} bracelet`,
+    metalPhrase(metal, metalColor),
     BIRTHSTONE_NAMES[birthstone],
-  ].filter(Boolean).join(' · ')
+  ].join(' · ')
+
+  /* ── Actions ── */
+  function handleAdd() {
+    addItem({
+      productType:  'bracelet',
+      collectionId: 'birthstone',
+      shape,
+      metal,
+      metalColor,
+      birthstoneIndex: birthstone,
+      price: catalog.priceDollars('birthstone', 'bracelet', metal),
+      specLine,
+    })
+    // Open the cart in place rather than navigating away: the pieces are sold
+    // as a set, so the likeliest next action is a second stone, not checkout.
+    openCart()
+  }
+
+  /** Gifting runs on hints — a design has to be sendable. */
+  async function handleShare() {
+    try {
+      await navigator.clipboard.writeText(window.location.href)
+      setShareState('copied')
+    } catch {
+      // Clipboard can be blocked (insecure context, denied permission). The
+      // address bar already holds the design, so point at it rather than
+      // opening a blocking prompt or failing silently.
+      setShareState('failed')
+    }
+    window.setTimeout(() => setShareState('idle'), 3000)
+  }
 
   /* ── JSX ── */
   return (
@@ -491,23 +553,50 @@ export default function BraceletConfiguratorPage() {
               ref={canvasRef}
               className={styles.canvas}
               role="img"
-              aria-label="3D bracelet preview — drag to rotate, scroll to zoom"
+              aria-label="3D preview — drag to rotate, scroll to zoom"
             />
-            {loading && (
+            {loading && photo === null && (
               <div className={styles.loadingOverlay} aria-live="polite" aria-label="Loading bracelet">
                 <div className={styles.loadingSpinner} aria-hidden="true" />
                 <span>Crafting your bracelet…</span>
               </div>
             )}
-            {!shape && !loading && (
-              <div className={styles.canvasPrompt} aria-hidden="true">
-                <div className={styles.canvasPromptRing} />
-                <p>Select a shape to begin</p>
-              </div>
+            {photo !== null && (
+              <img
+                src={PHOTOS[photo].src}
+                alt={PHOTOS[photo].alt}
+                className={styles.photoOverlay}
+              />
             )}
-            <p className={styles.orbitHint} aria-hidden="true">
-              {isTouch ? 'Drag to rotate · Pinch to zoom' : 'Drag to rotate · Scroll to zoom'}
-            </p>
+            {photo === null && (
+              <p className={styles.orbitHint} aria-hidden="true">
+                {isTouch ? 'Drag to rotate · Pinch to zoom' : 'Drag to rotate · Scroll to zoom'}
+              </p>
+            )}
+          </div>
+
+          <div className={styles.viewStrip} role="group" aria-label="Choose a view">
+            <button
+              type="button"
+              className={`${styles.viewThumb} ${photo === null ? styles.viewThumbActive : ''}`}
+              onClick={() => setPhoto(null)}
+              aria-pressed={photo === null}
+            >
+              <span className={styles.viewThumb3d} aria-hidden="true" />
+              <span className={styles.viewThumbLabel}>Your design</span>
+            </button>
+            {PHOTOS.map((shot, i) => (
+              <button
+                key={shot.label}
+                type="button"
+                className={`${styles.viewThumb} ${photo === i ? styles.viewThumbActive : ''}`}
+                onClick={() => setPhoto(i)}
+                aria-pressed={photo === i}
+              >
+                <img src={shot.src} alt="" className={styles.viewThumbImg} loading="lazy" />
+                <span className={styles.viewThumbLabel}>{shot.label}</span>
+              </button>
+            ))}
           </div>
         </div>
 
@@ -527,12 +616,6 @@ export default function BraceletConfiguratorPage() {
             <div className={styles.stepHeader}>
               <div className={styles.stepTitleRow}>
                 <p className={styles.stepLabel}>01 — Shape</p>
-                <span className={styles.tooltipWrap}>
-                  <span className={styles.tooltipIcon} aria-label="About shape">?</span>
-                  <span className={styles.tooltip} role="tooltip">
-                    The foundation of your piece. The <strong>Asscher</strong> offers clean architectural lines. The <strong>Circle</strong> is a symbol of continuity. The <strong>Heart</strong> wears its meaning openly, and the <strong>Pear</strong> tapers to a single point of light.
-                  </span>
-                </span>
               </div>
               <span className={styles.stepLine} aria-hidden="true" />
             </div>
@@ -554,59 +637,48 @@ export default function BraceletConfiguratorPage() {
                 </button>
               ))}
             </div>
+            <p className={styles.stepNote}>{SHAPE_NOTES[shape]}</p>
           </section>
 
           {/* Step 2 — Base Metal */}
-          <section className={`${styles.step} ${!shape ? styles.stepDisabled : ''}`}>
+          <section className={styles.step}>
             <div className={styles.stepHeader}>
               <div className={styles.stepTitleRow}>
                 <p className={styles.stepLabel}>02 — Base Metal</p>
-                <span className={styles.tooltipWrap}>
-                  <span className={styles.tooltipIcon} aria-label="About base metal">?</span>
-                  <span className={styles.tooltip} role="tooltip">
-                    The core material of your bracelet. <strong>Steel</strong> is modern and resilient. <strong>Silver</strong> is classic and refined. <strong>10K Gold</strong> is 41.7% pure gold — durable for daily wear. <strong>18K Gold</strong> is 75% pure — the mark of a true heirloom.
-                  </span>
-                </span>
               </div>
               <span className={styles.stepLine} aria-hidden="true" />
             </div>
             <div className={styles.optionRow}>
-              {(['steel', 'silver', '10k', '18k'] as Metal[]).map(m => (
+              {METALS.map(m => (
                 <button
                   key={m}
                   className={`${styles.optionBtn} ${metal === m ? styles.active : ''}`}
                   onClick={() => setMetal(m)}
                   aria-pressed={metal === m}
                 >
-                  {METAL_LABELS[m]}
+                  <span className={styles.optionLabel}>{METAL_LABELS[m]}</span>
+                  <span className={styles.optionPrice}>{fmtPrice(priceOf(m))}</span>
                 </button>
               ))}
             </div>
-            {!shape && <p className={styles.stepHint}>Select a shape above to unlock</p>}
+            <p className={styles.stepNote}>{METAL_NOTES[metal]}</p>
           </section>
 
           {/* Step 3 — Metal Color */}
-          <section className={`${styles.step} ${metal === 'steel' ? styles.stepDisabled : ''}`}>
+          <section className={styles.step}>
             <div className={styles.stepHeader}>
               <div className={styles.stepTitleRow}>
                 <p className={styles.stepLabel}>03 — Metal Color</p>
-                <span className={styles.tooltipWrap}>
-                  <span className={styles.tooltipIcon} aria-label="About metal color">?</span>
-                  <span className={styles.tooltip} role="tooltip">
-                    The finish of your bracelet's surface. <strong>White</strong> has a cool, platinum-like tone. <strong>Gold</strong> carries classic warmth. <strong>Rose</strong> blends copper's blush with gold's richness. Steel pieces are finished in their natural gunmetal tone.
-                  </span>
-                </span>
               </div>
               <span className={styles.stepLine} aria-hidden="true" />
             </div>
             <div className={styles.colorSwatches}>
-              {(['white', 'gold', 'rose'] as MetalColor[]).map(c => (
+              {METAL_COLORS.map(c => (
                 <button
                   key={c}
                   className={`${styles.swatchBtn} ${metalColor === c ? styles.active : ''}`}
-                  onClick={() => { if (metal !== 'steel') setMetalColor(c) }}
+                  onClick={() => setMetalColor(c)}
                   aria-pressed={metalColor === c}
-                  aria-disabled={metal === 'steel'}
                   style={{ '--swatch-color': METAL_COLOR_HEX[c] } as React.CSSProperties}
                 >
                   <span className={styles.swatchCircle} aria-hidden="true" />
@@ -614,19 +686,14 @@ export default function BraceletConfiguratorPage() {
                 </button>
               ))}
             </div>
+            <p className={styles.stepNote}>{METAL_COLOR_NOTES[metalColor]}</p>
           </section>
 
           {/* Step 4 — Birthstone */}
-          <section className={`${styles.step} ${!shape ? styles.stepDisabled : ''}`}>
+          <section className={styles.step}>
             <div className={styles.stepHeader}>
               <div className={styles.stepTitleRow}>
                 <p className={styles.stepLabel}>04 — Birthstone</p>
-                <span className={styles.tooltipWrap}>
-                  <span className={styles.tooltipIcon} aria-label="About birthstone">?</span>
-                  <span className={styles.tooltip} role="tooltip">
-                    Each month carries a gemstone chosen across centuries for its beauty and meaning. Select a stone for your birth month, a loved one's, or any date that holds personal significance. Every stone is hand-set by our artisans.
-                  </span>
-                </span>
               </div>
               <span className={styles.stepLine} aria-hidden="true" />
             </div>
@@ -648,7 +715,7 @@ export default function BraceletConfiguratorPage() {
             <p className={styles.stoneName}>
               {BIRTHSTONE_NAMES[birthstone]} — {MONTH_NAMES[birthstone]}
             </p>
-            {!shape && <p className={styles.stepHint}>Select a shape above to unlock</p>}
+            <p className={styles.stepNote}>{STONE_MEANINGS[birthstone]}</p>
           </section>
 
           {/* Price + CTA */}
@@ -658,30 +725,42 @@ export default function BraceletConfiguratorPage() {
               <span className={styles.priceValue}>{price}</span>
             </div>
             <p className={styles.specLine}>{specLine}</p>
-            <button
-              className={styles.ctaBtn}
-              disabled={!shape}
-              aria-disabled={!shape}
-              onClick={() => {
-                if (!shape) return
-                addItem({
-                  productType:  'bracelet',
-                  collectionId: 'birthstone',
-                  shape,
-                  metal,
-                  metalColor,
-                  birthstoneIndex: birthstone,
-                  price: catalog.priceDollars('birthstone', 'bracelet', metal),
-                  specLine,
-                })
-                navigate('/cart')
-              }}
-            >
-              {shape ? 'Add to Cart' : 'Select a Shape First'}
+
+            {/* The vault is the whole reason to buy this rather than any other
+                piece — it belongs at the point of decision, not four screens
+                further down the page. */}
+            <p className={styles.vaultNote}>
+              Includes the Tijoray memory vault — add photos, voice notes and
+              letters once your piece arrives.{' '}
+              <Link to="/technology" className={styles.vaultLink}>See how it works</Link>
+            </p>
+
+            <button className={styles.ctaBtn} onClick={handleAdd}>
+              Add to Cart
             </button>
-            <Link to="/contact" className={styles.ctaSecondary}>
-              Speak with the Atelier
-            </Link>
+
+            {/* Every claim here is the policy stated in our own terms. */}
+            <ul className={styles.reassure}>
+              <li>Complimentary shipping</li>
+              <li>Made to order — ships in 10–14 business days</li>
+              <li>Replaced or refunded if it arrives damaged</li>
+            </ul>
+
+            <div className={styles.secondaryRow}>
+              <button
+                type="button"
+                className={styles.shareBtn}
+                onClick={handleShare}
+                aria-live="polite"
+              >
+                {shareState === 'copied' ? 'Link copied'
+                  : shareState === 'failed' ? 'Copy the address bar to share'
+                  : 'Share this design'}
+              </button>
+              <Link to="/contact" className={styles.ctaSecondary}>
+                Speak with the Atelier
+              </Link>
+            </div>
           </div>
 
         </div>

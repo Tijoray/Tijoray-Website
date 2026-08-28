@@ -16,9 +16,9 @@ export default function PricingBand() {
 
   const TIERS = [
     {
-      name: 'Steel & Silver',
-      from: dollars(lowestAcross(['steel', 'silver'])),
-      desc: 'Stainless steel and sterling silver pieces — the same handcrafted form and memory vault, at an accessible entry point.',
+      name: 'Silver Collection',
+      from: dollars(lowestAcross(['silver'])),
+      desc: 'Sterling silver pieces — the same handcrafted form and memory vault, at an accessible entry point.',
       link: '/collection',
       cta: 'Explore Collection',
     },
@@ -41,7 +41,7 @@ export default function PricingBand() {
   return (
     <section className={styles.section}>
       <div className={styles.inner}>
-        <p className={styles.eyebrow}>Investment in Legacy</p>
+        <p className={styles.eyebrow}>Pricing</p>
         <div className={styles.grid}>
           {TIERS.map(tier => (
             <div key={tier.name} className={styles.tier}>

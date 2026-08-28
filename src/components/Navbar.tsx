@@ -4,11 +4,22 @@ import { useCart } from '../contexts/CartContext'
 import { useAuth } from '../contexts/AuthContext'
 import styles from './Navbar.module.css'
 
+// "Atelier" reads as brand-speak in a wayfinding label, and it collided with
+// the "Speak with the Atelier" links that go to /contact. Craftsmanship is
+// promoted out of the footer — it is one of the strongest trust pages.
+//
+// `desktop: false` keeps an item out of the top bar. The bar centres the
+// wordmark absolutely, which leaves ~574px for links at 1440px — a fourth
+// item runs underneath the logo at every desktop width. The mobile menu is a
+// vertical list with room to spare, so it carries the full set.
 const NAV_LINKS = [
-  { label: 'Collection', to: '/collection' },
-  { label: 'Technology', to: '/technology' },
-  { label: 'Atelier',    to: '/about' },
+  { label: 'Collection',    to: '/collection',    desktop: true  },
+  { label: 'Technology',    to: '/technology',    desktop: true  },
+  { label: 'Craftsmanship', to: '/craftsmanship', desktop: true  },
+  { label: 'Our Story',     to: '/about',         desktop: false },
 ]
+
+const DESKTOP_LINKS = NAV_LINKS.filter(l => l.desktop)
 
 export default function Navbar() {
   const navRef = useRef<HTMLElement>(null)
@@ -18,7 +29,7 @@ export default function Navbar() {
   const accountRef = useRef<HTMLDivElement>(null)
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const { items } = useCart()
+  const { items, openCart } = useCart()
   const { user, signOut }  = useAuth()
 
   // Close account dropdown when clicking outside
@@ -84,7 +95,7 @@ export default function Navbar() {
     <>
       <nav ref={navRef} className={styles.navbar} aria-label="Primary navigation">
         <ul className={styles.links}>
-          {NAV_LINKS.map(({ label, to }) => (
+          {DESKTOP_LINKS.map(({ label, to }) => (
             <li key={label}>
               {to ? (
                 <Link
@@ -147,16 +158,19 @@ export default function Navbar() {
           ) : (
             <Link to="/login" className={styles.signInLink}>Sign In</Link>
           )}
-          {items.length > 0 && (
-            <Link to="/cart" className={styles.cartIcon} aria-label="View cart">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                <line x1="3" y1="6" x2="21" y2="6"/>
-                <path d="M16 10a4 4 0 0 1-8 0"/>
-              </svg>
-              <span className={styles.cartBadge}>{items.length}</span>
-            </Link>
-          )}
+          <button
+            type="button"
+            className={styles.cartIcon}
+            aria-label={items.length ? `View cart, ${items.length} item${items.length > 1 ? 's' : ''}` : 'View cart, empty'}
+            onClick={() => (items.length ? openCart() : navigate('/cart'))}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+            {items.length > 0 && <span className={styles.cartBadge}>{items.length}</span>}
+          </button>
           <Link to="/collection" className={styles.cta}>Build Your Tijoray</Link>
         </div>
         <button

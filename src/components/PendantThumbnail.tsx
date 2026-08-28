@@ -8,7 +8,6 @@ import type { Shape, Metal, MetalColor } from '../data/catalog'
 import {
   METAL_COLOR_HEX,
   ROUGHNESS,
-  STEEL_COLOR,
   GEM_PROPS_THUMB as GEM_PROPS,
 } from '../data/catalog'
 
@@ -105,9 +104,7 @@ export default function PendantThumbnail({ shape, metal, metalColor, birthstoneI
     let chainGltf: THREE.Group | null = null
     let pendantGltf: THREE.Group | null = null
 
-    const bodyColor = metal === 'steel'
-      ? new THREE.Color(STEEL_COLOR)
-      : new THREE.Color(METAL_COLOR_HEX[metalColor])
+    const bodyColor = new THREE.Color(METAL_COLOR_HEX[metalColor])
     const roughness = ROUGHNESS[metal]
 
     function tryRender() {

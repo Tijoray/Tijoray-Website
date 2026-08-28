@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react'
 import styles from './Testimonials.module.css'
+import { useReveal } from '../lib/useReveal'
 
 // Honest editorial voice — not customer reviews. Swap in real, permissioned
 // testimonials (name + purchase verified) once the first pieces are worn.
@@ -22,35 +22,23 @@ const TESTIMONIALS = [
 ]
 
 export default function Testimonials() {
-  const cardRefs = useRef<(HTMLElement | null)[]>([])
-
-  useEffect(() => {
-    const cards = cardRefs.current.filter(Boolean) as HTMLElement[]
-    const io = new IntersectionObserver(
-      entries => entries.forEach(e => {
-        if (e.isIntersecting) e.target.classList.add(styles.inView)
-      }),
-      { threshold: 0.15 }
-    )
-    cards.forEach(c => io.observe(c))
-    return () => io.disconnect()
-  }, [])
+  const reveal = useReveal(styles.inView)
 
   return (
     <section className={styles.section}>
       <div className={styles.inner}>
         <header className={styles.header}>
-          <p className={styles.eyebrow}>From the Atelier</p>
-          <h2 className={styles.title}>Worn and <em>remembered.</em></h2>
+          <p className={styles.eyebrow}>In our own words</p>
+          <h2 className={styles.title}>Why we <em>make this.</em></h2>
         </header>
 
         <div className={styles.grid}>
           {TESTIMONIALS.map((t, i) => (
             <figure
               key={i}
-              ref={el => { cardRefs.current[i] = el }}
+              ref={reveal}
               className={styles.card}
-              style={{ transitionDelay: `${i * 0.12}s` }}
+              style={{ transitionDelay: `${i * 0.06}s` }}
             >
               <span className={styles.openQuote} aria-hidden="true">"</span>
               <blockquote className={styles.quote}>{t.quote}</blockquote>

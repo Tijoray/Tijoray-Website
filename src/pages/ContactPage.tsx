@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import styles from './ContactPage.module.css'
+import { usePageMeta } from '../lib/usePageMeta'
 
 export default function ContactPage() {
+  usePageMeta('Contact')
   const [submitted,  setSubmitted]  = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [apiError,   setApiError]   = useState('')
