@@ -25,10 +25,6 @@ const FAQS = [
     a: 'Your memories are encrypted with AES-256 on your device before they are uploaded, and stored as ciphertext in secure cloud storage. The NFC chip itself holds only the piece\'s identity — never your memories. Decryption keys are issued only to the sender and recipient of a piece; our support tools can see that a memory exists, not what it contains.',
   },
   {
-    q: 'What happens to my memories if Tijoray shuts down?',
-    a: 'The vault service and the servers behind it are ours, so reading your memories depends on us keeping that service running. We intend to for as long as we reasonably can, but we will not pretend to guarantee it forever — no one honestly can. What we do commit to is this: if we ever close the service, we will give you advance notice and make everything in your vault available to download in a standard, openly readable format before access ends. The piece itself is unaffected — the chip is passive and needs no service to stay intact. This is set out under "Service continuity and closure" in our Terms of Service.',
-  },
-  {
     q: 'Can I transfer ownership to someone else?',
     a: 'Yes. Tijoray pieces are designed to be passed down through generations — the vault belongs to the piece, not to a single account. When you are ready to hand a piece on, contact the atelier and we will transfer the vault and its provenance to the new owner.',
   },
