@@ -826,10 +826,6 @@ export default function ConfiguratorPage() {
               precision-set stone through years of continuous wear — a piece made
               for every day, not for the drawer.
             </p>
-            <p className={styles.storyBody}>
-              Every piece leaves under our Lifetime Heritage Guarantee — not a warranty,
-              but a commitment that we will maintain your pendant for as long as it exists.
-            </p>
           </div>
         </div>
       </section>

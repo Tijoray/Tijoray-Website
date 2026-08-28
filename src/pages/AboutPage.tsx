@@ -91,18 +91,13 @@ export default function AboutPage() {
             <p className={styles.eyebrow}>The Making</p>
             <p className={styles.bodyText}>
               Each Tijoray piece begins as raw metal and stone — responsibly sourced,
-              rigorously selected. Our jewellers work in sterling silver and 10K or 18K
+              rigorously selected. Our jewelers work in sterling silver and 10K or 18K
               gold, finishing every surface by hand before the birthstone
               is set.
             </p>
             <p className={styles.bodyText}>
               The NFC vault sealed within requires no battery, no signal, no subscription.
               It exists entirely within the piece — passive, permanent, and yours alone to open.
-            </p>
-            <p className={styles.bodyText}>
-              Every piece leaves our atelier under a Lifetime Heritage Guarantee.
-              Not a warranty — a promise that what you create today will still be
-              readable a generation from now.
             </p>
           </div>
           <div className={styles.craftQuote}>

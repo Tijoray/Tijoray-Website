@@ -36,7 +36,7 @@ const SPECS = [
 ]
 
 export default function CraftsmanshipPage() {
-  usePageMeta('Craftsmanship', 'How a Tijoray piece is made: hand-set stones, multi-stage finishing, and the Lifetime Heritage Guarantee that follows it.')
+  usePageMeta('Craftsmanship', 'How a Tijoray piece is made: responsibly sourced stones, hand-set settings, and multi-stage finishing checked at every stage.')
   const reveal = useReveal(styles.inView)
 
   return (

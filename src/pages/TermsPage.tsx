@@ -40,8 +40,15 @@ export default function TermsPage() {
         </div>
 
         <div className={styles.section}>
+          <h2>Service continuity and closure</h2>
+          <p>The vault service, the Tijoray app, and the servers and storage behind them are owned and operated by Tijoray. Reading the memories stored against your piece depends on that service continuing to run.</p>
+          <p>We intend to keep it running for as long as we reasonably can, and we will make reasonable efforts to do so. We do not guarantee it indefinitely, we make no commitment that the service will remain available for any particular period, and nothing elsewhere on this site should be read as such a commitment.</p>
+          <p>If we decide to close the service, we will give you reasonable advance notice and make the full contents of your vault available to download in a standard, openly readable format before access ends. What you upload remains yours, and a closure on our part will not take it from you.</p>
+        </div>
+
+        <div className={styles.section}>
           <h2>NFC and hardware</h2>
-          <p>The NFC chip embedded in your piece is a physical component subject to normal wear. It is rated for decades of typical use. Tijoray is not responsible for damage caused by physical impact, exposure to extreme conditions, or tampering. Tampering with the chip voids any warranty.</p>
+          <p>The NFC chip embedded in your piece is passive: it has no battery, needs no charging, and does not depend on our service to remain physically intact. It is a physical component subject to normal wear and is rated for decades of typical use. Tijoray is not responsible for damage caused by physical impact, exposure to extreme conditions, or tampering. Tampering with the chip voids any warranty.</p>
         </div>
 
         <div className={styles.section}>

@@ -45,8 +45,8 @@ const APP_FEATURES = [
     img: asset('/assets/app/app-gold.png'),
     label: 'Gold Composition',
     title: 'Know what you wear.',
-    body: 'Every alloy in your Tijoray piece is catalogued — metal purity, color composition, and total mass. Our Craftsmanship Guarantee is embedded directly in the record, verified by the atelier before the piece ships.',
-    pills: ['Metal Purity', 'Composition', 'Weight', 'Craftsmanship Guarantee'],
+    body: 'Every alloy in your Tijoray piece is catalogued — metal purity, color composition, and total mass — recorded by the atelier and verified before the piece ships.',
+    pills: ['Metal Purity', 'Composition', 'Weight', 'Atelier Verified'],
   },
   {
     img: asset('/assets/app/app-vault.png'),
@@ -58,7 +58,7 @@ const APP_FEATURES = [
 ]
 
 const STATS = [
-  { num: 'Lifetime', label: 'Heritage Guarantee' },
+  { num: 'No Battery', label: 'Passive NFC Chip' },
   { num: 'Encrypted', label: 'Vault Storage' },
   { num: 'Immutable', label: 'Provenance Record' },
 ]
@@ -200,12 +200,12 @@ export default function TechnologyPage() {
         </div>
       </section>
 
-      {/* ── Heritage Guarantee ── */}
+      {/* ── Provenance record ── */}
       <section className={`${styles.heritageSection} ${styles.fadeUp}`} ref={reveal}>
         <div className={styles.heritageInner}>
           <blockquote className={styles.heritageQuote}>
-            "Every Tijoray piece is registered in our permanent digital archive, ensuring
-            provenance and value for generations to come."
+            "Every Tijoray piece is registered in our archive the moment it is made —
+            its stones, its alloy, and the serial identity checked on every tap."
           </blockquote>
           <div className={styles.statGrid}>
             {STATS.map(stat => (
