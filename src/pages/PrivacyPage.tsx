@@ -6,7 +6,7 @@ export default function PrivacyPage() {
       <div className={styles.hero}>
         <p className={styles.eyebrow}>Legal</p>
         <h1 className={styles.title}>Privacy Policy</h1>
-        <p className={styles.updated}>Last updated: 27 May 2026</p>
+        <p className={styles.updated}>Last updated: 28 August 2026</p>
       </div>
 
       <div className={styles.content}>
@@ -43,31 +43,61 @@ export default function PrivacyPage() {
         <div className={styles.section}>
           <h2>How we store and protect your data</h2>
           <p>Account data and vault metadata are stored in Supabase (EU region). Vault media files are stored in Cloudflare R2 with private-access controls. All data in transit is encrypted via TLS. Vault contents are encrypted at rest with AES-256.</p>
-          <p><strong>Your vault is yours alone.</strong> Memories and media you upload — photos, videos, voice notes, and written messages — are encrypted on your device before they are uploaded, and decryption keys are issued only to the sender and recipient of a piece after their identity is verified. Our staff and support tools hold no such key and cannot display the contents of your vault.</p>
-          <p>We retain your data for as long as your account is active. If you delete your account, your vault contents and personal data are permanently deleted within 30 days.</p>
+          <p><strong>How the encryption actually works.</strong> Memories and media you upload — photos, videos, voice notes, and written messages — are encrypted in your browser before they leave your device. What we receive and store is ciphertext.</p>
+          <p>Every piece has its own encryption key. We hold those keys in escrow: each one is wrapped under a master key held on our servers, and released only to the sender and the recipient of that piece once their identity is verified. <strong>This is not end-to-end encryption.</strong> Because we hold the master key, we are technically capable of decrypting vault contents, and we would do so if legally compelled. We do not do so otherwise, no customer-support or administrative tool in our systems displays vault contents, and access to the master key is limited to the engineers who operate our production environment.</p>
+          <p>We chose key escrow deliberately rather than by omission. It is what allows a piece to be given to someone else, handed on to the next generation, or recovered after a lost phone — none of which is possible when the only copy of a key lives on one device. We would rather describe that trade-off accurately than claim a guarantee we cannot keep.</p>
         </div>
 
         <div className={styles.section}>
           <h2>Third-party services</h2>
           <p>We share limited data with the following processors, each bound by a data processing agreement:</p>
           <ul>
-            <li><strong>Stripe</strong> — payment processing</li>
-            <li><strong>Supabase</strong> — database and authentication</li>
-            <li><strong>Cloudflare R2</strong> — media file storage</li>
-            <li><strong>Resend</strong> — transactional email</li>
-            <li><strong>Vercel</strong> — hosting and edge infrastructure</li>
+            <li><strong>Stripe</strong> (US) — payment processing and fraud prevention at checkout</li>
+            <li><strong>Supabase</strong> (EU region) — database and authentication</li>
+            <li><strong>Cloudflare R2</strong> — encrypted media file storage</li>
+            <li><strong>Resend</strong> (US) — transactional email</li>
+            <li><strong>Vercel</strong> (US) — hosting, edge infrastructure, and cookieless analytics</li>
+            <li><strong>Google</strong> — Sign in with Google, if you choose it, and web font delivery</li>
+            <li><strong>Apple</strong> — Sign in with Apple, if you choose it</li>
+            <li><strong>OpenStreetMap Foundation</strong> — address lookup. When you type an address during sign-up, the text is sent through our servers to OpenStreetMap's geocoder to offer suggestions. Your IP address is not passed on.</li>
+            <li><strong>CARTO</strong> — map tiles, loaded only when you open a memory that has a location attached</li>
           </ul>
+          <p>Transfers outside the UK and EEA to the processors above are made under the UK and EU Standard Contractual Clauses, or the EU–US and UK–US Data Privacy Framework where the recipient is certified.</p>
         </div>
 
         <div className={styles.section}>
           <h2>Cookies</h2>
-          <p>We use only essential cookies: a session token to keep you logged in, and Stripe's fraud-prevention cookies during checkout. We do not use advertising or profiling cookies.</p>
+          <p>We use no advertising or profiling cookies, and our analytics are cookieless. What we do store on your device is a small set of items needed to keep you signed in, remember your cart, and remember interface choices you have already made.</p>
+          <p>Each item is listed individually — name, purpose, and whether it is strictly necessary — on our <a href="/cookies">Cookies and storage</a> page.</p>
         </div>
 
         <div className={styles.section}>
           <h2>Your rights</h2>
-          <p>You have the right to access, correct, export, or delete your personal data at any time. You can manage most data directly in your account settings. For anything else — including full account deletion — email <a href="mailto:support@tijoray.com">support@tijoray.com</a> and we will respond within 30 days.</p>
+          <p>You have the right to access, correct, export, or delete your personal data, and to object to or restrict how we process it.</p>
+          <p>Your account settings let you change your name, phone number, email address, and password directly. Everything else — a copy of your data, deletion of your account, or any other request — is handled by email: write to <a href="mailto:support@tijoray.com">support@tijoray.com</a> and we will respond within 30 days. We are building a self-service export; until it ships, we assemble it by hand on request.</p>
           <p>If you are in the UK or EU, you also have the right to lodge a complaint with your local data protection authority.</p>
+        </div>
+
+        <div className={styles.section}>
+          <h2>Age</h2>
+          <p>Tijoray is sold to adults. You must be 18 or over to buy a piece or hold an account, and we do not knowingly collect personal data from children.</p>
+          <p>Vault content is a separate matter: pieces are often given between family members, and the photographs, recordings and messages placed inside them frequently show children. That content is uploaded by the adult account holder, who is responsible for having the right to share it. If you believe content depicting a child has been uploaded without the right to do so, write to <a href="mailto:support@tijoray.com">support@tijoray.com</a> and we will act on it.</p>
+        </div>
+
+        <div className={styles.section}>
+          <h2>How long we keep things</h2>
+          <p>Vault contents and account data are kept while your account is open. If you delete your account, they are permanently deleted within 30 days.</p>
+          <p>Order and payment records are kept for seven years after the order, because tax and accounting law requires it. Support correspondence is kept for two years. Server logs containing IP addresses are kept for 30 days.</p>
+        </div>
+
+        <div className={styles.section}>
+          <h2>If something goes wrong</h2>
+          <p>If a breach occurs that is likely to result in a risk to your rights and freedoms, we will report it to the relevant supervisory authority within 72 hours of becoming aware of it, and tell affected customers directly without undue delay where the risk is high. Given how our encryption works — described above — we would not claim that encrypted vault contents are beyond reach in a breach that also reached our key material, and we would notify accordingly.</p>
+        </div>
+
+        <div className={styles.section}>
+          <h2>If an account holder dies</h2>
+          <p>A Tijoray piece is made to be handed on, and an account can outlive the person who opened it. If you are an executor or next of kin, write to <a href="mailto:support@tijoray.com">support@tijoray.com</a>. On satisfactory proof of death and of your authority, we will transfer the piece and its vault to the person entitled to it, or provide a copy of the contents, as instructed.</p>
         </div>
 
         <div className={styles.section}>

@@ -211,8 +211,8 @@ function LocationSearch({ value, onChange }: { value: string; onChange: (json: s
       setLoading(true)
       try {
         const res = await fetch(
-          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=5&addressdetails=0`,
-          { headers: { 'Accept-Language': 'en' } }
+          // Proxied — see api/geocode.ts.
+          `/api/geocode?q=${encodeURIComponent(q)}&details=0`
         )
         const data: NominatimResult[] = await res.json()
         setResults(data)

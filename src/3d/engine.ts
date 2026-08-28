@@ -10,7 +10,10 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
 
-const DRACO_DECODER_PATH = 'https://www.gstatic.com/draco/versioned/decoders/1.5.6/'
+// Served from our own origin. Fetching this from gstatic handed every visitor's
+// IP to Google just to open the configurator; the decoder ships with three, so
+// scripts/copy-draco.sh keeps public/assets/draco in step with the package.
+const DRACO_DECODER_PATH = '/assets/draco/'
 
 /**
  * Create a GLTF loader wired with the project's DRACO + Meshopt decoders.

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import type { Map as LeafletMap } from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 import type { MessageItem, MessageItemType } from '../lib/supabase'
 import MemoryIcon from '../components/MemoryIcon'
 import styles from './MemoryCarousel.module.css'
@@ -85,14 +86,6 @@ function LeafletMapInner({ lat, lon }: { lat: number; lon: number }) {
 
     // Dynamic import so Leaflet's window references don't break SSR/Vite build
     import('leaflet').then(L => {
-      // Import Leaflet CSS once
-      if (!document.getElementById('leaflet-css')) {
-        const link = document.createElement('link')
-        link.id   = 'leaflet-css'
-        link.rel  = 'stylesheet'
-        link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'
-        document.head.appendChild(link)
-      }
 
       const map = L.map(containerRef.current!, {
         center:             [lat, lon],

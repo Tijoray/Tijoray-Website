@@ -21,7 +21,7 @@ const TRUST_POINTS = [
       </svg>
     ),
     label: 'Private by Design',
-    detail: 'Decryption keys are issued only to the sender and the recipient of a piece, after their identity is verified. Our support and admin tools hold no key — they can see that a memory exists, never what it contains.',
+    detail: 'Every piece has its own key, released only to the sender and the recipient once their identity is verified. We hold those keys in escrow rather than stranding them on a single phone, which is what lets a piece be given away, inherited, or recovered. It also means this is not end-to-end encryption: we could decrypt if legally compelled. We would rather say so than promise otherwise.',
   },
   {
     icon: (

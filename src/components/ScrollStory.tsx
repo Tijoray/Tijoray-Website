@@ -149,7 +149,7 @@ export default function ScrollStory() {
     animLoop()
 
     const dracoLoader = new DRACOLoader()
-    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/')
+    dracoLoader.setDecoderPath('/assets/draco/')
 
     const gltfLoader = new GLTFLoader()
     gltfLoader.setDRACOLoader(dracoLoader)

@@ -67,8 +67,9 @@ export default function AddressAutocomplete({ value, onChange, id, error }: Prop
       setLoading(true)
       try {
         const res = await fetch(
-          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=5&addressdetails=1`,
-          { headers: { 'Accept-Language': 'en' } },
+          // Proxied through our own API so the customer's IP and the address
+          // they are typing never reach OpenStreetMap. See api/geocode.ts.
+          `/api/geocode?q=${encodeURIComponent(q)}&details=1`,
         )
         const data: NominatimResult[] = await res.json()
         setResults(data)

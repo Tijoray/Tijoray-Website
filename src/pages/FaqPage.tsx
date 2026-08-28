@@ -22,7 +22,7 @@ const FAQS = [
   },
   {
     q: 'Is my data stored online?',
-    a: 'Your memories are encrypted with AES-256 on your device before they are uploaded, and stored as ciphertext in secure cloud storage. The NFC chip itself holds only the piece\'s identity — never your memories. Decryption keys are issued only to the sender and recipient of a piece; our support tools can see that a memory exists, not what it contains.',
+    a: 'Your memories are encrypted with AES-256 on your device before they are uploaded, and stored as ciphertext in secure cloud storage. The NFC chip itself holds only the piece\'s identity — never your memories. Each piece has its own key, held in escrow by us and released only to the sender and recipient once their identity is verified. That means we are not end-to-end encrypted: we could decrypt if legally compelled, though no support or admin tool of ours displays vault contents. We hold the keys so a piece can be gifted, inherited or recovered — impossible if the only key sat on one phone.',
   },
   {
     q: 'Can I transfer ownership to someone else?',

@@ -49,6 +49,7 @@ export default function Footer() {
         <p className={styles.footerCopy}>© {new Date().getFullYear()} Atelier Tijoray. All rights reserved.</p>
         <nav className={styles.footerLegal} aria-label="Legal">
           <Link to="/privacy">Privacy Policy</Link>
+          <Link to="/cookies">Cookies</Link>
           <Link to="/terms">Terms of Service</Link>
         </nav>
       </div>

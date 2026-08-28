@@ -6,7 +6,7 @@ export default function TermsPage() {
       <div className={styles.hero}>
         <p className={styles.eyebrow}>Legal</p>
         <h1 className={styles.title}>Terms of Service</h1>
-        <p className={styles.updated}>Last updated: 27 May 2026</p>
+        <p className={styles.updated}>Last updated: 28 August 2026</p>
       </div>
 
       <div className={styles.content}>
@@ -14,6 +14,12 @@ export default function TermsPage() {
         <div className={styles.section}>
           <h2>Acceptance</h2>
           <p>By accessing tijoray.com or placing an order, you agree to these Terms. If you do not agree, do not use the site. These Terms form a binding contract between you and Tijoray.</p>
+        </div>
+
+        <div className={styles.section}>
+          <h2>Who may use Tijoray</h2>
+          <p>You must be 18 or over to place an order or hold an account. A piece may of course be given to someone younger, but the account, the payment, and the responsibility for what is uploaded remain the adult purchaser's.</p>
+          <p>You are responsible for the content you place in a vault, and for having the right to share it — including where it shows other people. You must not upload content you do not have permission to use.</p>
         </div>
 
         <div className={styles.section}>
@@ -44,6 +50,12 @@ export default function TermsPage() {
           <p>The vault service, the Tijoray app, and the servers and storage behind them are owned and operated by Tijoray. Reading the memories stored against your piece depends on that service continuing to run.</p>
           <p>We intend to keep it running for as long as we reasonably can, and we will make reasonable efforts to do so. We do not guarantee it indefinitely, we make no commitment that the service will remain available for any particular period, and nothing elsewhere on this site should be read as such a commitment.</p>
           <p>If we decide to close the service, we will give you reasonable advance notice and make the full contents of your vault available to download in a standard, openly readable format before access ends. What you upload remains yours, and a closure on our part will not take it from you.</p>
+        </div>
+
+        <div className={styles.section}>
+          <h2>Passing a piece on</h2>
+          <p>A piece and its vault can be transferred to another person. Contact us and, once both parties are identified, we will move the vault and its provenance record to the new owner.</p>
+          <p>If an account holder dies, an executor or next of kin may contact us with proof of death and of their authority, and we will transfer the piece and its vault to the person entitled to it or provide a copy of the contents.</p>
         </div>
 
         <div className={styles.section}>

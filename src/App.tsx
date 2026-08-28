@@ -37,6 +37,7 @@ const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 const FaqPage = lazy(() => import('./pages/FaqPage'))
 const CraftsmanshipPage = lazy(() => import('./pages/CraftsmanshipPage'))
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage'))
+const CookiesPage = lazy(() => import('./pages/CookiesPage'))
 const TermsPage = lazy(() => import('./pages/TermsPage'))
 
 // Admin panel (operational dashboard) — lazy so it never ships in the public bundle path.
@@ -181,6 +182,7 @@ export default function App() {
           <Route path="/faq" element={<FaqPage />} />
           <Route path="/craftsmanship" element={<CraftsmanshipPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/cookies" element={<CookiesPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
