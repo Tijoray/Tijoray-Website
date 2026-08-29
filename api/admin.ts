@@ -333,7 +333,7 @@ async function listCustomers(body: Record<string, unknown>) {
   const search = typeof body.search === 'string' ? body.search.trim().toLowerCase() : ''
 
   const { data: users } = await admin
-    .from('Users').select('id, name, email, phone_number, address, created_at')
+    .from('Users').select('id, name, email, phone_number, contact_phone, address, created_at')
     .order('created_at', { ascending: false })
 
   // Piece counts per user (as sender), one query.
@@ -356,7 +356,8 @@ async function listCustomers(body: Record<string, unknown>) {
     out = out.filter(u =>
       (u.name ?? '').toLowerCase().includes(search) ||
       (u.email ?? '').toLowerCase().includes(search) ||
-      (u.phone_number ?? '').toLowerCase().includes(search),
+      (u.phone_number ?? '').toLowerCase().includes(search) ||
+      (u.contact_phone ?? '').toLowerCase().includes(search),
     )
   }
 

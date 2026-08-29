@@ -57,7 +57,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // derive name/phone from their own account rather than the (omitted) form fields.
   const meta = (user.user_metadata ?? {}) as Record<string, unknown>
   const selfName  = String(meta.name ?? meta.full_name ?? meta.fullName ?? '').trim() || (user.email ?? '')
-  const selfPhone = String(meta.phone ?? meta.phone_number ?? '').trim()
+
+  // Prefer the SMS-confirmed number over anything in metadata.
+  //
+  // recipient_phone is not contact detail — it is the key the mobile app
+  // matches a piece against when someone claims it, and the claimant has to
+  // prove that exact number by OTP. Minting it from user_metadata meant
+  // minting it from a value the buyer typed once, possibly long ago, and never
+  // proved: a single wrong digit produces a piece that only the wrong verified
+  // handset can ever open, and nobody finds out until the recipient's
+  // collection is mysteriously empty. auth.users.phone is only populated by a
+  // completed OTP round-trip, so when it is there it is the number to use.
+  //
+  // The metadata fallback stays for buyers who have never verified — the web
+  // has no OTP flow, so refusing them would block self-purchase entirely. It
+  // is a target for a later proof, not a proof itself.
+  const confirmedPhone = user.phone_confirmed_at
+    ? String(user.phone ?? '').trim()
+    : ''
+  const typedPhone = String(meta.phone ?? meta.phone_number ?? '').trim()
+  // auth.users.phone is stored without the leading +; recipient_phone is
+  // matched in E.164, so put it back.
+  const selfPhone = confirmedPhone
+    ? (confirmedPhone.startsWith('+') ? confirmedPhone : `+${confirmedPhone}`)
+    : typedPhone
 
   const finalRecipientName  = forSelf ? selfName  : (recipientName  ?? '')
   const finalRecipientPhone = forSelf ? selfPhone : (recipientPhone ?? '')

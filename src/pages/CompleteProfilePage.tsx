@@ -65,8 +65,12 @@ export default function CompleteProfilePage() {
     setSaving(true)
     setApiError('')
 
-    // NOTE: phone is stored as-is for now. SMS OTP verification is pending —
-    // once the SMS service is live, gate `phone_verified` here before saving.
+    // The number is stored unverified, on purpose. Phone verification lives in
+    // the mobile app, where the recipient confirms the number a piece is
+    // registered to; the web has no OTP flow and is not getting one. What is
+    // typed here is contact detail — the trigger routes it to
+    // Users.contact_phone, which nothing reads to decide access. Anything that
+    // gates on a number must read Users.phone_number instead.
     const { error } = await supabase.auth.updateUser({
       data: {
         name:    name.trim(),

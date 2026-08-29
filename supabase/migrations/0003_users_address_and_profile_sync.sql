@@ -1,5 +1,17 @@
 -- Migration: address column + profile sync on UPDATE
 --
+-- ⚠️  SUPERSEDED — DO NOT EDIT handle_new_auth_user() HERE.
+-- This function is now owned by the mobile-app repo, whose migrations
+-- 20260824020000_sync_verified_phone.sql and 20260828000000_web_contact_phone.sql
+-- are its current definition. Two repos independently rewriting one function is
+-- exactly what opened the phone hole that 20260824020000 was written to close,
+-- so this file is kept for history only. Change it there, not here.
+--
+-- The behaviour below is out of date in one way that matters: the phone
+-- coalesce at line ~49 no longer exists. A number from raw_user_meta_data now
+-- lands in Users.contact_phone (unverified contact detail); Users.phone_number
+-- holds only an SMS-confirmed number taken from auth.users.phone.
+--
 -- The "Users" table mirrors auth.users via handle_new_auth_user(), but the
 -- trigger only fired AFTER INSERT, so anything a user added AFTER signup
 -- (phone/address via the profile-completion gate or Settings) never reached

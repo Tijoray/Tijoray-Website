@@ -82,7 +82,11 @@ export type DashboardStats = {
 }
 
 export type AdminCustomer = {
-  id: string; name: string | null; email: string | null; phone_number: string | null
+  id: string; name: string | null; email: string | null
+  /** SMS-confirmed number. Absent for anyone who has not verified in the app. */
+  phone_number: string | null
+  /** Unverified number as typed on the website. Contact detail only. */
+  contact_phone: string | null
   address: unknown; created_at: string; piecesBought: number; estSpendCents: number
 }
 

@@ -33,6 +33,7 @@ const SignUpPage = lazy(() => import('./pages/SignUpPage'))
 const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'))
 const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'))
 const CompleteProfilePage = lazy(() => import('./pages/CompleteProfilePage'))
+const VerifyEmailPage = lazy(() => import('./pages/VerifyEmailPage'))
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 const FaqPage = lazy(() => import('./pages/FaqPage'))
 const CraftsmanshipPage = lazy(() => import('./pages/CraftsmanshipPage'))
@@ -189,6 +190,7 @@ export default function App() {
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/complete-profile" element={<CompleteProfilePage />} />
+          <Route path="/verify-email" element={<VerifyEmailPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>

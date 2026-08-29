@@ -3,6 +3,29 @@ import { adminApi, type AdminCustomer } from '../../lib/adminApi'
 import { money, date } from './format'
 import styles from './admin.module.css'
 
+/**
+ * A confirmed number and a typed one are not the same fact, so they must not
+ * render identically. `phone_number` has been through an SMS round-trip and is
+ * what a piece is matched against; `contact_phone` is only what someone typed
+ * into the website. Showing the second one unlabelled would invite exactly the
+ * confusion the two columns exist to prevent — see the 20260828000000
+ * migration in the app repo.
+ */
+function phoneCell(c: AdminCustomer) {
+  if (c.phone_number) return c.phone_number
+  if (c.contact_phone) {
+    return (
+      <>
+        {c.contact_phone}{' '}
+        <span className={`${styles.pill} ${styles.pillMuted}`} title="Typed on the website, never confirmed by SMS. Not usable to match a piece.">
+          unverified
+        </span>
+      </>
+    )
+  }
+  return '—'
+}
+
 export default function AdminCustomers() {
   const [search, setSearch] = useState('')
   const [rows, setRows] = useState<AdminCustomer[]>([])
@@ -53,7 +76,7 @@ export default function AdminCustomers() {
                 <tr key={c.id}>
                   <td data-label="Name">{c.name ?? '—'}</td>
                   <td data-label="Email">{c.email ?? '—'}</td>
-                  <td data-label="Phone">{c.phone_number ?? '—'}</td>
+                  <td data-label="Phone">{phoneCell(c)}</td>
                   <td data-label="Location">{addrLine(c.address) || '—'}</td>
                   <td data-label="Pieces">{c.piecesBought}</td>
                   <td data-label="Est. spend">{money(c.estSpendCents)}</td>

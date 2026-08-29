@@ -54,9 +54,38 @@ export function getMetaAddress(user: User | null): Address | null {
 }
 
 /**
+ * True once the address on the account has actually been confirmed.
+ *
+ * `signUp` refusing to return a session is the whole of the enforcement
+ * otherwise, and it only covers one route in — it says nothing about a session
+ * from a password sign-in, from recovery, or from a provider. Checking the
+ * value itself covers all of them.
+ *
+ * Self-activating, like the app's AuthGate equivalent: while "Confirm email"
+ * is off in the hosted project GoTrue stamps `email_confirmed_at` at signup,
+ * so this is true for everyone and the gate below is inert. Turning the
+ * setting on is what starts producing sessions it can catch — no redeploy has
+ * to be co-ordinated with the toggle.
+ */
+export function isEmailConfirmed(user: User | null): boolean {
+  if (!user) return false
+  // An account with no email is not an unconfirmed email — nothing to confirm,
+  // and bouncing it to a page that resends to nowhere would strand it.
+  if (!user.email) return true
+  return !!user.email_confirmed_at
+}
+
+/**
  * A profile is complete once we have a name, a phone number, and a shipping
- * address. (Phone is collected but not yet OTP-verified — the SMS service is
- * pending; see CompleteProfilePage.)
+ * address.
+ *
+ * The phone here is contact detail, not a credential. It is never SMS-verified
+ * on the web — verification happens in the mobile app, where the recipient
+ * confirms the number that a piece is registered to. Anything that decides who
+ * may open a piece must read the confirmed number from `auth.users.phone`,
+ * never this one. See `Users.contact_phone` vs `Users.phone_number` in the
+ * database, which keeps the two apart by name so no reader has to remember a
+ * flag.
  */
 export function isProfileComplete(user: User | null): boolean {
   if (!user) return false
