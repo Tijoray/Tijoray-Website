@@ -285,3 +285,10 @@
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+
+/* Second line of the unconfirmed-email notice on LoginPage, carrying the
+   resend button. Sits inside .apiError, so it inherits the rose text and only
+   needs separating from the sentence above it. */
+.resendLine {
+  margin-top: 8px;
+}

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
+import { RESEND_WAIT, parseRetryAfter } from '../lib/authResend'
 import styles from './AuthPage.module.css'
 
 function AppleIcon() {
@@ -36,6 +37,14 @@ export default function LoginPage() {
   const [googleBusy, setGoogleBusy] = useState(false)
   const [appleBusy,  setAppleBusy]  = useState(false)
 
+  // Set only when GoTrue turns the sign-in away for an unconfirmed address.
+  // Holds the address it refused rather than reading the live field, so editing
+  // the form after the refusal cannot resend to somewhere else.
+  const [unconfirmed, setUnconfirmed] = useState('')
+  const [resendInfo,  setResendInfo]  = useState('')
+  const [resending,   setResending]   = useState(false)
+  const [secondsLeft, setSecondsLeft] = useState(0)
+
   async function handleApple() {
     setAppleBusy(true)
     await supabase.auth.signInWithOAuth({
@@ -57,6 +66,12 @@ export default function LoginPage() {
     if (!loading && user) navigate(from, { replace: true })
   }, [user, loading, from, navigate])
 
+  useEffect(() => {
+    if (secondsLeft <= 0) return
+    const t = setTimeout(() => setSecondsLeft(s => s - 1), 1000)
+    return () => clearTimeout(t)
+  }, [secondsLeft])
+
   function validate() {
     const errs: Record<string, string> = {}
     if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
@@ -73,6 +88,8 @@ export default function LoginPage() {
 
     setSubmitting(true)
     setApiError('')
+    setResendInfo('')
+    setUnconfirmed('')
 
     const { error } = await supabase.auth.signInWithPassword({
       email:    form.email,
@@ -80,14 +97,46 @@ export default function LoginPage() {
     })
 
     if (error) {
-      setApiError(
-        error.message === 'Invalid login credentials'
-          ? 'Incorrect email or password.'
-          : error.message
-      )
+      // GoTrue withholds the session until the address is confirmed, so this
+      // is the only place these people land — ProtectedRoute never sees them,
+      // and VerifyEmailPage needs a session it will never be given. Without
+      // the resend offered here, someone who lost the first email has no way
+      // back into their account.
+      if (error.code === 'email_not_confirmed') {
+        setUnconfirmed(form.email)
+      } else {
+        setApiError(
+          error.message === 'Invalid login credentials'
+            ? 'Incorrect email or password.'
+            : error.message
+        )
+      }
       setSubmitting(false)
     }
     // On success, the useEffect above fires and redirects
+  }
+
+  async function handleResend() {
+    if (!unconfirmed || secondsLeft > 0) return
+    setResending(true)
+    setApiError('')
+    setResendInfo('')
+
+    const { error } = await supabase.auth.resend({
+      type:  'signup',
+      email: unconfirmed,
+      options: { emailRedirectTo: `${window.location.origin}${from}` },
+    })
+
+    setResending(false)
+    if (error) {
+      setApiError(error.message)
+      const wait = parseRetryAfter(error.message)
+      if (wait) setSecondsLeft(wait)
+      return
+    }
+    setResendInfo(`A new confirmation link is on its way to ${unconfirmed}.`)
+    setSecondsLeft(RESEND_WAIT)
   }
 
   if (loading) return null
@@ -142,6 +191,35 @@ export default function LoginPage() {
             />
             {errors.password && <span className={styles.errorMsg}>{errors.password}</span>}
           </div>
+
+          {unconfirmed && (
+            <div className={styles.apiError}>
+              <p>
+                Your email address hasn't been confirmed yet. Check your inbox
+                for the link we sent to <strong>{unconfirmed}</strong> &mdash;
+                it may be in your spam folder.
+              </p>
+              <p className={styles.resendLine}>
+                {secondsLeft > 0 ? (
+                  <>You can request another link in {secondsLeft}s.</>
+                ) : (
+                  <>
+                    Still nothing?{' '}
+                    <button
+                      type="button"
+                      className={styles.resendBtn}
+                      onClick={handleResend}
+                      disabled={resending}
+                    >
+                      {resending ? 'sending…' : 'send a new link'}
+                    </button>.
+                  </>
+                )}
+              </p>
+            </div>
+          )}
+
+          {resendInfo && <p className={styles.verifyNote}>{resendInfo}</p>}
 
           {apiError && <p className={styles.apiError}>{apiError}</p>}
 

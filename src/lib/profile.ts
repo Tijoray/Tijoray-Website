@@ -61,11 +61,16 @@ export function getMetaAddress(user: User | null): Address | null {
  * from a password sign-in, from recovery, or from a provider. Checking the
  * value itself covers all of them.
  *
- * Self-activating, like the app's AuthGate equivalent: while "Confirm email"
- * is off in the hosted project GoTrue stamps `email_confirmed_at` at signup,
- * so this is true for everyone and the gate below is inert. Turning the
- * setting on is what starts producing sessions it can catch — no redeploy has
- * to be co-ordinated with the toggle.
+ * Self-activating, like the app's AuthGate equivalent: it reads the value
+ * rather than a build-time flag, so the "Confirm email" toggle in the hosted
+ * project can be flipped either way without a redeploy. While that setting is
+ * off GoTrue stamps `email_confirmed_at` at signup and this is true for
+ * everyone, leaving the gate inert; turning it on is what starts producing
+ * sessions the gate can catch. It is currently on.
+ *
+ * Note that Google and Apple assert the address themselves, so provider
+ * sign-ins arrive already confirmed and never see a confirmation email — that
+ * is by design, not a misconfigured mailer.
  */
 export function isEmailConfirmed(user: User | null): boolean {
   if (!user) return false

@@ -3,10 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { isEmailConfirmed } from '../lib/profile'
+import { RESEND_WAIT, parseRetryAfter } from '../lib/authResend'
 import styles from './AuthPage.module.css'
-
-/** Seconds before another confirmation email may be requested. */
-const RESEND_WAIT = 60
 
 /**
  * Where a signed-in-but-unconfirmed session is parked until the address is
@@ -65,8 +63,8 @@ export default function VerifyEmailPage() {
       // may be longer than ours. Showing its message beats a button that comes
       // back and then fails again.
       setApiError(error.message)
-      const wait = /(\d+)\s*second/.exec(error.message)
-      if (wait) setSecondsLeft(Number(wait[1]))
+      const wait = parseRetryAfter(error.message)
+      if (wait) setSecondsLeft(wait)
       return
     }
     setInfo(`A new confirmation email is on its way to ${user.email}.`)

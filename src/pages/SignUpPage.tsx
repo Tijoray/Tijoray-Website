@@ -97,16 +97,35 @@ export default function SignUpPage() {
     })
 
     if (error) {
-      setApiError(error.message)
+      // GoTrue reports a refused SMTP handoff as a bare 500. Showing that to
+      // someone who just filled in the form reads as their mistake, not ours.
+      setApiError(
+        /error sending/i.test(error.message)
+          ? "We couldn't send the confirmation email just now. Please try again in a moment."
+          : error.message
+      )
+      setSubmitting(false)
+      return
+    }
+
+    // An address that already has a *confirmed* account comes back looking like
+    // a fresh signup — same shape, `confirmation_sent_at` filled in — except
+    // that `identities` is empty. GoTrue obfuscates it deliberately so signup
+    // cannot be used to enumerate registered addresses, and it sends no email.
+    // Taken at face value it parks the person on "check your email" waiting for
+    // a message that was never sent. They already have an account; say so.
+    if (data.user && data.user.identities?.length === 0) {
+      setApiError('That email already has an account. Try signing in instead.')
       setSubmitting(false)
       return
     }
 
     if (data.session) {
-      // Email confirmation disabled — user is immediately logged in
+      // No session means the address still has to be confirmed. A session here
+      // means it did not — either "Confirm email" is off in the project, or the
+      // provider asserted the address for us.
       navigate('/portal', { replace: true })
     } else {
-      // Email confirmation required
       setSentTo(form.email)
       setStep('verify-email')
     }
