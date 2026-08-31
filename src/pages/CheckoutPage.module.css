@@ -556,3 +556,74 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Promo code ────────────────────────────────────────────────────────────
+ *
+ * Sits inside the order summary rather than beside the payment button: it is a
+ * change to what is owed, so it belongs where the money is itemised.
+ */
+.promoBlock {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-soft);
+}
+.promoLabel {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: var(--tracking-md);
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  margin-bottom: 10px;
+}
+.promoRow { display: flex; gap: 10px; align-items: flex-end; }
+.promoInput {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-soft);
+  padding: 10px 0;
+  outline: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: border-color 0.3s;
+}
+.promoInput:focus { border-bottom-color: var(--burgundy); }
+.promoApply {
+  flex: 0 0 auto;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: var(--tracking-md);
+  text-transform: uppercase;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--border-soft);
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: border-color 0.3s, color 0.3s;
+}
+.promoApply:hover:not(:disabled) { border-color: var(--burgundy); color: var(--burgundy); }
+.promoApply:disabled { opacity: 0.4; cursor: default; }
+
+.promoOk, .promoErr, .promoNote {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  margin-top: 10px;
+}
+.promoOk   { color: var(--burgundy); font-weight: 500; }
+.promoErr  { color: var(--rose); }
+.promoNote { color: var(--ink-soft); font-style: italic; }
+
+.summaryDiscount { color: var(--burgundy); }
+.summaryFootnote {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+  margin-top: 10px;
+}

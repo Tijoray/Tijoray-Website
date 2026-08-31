@@ -7,6 +7,7 @@ import { METAL_PRICES_CENTS } from '../src/data/catalog.js'
 import type { Metal } from '../src/data/catalog.js'
 import { getCatalog, saveCatalog } from '../lib/catalog-store.js'
 import type { CatalogDoc } from '../src/data/catalog-doc.js'
+import { stripe, createPromo, updatePromo, couponLabel, type NewPromo } from '../lib/promos.js'
 
 /**
  * Consolidated admin-panel API. ONE serverless function that routes on a
@@ -96,6 +97,20 @@ async function dashboard() {
 
   const { count: customerCount } = await admin.from('Users').select('id', { count: 'exact', head: true })
 
+  // Real money, from what Stripe actually charged. `estRevenueCents` above is
+  // still computed because orders predating the Orders table have no row here
+  // and would otherwise read as zero revenue; the two are reported separately
+  // rather than blended, because one is a fact and the other is a guess.
+  const { data: orders } = await admin
+    .from('Orders').select('total_cents, tax_cents, discount_cents, tax_status')
+  let revenueCents = 0, taxCollectedCents = 0, discountGivenCents = 0, unresolvedTax = 0
+  for (const o of orders ?? []) {
+    revenueCents       += o.total_cents ?? 0
+    taxCollectedCents  += o.tax_cents ?? 0
+    discountGivenCents += o.discount_cents ?? 0
+    if (o.tax_status && o.tax_status !== 'complete') unresolvedTax++
+  }
+
   const { data: emails } = await admin.from('Email_Log').select('type')
   const emailByType: Record<string, number> = {}
   for (const e of emails ?? []) emailByType[e.type] = (emailByType[e.type] ?? 0) + 1
@@ -114,6 +129,11 @@ async function dashboard() {
     shippedNoTag,
     viewed,
     estRevenueCents,
+    revenueCents,
+    taxCollectedCents,
+    discountGivenCents,
+    orderCount: (orders ?? []).length,
+    unresolvedTax,
     customerCount: customerCount ?? 0,
     emailByType,
     recentAudit: recentAudit ?? [],
@@ -413,6 +433,214 @@ async function saveCatalogAction(actor: AdminUser, body: Record<string, unknown>
   return result
 }
 
+
+/* ── Promotions ────────────────────────────────────────────────────────────── */
+
+/**
+ * Live redemption state, keyed by Stripe promotion code id.
+ *
+ * Read from Stripe rather than counted from our own Orders, because Stripe's
+ * counter is the one that enforces the cap. If the two ever diverge, a code
+ * stops working at the till while our table still says it has room, and the
+ * number the operator needs is the one that decides that.
+ *
+ * Capped at 300 codes. Well past anything this brand will issue, and a bounded
+ * loop beats an admin page that quietly takes thirty seconds to load.
+ */
+async function livePromoState(): Promise<Map<string, { timesRedeemed: number; active: boolean; expiresAt: string | null; maxRedemptions: number | null }>> {
+  const map = new Map<string, { timesRedeemed: number; active: boolean; expiresAt: string | null; maxRedemptions: number | null }>()
+  try {
+    const codes = await stripe.promotionCodes.list({ limit: 100 }).autoPagingToArray({ limit: 300 })
+    for (const pc of codes) {
+      map.set(pc.id, {
+        timesRedeemed:  pc.times_redeemed,
+        active:         pc.active,
+        expiresAt:      pc.expires_at ? new Date(pc.expires_at * 1000).toISOString() : null,
+        maxRedemptions: pc.max_redemptions,
+      })
+    }
+  } catch (err) {
+    // A Stripe outage should still render the ledger, just without live counts.
+    console.error('[admin] could not read live promotion state', err)
+  }
+  return map
+}
+
+async function listPromos() {
+  const { data: rows, error } = await admin
+    .from('Promo_Codes').select('*').order('created_at', { ascending: false })
+  if (error) throw error
+
+  const live = await livePromoState()
+
+  // Redemptions actually attributable to each code, and what they were worth.
+  // Stripe answers "how many"; only Orders can answer "for how much".
+  const { data: orders } = await admin
+    .from('Orders')
+    .select('promo_code_id, discount_cents, total_cents')
+    .not('promo_code_id', 'is', null)
+
+  const used = new Map<string, { orders: number; discountCents: number; revenueCents: number }>()
+  for (const o of orders ?? []) {
+    const key = o.promo_code_id as string
+    const agg = used.get(key) ?? { orders: 0, discountCents: 0, revenueCents: 0 }
+    agg.orders++
+    agg.discountCents += o.discount_cents ?? 0
+    agg.revenueCents  += o.total_cents ?? 0
+    used.set(key, agg)
+  }
+
+  const promos = (rows ?? []).map(r => {
+    const l = live.get(r.stripe_promotion_code_id)
+    const agg = used.get(r.stripe_promotion_code_id) ?? { orders: 0, discountCents: 0, revenueCents: 0 }
+    const expiresAt = l?.expiresAt ?? r.expires_at
+    const maxRedemptions = l?.maxRedemptions ?? r.max_redemptions
+    const timesRedeemed = l?.timesRedeemed ?? agg.orders
+    return {
+      ...r,
+      label:          couponLabel({ percent_off: r.percent_off, amount_off: r.amount_off_cents, currency: r.currency }),
+      timesRedeemed,
+      maxRedemptions,
+      expiresAt,
+      // Stripe's flag wins: it is what decides whether the code works.
+      active:         l?.active ?? r.active,
+      exhausted:      maxRedemptions != null && timesRedeemed >= maxRedemptions,
+      expired:        !!expiresAt && new Date(expiresAt).getTime() < Date.now(),
+      ordersCents:    agg.revenueCents,
+      discountCents:  agg.discountCents,
+      // True when Stripe has no record of a code our ledger claims — the code
+      // was archived or deleted directly in the Stripe dashboard.
+      missingInStripe: !l,
+    }
+  })
+
+  return { promos }
+}
+
+/** Who actually redeemed one code. Stripe only counts; Orders remembers. */
+async function promoRedemptions(body: Record<string, unknown>) {
+  const promotionCodeId = String(body.promotionCodeId ?? '')
+  if (!promotionCodeId) throw new Error('Missing promotion code id')
+
+  const { data: orders, error } = await admin
+    .from('Orders')
+    .select('id, email, user_id, subtotal_cents, discount_cents, tax_cents, total_cents, paid_at, promo_code')
+    .eq('promo_code_id', promotionCodeId)
+    .order('paid_at', { ascending: false })
+  if (error) throw error
+
+  const buyers = await buyersByIds((orders ?? []).map(o => o.user_id).filter(Boolean) as string[])
+
+  return {
+    redemptions: (orders ?? []).map(o => ({
+      ...o,
+      buyerName: o.user_id ? (buyers.get(o.user_id)?.name ?? null) : null,
+    })),
+  }
+}
+
+async function createPromoAction(actor: AdminUser, body: Record<string, unknown>) {
+  const input = (body.promo ?? {}) as NewPromo
+  const { row } = await createPromo(input, actor.email)
+
+  await audit({
+    actor, action: 'promo.create', entityType: 'promo', entityId: row.stripe_promotion_code_id,
+    after: {
+      code: row.code, percent_off: row.percent_off, amount_off_cents: row.amount_off_cents,
+      max_redemptions: row.max_redemptions, expires_at: row.expires_at,
+      issued_to: row.issued_to_email ?? row.issued_to_name, campaign: row.campaign,
+    },
+  })
+
+  return { promo: row }
+}
+
+async function updatePromoAction(actor: AdminUser, body: Record<string, unknown>) {
+  const promotionCodeId = String(body.promotionCodeId ?? '')
+  if (!promotionCodeId) throw new Error('Missing promotion code id')
+  const patch = (body.patch ?? {}) as Parameters<typeof updatePromo>[1]
+
+  const { data: before } = await admin
+    .from('Promo_Codes').select('*').eq('stripe_promotion_code_id', promotionCodeId).maybeSingle()
+  if (!before) throw new Error('Promotion code not found')
+
+  const after = await updatePromo(promotionCodeId, patch)
+
+  await audit({
+    actor,
+    // Activation is the consequential half of this action and deserves its own
+    // verb in the log — "promo.update" would bury a code being switched off
+    // among edits to a notes field.
+    action: typeof patch.active === 'boolean'
+      ? (patch.active ? 'promo.activate' : 'promo.deactivate')
+      : 'promo.annotate',
+    entityType: 'promo', entityId: promotionCodeId,
+    before: { active: before.active, issued_to_email: before.issued_to_email, campaign: before.campaign, notes: before.notes },
+    after:  { active: after.active,  issued_to_email: after.issued_to_email,  campaign: after.campaign,  notes: after.notes },
+  })
+
+  return { promo: after }
+}
+
+/* ── Tax reporting ─────────────────────────────────────────────────────────── */
+
+/**
+ * What was collected, grouped the way a remittance return asks for it:
+ * by destination jurisdiction, over a period.
+ *
+ * Reads Orders, not Stripe. The point of the table is that this question can be
+ * answered without an API round trip, and answered identically every time.
+ */
+async function taxSummary(body: Record<string, unknown>) {
+  const from = typeof body.from === 'string' && body.from ? body.from : null
+  const to   = typeof body.to   === 'string' && body.to   ? body.to   : null
+
+  let q = admin.from('Orders').select(
+    'tax_country, tax_state, subtotal_cents, discount_cents, tax_cents, total_cents, tax_status, paid_at',
+  )
+  if (from) q = q.gte('paid_at', from)
+  if (to)   q = q.lte('paid_at', to)
+
+  const { data: orders, error } = await q
+  if (error) throw error
+
+  type Bucket = {
+    country: string; state: string
+    orders: number; netCents: number; taxCents: number; grossCents: number
+  }
+  const buckets = new Map<string, Bucket>()
+  let orderCount = 0, grossCents = 0, taxCents = 0, discountCents = 0, netCents = 0
+  // Orders where Stripe could not finish the calculation. One of these is a hole
+  // in a filing, so it is surfaced rather than averaged away.
+  let unresolvedTax = 0
+
+  for (const o of orders ?? []) {
+    const country = o.tax_country ?? '—'
+    const state   = o.tax_state ?? ''
+    const key = `${country}/${state}`
+    const b = buckets.get(key) ?? { country, state, orders: 0, netCents: 0, taxCents: 0, grossCents: 0 }
+
+    // Net of discount and exclusive of tax — the taxable base a return declares.
+    const net = (o.subtotal_cents ?? 0) - (o.discount_cents ?? 0)
+    b.orders++
+    b.netCents   += net
+    b.taxCents   += o.tax_cents ?? 0
+    b.grossCents += o.total_cents ?? 0
+    buckets.set(key, b)
+
+    orderCount++
+    netCents      += net
+    taxCents      += o.tax_cents ?? 0
+    grossCents    += o.total_cents ?? 0
+    discountCents += o.discount_cents ?? 0
+    if (o.tax_status && o.tax_status !== 'complete') unresolvedTax++
+  }
+
+  const jurisdictions = [...buckets.values()].sort((a, b) => b.taxCents - a.taxCents || b.grossCents - a.grossCents)
+
+  return { orderCount, grossCents, netCents, taxCents, discountCents, unresolvedTax, jurisdictions, from, to }
+}
+
 /* ── Entry point ───────────────────────────────────────────────────────────── */
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -437,6 +665,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       case 'sign-file':     return res.status(200).json(await signFile(body))
       case 'get-catalog':   return res.status(200).json(await getCatalogAction())
       case 'save-catalog':  return res.status(200).json(await saveCatalogAction(actor, body))
+      case 'list-promos':   return res.status(200).json(await listPromos())
+      case 'create-promo':  return res.status(200).json(await createPromoAction(actor, body))
+      case 'update-promo':  return res.status(200).json(await updatePromoAction(actor, body))
+      case 'promo-redemptions': return res.status(200).json(await promoRedemptions(body))
+      case 'tax-summary':   return res.status(200).json(await taxSummary(body))
       default:              return res.status(400).json({ error: `Unknown action: ${action}` })
     }
   } catch (err) {

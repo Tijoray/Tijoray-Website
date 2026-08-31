@@ -126,11 +126,20 @@ export default function CartPage() {
               <span>Shipping</span>
               <span className={styles.summaryMuted}>Complimentary</span>
             </div>
+            {/* Tax is destination-based and no address has been given yet, so a
+                "Total" here would be a number the shopper is never charged. */}
+            <div className={styles.summaryRow}>
+              <span>Tax</span>
+              <span className={styles.summaryMuted}>Calculated at checkout</span>
+            </div>
             <div className={styles.summaryDivider} />
             <div className={`${styles.summaryRow} ${styles.summaryTotal}`}>
-              <span>Total</span>
+              <span>Subtotal</span>
               <span>{fmt(total)}</span>
             </div>
+            <p className={styles.summaryFootnote}>
+              Tax and any promo code are applied at checkout.
+            </p>
           </div>
 
           <button

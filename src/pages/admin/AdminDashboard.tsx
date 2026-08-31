@@ -1,16 +1,20 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { adminApi, type DashboardStats } from '../../lib/adminApi'
-import { money, dateTime } from './format'
+import { adminApi, type DashboardStats, type TaxSummary } from '../../lib/adminApi'
+import { money, moneyExact, dateTime } from './format'
 import styles from './admin.module.css'
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [tax, setTax] = useState<TaxSummary | null>(null)
   const [error, setError] = useState('')
   const navigate = useNavigate()
 
   useEffect(() => {
     adminApi.dashboard().then(setStats).catch(e => setError(e.message))
+    // Loaded separately so a reporting hiccup cannot blank the operational
+    // cards above, which are what the panel is opened for day to day.
+    adminApi.taxSummary().then(setTax).catch(() => setTax(null))
   }, [])
 
   if (error) return <div className={styles.msg + ' ' + styles.msgErr}>{error}</div>
@@ -50,6 +54,55 @@ export default function AdminDashboard() {
         {card('Customers', stats.customerCount, { to: '/admin/customers' })}
         {card('Est. revenue', money(stats.estRevenueCents))}
       </div>
+
+      <div className={styles.sectionTitle}>Revenue &amp; tax</div>
+      <div className={styles.cards}>
+        {card('Orders', stats.orderCount)}
+        {card('Charged', money(stats.revenueCents))}
+        {card('Tax collected', moneyExact(stats.taxCollectedCents))}
+        {card('Discounts given', money(stats.discountGivenCents), { to: '/admin/promos' })}
+        {/* A tax calculation Stripe could not finish is a hole in a filing, not
+            a rounding difference — it gets the alert treatment. */}
+        {stats.unresolvedTax > 0 && card('Tax unresolved', stats.unresolvedTax, { alert: true })}
+      </div>
+      <p className={styles.hint}>
+        Charged is what Stripe actually took, from orders recorded since the Orders table went in.
+        Older pieces are estimated separately at {money(stats.estRevenueCents)} from their metal.
+      </p>
+
+      {tax && tax.jurisdictions.length > 0 && (
+        <>
+          <div className={styles.sectionTitle}>Tax collected by jurisdiction</div>
+          <div className={styles.tableWrap}>
+            <div className={styles.tableScroll}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Country</th><th>State / province</th><th>Orders</th>
+                    <th>Taxable base</th><th>Tax collected</th><th>Gross</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tax.jurisdictions.map(j => (
+                    <tr key={`${j.country}/${j.state}`}>
+                      <td data-label="Country">{j.country}</td>
+                      <td data-label="State / province">{j.state || '—'}</td>
+                      <td data-label="Orders">{j.orders}</td>
+                      <td data-label="Taxable base">{moneyExact(j.netCents)}</td>
+                      <td data-label="Tax collected">{moneyExact(j.taxCents)}</td>
+                      <td data-label="Gross">{moneyExact(j.grossCents)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p className={styles.hint}>
+            Grouped by shipping destination, which is what these physical goods are taxed on.
+            Taxable base is the subtotal less any discount, before tax — the figure a return declares.
+          </p>
+        </>
+      )}
 
       <div className={styles.sectionTitle}>Emails sent</div>
       <div className={styles.cards}>

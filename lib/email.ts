@@ -187,6 +187,10 @@ export async function sendCraftingEmail(opts: {
   /** Sales tax Stripe collected, in cents. Omitted/0 renders no tax row —
    *  exports out of Canada are zero-rated, so most orders have none. */
   taxCents?: number
+  /** Promotion discount applied, in cents. Omitted/0 renders no discount row. */
+  discountCents?: number
+  /** The code redeemed, shown beside the discount so the saving is attributable. */
+  promoCode?: string | null
 }): Promise<SendResult> {
   const portal = `${SITE}/portal`
   const rows = opts.items.map(i => `
@@ -195,20 +199,33 @@ export async function sendCraftingEmail(opts: {
       <td align="right" style="padding:10px 0;border-bottom:1px solid ${C.border};font-family:${SERIF};font-size:17px;color:${C.ink};">${fmtUSD(i.priceCents)}</td>
     </tr>`).join('')
 
-  // Only rendered when tax was actually collected. Without it the itemised
-  // lines would not sum to the total, which reads as a billing error.
+  // Rendered only when they actually happened. The itemised lines must reach the
+  // total or the receipt reads as a billing error, and a customer who used a code
+  // needs to see it land — a total that is simply lower than the prices above it,
+  // with no line explaining why, is the same complaint as one that is too high.
   const taxCents = opts.taxCents ?? 0
-  const taxRow = taxCents > 0 ? `
+  const discountCents = opts.discountCents ?? 0
+
+  const summaryRow = (label: string, value: string, tone: string = C.inkMid) => `
       <tr>
-        <td style="padding:10px 0;border-bottom:1px solid ${C.border};font-family:${SERIF};font-size:17px;color:${C.inkMid};">Tax</td>
-        <td align="right" style="padding:10px 0;border-bottom:1px solid ${C.border};font-family:${SERIF};font-size:17px;color:${C.inkMid};">${fmtUSD(taxCents)}</td>
-      </tr>` : ''
+        <td style="padding:10px 0;border-bottom:1px solid ${C.border};font-family:${SERIF};font-size:17px;color:${tone};">${label}</td>
+        <td align="right" style="padding:10px 0;border-bottom:1px solid ${C.border};font-family:${SERIF};font-size:17px;color:${tone};">${value}</td>
+      </tr>`
+
+  const discountRow = discountCents > 0
+    ? summaryRow(
+        opts.promoCode ? `Discount (${esc(opts.promoCode)})` : 'Discount',
+        `−${fmtUSD(discountCents)}`,
+      )
+    : ''
+  const taxRow = taxCents > 0 ? summaryRow('Tax', fmtUSD(taxCents)) : ''
 
   const bodyHtml = `
     <p style="margin:0 0 16px;">Hi ${firstName(opts.buyerName)},</p>
     <p style="margin:0 0 16px;">Thank you for your order. Your piece is now in the hands of our atelier, where it's being crafted by hand. We'll email you again the moment it ships.</p>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0 4px;">
       ${rows}
+      ${discountRow}
       ${taxRow}
       <tr>
         <td style="padding:14px 0 0;font-family:${SANS};font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:${C.inkMid};">Total</td>
@@ -222,7 +239,7 @@ export async function sendCraftingEmail(opts: {
 
 Thank you for your order. Your piece is being crafted by hand and we'll email you when it ships.
 
-${taxCents > 0 ? `Tax: ${fmtUSD(taxCents)}\n` : ''}Order total: ${fmtUSD(opts.totalCents)}
+${discountCents > 0 ? `Discount${opts.promoCode ? ` (${opts.promoCode})` : ''}: -${fmtUSD(discountCents)}\n` : ''}${taxCents > 0 ? `Tax: ${fmtUSD(taxCents)}\n` : ''}Order total: ${fmtUSD(opts.totalCents)}
 
 While we craft it, start building the memory inside your piece's portal:
 ${portal}

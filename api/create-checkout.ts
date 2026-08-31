@@ -1,5 +1,4 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
 import {
   METAL_LABELS_LONG       as METAL_LABELS,
@@ -9,9 +8,8 @@ import {
 } from '../src/data/catalog.js'
 import type { Metal } from '../src/data/catalog.js'
 import { getCatalog } from '../lib/catalog-store.js'
-import { priceCents } from '../src/data/catalog-doc.js'
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2026-03-25.dahlia' })
+import { priceCents, type CatalogDoc } from '../src/data/catalog-doc.js'
+import { stripe, quotePromo } from '../lib/promos.js'
 
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL!,
@@ -29,6 +27,67 @@ type CartItem = {
   specLine:        string
 }
 
+/**
+ * Server-side cart subtotal, pre-discount and pre-tax.
+ *
+ * Recomputed from the catalog rather than summed from `item.price`, for the same
+ * reason the line items are: the client's number is a display value that a
+ * shopper's devtools can edit. A promotion code's minimum-order restriction is
+ * checked against this, so trusting the client here would let anyone unlock a
+ * "spend $2000, save $200" code with a one-dollar cart.
+ */
+function cartSubtotalCents(catalog: CatalogDoc, items: CartItem[]): number {
+  return items.reduce((sum, item) => sum + priceCents(
+    catalog,
+    item.collectionId ?? 'birthstone',
+    item.productType  ?? 'pendant',
+    item.metal as Metal,
+  ), 0)
+}
+
+/** Read a buyer's Stripe customer id, without minting one. */
+async function lookupCustomer(userId: string): Promise<string | null> {
+  const { data } = await supabase
+    .from('Users').select('stripe_customer_id').eq('id', userId).maybeSingle()
+  return data?.stripe_customer_id ?? null
+}
+
+/**
+ * The buyer's Stripe customer, created on first checkout.
+ *
+ * Worth the extra round trip for two reasons. Promotion codes restricted to a
+ * first order are evaluated against the customer's payment history, which Stripe
+ * cannot do for an anonymous session — without this, "first order only" silently
+ * applies to everyone. And it keeps one buyer as one customer, so their receipts
+ * and saved tax location accumulate in one place instead of a fresh customer per
+ * purchase.
+ *
+ * Fails OPEN. A customer record is a convenience; a sale is not. If Stripe or the
+ * write fails we proceed anonymously — first-order-only codes then fall through
+ * to Stripe's own adjudication at payment, which is the safe direction.
+ *
+ * Two simultaneous first checkouts can mint two customers and keep the second.
+ * That is a cosmetic duplicate in the Stripe dashboard, not a payment fault, and
+ * locking a row to prevent it costs more than it saves.
+ */
+async function getOrCreateCustomer(userId: string, email: string | null, name: string): Promise<string | null> {
+  const existing = await lookupCustomer(userId)
+  if (existing) return existing
+
+  try {
+    const customer = await stripe.customers.create({
+      email: email ?? undefined,
+      name:  name || undefined,
+      metadata: { supabase_user_id: userId },
+    })
+    await supabase.from('Users').update({ stripe_customer_id: customer.id }).eq('id', userId)
+    return customer.id
+  } catch (err) {
+    console.error('[checkout] could not create Stripe customer', err)
+    return null
+  }
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
 
@@ -42,15 +101,41 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const userId = user.id
 
-  const { items, recipientName, recipientPhone, forSelf }: {
+  const { items, recipientName, recipientPhone, forSelf, promoCode, intent }: {
     items: CartItem[]
     recipientName?: string
     recipientPhone?: string
     forSelf?: boolean
+    promoCode?: string
+    intent?: string
   } = req.body
 
   if (!Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: 'Missing required fields' })
+  }
+
+  // ── Promo code check, for the box on the checkout page ────────────────────
+  //
+  // Shares this endpoint rather than adding its own so the deployment does not
+  // grow another serverless function, and so the subtotal a code is judged
+  // against is computed by exactly the same code that will price the sale.
+  //
+  // A rejected code answers 200, not 4xx: "this code has expired" is a normal
+  // outcome of asking, not a failed request, and the client renders the reason
+  // beside the input instead of an error banner.
+  if (intent === 'validate-promo') {
+    const { doc } = await getCatalog()
+    const subtotal = cartSubtotalCents(doc, items)
+    const quote = await quotePromo({
+      code: String(promoCode ?? ''),
+      subtotalCents: subtotal,
+      customerId: await lookupCustomer(userId),
+    })
+    return res.status(200).json(
+      quote.ok
+        ? { ok: true, code: quote.code, label: quote.label, discountCents: quote.discountCents, subtotalCents: subtotal }
+        : { ok: false, reason: quote.reason },
+    )
   }
 
   // When the buyer is purchasing for themselves, the recipient IS the buyer —
@@ -102,6 +187,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Prices come from the DB-backed catalog (per product × metal), with the code
   // defaults as fallback. NEVER trust a price from the client `items` payload.
   const { doc: catalog } = await getCatalog()
+  const subtotal = cartSubtotalCents(catalog, items)
 
   for (let i = 0; i < items.length; i++) {
     const item = items[i]
@@ -165,13 +251,90 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // through with no tax line.
   const taxEnabled = process.env.STRIPE_TAX_ENABLED === 'true'
 
+  // The buyer's Stripe customer. Also what makes `customer_update` below legal —
+  // that field is rejected outright when no customer is attached.
+  const customerId = await getOrCreateCustomer(userId, user.email ?? null, selfName)
+
+  // ── Discount ──────────────────────────────────────────────────────────────
+  //
+  // A code entered on our checkout page is re-validated here before it is
+  // honoured. The client already asked once, but that answer is a display value
+  // it could have fabricated, and minutes may have passed — a redemption cap can
+  // fill between the two calls.
+  //
+  // Only the promotion code ID reaches Stripe, never an amount. Stripe applies
+  // the discount to the subtotal and calculates tax on what remains, which is the
+  // order a tax authority expects and the single easiest thing to get wrong by
+  // computing a discounted price ourselves.
+  //
+  // `discounts` and `allow_promotion_codes` are mutually exclusive in Checkout,
+  // so a shopper who typed nothing here still gets Stripe's own code box.
+  let discounts: { promotion_code: string }[] | undefined
+  if (typeof promoCode === 'string' && promoCode.trim()) {
+    const quote = await quotePromo({ code: promoCode, subtotalCents: subtotal, customerId })
+    if (!quote.ok) return res.status(400).json({ error: quote.reason })
+    discounts = [{ promotion_code: quote.promotionCodeId }]
+  }
+
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',
     payment_method_types: ['card'],
     line_items: lineItems,
     automatic_tax: { enabled: taxEnabled },
+    ...(customerId
+      ? {
+          customer: customerId,
+          // Required by Stripe once a customer is attached and automatic_tax is
+          // on: the tax engine needs an address on the customer, and 'auto' is
+          // what writes the one collected at checkout back to them.
+          customer_update: { address: 'auto' as const, name: 'auto' as const, shipping: 'auto' as const },
+        }
+      : {}),
+    ...(discounts ? { discounts } : { allow_promotion_codes: true }),
     shipping_address_collection: {
       allowed_countries: ['US', 'CA', 'GB', 'AU'],
+    },
+    // Free shipping stated as an actual zero-cost rate rather than only as copy
+    // on our own summary. It carries a shipping tax code because some
+    // jurisdictions tax delivery on a taxable order; at $0 that resolves to
+    // nothing, and it stays correct if shipping is ever charged.
+    shipping_options: [{
+      shipping_rate_data: {
+        type: 'fixed_amount' as const,
+        fixed_amount: { amount: 0, currency: 'usd' },
+        display_name: 'Complimentary shipping',
+        tax_behavior: 'exclusive' as const,
+        tax_code: 'txcd_92010001', // Shipping
+      },
+    }],
+    // ── The invoice ───────────────────────────────────────────────────────
+    //
+    // Without this a customer gets, at best, a payment RECEIPT — and only if the
+    // account has automatic receipts switched on, which is off by default and
+    // never sent for test payments. A receipt is not an invoice: it carries no
+    // invoice number, no business address, and no tax registration number, so a
+    // business buyer cannot claim an input tax credit from it and we have no
+    // sequentially numbered document for an order we charged tax on.
+    //
+    // Stripe emails the invoice summary (with PDFs of both the invoice and the
+    // receipt) once payment actually SUCCEEDS — not when checkout closes. It
+    // still requires Settings → Business → Customer emails → "Successful
+    // payments" to be on; this flag alone sends nothing. See TAX_AND_PROMOS.md.
+    //
+    // Billed by Stripe at 0.4% of the transaction, capped at $2 per invoice.
+    invoice_creation: {
+      enabled: true,
+      invoice_data: {
+        description: 'Handcrafted Tijoray piece',
+        // The tax registration number the invoice is issued under. Omitted
+        // rather than faked when unset: an invoice showing a blank or wrong
+        // registration is worse than one showing none, because a buyer may act
+        // on it. Set STRIPE_ACCOUNT_TAX_ID once the account tax ID exists.
+        ...(process.env.STRIPE_ACCOUNT_TAX_ID
+          ? { account_tax_ids: [process.env.STRIPE_ACCOUNT_TAX_ID] }
+          : {}),
+        metadata: { userId },
+      },
     },
     metadata: {
       userId,

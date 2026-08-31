@@ -44,6 +44,13 @@ export default function CheckoutPage() {
   const [apiError,   setApiError]   = useState('')
   const [googleBusy, setGoogleBusy] = useState(false)
 
+  // Promo code. `applied` is only ever set from a server answer — a code the
+  // shopper typed is not a discount until Stripe has agreed it is one.
+  const [promoInput, setPromoInput] = useState('')
+  const [promoBusy,  setPromoBusy]  = useState(false)
+  const [promoError, setPromoError] = useState('')
+  const [applied,    setApplied]    = useState<{ code: string; label: string; discountCents: number } | null>(null)
+
   async function handleGoogle() {
     setGoogleBusy(true)
     await supabase.auth.signInWithOAuth({
@@ -92,6 +99,43 @@ export default function CheckoutPage() {
     return errs
   }
 
+  /**
+   * Check a code before the shopper leaves the site.
+   *
+   * Needs a signed-in session, because the endpoint prices the cart from the
+   * catalog under the caller's identity and a first-order-only code can only be
+   * judged against a known customer. Someone still creating their account keeps
+   * the code they typed — it is sent with the order and validated server-side,
+   * where a rejection comes back with the same wording.
+   */
+  async function applyPromo() {
+    const code = promoInput.trim()
+    if (!code) return
+    setPromoBusy(true); setPromoError('')
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) throw new Error('Sign in to apply a code.')
+      const res = await fetch('/api/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ intent: 'validate-promo', promoCode: code, items }),
+      })
+      if (!res.ok) throw new Error('We could not check that code just now.')
+      const body = await res.json()
+      if (body.ok) {
+        setApplied({ code: body.code, label: body.label, discountCents: body.discountCents })
+        setPromoInput(body.code)
+      } else {
+        setApplied(null)
+        setPromoError(body.reason ?? 'That code isn’t recognised.')
+      }
+    } catch (err) {
+      setPromoError(err instanceof Error ? err.message : 'Could not check that code.')
+    } finally {
+      setPromoBusy(false)
+    }
+  }
+
   async function proceedToStripe(accessToken: string) {
     // Last chance to catch a number that can never receive its verification
     // code. The giftee unlocks the piece by verifying this number, so a
@@ -121,6 +165,10 @@ export default function CheckoutPage() {
         forSelf:        form.forSelf,
         recipientName:  form.forSelf ? '' : form.recipientName.trim(),
         recipientPhone,
+        // Whatever is in the box, applied or not. The server re-validates and
+        // refuses the sale with a reason rather than quietly dropping a code the
+        // shopper believes is working.
+        promoCode:      promoInput.trim(),
       }),
     })
     if (!res.ok) {
@@ -421,17 +469,73 @@ export default function CheckoutPage() {
               </div>
             ))}
 
+            <div className={styles.promoBlock}>
+              <label className={styles.promoLabel} htmlFor="promo">Promo code</label>
+              <div className={styles.promoRow}>
+                <input
+                  id="promo"
+                  className={styles.promoInput}
+                  value={promoInput}
+                  autoComplete="off"
+                  autoCapitalize="characters"
+                  spellCheck={false}
+                  placeholder="Enter code"
+                  onChange={e => {
+                    setPromoInput(e.target.value)
+                    // Editing a code invalidates the answer we were given for it.
+                    setApplied(null)
+                    setPromoError('')
+                  }}
+                  onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); if (user) applyPromo() } }}
+                />
+                {user && (
+                  <button
+                    type="button"
+                    className={styles.promoApply}
+                    onClick={applyPromo}
+                    disabled={promoBusy || !promoInput.trim()}
+                  >
+                    {promoBusy ? '…' : applied ? 'Change' : 'Apply'}
+                  </button>
+                )}
+              </div>
+              {applied && (
+                <p className={styles.promoOk}>{applied.code} applied — {applied.label}.</p>
+              )}
+              {promoError && <p className={styles.promoErr}>{promoError}</p>}
+              {!user && promoInput.trim() && !promoError && (
+                <p className={styles.promoNote}>We’ll check this when you create your account.</p>
+              )}
+            </div>
+
+            {applied && (
+              <div className={styles.summaryRow}>
+                <span>Discount ({applied.code})</span>
+                <span className={styles.summaryDiscount}>−{fmt(applied.discountCents / 100)}</span>
+              </div>
+            )}
+
             <div className={styles.summaryRow} style={{ marginTop: 16 }}>
               <span>Shipping</span>
               <span className={styles.summaryMuted}>Complimentary</span>
             </div>
 
+            {/* Tax depends on where it ships, and that address is collected on
+                Stripe's page. Showing a "Total" here that silently excludes it
+                would be the last number the shopper reads before being charged
+                a different one. */}
+            <div className={styles.summaryRow}>
+              <span>Tax</span>
+              <span className={styles.summaryMuted}>Calculated at checkout</span>
+            </div>
+
             <div className={styles.summaryDivider} />
 
             <div className={`${styles.summaryRow} ${styles.summaryTotal}`}>
-              <span>Total</span>
-              <span>{fmt(total)}</span>
+              <span>Subtotal</span>
+              <span>{fmt(total - (applied ? applied.discountCents / 100 : 0))}</span>
             </div>
+            <p className={styles.summaryFootnote}>Tax is added on the next screen, once you’ve entered a delivery address.</p>
           </div>
 
           <p className={styles.secureNote}>Secured by Stripe · 256-bit TLS encryption</p>

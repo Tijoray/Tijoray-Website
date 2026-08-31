@@ -10,6 +10,18 @@ import type { PieceConfig } from '../../lib/adminApi'
 export const money = (cents: number) =>
   new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(cents / 100)
 
+/**
+ * Money to the cent. `money` rounds to whole dollars, which is right for a
+ * revenue headline and wrong for anything that gets transcribed onto a tax
+ * return or reconciled against Stripe — "$1,234" for $1,234.56 is a number that
+ * will not tie out.
+ */
+export const moneyExact = (cents: number) =>
+  new Intl.NumberFormat('en-US', {
+    style: 'currency', currency: 'USD',
+    minimumFractionDigits: 2, maximumFractionDigits: 2,
+  }).format(cents / 100)
+
 /** Best-effort price of a piece from its chosen metal (matches the checkout pricing). */
 export const estCents = (config: PieceConfig | null): number => {
   const metal = config?.metal as Metal | undefined

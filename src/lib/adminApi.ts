@@ -75,7 +75,15 @@ export type DashboardStats = {
   overdueNoMemories: number
   shippedNoTag: number
   viewed: number
+  /** Metal-derived guess, kept so pieces predating the Orders table still count. */
   estRevenueCents: number
+  /** Actually charged, from Orders. Zero until the first order lands post-migration. */
+  revenueCents: number
+  taxCollectedCents: number
+  discountGivenCents: number
+  orderCount: number
+  /** Orders where Stripe could not finish the tax calculation. */
+  unresolvedTax: number
   customerCount: number
   emailByType: Record<string, number>
   recentAudit: { id: string; actor_email: string; action: string; entity_type: string | null; entity_id: string | null; created_at: string }[]
@@ -91,6 +99,87 @@ export type AdminCustomer = {
 }
 
 export type EmailRow = { id: string; ref: string; type: string; recipient: string | null; sent_at: string }
+
+export type AdminPromo = {
+  id: string
+  code: string
+  stripe_promotion_code_id: string
+  stripe_coupon_id: string
+  percent_off: number | null
+  amount_off_cents: number | null
+  currency: string
+  minimum_amount_cents: number | null
+  first_time_only: boolean
+  issued_to_name: string | null
+  issued_to_email: string | null
+  campaign: string | null
+  notes: string | null
+  created_by: string | null
+  created_at: string
+  /** "20% off" / "$50 off", precomputed server-side. */
+  label: string
+  /** Live from Stripe — the counter that actually enforces the cap. */
+  timesRedeemed: number
+  maxRedemptions: number | null
+  expiresAt: string | null
+  active: boolean
+  exhausted: boolean
+  expired: boolean
+  /** Totals across orders that used this code. */
+  ordersCents: number
+  discountCents: number
+  /** Our ledger has it, Stripe does not — archived or deleted in the dashboard. */
+  missingInStripe: boolean
+}
+
+export type PromoRedemption = {
+  id: string
+  email: string | null
+  user_id: string | null
+  buyerName: string | null
+  subtotal_cents: number
+  discount_cents: number
+  tax_cents: number
+  total_cents: number
+  paid_at: string | null
+  promo_code: string | null
+}
+
+export type NewPromoInput = {
+  code: string
+  percentOff?: number | null
+  amountOffCents?: number | null
+  maxRedemptions?: number | null
+  expiresAt?: string | null
+  minimumAmountCents?: number | null
+  firstTimeOnly?: boolean
+  issuedToName?: string | null
+  issuedToEmail?: string | null
+  campaign?: string | null
+  notes?: string | null
+}
+
+export type TaxJurisdiction = {
+  country: string
+  state: string
+  orders: number
+  /** Taxable base: subtotal less discount, before tax. */
+  netCents: number
+  taxCents: number
+  grossCents: number
+}
+
+export type TaxSummary = {
+  orderCount: number
+  grossCents: number
+  netCents: number
+  taxCents: number
+  discountCents: number
+  unresolvedTax: number
+  jurisdictions: TaxJurisdiction[]
+  from: string | null
+  to: string | null
+}
 
 export type CatalogLoad = {
   doc: CatalogDoc
@@ -125,4 +214,14 @@ export const adminApi = {
   getCatalog:    () => call<CatalogLoad>('get-catalog'),
   saveCatalog:   (doc: CatalogDoc, expectedVersion: number) =>
     call<{ version: number; updatedAt: string }>('save-catalog', { doc, expectedVersion }),
+
+  listPromos:    () => call<{ promos: AdminPromo[] }>('list-promos'),
+  createPromo:   (promo: NewPromoInput) => call<{ promo: AdminPromo }>('create-promo', { promo }),
+  updatePromo:   (promotionCodeId: string, patch: {
+    active?: boolean; issuedToName?: string | null; issuedToEmail?: string | null
+    campaign?: string | null; notes?: string | null
+  }) => call<{ promo: AdminPromo }>('update-promo', { promotionCodeId, patch }),
+  promoRedemptions: (promotionCodeId: string) =>
+    call<{ redemptions: PromoRedemption[] }>('promo-redemptions', { promotionCodeId }),
+  taxSummary:    (p: { from?: string | null; to?: string | null } = {}) => call<TaxSummary>('tax-summary', p),
 }

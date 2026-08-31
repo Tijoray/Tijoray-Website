@@ -54,6 +54,7 @@ export default function AdminLayout() {
           <NavLink to="/admin/pieces" className={link}>Pieces &amp; Orders</NavLink>
           <NavLink to="/admin/catalog" className={link}>Catalog</NavLink>
           <NavLink to="/admin/customers" className={link}>Customers</NavLink>
+          <NavLink to="/admin/promos" className={link}>Promo Codes</NavLink>
           <NavLink to="/admin/emails" className={link}>Emails</NavLink>
         </nav>
         <button className={styles.signOut} onClick={() => signOut()}>

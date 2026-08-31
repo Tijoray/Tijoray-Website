@@ -49,6 +49,7 @@ const AdminPieceDetail = lazy(() => import('./pages/admin/AdminPieceDetail'))
 const AdminCustomers = lazy(() => import('./pages/admin/AdminCustomers'))
 const AdminEmails = lazy(() => import('./pages/admin/AdminEmails'))
 const AdminCatalog = lazy(() => import('./pages/admin/AdminCatalog'))
+const AdminPromos = lazy(() => import('./pages/admin/AdminPromos'))
 
 /** Shown while a lazy route's chunk downloads — a blank page reads as broken. */
 function RouteFallback() {
@@ -137,6 +138,7 @@ export default function App() {
             <Route path="pieces/:pieceId" element={<AdminPieceDetail />} />
             <Route path="catalog" element={<AdminCatalog />} />
             <Route path="customers" element={<AdminCustomers />} />
+            <Route path="promos" element={<AdminPromos />} />
             <Route path="emails" element={<AdminEmails />} />
           </Route>
         </Routes>

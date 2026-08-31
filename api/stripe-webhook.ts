@@ -14,6 +14,71 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 )
 
+/**
+ * Re-fetch the session with the fields a financial record needs.
+ *
+ * The webhook payload is deliberately shallow: `total_details.breakdown` (the
+ * per-jurisdiction tax lines) and the promotion code behind a discount both
+ * arrive as ids or not at all. Those are exactly the two things a tax filing and
+ * a promo report are made of, so one retrieve buys both.
+ *
+ * Falls back to the delivered payload. Losing the breakdown costs detail in a
+ * report; failing the webhook over it would cost the order.
+ */
+async function loadFullSession(
+  session: Stripe.Checkout.Session,
+): Promise<Stripe.Checkout.Session> {
+  try {
+    return await stripe.checkout.sessions.retrieve(session.id, {
+      // The coupon is deliberately NOT expanded: only its id is stored, and an
+      // unexpanded expandable field already arrives as that id. Every extra path
+      // is one more chance for Stripe to reject the whole request and drop the
+      // tax breakdown with it.
+      expand: ['total_details.breakdown', 'discounts.promotion_code'],
+    })
+  } catch (err) {
+    console.error('Webhook: could not expand session, recording what we have:', err)
+    return session
+  }
+}
+
+type OrderTotals = {
+  subtotalCents: number
+  discountCents: number
+  shippingCents: number
+  taxCents:      number
+  totalCents:    number
+  currency:      string
+  promoCode:     string | null
+  promoCodeId:   string | null
+  promoCouponId: string | null
+}
+
+/** Read the money off a completed session, in the shape the Orders table stores. */
+function readTotals(session: Stripe.Checkout.Session): OrderTotals {
+  const td = session.total_details
+  const discount = session.discounts?.[0]
+
+  // Each may be an id or an expanded object depending on whether the retrieve
+  // above succeeded, so both shapes are handled rather than assumed.
+  const promo  = discount?.promotion_code
+  const coupon = discount?.coupon
+
+  return {
+    // amount_subtotal is pre-discount and pre-tax, which is the definition the
+    // Orders column comments promise.
+    subtotalCents: session.amount_subtotal ?? 0,
+    discountCents: td?.amount_discount ?? 0,
+    shippingCents: td?.amount_shipping ?? 0,
+    taxCents:      td?.amount_tax ?? 0,
+    totalCents:    session.amount_total ?? 0,
+    currency:      session.currency ?? 'usd',
+    promoCode:     promo  && typeof promo  === 'object' ? promo.code : null,
+    promoCodeId:   promo  ? (typeof promo  === 'string' ? promo  : promo.id)  : null,
+    promoCouponId: coupon ? (typeof coupon === 'string' ? coupon : coupon.id) : null,
+  }
+}
+
 async function readRawBody(req: VercelRequest): Promise<Buffer> {
   const chunks: Buffer[] = []
   for await (const chunk of req) {
@@ -47,7 +112,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     shipping_details?: ShippingDetails | null
     collected_information?: { shipping_details?: ShippingDetails | null } | null
   }
-  const session = event.data.object as SessionWithShipping
+  const session = (await loadFullSession(event.data.object as Stripe.Checkout.Session)) as SessionWithShipping
   const meta = session.metadata ?? {}
   const { userId, recipientName, recipientPhone } = meta
 
@@ -96,6 +161,49 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   } catch {
     console.error('Webhook: failed to parse items metadata')
     return res.status(400).json({ error: 'Malformed items metadata' })
+  }
+
+  // ── The financial record ──────────────────────────────────────────────────
+  //
+  // Written BEFORE any piece is minted, and deliberately not gated on those
+  // succeeding. A charge that happened is a fact regardless of whether we
+  // managed to turn it into inventory, and it is the row an accountant needs:
+  // what was collected, in which jurisdiction, against which promotion.
+  //
+  // Idempotent on the session id, so the retries the piece loop below can
+  // trigger never double-count revenue or tax.
+  const totals = readTotals(session)
+  {
+    const { error: orderErr } = await supabase.from('Orders').upsert({
+      stripe_session_id:     session.id,
+      stripe_payment_intent: typeof session.payment_intent === 'string' ? session.payment_intent : null,
+      user_id:               userId,
+      email:                 session.customer_details?.email ?? null,
+      currency:              totals.currency,
+      subtotal_cents:        totals.subtotalCents,
+      discount_cents:        totals.discountCents,
+      shipping_cents:        totals.shippingCents,
+      tax_cents:             totals.taxCents,
+      total_cents:           totals.totalCents,
+      tax_status:            session.automatic_tax?.status ?? null,
+      // Destination jurisdiction. These are physical goods, so the shipping
+      // address is what tax was computed on and what a return is grouped by.
+      tax_country:           shippingAddress?.country     || null,
+      tax_state:             shippingAddress?.state       || null,
+      tax_postal_code:       shippingAddress?.postal_code || null,
+      tax_breakdown:         session.total_details?.breakdown?.taxes ?? null,
+      promo_code:            totals.promoCode,
+      promo_code_id:         totals.promoCodeId,
+      promo_coupon_id:       totals.promoCouponId,
+      item_count:            itemList.length,
+      // The event's timestamp, not the session's: `session.created` is when
+      // checkout was opened, which can be long before it was paid for.
+      paid_at:               new Date(event.created * 1000).toISOString(),
+    }, { onConflict: 'stripe_session_id', ignoreDuplicates: true })
+
+    // Logged, never fatal. Forcing a retry here would re-run the piece loop for
+    // a bookkeeping miss, and the row can be reconstructed from Stripe.
+    if (orderErr) console.error('Webhook: failed to record order', orderErr)
   }
 
   // Human-readable collection label for the legacy `collection` column.
@@ -260,9 +368,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         to:         customerEmail,
         buyerName:  session.customer_details?.name,
         items:      emailItems,
-        totalCents: session.amount_total ?? emailItems.reduce((s, i) => s + i.priceCents, 0),
-        // amount_total includes tax, so the receipt needs the tax line to add up.
-        taxCents:   session.total_details?.amount_tax ?? 0,
+        totalCents: totals.totalCents || emailItems.reduce((s, i) => s + i.priceCents, 0),
+        // amount_total is net of the discount and inclusive of tax, so the
+        // receipt needs both lines or the itemised prices will not reach it.
+        taxCents:      totals.taxCents,
+        discountCents: totals.discountCents,
+        promoCode:     totals.promoCode,
       })
     } catch (err) {
       console.error('Crafting email error:', err)

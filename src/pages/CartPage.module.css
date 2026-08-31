@@ -267,3 +267,10 @@
     padding: 160px 24px 80px;
   }
 }
+
+.summaryFootnote {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+  margin-top: 10px;
+}
