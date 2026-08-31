@@ -1,22 +1,27 @@
-import { useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useEffect, useRef } from 'react'
+import { Link, Navigate, useSearchParams } from 'react-router-dom'
 import { useCart } from '../contexts/CartContext'
 import styles from './OrderSuccessPage.module.css'
 
 export default function OrderSuccessPage() {
   const { clearCart } = useCart()
-  const navigate = useNavigate()
+  const [params] = useSearchParams()
+  const hasSession = Boolean(params.get('session_id'))
 
-  // Clear the cart once the success page is reached
+  // Empty the cart once, on arrival back from Stripe. The ref guard matters:
+  // this page is the one place clearCart is called from an effect, and if it
+  // ever re-fires the resulting render loop wedges the page — the "Go to My
+  // Portal" link below stops responding and the only way out is a reload.
+  const cleared = useRef(false)
   useEffect(() => {
+    if (cleared.current) return
+    cleared.current = true
     clearCart()
   }, [clearCart])
 
-  // Redirect to home if no session_id in URL (direct access)
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    if (!params.get('session_id')) navigate('/', { replace: true })
-  }, [navigate])
+  // No Stripe session in the URL means there is no order to confirm — a direct
+  // hit or a stale bookmark. Redirect during render so nothing flashes first.
+  if (!hasSession) return <Navigate to="/" replace />
 
   return (
     <main className={styles.page}>

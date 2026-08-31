@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback, useMemo, ReactNode } from 'react'
 import { z } from 'zod'
 
 const CartItemSchema = z.object({
@@ -60,20 +60,25 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const [cartOpen, setCartOpen] = useState(false)
 
-  const addItem    = (newItem: CartItem) => setItems(prev => [...prev, newItem])
-  const removeItem = (index: number)    => setItems(prev => prev.filter((_, i) => i !== index))
-  const clearCart  = ()                 => { setItems([]); setCartOpen(false) }
-  // Stable identities — consumers use these in effect dependency lists.
+  // Stable identities — consumers use these in effect dependency lists, and a
+  // function rebuilt on every render there means an effect that fires forever.
+  const addItem    = useCallback((newItem: CartItem) => setItems(prev => [...prev, newItem]), [])
+  const removeItem = useCallback((index: number) => setItems(prev => prev.filter((_, i) => i !== index)), [])
+  const clearCart  = useCallback(() => {
+    // Returning the same array when there is nothing to clear lets React bail
+    // out of the re-render, so clearing an already-empty cart costs nothing.
+    setItems(prev => (prev.length === 0 ? prev : []))
+    setCartOpen(false)
+  }, [])
   const openCart   = useCallback(() => setCartOpen(true),  [])
   const closeCart  = useCallback(() => setCartOpen(false), [])
 
-  return (
-    <CartContext.Provider
-      value={{ items, addItem, removeItem, clearCart, cartOpen, openCart, closeCart }}
-    >
-      {children}
-    </CartContext.Provider>
+  const value = useMemo(
+    () => ({ items, addItem, removeItem, clearCart, cartOpen, openCart, closeCart }),
+    [items, addItem, removeItem, clearCart, cartOpen, openCart, closeCart],
   )
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>
 }
 
 export function useCart() {
