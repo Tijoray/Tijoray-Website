@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import styles from './TrustSection.module.css'
 import { useReveal } from '../lib/useReveal'
+import { IMG } from '../lib/assets'
 
 const TRUST_POINTS = [
   {
@@ -71,6 +72,20 @@ export default function TrustSection() {
             and the person you give the piece to.
           </p>
         </header>
+
+        <figure className={styles.cutaway}>
+          <img
+            src={IMG.nfcCutaway}
+            alt="Cutaway of a Tijoray pendant, showing the NFC coil sealed in the gold body beneath the stone"
+            className={styles.cutawayImg}
+            loading="lazy"
+            width="960"
+            height="960"
+          />
+          <figcaption className={styles.cutawayCaption}>
+            The chip sits under the stone, sealed into the metal. Nothing to charge, nothing to pair.
+          </figcaption>
+        </figure>
 
         <ul className={styles.list}>
           {TRUST_POINTS.map((point, i) => (

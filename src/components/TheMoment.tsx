@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { asset } from '../lib/assets'
+import { IMG } from '../lib/assets'
 import { useReveal } from '../lib/useReveal'
 import styles from './TheMoment.module.css'
 
@@ -34,7 +34,7 @@ export default function TheMoment() {
       <div className={styles.inner}>
         <div className={`${styles.media} ${styles.fadeUp}`} ref={reveal}>
           <img
-            src={asset('/assets/editorial/product-nfc-tap.png')}
+            src={IMG.nfcTap}
             alt="A phone held against a Tijoray pendant, opening the vault inside it"
             className={styles.image}
             loading="lazy"

@@ -2,25 +2,34 @@ import { Link } from 'react-router-dom'
 import styles from './CraftsmanshipPage.module.css'
 import { useReveal } from '../lib/useReveal'
 import { usePageMeta } from '../lib/usePageMeta'
+import { IMG } from '../lib/assets'
 
 const PILLARS = [
   {
     num: '01',
+    img: IMG.silverCircle,
+    imgAlt: 'A circle pendant in polished sterling silver on marble',
     title: 'Metals',
     body: 'Every Tijoray piece begins with its metal. We work in sterling silver and 10K or 18K gold — in white, yellow, and rose — each chosen for how it wears over years of daily contact, not just how it photographs on day one.',
   },
   {
     num: '02',
+    img: IMG.stoneStrip,
+    imgAlt: 'The twelve Tijoray birthstones, each bezel-set in gold',
     title: 'Birthstones',
     body: 'Twelve stones, one for every month, each selected for color and character and set by hand at the center of the piece. The stone you choose — and the month it stands for — is recorded in the piece\'s digital profile the moment it is made.',
   },
   {
     num: '03',
+    img: IMG.handFinishing,
+    imgAlt: 'A jeweller\'s hands finishing a piece at the bench',
     title: 'Hand Finishing',
     body: 'Settings are finished by hand in our atelier — a process that cannot be replicated by machine. Surfaces are polished to a mirror standard on the exterior and softened on hidden edges, creating depth that rewards close inspection.',
   },
   {
     num: '04',
+    img: IMG.benchInspection,
+    imgAlt: 'A setter inspecting a piece under magnification before dispatch',
     title: 'Identity & Record',
     body: 'Every Tijoray piece carries a unique serial identity, bound to the NFC vault sealed inside it. Its metal, stone, and configuration are registered with the atelier at creation — a provenance record that travels with the piece for life.',
   },
@@ -50,6 +59,17 @@ export default function CraftsmanshipPage() {
         </p>
       </div>
 
+      <figure className={styles.heroBanner}>
+        <img
+          src={IMG.atelierWide}
+          alt="Jewellers at the bench in the Tijoray atelier, setting stones under task lamps"
+          className={styles.heroBannerImg}
+          loading="eager"
+          width="1672"
+          height="941"
+        />
+      </figure>
+
       <section className={styles.pillarsSection}>
         <div className={styles.inner}>
           <div className={styles.pillarsGrid}>
@@ -60,6 +80,12 @@ export default function CraftsmanshipPage() {
                 className={styles.pillarCard}
                 style={{ transitionDelay: `${i * 0.05}s` }}
               >
+                <img
+                  src={p.img}
+                  alt={p.imgAlt}
+                  className={styles.pillarImg}
+                  loading="lazy"
+                />
                 <div className={styles.pillarNum}>{p.num}</div>
                 <h2 className={styles.pillarTitle}>{p.title}</h2>
                 <p className={styles.pillarBody}>{p.body}</p>

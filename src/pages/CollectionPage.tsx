@@ -4,6 +4,7 @@ import { useReveal } from '../lib/useReveal'
 import { useCatalog } from '../contexts/CatalogContext'
 import type { CatalogCollection, CatalogProduct } from '../data/catalog-doc'
 import { usePageMeta } from '../lib/usePageMeta'
+import { IMG, stoneSwatch } from '../lib/assets'
 
 const fmt = (n: number) => new Intl.NumberFormat('en-US', {
   style: 'currency', currency: 'USD', maximumFractionDigits: 0,
@@ -107,6 +108,14 @@ export default function CollectionPage() {
             photographs, recordings and letters you put inside it.
           </p>
         </div>
+        <img
+          src={IMG.collectionHero}
+          alt="The twelve Tijoray birthstone pendants, January through December, laid out in a grid"
+          className={styles.heroImage}
+          loading="eager"
+          width="1122"
+          height="1402"
+        />
         <hr className={styles.heroRule} />
       </section>
 
@@ -124,9 +133,16 @@ export default function CollectionPage() {
               </div>
               {collection.chips && (
                 <div className={styles.stoneStrip}>
-                  {collection.chips.map(b => (
+                  {collection.chips.map((b, i) => (
                     <div key={b.month} className={styles.stoneChip} title={b.stone}>
-                      <span className={styles.stoneDot} style={{ background: b.color }} />
+                      <img
+                        src={stoneSwatch(i)}
+                        alt={b.stone}
+                        className={styles.stoneDot}
+                        loading="lazy"
+                        width="520"
+                        height="520"
+                      />
                       <span className={styles.stoneMonth}>{b.month}</span>
                     </div>
                   ))}

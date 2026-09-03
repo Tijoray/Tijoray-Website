@@ -9,7 +9,7 @@
  * The configurator composes a product's options from BOTH axes:
  *   form options  (product type)  +  design options (collection)  +  metal (shared)
  */
-import { asset } from '../lib/assets'
+import { IMG } from '../lib/assets'
 import type { CollectionId } from './collections'
 import { COLLECTIONS } from './collections'
 import type { ProductTypeId } from './product-types'
@@ -44,7 +44,7 @@ export const PRODUCTS: Product[] = [
     productTypeId: 'pendant',
     name:          'Birthstone Pendant',
     priceFrom:     399,
-    cardImage:     asset('/assets/jewelry/birthstone-pendant.png'),
+    cardImage:     IMG.cardPendant,
     cardDetail:
       'Available in square, circle, heart, and pear silhouettes. Set in ' +
       'silver, 10K, or 18K gold — with your chosen birthstone at the center.',
@@ -57,7 +57,7 @@ export const PRODUCTS: Product[] = [
     productTypeId: 'bracelet',
     name:          'Birthstone Bracelet',
     priceFrom:     399,
-    cardImage:     asset('/assets/jewelry/birthstone-bracelet.png'),
+    cardImage:     IMG.cardBracelet,
     cardDetail:
       'The same craft, the same vault — worn around the wrist. Available in ' +
       'asscher, circle, heart, and pear stations, set in silver, 10K, or 18K gold.',

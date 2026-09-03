@@ -123,6 +123,27 @@
   padding: 0 0 24px 44px;
 }
 
+.cutaway {
+  margin: 0 auto 48px;
+  max-width: 380px;
+  text-align: center;
+}
+
+.cutawayImg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+}
+
+.cutawayCaption {
+  margin-top: 14px;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
 @media (max-width: 900px) {
   .inner {
     padding: 0 24px;
@@ -130,6 +151,11 @@
 }
 
 @media (max-width: 600px) {
+  .cutaway {
+    max-width: 260px;
+    margin-bottom: 36px;
+  }
+
   .inner {
     padding: 0 20px;
   }

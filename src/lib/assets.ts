@@ -22,3 +22,86 @@ export const ASSETS = {
   braceletHeart:  asset('/assets/3d/bracelet-heart.glb'),
   braceletPear:   asset('/assets/3d/bracelet-pear.glb'),
 } as const
+
+/* ── v2 imagery (September 2026) ─────────────────────────
+ * Everything below points at the `assets/v2/**` keys. The original
+ * `assets/editorial/*.png` files are still in the bucket, untouched —
+ * reverting this block restores the old imagery without re-uploading.
+ */
+const V2 = '/assets/v2'
+
+export const IMG = {
+  hero:             asset(`${V2}/editorial/hero.webp`),
+  heroMobile:       asset(`${V2}/editorial/hero-mobile.webp`),
+  pendantCloseup:   asset(`${V2}/editorial/product-pendant-closeup.webp`),
+  pendantWorn:      asset(`${V2}/editorial/product-pendant-worn.webp`),
+  unboxing:         asset(`${V2}/editorial/product-unboxing.webp`),
+  nfcTap:           asset(`${V2}/editorial/product-nfc-tap.webp`),
+  lifestyleWorn:    asset(`${V2}/editorial/lifestyle-worn.webp`),
+  macroFinish:      asset(`${V2}/editorial/macro-finish.webp`),
+  wearLayered:      asset(`${V2}/editorial/wear-layered.webp`),
+  scaleReference:   asset(`${V2}/editorial/scale-reference.webp`),
+  braceletWorn:     asset(`${V2}/editorial/bracelet-lifestyle-worn.webp`),
+  braceletMacro:    asset(`${V2}/editorial/bracelet-macro-finish.webp`),
+  braceletNfcTap:   asset(`${V2}/editorial/bracelet-nfc-tap.webp`),
+  braceletUnboxing: asset(`${V2}/editorial/bracelet-unboxing.webp`),
+  cardPendant:      asset(`${V2}/jewelry/birthstone-pendant.webp`),
+  cardBracelet:     asset(`${V2}/jewelry/birthstone-bracelet.webp`),
+  silverCircle:     asset(`${V2}/jewelry/silver-circle.webp`),
+  braceletStations: asset(`${V2}/jewelry/bracelet-stations.webp`),
+  collectionHero:   asset(`${V2}/collection/collection-hero.webp`),
+  stoneGrid:        asset(`${V2}/collection/stone-grid.webp`),
+  stoneStrip:       asset(`${V2}/collection/stone-strip.webp`),
+  nfcCutaway:       asset(`${V2}/technology/nfc-cutaway.webp`),
+  atelierWide:      asset(`${V2}/craftsmanship/atelier-wide.webp`),
+  benchInspection:  asset(`${V2}/craftsmanship/bench-inspection.webp`),
+  handFinishing:    asset(`${V2}/craftsmanship/hand-finishing.webp`),
+  // How-it-works illustrations. Only step 01 has been remade so far;
+  // 02–04 are still the original files at their original keys.
+  hiw1:             asset(`${V2}/illustrations/how-it-works-1-choose.webp`),
+  hiw2:             asset('/assets/illustrations/how-it-works-2-upload.png'),
+  hiw3:             asset('/assets/illustrations/how-it-works-3-tap.png'),
+  hiw4:             asset('/assets/illustrations/how-it-works-4-legacy.png'),
+  // No v2 replacement shot yet — still the original files.
+  wearSolo:         asset('/assets/editorial/wear-solo.png'),
+  wearStacked:      asset('/assets/editorial/wear-stacked.png'),
+} as const
+
+/**
+ * Photoreal studio render of a pendant for a given silhouette and metal.
+ * Silver and white gold share the white-metal render; every render is
+ * shot with a sapphire, so it stands in for the silhouette and metal
+ * rather than the chosen stone.
+ */
+export function pendantRender(shape: string, metal: string, color: string): string {
+  const tone = metal === 'silver' || color === 'white' ? 'white' : color === 'rose' ? 'rose' : 'gold'
+  const s = ['square', 'circle', 'heart', 'pear'].includes(shape) ? shape : 'square'
+  return asset(`${V2}/renders/pendant-${s}-${tone}.webp`)
+}
+
+/*
+ * Still to come — the seven Technology-page app screens.
+ * They are the last assets pointing at the white-label template
+ * (they read "Arcana" and "Aurelia Infinite"). Once real screenshots
+ * are uploaded as:
+ *     assets/v2/app/app-tap.webp
+ *     assets/v2/app/app-connecting.webp
+ *     assets/v2/app/app-connected.webp
+ *     assets/v2/app/app-memory.webp
+ *     assets/v2/app/app-atelier.webp
+ *     assets/v2/app/app-gold.webp
+ *     assets/v2/app/app-vault.webp
+ * point the seven app-screen paths at the top of pages/TechnologyPage.tsx
+ * at the V2 prefix instead of /assets/app, the same way IMG does above.
+ */
+
+/** Macro swatch of the set stone for a birthstone index (0 = January). */
+const STONE_SLUGS = [
+  'garnet', 'amethyst', 'aquamarine', 'white-topaz', 'emerald', 'mother-of-pearl',
+  'ruby', 'peridot', 'sapphire', 'pink-tourmaline', 'citrine', 'turquoise',
+] as const
+
+export function stoneSwatch(birthstoneIndex: number): string {
+  const i = Math.min(11, Math.max(0, birthstoneIndex))
+  return asset(`${V2}/stones/${String(i + 1).padStart(2, '0')}-${STONE_SLUGS[i]}.webp`)
+}

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import styles from './Hero.module.css'
-import { asset } from '../lib/assets'
+import { IMG } from '../lib/assets'
 import HeroCarousel from './HeroCarousel'
 
 function scrollToHowItWorks(e: React.MouseEvent) {
@@ -12,9 +12,9 @@ export default function Hero() {
   return (
     <section className={`${styles.hero} hero-section`} aria-label="Hero" id="hero-section">
       <picture>
-        <source media="(max-width: 768px)" srcSet={asset('/assets/editorial/hero-mobile.png')} />
+        <source media="(max-width: 768px)" srcSet={IMG.heroMobile} />
         <img
-          src={asset('/assets/editorial/hero.png')}
+          src={IMG.hero}
           alt=""
           aria-hidden="true"
           className={styles.heroImage}

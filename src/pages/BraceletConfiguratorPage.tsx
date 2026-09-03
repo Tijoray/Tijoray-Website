@@ -6,7 +6,7 @@ import * as THREE from 'three'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import styles from './ConfiguratorPage.module.css'
-import { asset } from '../lib/assets'
+import { IMG, stoneSwatch } from '../lib/assets'
 import { BRACELET_CHAIN_PATH, BRACELET_PATHS, BRACELET_SHAPE_LABELS } from '../data/product-types'
 import { createGemMaterial, GEM_NAME_RE } from '../3d/gem'
 import { createGltfLoader } from '../3d/engine'
@@ -33,10 +33,10 @@ import { usePageMeta } from '../lib/usePageMeta'
 /* A shopper deciding on a $1,299 piece should see the real thing, not only a
    render. These sit beside the 3D view rather than far below the fold. */
 const PHOTOS = [
-  { src: asset('/assets/editorial/product-bracelet-worn.png'),     label: 'Worn',      alt: 'Tijoray bracelet on the wrist' },
-  { src: asset('/assets/editorial/bracelet-macro-finish.png'),     label: 'Detail',    alt: 'Macro close-up of the bracelet stations and finish' },
-  { src: asset('/assets/editorial/product-nfc-tap.png'),           label: 'The tap',   alt: 'A phone tapped against the piece, opening the vault' },
-  { src: asset('/assets/editorial/product-unboxing.png'),          label: 'Packaging', alt: 'Tijoray packaging as it arrives' },
+  { src: IMG.braceletWorn,     label: 'Worn',      alt: 'Tijoray bracelet on the wrist' },
+  { src: IMG.braceletMacro,     label: 'Detail',    alt: 'Macro close-up of the bracelet stations and finish' },
+  { src: IMG.braceletNfcTap,   label: 'The tap',   alt: 'A phone held to the bracelet, opening the vault' },
+  { src: IMG.braceletUnboxing, label: 'Packaging', alt: 'The bracelet in its Tijoray box, as it arrives' },
 ]
 
 
@@ -707,7 +707,7 @@ export default function BraceletConfiguratorPage() {
                   aria-label={`${month} — ${BIRTHSTONE_NAMES[i]}`}
                   style={{ '--gem-color': BIRTHSTONE_COLORS[i] } as React.CSSProperties}
                 >
-                  <span className={styles.gemSwatch} aria-hidden="true" />
+                  <img src={stoneSwatch(i)} alt="" aria-hidden="true" className={styles.gemSwatch} loading="lazy" />
                   <span className={styles.monthAbbr}>{month.slice(0, 3)}</span>
                 </button>
               ))}
@@ -790,7 +790,7 @@ export default function BraceletConfiguratorPage() {
             </p>
           </div>
           <div className={styles.storyImageWrap}>
-            <img src={asset('/assets/editorial/bracelet-lifestyle-worn.png')} alt="Tijoray bracelet worn at the wrist" />
+            <img src={IMG.braceletWorn} alt="Tijoray bracelet worn at the wrist" />
           </div>
         </div>
       </section>
@@ -805,9 +805,13 @@ export default function BraceletConfiguratorPage() {
           <div className={styles.stonesGrid}>
             {BIRTHSTONE_NAMES.map((name, i) => (
               <div key={name} className={styles.stoneCard}>
-                <span
+                <img
+                  src={stoneSwatch(i)}
+                  alt={`${name} — the ${MONTH_NAMES[i]} birthstone, bezel-set in gold`}
                   className={styles.stoneCardGem}
-                  style={{ '--gem-color': BIRTHSTONE_COLORS[i] } as React.CSSProperties}
+                  loading="lazy"
+                  width="520"
+                  height="520"
                 />
                 <span className={styles.stoneCardMonth}>{MONTH_NAMES[i]}</span>
                 <span className={styles.stoneCardName}>{name}</span>
@@ -822,7 +826,7 @@ export default function BraceletConfiguratorPage() {
       <section className={styles.craftSection}>
         <div className={styles.craftInner}>
           <div className={styles.craftImageWrap}>
-            <img src={asset('/assets/editorial/bracelet-macro-finish.png')} alt="Close-up of Tijoray bracelet surface finish" />
+            <img src={IMG.braceletMacro} alt="Close-up of Tijoray bracelet surface finish" />
           </div>
           <div className={styles.craftText}>
             <p className={styles.eyebrow}>Crafted to Last</p>
@@ -862,6 +866,14 @@ export default function BraceletConfiguratorPage() {
             The station face is consistent across all four shapes — Asscher, Circle, Heart, and Pear —
             so pieces read cleanly on the wrist.
           </p>
+          <img
+            src={IMG.braceletStations}
+            alt="The four Tijoray bracelet stations — asscher, circle, heart and pear — on gold chains"
+            className={styles.dimsImage}
+            loading="lazy"
+            width="1122"
+            height="1402"
+          />
         </div>
       </section>
 

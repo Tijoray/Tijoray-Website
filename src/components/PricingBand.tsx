@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import styles from './PricingBand.module.css'
 import { useCatalog } from '../contexts/CatalogContext'
 import type { Metal } from '../data/catalog'
+import { pendantRender } from '../lib/assets'
 
 const dollars = (n: number) => `from $${Math.round(n).toLocaleString('en-US')}`
 
@@ -17,6 +18,8 @@ export default function PricingBand() {
   const TIERS = [
     {
       name: 'Silver Collection',
+      img: pendantRender('circle', 'silver', 'white'),
+      imgAlt: 'Circle pendant in sterling silver',
       from: dollars(lowestAcross(['silver'])),
       desc: 'Sterling silver pieces — the same handcrafted form and memory vault, at an accessible entry point.',
       link: '/collection',
@@ -24,6 +27,8 @@ export default function PricingBand() {
     },
     {
       name: 'Gold Collection',
+      img: pendantRender('square', '18k', 'gold'),
+      imgAlt: 'Square pendant in 18K yellow gold',
       from: dollars(lowestAcross(['10k', '18k'])),
       desc: '10K and 18K gold settings in white, yellow, or rose. Each piece carries your chosen birthstone and a lifetime memory vault.',
       link: '/products/birthstone-pendant',
@@ -31,6 +36,8 @@ export default function PricingBand() {
     },
     {
       name: 'Bespoke Commission',
+      img: pendantRender('pear', '18k', 'rose'),
+      imgAlt: 'Pear pendant in 18K rose gold',
       from: 'by consultation',
       desc: 'Fully custom work — rare gemstones, platinum settings, and a private atelier process for heirloom-grade pieces.',
       link: '/contact',
@@ -45,6 +52,14 @@ export default function PricingBand() {
         <div className={styles.grid}>
           {TIERS.map(tier => (
             <div key={tier.name} className={styles.tier}>
+              <img
+                src={tier.img}
+                alt={tier.imgAlt}
+                className={styles.tierImg}
+                loading="lazy"
+                width="1100"
+                height="1100"
+              />
               <p className={styles.tierName}>{tier.name}</p>
               <p className={styles.tierFrom}>{tier.from}</p>
               <p className={styles.tierDesc}>{tier.desc}</p>

@@ -110,6 +110,8 @@ const M = {
   braceletCircle: '/assets/3d/bracelet-circle.glb',
   braceletHeart:  '/assets/3d/bracelet-heart.glb',
   braceletPear:   '/assets/3d/bracelet-pear.glb',
+  cardPendant:    '/assets/v2/jewelry/birthstone-pendant.webp',
+  cardBracelet:   '/assets/v2/jewelry/birthstone-bracelet.webp',
 }
 
 const BRACELET_SHAPE_LABELS: Record<Shape, string> = {
@@ -137,7 +139,7 @@ export function buildDefaultCatalog(assetBase = ''): CatalogDoc {
         collectionId: 'birthstone', productTypeId: 'pendant',
         name: 'Birthstone Pendant', priceFrom: 399,
         prices: allMetalPrices(),
-        cardImage: a('/assets/jewelry/birthstone-pendant.png'),
+        cardImage: a(M.cardPendant),
         cardDetail:
           'Available in square, circle, heart, and pear silhouettes. Set in ' +
           'silver, 10K, or 18K gold — with your chosen birthstone at the center.',
@@ -148,7 +150,7 @@ export function buildDefaultCatalog(assetBase = ''): CatalogDoc {
         collectionId: 'birthstone', productTypeId: 'bracelet',
         name: 'Birthstone Bracelet', priceFrom: 399,
         prices: allMetalPrices(),
-        cardImage: a('/assets/jewelry/birthstone-bracelet.png'),
+        cardImage: a(M.cardBracelet),
         cardDetail:
           'The same craft, the same vault — worn around the wrist. Available in ' +
           'asscher, circle, heart, and pear stations, set in silver, 10K, or 18K gold.',

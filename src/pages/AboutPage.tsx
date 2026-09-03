@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import styles from './AboutPage.module.css'
 import { useReveal } from '../lib/useReveal'
 import { usePageMeta } from '../lib/usePageMeta'
+import { IMG } from '../lib/assets'
 
 export default function AboutPage() {
   usePageMeta('Our Story', 'Atelier Tijoray was founded at the intersection of fine jewelry and encrypted memory. This is why we make what we make.')
@@ -35,6 +36,14 @@ export default function AboutPage() {
             <h2 className={styles.sectionTitle}>
               Every piece is a <em>vessel.</em>
             </h2>
+            <img
+              src={IMG.pendantCloseup}
+              alt="Macro view of a Tijoray pendant, the stone set flush in its gold bezel"
+              className={styles.missionImage}
+              loading="lazy"
+              width="1086"
+              height="1448"
+            />
           </div>
           <div className={styles.missionRight}>
             <p className={styles.bodyText}>

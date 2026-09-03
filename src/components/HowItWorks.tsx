@@ -1,4 +1,4 @@
-import { asset } from '../lib/assets'
+import { IMG } from '../lib/assets'
 import { useReveal } from '../lib/useReveal'
 import styles from './HowItWorks.module.css'
 
@@ -7,25 +7,25 @@ const STEPS = [
     num: '01',
     title: 'Choose Your Jewel',
     body: 'Choose from our handcrafted pendants and bracelets, then select your metal, gemstone, and silhouette in our atelier.',
-    illustration: asset('/assets/illustrations/how-it-works-1-choose.png'),
+    illustration: IMG.hiw1,
   },
   {
     num: '02',
     title: 'Upload Memories Securely',
     body: 'Add photographs, voice notes, letters, and certificates to your private encrypted vault — seen only by you and the person you give it to.',
-    illustration: asset('/assets/illustrations/how-it-works-2-upload.png'),
+    illustration: IMG.hiw2,
   },
   {
     num: '03',
     title: 'Tap With Your Phone',
     body: 'Open the free Tijoray app and touch your phone to the piece. Your memories unfold on screen — no pairing, no charging, nothing to set up.',
-    illustration: asset('/assets/illustrations/how-it-works-3-tap.png'),
+    illustration: IMG.hiw3,
   },
   {
     num: '04',
     title: 'Gift It to Someone Special',
     body: 'Give a Tijoray to a loved one, a friend, or even yourself. A gift that holds memories, not just beauty — worn close, forever.',
-    illustration: asset('/assets/illustrations/how-it-works-4-legacy.png'),
+    illustration: IMG.hiw4,
   },
 ]
 

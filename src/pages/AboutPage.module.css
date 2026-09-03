@@ -88,6 +88,15 @@
   align-items: start;
 }
 
+.missionImage {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  margin-top: 40px;
+  border-radius: 2px;
+}
+
 .sectionTitle {
   font-family: var(--font-serif);
   font-size: clamp(36px, 4.5vw, 60px);

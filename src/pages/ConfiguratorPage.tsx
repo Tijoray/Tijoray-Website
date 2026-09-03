@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useCart } from '../contexts/CartContext'
 import { useCatalog } from '../contexts/CatalogContext'
@@ -6,7 +6,7 @@ import * as THREE from 'three'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import styles from './ConfiguratorPage.module.css'
-import { asset } from '../lib/assets'
+import { IMG, pendantRender, stoneSwatch } from '../lib/assets'
 import { CHAIN_PATH, PENDANT_PATHS } from '../data/product-types'
 import { createGemMaterial, GEM_NAME_RE } from '../3d/gem'
 import { createGltfLoader } from '../3d/engine'
@@ -33,12 +33,23 @@ import { usePageMeta } from '../lib/usePageMeta'
 /* ── Constants ─────────────────────────────────────────── */
 /* A shopper deciding on a $1,299 piece should see the real thing, not only a
    render. These sit beside the 3D view rather than far below the fold. */
-const PHOTOS = [
-  { src: asset('/assets/editorial/product-pendant-worn.png'),    label: 'Worn',      alt: 'Tijoray pendant worn at the collarbone' },
-  { src: asset('/assets/editorial/product-pendant-closeup.png'), label: 'Detail',    alt: 'Macro close-up of the pendant setting and stone' },
-  { src: asset('/assets/editorial/product-nfc-tap.png'),         label: 'The tap',   alt: 'A phone tapped against the pendant, opening the vault' },
-  { src: asset('/assets/editorial/product-unboxing.png'),        label: 'Packaging', alt: 'Tijoray packaging as it arrives' },
-]
+/* The first frame is a studio render of the silhouette and metal actually
+   selected, so the strip opens on the shopper's own piece rather than a
+   stock shot. Every render is set with a sapphire — it stands in for the
+   shape and the metal, not for the chosen stone. */
+function photosFor(shape: Shape, metal: Metal, metalColor: MetalColor) {
+  return [
+    {
+      src:   pendantRender(shape, metal, metalColor),
+      label: 'Your metal',
+      alt:   `${SHAPE_LABELS[shape]} pendant in ${metalPhrase(metal, metalColor)}`,
+    },
+    { src: IMG.pendantWorn,    label: 'Worn',      alt: 'Tijoray pendant worn at the collarbone' },
+    { src: IMG.pendantCloseup, label: 'Detail',    alt: 'Macro close-up of the pendant setting and stone' },
+    { src: IMG.nfcTap,         label: 'The tap',   alt: 'A phone tapped against the pendant, opening the vault' },
+    { src: IMG.unboxing,       label: 'Packaging', alt: 'Tijoray packaging as it arrives' },
+  ]
+}
 
 
 const BUILD_DURATION  = 900 // ms — fade + drift animation
@@ -67,6 +78,11 @@ export default function ConfiguratorPage() {
   const [shareState,  setShareState]  = useState<'idle' | 'copied' | 'failed'>('idle')
   /** null = the interactive 3D view; a number selects a photograph. */
   const [photo,       setPhoto]       = useState<number | null>(null)
+
+  const PHOTOS = useMemo(
+    () => photosFor(shape, metal, metalColor),
+    [shape, metal, metalColor],
+  )
 
   /* ── Three.js infrastructure refs (created once) ── */
   const canvasRef    = useRef<HTMLCanvasElement>(null)
@@ -696,7 +712,7 @@ export default function ConfiguratorPage() {
                   aria-label={`${month} — ${BIRTHSTONE_NAMES[i]}`}
                   style={{ '--gem-color': BIRTHSTONE_COLORS[i] } as React.CSSProperties}
                 >
-                  <span className={styles.gemSwatch} aria-hidden="true" />
+                  <img src={stoneSwatch(i)} alt="" aria-hidden="true" className={styles.gemSwatch} loading="lazy" />
                   <span className={styles.monthAbbr}>{month.slice(0, 3)}</span>
                 </button>
               ))}
@@ -779,7 +795,7 @@ export default function ConfiguratorPage() {
             </p>
           </div>
           <div className={styles.storyImageWrap}>
-            <img src={asset('/assets/editorial/lifestyle-worn.png')} alt="Tijoray pendant worn at the collarbone" />
+            <img src={IMG.lifestyleWorn} alt="Tijoray pendant worn at the collarbone" />
           </div>
         </div>
       </section>
@@ -794,9 +810,13 @@ export default function ConfiguratorPage() {
           <div className={styles.stonesGrid}>
             {BIRTHSTONE_NAMES.map((name, i) => (
               <div key={name} className={styles.stoneCard}>
-                <span
+                <img
+                  src={stoneSwatch(i)}
+                  alt={`${name} — the ${MONTH_NAMES[i]} birthstone, bezel-set in gold`}
                   className={styles.stoneCardGem}
-                  style={{ '--gem-color': BIRTHSTONE_COLORS[i] } as React.CSSProperties}
+                  loading="lazy"
+                  width="520"
+                  height="520"
                 />
                 <span className={styles.stoneCardMonth}>{MONTH_NAMES[i]}</span>
                 <span className={styles.stoneCardName}>{name}</span>
@@ -811,7 +831,7 @@ export default function ConfiguratorPage() {
       <section className={styles.craftSection}>
         <div className={styles.craftInner}>
           <div className={styles.craftImageWrap}>
-            <img src={asset('/assets/editorial/macro-finish.png')} alt="Close-up of Tijoray pendant surface finish" />
+            <img src={IMG.macroFinish} alt="Close-up of Tijoray pendant surface finish" />
           </div>
           <div className={styles.craftText}>
             <p className={styles.eyebrow}>Crafted to Last</p>
@@ -851,6 +871,14 @@ export default function ConfiguratorPage() {
             The pendant face is consistent across all four shapes — Square, Circle, Heart, and Pear —
             so pieces can be stacked and layered interchangeably on the same chain.
           </p>
+          <img
+            src={IMG.scaleReference}
+            alt="A Tijoray pendant beside a fingertip for scale, and turned on edge to show its 2.5 mm profile"
+            className={styles.dimsImage}
+            loading="lazy"
+            width="1122"
+            height="1402"
+          />
         </div>
       </section>
 
@@ -864,19 +892,19 @@ export default function ConfiguratorPage() {
               {
                 label: 'Solo',
                 desc: 'Worn alone, the Tijoray pendant speaks for itself — a single stone, a single story, worn close to the skin.',
-                img: asset('/assets/editorial/wear-solo.png'),
+                img: IMG.wearSolo,
                 alt: 'Tijoray pendant worn solo',
               },
               {
                 label: 'Stacked',
                 desc: 'Multiple Tijoray pendants on a single chain — each stone a different month, a different person, a different memory.',
-                img: asset('/assets/editorial/wear-stacked.png'),
+                img: IMG.wearStacked,
                 alt: 'Multiple Tijoray pendants on one chain',
               },
               {
                 label: 'Layered',
                 desc: 'Pair your Tijoray pendant with other necklaces at varying lengths — the pendant sits naturally at collarbone height.',
-                img: asset('/assets/editorial/wear-layered.png'),
+                img: IMG.wearLayered,
                 alt: 'Tijoray pendant layered with other necklaces',
               },
             ].map(w => (

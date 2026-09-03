@@ -38,6 +38,17 @@
   gap: 10px;
 }
 
+/* Full-bleed so the render's warm ground meets the card edge instead of
+   sitting on it as a visible rectangle. */
+.tierImg {
+  display: block;
+  width: calc(100% + 72px);
+  margin: -40px -36px 18px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: center 58%;
+}
+
 .tierName {
   font-family: var(--font-serif);
   font-size: 22px;
@@ -96,6 +107,10 @@
 }
 
 @media (max-width: 900px) {
+  .tierImg {
+    aspect-ratio: 16 / 9;
+  }
+
   .grid {
     grid-template-columns: 1fr;
   }
