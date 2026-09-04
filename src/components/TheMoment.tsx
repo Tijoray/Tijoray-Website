@@ -45,8 +45,8 @@ export default function TheMoment() {
         <div className={`${styles.text} ${styles.fadeUp}`} ref={reveal}>
           <p className={styles.eyebrow}>Why Tijoray</p>
           <h2 id="moment-heading" className={styles.title}>
-            A locket holds one photograph.<br />
-            A Tijoray holds <em>her voice.</em>
+            A locket holds a photograph.<br />
+            This one holds <em>her voice.</em>
           </h2>
           <p className={styles.lede}>
             The jewelry is the point — handmade, hallmarked, meant to be worn for
