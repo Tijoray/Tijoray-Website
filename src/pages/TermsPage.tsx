@@ -1,4 +1,5 @@
 import styles from './PrivacyPage.module.css'
+import { LEGAL_NAME, SUPPORT_EMAIL } from '../lib/brand'
 
 export default function TermsPage() {
   return (
@@ -13,13 +14,13 @@ export default function TermsPage() {
 
         <div className={styles.section}>
           <h2>Acceptance</h2>
-          <p>By accessing tijoray.com or placing an order, you agree to these Terms. If you do not agree, do not use the site. These Terms form a binding contract between you and Tijoray.</p>
+          <p>By accessing tijoray.com or placing an order, you agree to these Terms. If you do not agree, do not use the site. These Terms form a binding contract between you and Tijoray, an operating name of {LEGAL_NAME}.</p>
         </div>
 
         <div className={styles.section}>
           <h2>Who may use Tijoray</h2>
           <p>You must be 18 or over to place an order or hold an account. A piece may of course be given to someone younger, but the account, the payment, and the responsibility for what is uploaded remain the adult purchaser's.</p>
-          <p>You are responsible for the content you place in a vault, and for having the right to share it — including where it shows other people. You must not upload content you do not have permission to use.</p>
+          <p>You are responsible for the content you place in a vault, and for having the right to share it, including where it shows other people. You must not upload content you do not have permission to use.</p>
         </div>
 
         <div className={styles.section}>
@@ -31,6 +32,15 @@ export default function TermsPage() {
         <div className={styles.section}>
           <h2>Payments</h2>
           <p>All prices are in USD. Payment is processed securely by Stripe. By placing an order you authorise Stripe to charge the amount shown at checkout. We do not store payment card details.</p>
+        </div>
+
+        <div className={styles.section}>
+          <h2>SMS terms</h2>
+          <p>Tijoray, also known as {LEGAL_NAME}, operates the text message programs described here.</p>
+          <p><strong>Account verification.</strong> When you enter your own mobile number in the Tijoray app or on this site and ask us to send a code, we send a one-time passcode by SMS so you can confirm the number is yours. Confirming the number is what links a piece bought for you to your account. Entering the number and requesting the code is your consent to receive that message; we never add a number from any other source.</p>
+          <p><strong>Account notifications.</strong> Customers who have confirmed a mobile number may also receive occasional service notifications about the delivery and servicing of the piece they own.</p>
+          <p>Message frequency varies; typically one verification message per sign-up. Message and data rates may apply. Reply STOP to cancel at any time, or reply HELP for help; you can also reach us at <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>. Carriers are not liable for any delays or undelivered messages.</p>
+          <p>We send no marketing or promotional text messages on these programs. No mobile information will be shared with third parties or affiliates for marketing or promotional purposes; see our <a href="/privacy">Privacy Policy</a>.</p>
         </div>
 
         <div className={styles.section}>

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import styles from './Footer.module.css'
+import { BRAND_PHONE_DISPLAY, BRAND_PHONE_E164, LEGAL_ENTITY_LINE, SUPPORT_EMAIL } from '../lib/brand'
 
 export default function Footer() {
   return (
@@ -39,18 +40,23 @@ export default function Footer() {
             <li><Link to="/contact">Contact Us</Link></li>
             <li><Link to="/faq#care">Care Guide</Link></li>
             <li><Link to="/faq">FAQ</Link></li>
-            <li><a href="mailto:support@tijoray.com">support@tijoray.com</a></li>
+            <li><a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a></li>
+            {BRAND_PHONE_E164 && (
+              <li><a href={`tel:${BRAND_PHONE_E164}`}>{BRAND_PHONE_DISPLAY}</a></li>
+            )}
           </ul>
         </div>
 
       </div>
 
       <div className={styles.footerBottom}>
-        <p className={styles.footerCopy}>© {new Date().getFullYear()} Atelier Tijoray. All rights reserved.</p>
+        <p className={styles.footerCopy}>© {new Date().getFullYear()} Atelier Tijoray. All rights reserved. {LEGAL_ENTITY_LINE}</p>
         <nav className={styles.footerLegal} aria-label="Legal">
           <Link to="/privacy">Privacy Policy</Link>
           <Link to="/cookies">Cookies</Link>
           <Link to="/terms">Terms of Service</Link>
+          {/* Plain anchor on purpose: this one is a static file, not a router route. */}
+          <a href="/sms-opt-in.html">SMS</a>
         </nav>
       </div>
     </footer>

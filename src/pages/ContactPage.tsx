@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import styles from './ContactPage.module.css'
 import { usePageMeta } from '../lib/usePageMeta'
+import { BRAND_PHONE_DISPLAY, BRAND_PHONE_E164, LEGAL_ENTITY_LINE, SUPPORT_EMAIL } from '../lib/brand'
 
 export default function ContactPage() {
   usePageMeta('Contact')
@@ -66,16 +67,24 @@ export default function ContactPage() {
           </h1>
           <p className={styles.intro}>
             Every Tijoray piece begins with a conversation. Whether you have a
-            question about a commission, the technology, or our process — we are
+            question about a commission, the technology, or our process, we are
             here to listen.
           </p>
           <div className={styles.contactDetails}>
             <div className={styles.detailRow}>
               <span className={styles.detailLabel}>Email</span>
-              <a href="mailto:support@tijoray.com" className={styles.detailValue}>
-                support@tijoray.com
+              <a href={`mailto:${SUPPORT_EMAIL}`} className={styles.detailValue}>
+                {SUPPORT_EMAIL}
               </a>
             </div>
+            {BRAND_PHONE_E164 && (
+              <div className={styles.detailRow}>
+                <span className={styles.detailLabel}>Telephone</span>
+                <a href={`tel:${BRAND_PHONE_E164}`} className={styles.detailValue}>
+                  {BRAND_PHONE_DISPLAY}
+                </a>
+              </div>
+            )}
             <div className={styles.detailRow}>
               <span className={styles.detailLabel}>Response</span>
               <span className={styles.detailValue}>Within 48 hours</span>
@@ -90,6 +99,7 @@ export default function ContactPage() {
             All correspondence is treated with the same care and discretion we
             bring to every piece we craft.
           </p>
+          <p className={styles.footnote}>{LEGAL_ENTITY_LINE}</p>
         </div>
 
         {/* ── Right column — form ── */}

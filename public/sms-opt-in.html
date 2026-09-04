@@ -1,0 +1,154 @@
+<!doctype html>
+<!--
+  Opt-in evidence for 10DLC campaign vetting.
+
+  Deliberately a static file in /public rather than a React route: every SPA
+  route on this site returns the same empty index.html to anything that does
+  not run JavaScript, and a carrier's automated check would see nothing. This
+  page answers with its full content to a plain fetch.
+
+  To show a real screenshot instead of the reproduction below, drop the file at
+  public/assets/sms/opt-in-screen.png. The <img> removes itself if it is absent,
+  so the page stays valid either way.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SMS Opt-In — Tijoray</title>
+  <meta name="description" content="How Tijoray collects consent to send text messages, and the terms of the programme.">
+  <link rel="icon" type="image/svg+xml" href="/assets/brand/Logo.svg">
+  <style>
+    :root {
+      --cream:    #F7F7F2;
+      --ink:      #2B2320;
+      --stone:    #8A7A72;
+      --burgundy: #4A2326;
+      --rule:     #E3DED6;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 48px 24px 96px;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; }
+    .eyebrow {
+      font-size: 12px; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--stone); margin: 0 0 12px;
+    }
+    h1 { font-size: 34px; font-weight: 500; line-height: 1.2; margin: 0 0 8px; }
+    h2 {
+      font-size: 19px; font-weight: 600; margin: 44px 0 12px;
+      padding-top: 22px; border-top: 1px solid var(--rule);
+    }
+    .legal { color: var(--stone); margin: 0 0 40px; }
+    p, li { margin: 0 0 14px; }
+    ol, ul { padding-left: 22px; }
+    a { color: var(--burgundy); }
+    .disclosure {
+      background: #fff; border: 1px solid var(--rule); border-left: 3px solid var(--burgundy);
+      padding: 20px 24px; margin: 20px 0 24px;
+    }
+    .disclosure p:last-child { margin-bottom: 0; }
+    figure { margin: 24px 0; }
+    figcaption { font-size: 13px; color: var(--stone); margin-top: 10px; }
+    .shot { max-width: 320px; width: 100%; border: 1px solid var(--rule); display: block; }
+    /* Reproduction of the app screen where the number is entered. */
+    .screen {
+      max-width: 320px; background: var(--cream); border: 1px solid var(--rule);
+      border-radius: 22px; padding: 26px 22px 30px; box-shadow: 0 2px 18px rgba(43,35,32,.06);
+    }
+    .screen h3 { font-size: 20px; font-weight: 500; margin: 0 0 10px; }
+    .screen .body { font-size: 13px; color: var(--stone); margin: 0 0 20px; }
+    .screen .label {
+      font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--stone); margin: 0 0 6px;
+    }
+    .screen .input {
+      border: 1px solid var(--rule); background: #fff; padding: 12px 14px;
+      font-size: 15px; color: var(--ink); margin-bottom: 22px;
+    }
+    .screen .btn {
+      background: var(--burgundy); color: var(--cream); text-align: center;
+      padding: 15px; font-size: 12px; letter-spacing: .16em; font-weight: 600;
+    }
+    .screen .note {
+      font-size: 11px; line-height: 1.55; color: var(--stone);
+      text-align: center; margin: 14px 0 0;
+    }
+    .screen .note a { color: var(--burgundy); }
+    .foot { margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--rule);
+            font-size: 13px; color: var(--stone); }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">Tijoray</p>
+  <h1>SMS opt-in and message programme</h1>
+  <p class="legal">Tijoray is an operating name of GEN Z DIAMONDS COMPANY LIMITED.</p>
+
+  <p>Tijoray sells NFC-enabled fine jewellery. Each piece is registered to the mobile number of the person it was made for, and the owner uses the Tijoray mobile app to open the memories, certificates and documents stored with that piece.</p>
+
+  <h2>Where consent is collected</h2>
+  <p>Consent is collected inside the Tijoray mobile app, at the moment the customer hands over their number. There is no other route by which a number enters the messaging programme.</p>
+  <ol>
+    <li>The customer signs in to the Tijoray app with their email address, Google, or Apple.</li>
+    <li>The app asks for a mobile number, and the customer types in their own.</li>
+    <li>The consent disclosure below sits directly beneath the button, on that same screen.</li>
+    <li>The customer taps <strong>Send Code</strong>. That tap is the opt-in, and it is what causes the one-time passcode to be sent.</li>
+    <li>The customer types the code back into the app, which confirms the number and links the pieces registered to it.</li>
+  </ol>
+  <p>Numbers are never purchased, rented, or imported from third parties, and no number is added from any other source. A customer who does not enter a number and request a code is never messaged.</p>
+
+  <h2>The opt-in request, as it appears</h2>
+
+  <figure>
+    <img class="shot" src="/assets/sms/opt-in-screen.png" alt="The Tijoray app screen where a customer enters their mobile number and taps Send Code."
+         onerror="this.closest('figure').remove()">
+    <figcaption>The verification screen in the Tijoray mobile app.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="screen">
+      <h3>One last thing</h3>
+      <p class="body">Every Tijoray piece is registered to the phone number of the person it was made for. Confirming yours is how we match a piece to this account — and how we reach you about deliveries and servicing.</p>
+      <p class="label">Mobile number</p>
+      <div class="input">+1 &nbsp;·&nbsp; (647) 000-0000</div>
+      <div class="btn">SEND CODE</div>
+      <p class="note">Required to link your pieces to this account. By tapping Send Code you agree to receive text messages from Tijoray at this number. Message frequency varies. Message and data rates may apply. Reply STOP to opt out, HELP for help. See our <a href="/privacy">Privacy Policy</a>.</p>
+    </div>
+    <figcaption>Reproduction of the same screen, showing the disclosure text in full.</figcaption>
+  </figure>
+
+  <h2>The consent disclosure</h2>
+  <div class="disclosure">
+    <p>By tapping Send Code you agree to receive text messages from Tijoray at this number.</p>
+    <p>Reply STOP to opt out. Reply HELP for help. Message frequency varies. Message and data rates may apply. Carriers are not liable for any delays or undelivered messages.</p>
+    <p>See our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms of Service</a>.</p>
+  </div>
+
+  <h2>What we send</h2>
+  <p><strong>Account verification.</strong> A one-time passcode, sent when the customer requests it, confirming that the number they entered is theirs. Example: <em>Your Tijoray confirmation code is 123456. This code expires in 10 minutes.</em></p>
+  <p><strong>Account notifications.</strong> Occasional service messages, to customers who have confirmed a number, about the delivery and servicing of the piece they own. Example: <em>Tijoray: your piece has shipped and will arrive Tuesday. Reply STOP to opt out, HELP for help.</em></p>
+  <p>Message frequency varies; typically one verification message per customer at sign-up. All messages are transactional and initiated by the customer's own action. No marketing or promotional messages are sent, and no mobile information is shared with third parties or affiliates for marketing or promotional purposes.</p>
+
+  <h2>Stopping messages, and getting help</h2>
+  <p>Reply <strong>STOP</strong> to any message to be removed immediately; you will receive one confirmation and nothing after it. Reply <strong>HELP</strong> for help, or write to <a href="mailto:support@tijoray.com">support@tijoray.com</a>.</p>
+
+  <p class="foot">
+    GEN Z DIAMONDS COMPANY LIMITED, trading as Tijoray ·
+    <a href="mailto:support@tijoray.com">support@tijoray.com</a> ·
+    <a href="/privacy">Privacy Policy</a> ·
+    <a href="/terms">Terms of Service</a>
+  </p>
+
+</div>
+</body>
+</html>
