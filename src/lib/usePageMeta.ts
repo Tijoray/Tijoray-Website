@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 
 const SUFFIX = 'Tijoray'
-const DEFAULT_TITLE = 'Tijoray — Fine Jewelry with an Encrypted Memory Vault'
+const DEFAULT_TITLE = 'Tijoray · Fine Jewelry with an Encrypted Memory Vault'
 const DEFAULT_DESCRIPTION =
-  'Handcrafted gold and silver jewelry with an encrypted vault sealed inside — photographs, voice notes and letters, opened with a tap of your phone.'
+  'Handcrafted gold and silver jewelry with an encrypted vault sealed inside. Photographs, voice notes and letters, opened with a tap of your phone.'
 
 function setMeta(selector: string, content: string) {
   const el = document.head.querySelector<HTMLMetaElement>(selector)
@@ -20,7 +20,7 @@ function setMeta(selector: string, content: string) {
  */
 export function usePageMeta(title: string, description?: string) {
   useEffect(() => {
-    document.title = title ? `${title} — ${SUFFIX}` : DEFAULT_TITLE
+    document.title = title ? `${title} · ${SUFFIX}` : DEFAULT_TITLE
     const desc = description ?? DEFAULT_DESCRIPTION
     setMeta('meta[name="description"]', desc)
     setMeta('meta[property="og:title"]', document.title)

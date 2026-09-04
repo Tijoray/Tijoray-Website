@@ -17,6 +17,12 @@ const COLLECTION_TO_SHAPE: Record<string, Shape> = {
   'Circle Pendant': 'circle',
   'Heart Pendant':  'heart',
   'Pear Pendant':   'pear',
+  'Square Pendant · Birthstone Collection': 'square',
+  'Circle Pendant · Birthstone Collection': 'circle',
+  'Heart Pendant · Birthstone Collection':  'heart',
+  'Pear Pendant · Birthstone Collection':   'pear',
+  // Pieces written before the separator changed. Rows in the database still
+  // carry the em dash, so these keys have to stay for those to resolve.
   'Square Pendant — Birthstone Collection': 'square',
   'Circle Pendant — Birthstone Collection': 'circle',
   'Heart Pendant — Birthstone Collection':  'heart',

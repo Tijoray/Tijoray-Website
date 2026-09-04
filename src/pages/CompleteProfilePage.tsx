@@ -118,10 +118,7 @@ export default function CompleteProfilePage() {
               onChange={v => { setPhone(v); setErrors(e => ({ ...e, phone: '' })) }}
               error={!!errors.phone}
             />
-            {errors.phone
-              ? <span className={styles.errorMsg}>{errors.phone}</span>
-              : <span className={styles.optional}>We'll verify this by text once our SMS service is live.</span>
-            }
+            {errors.phone && <span className={styles.errorMsg}>{errors.phone}</span>}
           </div>
 
           <div className={styles.field}>

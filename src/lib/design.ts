@@ -83,9 +83,9 @@ export const BRACELET_SHAPE_NOTES: Record<Shape, string> = {
 }
 
 export const METAL_NOTES: Record<Metal, string> = {
-  silver: 'Sterling silver — classic, refined, and the most accessible way in.',
+  silver: 'Sterling silver. Classic, refined, and the easiest way in.',
   '10k':  '41.7% pure gold. The harder, more scratch-resistant of the two golds.',
-  '18k':  '75% pure gold. Softer and warmer in colour — the mark of a true heirloom.',
+  '18k':  '75% pure gold. Softer and warmer in colour, and the mark of a true heirloom.',
 }
 
 export const METAL_COLOR_NOTES: Record<MetalColor, string> = {

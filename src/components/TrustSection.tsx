@@ -12,7 +12,7 @@ const TRUST_POINTS = [
       </svg>
     ),
     label: 'AES-256 Encrypted Memories',
-    detail: 'Memories are encrypted with AES-256 in your browser before they are uploaded — the same encryption standard used by governments and financial institutions. What reaches our servers is ciphertext, not your photos and voices.',
+    detail: 'Memories are encrypted with AES-256 in your browser before they are uploaded. That is the same encryption standard used by governments and financial institutions. What reaches our servers is ciphertext, not your photos and voices.',
   },
   {
     icon: (
@@ -30,8 +30,8 @@ const TRUST_POINTS = [
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
       </svg>
     ),
-    label: 'Passive NFC — No Charging Required',
-    detail: 'The NFC chip is completely passive — it draws power from your phone\'s field. No battery, no charging, no connectivity required. It works for decades without maintenance.',
+    label: 'Passive NFC, No Charging',
+    detail: 'The NFC chip is completely passive. It draws power from your phone\'s field. No battery, no charging, no connectivity required. It works for decades without maintenance.',
   },
   {
     icon: (
@@ -43,7 +43,7 @@ const TRUST_POINTS = [
       </svg>
     ),
     label: 'Made to Be Passed On',
-    detail: 'A Tijoray piece is designed to outlive its first owner. When it is handed to the next generation, the vault travels with it — memories and provenance intact, tied to the piece rather than to a single account.',
+    detail: 'A Tijoray piece is designed to outlive its first owner. When it is handed to the next generation, the vault travels with it, memories and provenance intact, tied to the piece rather than to a single account.',
   },
   {
     icon: (
@@ -53,7 +53,7 @@ const TRUST_POINTS = [
       </svg>
     ),
     label: 'Registered & Authenticated',
-    detail: 'Every piece carries a unique serial identity, registered with our atelier at the moment of creation and verified on every tap — so a Tijoray can always be told from an imitation.',
+    detail: 'Every piece carries a unique serial identity, registered with our atelier at the moment of creation and verified on every tap, so a Tijoray can always be told from an imitation.',
   },
 ]
 

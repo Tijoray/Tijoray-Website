@@ -6,15 +6,15 @@ import { usePageMeta } from '../lib/usePageMeta'
 const FAQS = [
   {
     q: 'Does it work on iPhone and Android?',
-    a: 'Yes. Tijoray uses standard NFC, supported on modern iPhones (XS and later) and NFC-enabled Android devices. You will need the free Tijoray app installed — open it, hold your phone to the piece, and your memories appear. There is nothing to pair and nothing to charge.',
+    a: 'Yes. Tijoray uses standard NFC, supported on modern iPhones (XS and later) and NFC-enabled Android devices. You will need the free Tijoray app installed. Open it, hold your phone to the piece, and your memories appear. There is nothing to pair and nothing to charge.',
   },
   {
-    q: 'Do I need an app, and who needs it — me or the person I gift it to?',
+    q: 'Do I need an app, and who needs it, me or the person I gift it to?',
     a: 'Whoever wears the piece needs the free Tijoray app on their phone; that is what reads the tag and opens the memories. You compose the memories here on the website after ordering, so you do not need the app yourself unless the piece is for you. When a gift arrives, the recipient installs the app, taps the piece, and everything you prepared is waiting for them.',
   },
   {
     q: 'How long does it take to arrive, and can I return it?',
-    a: 'Every piece is made to your configuration, so allow 10–14 business days from payment before it ships. Shipping is complimentary. Because each piece is made to order we cannot accept returns for a change of mind — please configure carefully. If a piece arrives damaged or with a manufacturing defect, email support@tijoray.com within 14 days with photographs and we will arrange a replacement or a full refund.',
+    a: 'Every piece is made to your configuration, so allow 10–14 business days from payment before it ships. Shipping is complimentary. Because each piece is made to order we cannot accept returns for a change of mind, so please configure carefully. If a piece arrives damaged or with a manufacturing defect, email support@tijoray.com within 14 days with photographs and we will arrange a replacement or a full refund.',
   },
   {
     q: 'What happens if I lose my jewelry?',
@@ -22,11 +22,11 @@ const FAQS = [
   },
   {
     q: 'Is my data stored online?',
-    a: 'Your memories are encrypted with AES-256 on your device before they are uploaded, and stored as ciphertext in secure cloud storage. The NFC chip itself holds only the piece\'s identity — never your memories. Each piece has its own key, held in escrow by us and released only to the sender and recipient once their identity is verified. That means we are not end-to-end encrypted: we could decrypt if legally compelled, though no support or admin tool of ours displays vault contents. We hold the keys so a piece can be gifted, inherited or recovered — impossible if the only key sat on one phone.',
+    a: 'Your memories are encrypted with AES-256 on your device before they are uploaded, and stored as ciphertext in secure cloud storage. The NFC chip itself holds only the piece\'s identity, never your memories. Each piece has its own key, held in escrow by us and released only to the sender and recipient once their identity is verified. That means we are not end-to-end encrypted: we could decrypt if legally compelled, though no support or admin tool of ours displays vault contents. We hold the keys so a piece can be gifted, inherited or recovered. That would be impossible if the only key sat on one phone.',
   },
   {
     q: 'Can I transfer ownership to someone else?',
-    a: 'Yes. Tijoray pieces are designed to be passed down through generations — the vault belongs to the piece, not to a single account. When you are ready to hand a piece on, contact the atelier and we will transfer the vault and its provenance to the new owner.',
+    a: 'Yes. Tijoray pieces are designed to be passed down through generations, because the vault belongs to the piece rather than to a single account. When you are ready to hand a piece on, contact the atelier and we will transfer the vault and its provenance to the new owner.',
   },
   {
     q: 'Are you able to make custom orders with this technology?',
@@ -34,11 +34,11 @@ const FAQS = [
   },
   {
     q: 'How secure is NFC technology?',
-    a: 'The chip is entirely passive — it has no battery and emits no signal unless it is actively read by a phone held against it. It carries only the piece\'s identity: your memories are never stored on the chip, and viewing them always requires a verified, authorised account.',
+    a: 'The chip is entirely passive. It has no battery and emits no signal unless it is actively read by a phone held against it. It carries only the piece\'s identity: your memories are never stored on the chip, and viewing them always requires a verified, authorised account.',
   },
   {
     q: 'How long does it last?',
-    a: 'The NFC chip is rated for decades of use with no maintenance — no battery, no charging. The jewelry is crafted from materials chosen for longevity: sterling silver and 10K or 18K gold. The memory vault is included with your piece — there is no subscription and nothing further to pay.',
+    a: 'The NFC chip is rated for decades of use with no maintenance, no battery and no charging. The jewelry is crafted from materials chosen for longevity: sterling silver and 10K or 18K gold. The memory vault is included with your piece, so there is no subscription and nothing further to pay.',
   },
 ]
 
@@ -53,7 +53,7 @@ const CARE: { title: string; body?: string; points?: string[] }[] = [
     body: 'Your piece is made to be worn, not stored. A few habits keep it looking new for far longer:',
     points: [
       'Put it on last, after perfume, lotion, hairspray and sunscreen have dried.',
-      'Take it off before swimming — chlorine and salt water are hard on metal and can loosen a setting over time.',
+      'Take it off before swimming. Chlorine and salt water are hard on metal and can loosen a setting over time.',
       'Take it off for the gym, gardening, and anything with knocks or heavy lifting.',
       'Remove it before sleeping. Most broken chains are broken overnight.',
     ],
@@ -62,7 +62,7 @@ const CARE: { title: string; body?: string; points?: string[] }[] = [
     title: 'Cleaning',
     body: 'Warm water, a drop of mild washing-up liquid, and a soft toothbrush is all that is needed. Rinse, then dry thoroughly with a soft lint-free cloth before wearing or storing.',
     points: [
-      'Never use bleach, ammonia, or abrasive polish — they pit the metal and dull a stone.',
+      'Never use bleach, ammonia or abrasive polish. They pit the metal and dull a stone.',
       'Avoid home ultrasonic and steam cleaners. They can crack included or treated stones and loosen settings.',
     ],
   },
@@ -72,14 +72,14 @@ const CARE: { title: string; body?: string; points?: string[] }[] = [
     points: [
       'Mother of Pearl (June) and Turquoise (December) are soft and porous. Keep them away from water, perfume and household chemicals, and wipe with a barely damp cloth only.',
       'Emerald (May) is commonly included and should never see an ultrasonic cleaner or hot water.',
-      'Peridot (August) scratches more easily than the rest — store it apart from harder stones.',
+      'Peridot (August) scratches more easily than the rest, so store it apart from harder stones.',
       'Ruby, sapphire, topaz, garnet, amethyst, citrine, aquamarine and tourmaline are all durable enough for daily wear.',
     ],
   },
   {
     title: 'By metal',
     points: [
-      'Sterling silver tarnishes — that is the metal behaving normally, not a fault. Store it dry and away from air, and bring the shine back with a proper silver cloth.',
+      'Sterling silver tarnishes. That is the metal behaving normally, not a fault. Store it dry and away from air, and bring the shine back with a proper silver cloth.',
       '10K gold is the harder, more scratch-resistant gold; 18K is softer and warmer in color, so treat it a little more carefully.',
       'Rose and white finishes are best kept away from chlorine, which attacks the alloy over time.',
     ],
@@ -89,7 +89,7 @@ const CARE: { title: string; body?: string; points?: string[] }[] = [
     body: 'The NFC chip is passive and sealed within the piece. It has no battery, never needs charging, and requires no maintenance at all.',
     points: [
       'Water, everyday knocks and airport scanners will not harm it.',
-      'Do not attempt to drill, bend, cut, or heat the piece — any of those can destroy the chip, and doing so voids the warranty.',
+      'Do not attempt to drill, bend, cut or heat the piece. Any of those can destroy the chip, and doing so voids the warranty.',
       'If a tap stops working, try again with the phone held still against the piece before assuming a fault, then contact us.',
     ],
   },
@@ -97,7 +97,7 @@ const CARE: { title: string; body?: string; points?: string[] }[] = [
     title: 'Storage',
     body: 'Keep each piece separately in a soft pouch or a lined box. Stones scratch other stones, and chains left loose in a drawer knot and kink.',
     points: [
-      'Store somewhere dry — a bathroom cabinet is the worst place in most homes.',
+      'Store somewhere dry. A bathroom cabinet is the worst place in most homes.',
       'For a piece being put away for years, a sealed bag with the air pressed out slows tarnish considerably.',
     ],
   },
@@ -181,8 +181,8 @@ export default function FaqPage() {
           </div>
 
           <p className={styles.careNote}>
-            Something wrong with your piece? Don&rsquo;t attempt a repair yourself —
-            prising at a setting is the most common way a stone is lost. Write to{' '}
+            Something wrong with your piece? Don&rsquo;t attempt a repair yourself.
+            Prising at a setting is the most common way a stone is lost. Write to{' '}
             <a href="mailto:support@tijoray.com">support@tijoray.com</a> and we will
             look after it.
           </p>

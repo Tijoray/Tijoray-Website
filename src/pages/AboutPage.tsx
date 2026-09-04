@@ -16,13 +16,13 @@ export default function AboutPage() {
         <div className={styles.heroInner}>
           <p className={styles.eyebrow}>Our Story</p>
           <h1 className={styles.heroTitle}>
-            Born from the belief that <em>some things</em><br />
-            deserve to last forever.
+            Some things deserve<br />
+            to <em>last.</em>
           </h1>
           <p className={styles.heroSub}>
-            Atelier Tijoray was founded at the intersection of fine jewelry and
-            encrypted memory — for those who understand that legacy is not inherited,
-            it is composed.
+            Atelier Tijoray makes fine jewelry with an encrypted vault sealed
+            inside, for people who would rather leave behind a voice than a
+            photograph.
           </p>
         </div>
         <div className={styles.heroRule} />
@@ -47,13 +47,13 @@ export default function AboutPage() {
           </div>
           <div className={styles.missionRight}>
             <p className={styles.bodyText}>
-              We do not make accessories. We craft objects with intention — each one
-              designed to hold something far more precious than gemstone or metal:
-              the moments and voices that define a life.
+              We make jewelry that carries more than gemstone and metal. Each
+              piece is built to hold the photographs and voices you would not
+              want to lose.
             </p>
             <p className={styles.bodyText}>
-              Our atelier brings jewelry craft and modern encryption together under a
-              single conviction — that permanence is the highest form of luxury.
+              Our atelier works in two crafts at once. Jewelry made by hand, and
+              encryption strong enough to still be standing in fifty years.
             </p>
           </div>
         </div>
@@ -66,17 +66,17 @@ export default function AboutPage() {
             {
               num: '01',
               title: 'Eternal Craft',
-              body: 'Each piece is individually finished by hand in our atelier. Responsibly sourced metals and gemstones, blended and set to exacting tolerances that outlast trends and time.',
+              body: 'Each piece is individually finished by hand in our atelier. Responsibly sourced metals and gemstones, blended and set to tolerances that hold up after decades of daily wear.',
             },
             {
               num: '02',
               title: 'Private by Design',
-              body: 'Your vault belongs to you alone. Memories are encrypted before they ever leave your device, and only the piece itself — held close and tapped — unlocks what is inside.',
+              body: 'Your vault belongs to you alone. Memories are encrypted before they ever leave your device, and only the piece itself, held close and tapped, unlocks what is inside.',
             },
             {
               num: '03',
               title: 'Generational Transfer',
-              body: 'Tijoray pieces are designed to be passed on. When you transfer the jewel, you transfer the vault — photographs, voices, letters — intact across generations.',
+              body: 'Tijoray pieces are designed to be passed on. When you hand on the jewel, the vault goes with it. Photographs, voices and letters, all intact.',
             },
           ].map((p, i) => (
             <article
@@ -99,22 +99,22 @@ export default function AboutPage() {
           <div className={styles.craftSpecs}>
             <p className={styles.eyebrow}>The Making</p>
             <p className={styles.bodyText}>
-              Each Tijoray piece begins as raw metal and stone — responsibly sourced,
-              rigorously selected. Our jewelers work in sterling silver and 10K or 18K
+              Each Tijoray piece begins as raw metal and stone, responsibly sourced
+              and closely inspected. Our jewelers work in sterling silver and 10K or 18K
               gold, finishing every surface by hand before the birthstone
               is set.
             </p>
             <p className={styles.bodyText}>
               The NFC vault sealed within requires no battery, no signal, no subscription.
-              It exists entirely within the piece — passive, permanent, and yours alone to open.
+              It lives entirely inside the piece, passive and permanent, and yours alone to open.
             </p>
           </div>
           <div className={styles.craftQuote}>
             <div className={styles.quoteRule} />
             <blockquote className={styles.quoteText}>
-              "We are not competing with fashion. We are competing with time."
+              "Fashion was never the thing to beat. Time was."
             </blockquote>
-            <p className={styles.quoteAttr}>— Atelier Tijoray, Founding Principle</p>
+            <p className={styles.quoteAttr}>Atelier Tijoray, founding principle</p>
           </div>
         </div>
       </section>

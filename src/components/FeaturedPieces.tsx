@@ -30,8 +30,8 @@ export default function FeaturedPieces() {
             Choose a form. <em>Make it yours.</em>
           </h2>
           <p className={styles.sub}>
-            Every piece is configured in your browser — silhouette, metal, and the
-            stone of whichever month matters — then handmade to that order.
+            You choose the silhouette, the metal, and the stone for whichever month
+            matters. Then it is made by hand to that order.
           </p>
         </header>
 

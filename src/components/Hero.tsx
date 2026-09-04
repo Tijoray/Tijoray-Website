@@ -34,7 +34,7 @@ export default function Hero() {
           </h1>
           <p className={styles.heroSub}>
             Handcrafted gold and silver jewelry with an encrypted vault sealed
-            inside — photographs, voice notes and letters, opened by a touch.
+            inside. Photographs, voice notes and letters, opened by a touch.
             No charging, no pairing, nothing to set up.
           </p>
           <div className={styles.heroCtas}>

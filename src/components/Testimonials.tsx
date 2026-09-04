@@ -10,7 +10,7 @@ const TESTIMONIALS = [
     detail: 'The idea behind every piece',
   },
   {
-    quote: 'Every piece is finished by hand and carries its own vault — a private, encrypted archive that opens with a tap and asks nothing of you. No battery. No charging. No subscription.',
+    quote: 'Every piece is finished by hand and carries its own vault, a private encrypted archive that opens with a tap and asks nothing of you. No battery. No charging. No subscription.',
     name: 'How it is made',
     detail: 'Craft first, technology concealed',
   },

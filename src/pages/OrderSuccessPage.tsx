@@ -39,7 +39,7 @@ export default function OrderSuccessPage() {
           A confirmation has been sent to your email. Your piece will be handcrafted and dispatched within 10–14 business days.
         </p>
         <p className={styles.body}>
-          Once your piece arrives, return to your portal to compose the memory inside — photos, voice notes, music, and more.
+          Once your piece arrives, return to your portal to compose the memory inside: photos, voice notes, music and more.
         </p>
 
         <div className={styles.actions}>

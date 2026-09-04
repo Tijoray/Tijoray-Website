@@ -110,7 +110,7 @@ export default function CookiesPage() {
         <div className={styles.section}>
           <h2>Managing it</h2>
           <p>Every browser lets you clear or block cookies and site data, usually under Privacy settings. Blocking the items marked strictly necessary will sign you out and empty your cart, but nothing will break permanently.</p>
-          <p>If we ever add storage that is not strictly necessary — an advertising pixel, say — we will ask for your consent before setting it, and this page will say so first.</p>
+          <p>If we ever add storage that is not strictly necessary, an advertising pixel for example, we will ask for your consent before setting it, and this page will say so first.</p>
         </div>
 
         <div className={styles.section}>

@@ -275,7 +275,7 @@ export default function CheckoutPage() {
         ) : (
           <>
             <p className={styles.recipientBody}>
-              Tell us who this piece is for. We'll ship directly to them and send an invitation to their memory portal once it arrives — no spoilers.
+              Tell us who this piece is for. We'll ship directly to them and send an invitation to their memory portal once it arrives. No spoilers.
             </p>
 
             <div className={styles.fieldRow}>
@@ -343,7 +343,7 @@ export default function CheckoutPage() {
           ) : (
             <>
               <p className={styles.formSub}>
-                Your account unlocks your piece's memory portal — add photos, voice notes, and messages for the recipient after purchase.
+                Your account unlocks your piece's memory portal, where you can add photos, voice notes and messages for the recipient after purchase.
               </p>
 
               <button
@@ -500,7 +500,7 @@ export default function CheckoutPage() {
                 )}
               </div>
               {applied && (
-                <p className={styles.promoOk}>{applied.code} applied — {applied.label}.</p>
+                <p className={styles.promoOk}>{applied.code} applied. {applied.label}.</p>
               )}
               {promoError && <p className={styles.promoErr}>{promoError}</p>}
               {!user && promoInput.trim() && !promoError && (

@@ -64,7 +64,7 @@ export const BIRTHSTONE: Collection = {
   tagline: 'Twelve stones. Twelve months.',
   description:
     'Twelve stones. Twelve months. Each piece carries the gemstone of the ' +
-    'moment your loved one entered the world — set in your chosen metal, ' +
+    'moment your loved one entered the world, set in your chosen metal, ' +
     'embedded with a private memory, and registered in the Tijoray vault forever.',
   designKind: 'gemstone',
   designApplicator: 'gem-material',
@@ -86,7 +86,7 @@ export const DIAMOND: Collection = {
   name:   'The Diamond Collection',
   tagline: 'One stone. Endless clarity.',
   description:
-    'A single brilliant-cut diamond, held in your chosen metal — the clearest ' +
+    'A single brilliant-cut diamond, held in your chosen metal, the clearest ' +
     'expression of a moment worth keeping. Each piece carries the same private ' +
     'vault, registered to you forever.',
   designKind: 'gemstone',
@@ -105,7 +105,7 @@ export const INITIAL_LETTER: Collection = {
   name:   'The Initial Collection',
   tagline: 'A single letter, carried close.',
   description:
-    'A single initial, sculpted and carried close — for a name, a place, or a ' +
+    'A single initial, sculpted and carried close, for a name, a place, or a ' +
     'person who matters. Set in your chosen metal, with the same private vault ' +
     'registered to you forever.',
   designKind: 'glyph',

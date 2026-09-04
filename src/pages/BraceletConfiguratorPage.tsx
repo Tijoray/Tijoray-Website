@@ -50,7 +50,7 @@ const BRACELET_SHAPES: Shape[] = ['square', 'circle', 'heart', 'pear']
 function easeOutCubic(t: number) { return 1 - Math.pow(1 - Math.min(t, 1), 3) }
 
 export default function BraceletConfiguratorPage() {
-  usePageMeta('Design Your Bracelet', 'Configure a Tijoray birthstone bracelet — station, metal and stone — with an encrypted memory vault sealed inside. From $399.')
+  usePageMeta('Design Your Bracelet', 'Configure a Tijoray birthstone bracelet: station, metal and stone, with an encrypted memory vault sealed inside. From $399.')
   const { addItem, openCart } = useCart()
   const catalog     = useCatalog()
 
@@ -553,7 +553,7 @@ export default function BraceletConfiguratorPage() {
               ref={canvasRef}
               className={styles.canvas}
               role="img"
-              aria-label="3D preview — drag to rotate, scroll to zoom"
+              aria-label="3D preview, drag to rotate, scroll to zoom"
             />
             {loading && photo === null && (
               <div className={styles.loadingOverlay} aria-live="polite" aria-label="Loading bracelet">
@@ -615,7 +615,7 @@ export default function BraceletConfiguratorPage() {
           <section className={styles.step}>
             <div className={styles.stepHeader}>
               <div className={styles.stepTitleRow}>
-                <p className={styles.stepLabel}>01 — Shape</p>
+                <p className={styles.stepLabel}>01 · Shape</p>
               </div>
               <span className={styles.stepLine} aria-hidden="true" />
             </div>
@@ -644,7 +644,7 @@ export default function BraceletConfiguratorPage() {
           <section className={styles.step}>
             <div className={styles.stepHeader}>
               <div className={styles.stepTitleRow}>
-                <p className={styles.stepLabel}>02 — Base Metal</p>
+                <p className={styles.stepLabel}>02 · Base Metal</p>
               </div>
               <span className={styles.stepLine} aria-hidden="true" />
             </div>
@@ -668,7 +668,7 @@ export default function BraceletConfiguratorPage() {
           <section className={styles.step}>
             <div className={styles.stepHeader}>
               <div className={styles.stepTitleRow}>
-                <p className={styles.stepLabel}>03 — Metal Color</p>
+                <p className={styles.stepLabel}>03 · Metal Color</p>
               </div>
               <span className={styles.stepLine} aria-hidden="true" />
             </div>
@@ -693,7 +693,7 @@ export default function BraceletConfiguratorPage() {
           <section className={styles.step}>
             <div className={styles.stepHeader}>
               <div className={styles.stepTitleRow}>
-                <p className={styles.stepLabel}>04 — Birthstone</p>
+                <p className={styles.stepLabel}>04 · Birthstone</p>
               </div>
               <span className={styles.stepLine} aria-hidden="true" />
             </div>
@@ -704,7 +704,7 @@ export default function BraceletConfiguratorPage() {
                   className={`${styles.stoneBtn} ${birthstone === i ? styles.active : ''}`}
                   onClick={() => setBirthstone(i)}
                   aria-pressed={birthstone === i}
-                  aria-label={`${month} — ${BIRTHSTONE_NAMES[i]}`}
+                  aria-label={`${month}, ${BIRTHSTONE_NAMES[i]}`}
                   style={{ '--gem-color': BIRTHSTONE_COLORS[i] } as React.CSSProperties}
                 >
                   <img src={stoneSwatch(i)} alt="" aria-hidden="true" className={styles.gemSwatch} loading="lazy" />
@@ -713,7 +713,7 @@ export default function BraceletConfiguratorPage() {
               ))}
             </div>
             <p className={styles.stoneName}>
-              {BIRTHSTONE_NAMES[birthstone]} — {MONTH_NAMES[birthstone]}
+              {BIRTHSTONE_NAMES[birthstone]}, {MONTH_NAMES[birthstone]}
             </p>
             <p className={styles.stepNote}>{STONE_MEANINGS[birthstone]}</p>
           </section>
@@ -730,7 +730,7 @@ export default function BraceletConfiguratorPage() {
                 piece — it belongs at the point of decision, not four screens
                 further down the page. */}
             <p className={styles.vaultNote}>
-              Includes the Tijoray memory vault — add photos, voice notes and
+              Includes the Tijoray memory vault. Add photos, voice notes and
               letters once your piece arrives.{' '}
               <Link to="/technology" className={styles.vaultLink}>See how it works</Link>
             </p>
@@ -742,7 +742,7 @@ export default function BraceletConfiguratorPage() {
             {/* Every claim here is the policy stated in our own terms. */}
             <ul className={styles.reassure}>
               <li>Complimentary shipping</li>
-              <li>Made to order — ships in 10–14 business days</li>
+              <li>Made to order, ships in 10–14 business days</li>
               <li>Replaced or refunded if it arrives damaged</li>
             </ul>
 
@@ -775,18 +775,18 @@ export default function BraceletConfiguratorPage() {
               A gemstone chosen<br />across <em>centuries.</em>
             </h2>
             <p className={styles.storyBody}>
-              The tradition of birthstones stretches back to ancient civilizations —
-              each stone assigned to a month not by chance, but by the qualities it
-              was believed to carry: protection, clarity, passion, renewal.
+              The tradition of birthstones stretches back to ancient civilizations,
+              where each stone was assigned to a month not by chance but for the
+              qualities it was believed to carry: protection, clarity, passion, renewal.
             </p>
             <p className={styles.storyBody}>
               The Tijoray Bracelet honors that tradition and extends it. Beneath the
-              surface of each stone sits a passive NFC vault — no battery, no signal
-              required — holding whatever you choose to preserve. A voice. A map.
-              A letter. A photograph. The stone carries meaning. The vault carries memory.
+              surface of each stone sits a passive NFC vault, needing no battery and
+              no signal, holding whatever you choose to keep in it. A voice. A map.
+              A letter. A photograph.
             </p>
             <p className={styles.storyBody}>
-              Together, they compose something that outlasts both.
+              Together they make something that lasts longer than either would alone.
             </p>
           </div>
           <div className={styles.storyImageWrap}>
@@ -807,7 +807,7 @@ export default function BraceletConfiguratorPage() {
               <div key={name} className={styles.stoneCard}>
                 <img
                   src={stoneSwatch(i)}
-                  alt={`${name} — the ${MONTH_NAMES[i]} birthstone, bezel-set in gold`}
+                  alt={`${name}, the ${MONTH_NAMES[i]} birthstone, bezel-set in gold`}
                   className={styles.stoneCardGem}
                   loading="lazy"
                   width="520"
@@ -833,13 +833,13 @@ export default function BraceletConfiguratorPage() {
             <h2 className={styles.storyTitle}>Built for <em>a lifetime</em> of wear.</h2>
             <p className={styles.storyBody}>
               Every Tijoray bracelet passes through multi-stage finishing before it
-              leaves our atelier — cut, set, polished, and inspected by hand, with
-              each stage checked before the next begins.
+              leaves our atelier. It is cut, set, polished and inspected by hand,
+              with each stage checked before the next begins.
             </p>
             <p className={styles.storyBody}>
               The result is a surface that holds its color, its luster, and its
-              precision-set stone through years of continuous wear — a piece made
-              for every day, not for the drawer.
+              precision-set stone through years of continuous wear. It is made for
+              every day, not for the drawer.
             </p>
           </div>
         </div>
@@ -863,12 +863,12 @@ export default function BraceletConfiguratorPage() {
             ))}
           </div>
           <p className={styles.dimsNote}>
-            The station face is consistent across all four shapes — Asscher, Circle, Heart, and Pear —
+            The station face is consistent across all four shapes, Asscher, Circle, Heart and Pear,
             so pieces read cleanly on the wrist.
           </p>
           <img
             src={IMG.braceletStations}
-            alt="The four Tijoray bracelet stations — asscher, circle, heart and pear — on gold chains"
+            alt="The four Tijoray bracelet stations, asscher, circle, heart and pear, on gold chains"
             className={styles.dimsImage}
             loading="lazy"
             width="1122"

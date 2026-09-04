@@ -71,11 +71,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     await resend.emails.send({
       from:    'Tijoray Atelier <hello@tijoray.com>',
       to:      safeEmail,
-      subject: 'We received your message — Tijoray Atelier',
+      subject: 'We received your message · Tijoray Atelier',
       html: `
         <p>Dear ${escapeHtml(safeName)},</p>
         <p>Thank you for reaching out. Our atelier has received your message and will be in touch within 48 hours.</p>
-        <p>— The Tijoray Atelier</p>
+        <p>The Tijoray Atelier</p>
       `,
     })
 

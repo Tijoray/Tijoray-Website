@@ -12,19 +12,19 @@ const STEPS = [
   {
     num: '02',
     title: 'Upload Memories Securely',
-    body: 'Add photographs, voice notes, letters, and certificates to your private encrypted vault — seen only by you and the person you give it to.',
+    body: 'Add photographs, voice notes, letters, and certificates to your private encrypted vault. Only you and the person you give it to can open it.',
     illustration: IMG.hiw2,
   },
   {
     num: '03',
     title: 'Tap With Your Phone',
-    body: 'Open the free Tijoray app and touch your phone to the piece. Your memories unfold on screen — no pairing, no charging, nothing to set up.',
+    body: 'Open the free Tijoray app and touch your phone to the piece. Your memories unfold on screen. No pairing, no charging, nothing to set up.',
     illustration: IMG.hiw3,
   },
   {
     num: '04',
     title: 'Gift It to Someone Special',
-    body: 'Give a Tijoray to a loved one, a friend, or even yourself. A gift that holds memories, not just beauty — worn close, forever.',
+    body: 'Give a Tijoray to a loved one, a friend, or even yourself. Jewelry to wear, and a memory to keep.',
     illustration: IMG.hiw4,
   },
 ]

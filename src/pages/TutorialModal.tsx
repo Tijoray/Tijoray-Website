@@ -5,7 +5,7 @@ const STEPS = [
   {
     eyebrow: 'Step 1 of 3',
     title: 'Choose your memory type',
-    body: 'Select from photos, videos, audio recordings, voice notes, written messages, Spotify songs, or meaningful places — anything that tells your story.',
+    body: 'Select from photos, videos, audio recordings, voice notes, written messages, Spotify songs, or meaningful places. Anything that tells your story.',
     visual: (
       <div className={styles.visualGrid}>
         {[

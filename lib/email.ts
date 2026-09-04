@@ -131,7 +131,7 @@ function shell(o: ShellOpts): string {
             <td style="padding:32px 48px 40px;">
               <div style="height:1px;background:${C.border};margin-bottom:24px;"></div>
               <p style="margin:0;font-family:${SANS};font-size:12px;line-height:1.7;color:${C.inkSoft};">
-                Tijoray — keepsakes that hold a memory.<br>
+                Tijoray, keepsakes that hold a memory.<br>
                 You're receiving this because you placed an order with Tijoray.<br>
                 <a href="${SITE}" style="color:${C.rose};text-decoration:none;">${SITE.replace(/^https?:\/\//, '')}</a>
               </p>
@@ -232,7 +232,7 @@ export async function sendCraftingEmail(opts: {
         <td align="right" style="padding:14px 0 0;font-family:${SERIF};font-size:20px;color:${C.ink};">${fmtUSD(opts.totalCents)}</td>
       </tr>
     </table>
-    <p style="margin:28px 0 0;"><strong style="color:${C.ink};">While we craft it, build the memory inside.</strong> Your piece's private portal is open now — add photos, voice notes, a written message, places, and songs. It's ready the moment it's worn.</p>`
+    <p style="margin:28px 0 0;"><strong style="color:${C.ink};">While we craft it, build the memory inside.</strong> Your piece's private portal is open now. Add photos, voice notes, a written message, places and songs. It's ready the moment it's worn.</p>`
 
   const text =
 `Hi ${firstName(opts.buyerName)},
@@ -244,11 +244,11 @@ ${discountCents > 0 ? `Discount${opts.promoCode ? ` (${opts.promoCode})` : ''}: 
 While we craft it, start building the memory inside your piece's portal:
 ${portal}
 
-— Tijoray`
+Tijoray`
 
   return dispatch(opts.sessionId, 'crafting', opts.to,
     'Your Tijoray piece is being crafted', shell({
-      preheader: 'Your order is confirmed — start building the memory inside.',
+      preheader: 'Your order is confirmed. Start building the memory inside.',
       headline:  'Your piece is being crafted',
       bodyHtml,
       ctaLabel:  'Start building your memories',
@@ -262,17 +262,17 @@ const REMINDER_COPY: Record<1 | 2 | 3, { subject: string; headline: string; intr
   1: {
     subject:  'Your Tijoray piece is waiting for its memory',
     headline: 'Ready when you are',
-    intro:    "Your piece is being crafted — and its portal is open, waiting for the memory that will live inside it. Whenever you have a quiet moment, we'd love for you to begin.",
+    intro:    "Your piece is being crafted, and its portal is open, waiting for the memory that will live inside it. Whenever you have a quiet moment, we'd love for you to begin.",
   },
   2: {
     subject:  'A photo, a voice, a few words',
     headline: 'What will they find inside?',
-    intro:    "Your piece will soon be on its way. The most loved memories are the small, personal ones — a photo from that day, a voice note, a song, a few honest words. Add even one and it's no longer just jewelry.",
+    intro:    "Your piece will soon be on its way. The most loved memories are the small, personal ones: a photo from that day, a voice note, a song, a few honest words. Add even one and it's no longer just jewelry.",
   },
   3: {
     subject:  'Last chance to add memories before it ships',
     headline: 'It ships soon',
-    intro:    "Your piece is nearly ready to leave our atelier. Once it ships, the memory inside is sealed — so this is the moment to add anything you've been meaning to.",
+    intro:    "Your piece is nearly ready to leave our atelier. Once it ships, the memory inside is sealed, so this is the moment to add anything you've been meaning to.",
     footnote: 'Added everything already? You can ignore this note.',
   },
 }
@@ -299,7 +299,7 @@ ${copy.intro}
 Add memories before ${fmtDate(opts.deadline)}:
 ${opts.portalUrl}
 
-— Tijoray`
+Tijoray`
 
   return dispatch(opts.pieceId, `reminder_${opts.tier}`, opts.to,
     copy.subject, shell({
@@ -328,7 +328,7 @@ export async function sendShippedEmail(opts: {
   const bodyHtml = `
     <p style="margin:0 0 16px;">Hi ${firstName(opts.buyerName)},</p>
     <p style="margin:0 0 16px;">Your <strong style="color:${C.ink};">${esc(opts.pieceName)}</strong> has shipped and is ${forWhom}.</p>
-    <p style="margin:0;">The memory you composed is now sealed inside it — ready to be discovered the moment the piece is worn. You can revisit what you created any time in your portal.</p>`
+    <p style="margin:0;">The memory you composed is now sealed inside it, ready to be discovered the moment the piece is worn. You can revisit what you created any time in your portal.</p>`
 
   const text =
 `Hi ${firstName(opts.buyerName)},
@@ -338,11 +338,11 @@ Your ${opts.pieceName} has shipped and is ${opts.recipientName ? `on its way to 
 The memory you composed is sealed inside it. Revisit it any time:
 ${opts.portalUrl}
 
-— Tijoray`
+Tijoray`
 
   return dispatch(opts.pieceId, 'shipped', opts.to,
     'Your Tijoray piece has shipped', shell({
-      preheader: 'It has shipped — the memory inside is sealed.',
+      preheader: 'It has shipped, and the memory inside is sealed.',
       headline:  'On its way',
       bodyHtml,
       ctaLabel:  'View your portal',
@@ -361,14 +361,14 @@ export async function sendRecipientLinkedEmail(opts: {
   const who = opts.recipientName?.trim() ? esc(opts.recipientName.trim()) : 'Your recipient'
   const bodyHtml = `
     <p style="margin:0 0 16px;">Hi ${firstName(opts.buyerName)},</p>
-    <p style="margin:0;"><strong style="color:${C.ink};">${who}</strong> has linked their <strong style="color:${C.ink};">${esc(opts.pieceName)}</strong>. The memory you made is now theirs to hold — and to open whenever they like.</p>`
+    <p style="margin:0;"><strong style="color:${C.ink};">${who}</strong> has linked their <strong style="color:${C.ink};">${esc(opts.pieceName)}</strong>. The memory you made is now theirs to hold, and to open whenever they like.</p>`
 
   const text =
 `Hi ${firstName(opts.buyerName)},
 
 ${opts.recipientName ?? 'Your recipient'} has linked their ${opts.pieceName}. The memory you made is now theirs to hold.
 
-— Tijoray`
+Tijoray`
 
   return dispatch(opts.pieceId, 'linked', opts.to,
     `${opts.recipientName ?? 'Your recipient'} linked their Tijoray piece`, shell({
@@ -396,7 +396,7 @@ export async function sendRecipientViewedEmail(opts: {
 
 ${opts.recipientName ?? 'Your recipient'} just opened the memories inside their ${opts.pieceName} for the first time.
 
-— Tijoray`
+Tijoray`
 
   return dispatch(opts.pieceId, 'viewed', opts.to,
     `${opts.recipientName ?? 'Your recipient'} opened your memories`, shell({

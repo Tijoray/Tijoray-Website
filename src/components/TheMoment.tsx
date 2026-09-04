@@ -49,7 +49,7 @@ export default function TheMoment() {
             This one holds <em>her voice.</em>
           </h2>
           <p className={styles.lede}>
-            The jewelry is the point — handmade, hallmarked, meant to be worn for
+            The jewelry is the point. Handmade, hallmarked, meant to be worn for
             decades. What makes it a Tijoray is sealed underneath the stone.
           </p>
 

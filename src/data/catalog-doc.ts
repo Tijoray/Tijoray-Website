@@ -142,7 +142,7 @@ export function buildDefaultCatalog(assetBase = ''): CatalogDoc {
         cardImage: a(M.cardPendant),
         cardDetail:
           'Available in square, circle, heart, and pear silhouettes. Set in ' +
-          'silver, 10K, or 18K gold — with your chosen birthstone at the center.',
+          'silver, 10K, or 18K gold, with your chosen birthstone at the center.',
         models: {}, available: true,
       },
       {
@@ -152,7 +152,7 @@ export function buildDefaultCatalog(assetBase = ''): CatalogDoc {
         prices: allMetalPrices(),
         cardImage: a(M.cardBracelet),
         cardDetail:
-          'The same craft, the same vault — worn around the wrist. Available in ' +
+          'The same craft and the same vault, worn around the wrist. Available in ' +
           'asscher, circle, heart, and pear stations, set in silver, 10K, or 18K gold.',
         models: {}, available: true,
       },

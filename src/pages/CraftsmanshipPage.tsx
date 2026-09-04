@@ -10,28 +10,28 @@ const PILLARS = [
     img: IMG.silverCircle,
     imgAlt: 'A circle pendant in polished sterling silver on marble',
     title: 'Metals',
-    body: 'Every Tijoray piece begins with its metal. We work in sterling silver and 10K or 18K gold — in white, yellow, and rose — each chosen for how it wears over years of daily contact, not just how it photographs on day one.',
+    body: 'Every Tijoray piece begins with its metal. We work in sterling silver and 10K or 18K gold, in white, yellow and rose, each chosen for how it wears over years of daily contact rather than how it photographs on day one.',
   },
   {
     num: '02',
     img: IMG.stoneStrip,
     imgAlt: 'The twelve Tijoray birthstones, each bezel-set in gold',
     title: 'Birthstones',
-    body: 'Twelve stones, one for every month, each selected for color and character and set by hand at the center of the piece. The stone you choose — and the month it stands for — is recorded in the piece\'s digital profile the moment it is made.',
+    body: 'Twelve stones, one for every month, each selected for color and character and set by hand at the center of the piece. The stone you choose, and the month it stands for, is recorded in the piece\'s digital profile the moment it is made.',
   },
   {
     num: '03',
     img: IMG.handFinishing,
     imgAlt: 'A jeweller\'s hands finishing a piece at the bench',
     title: 'Hand Finishing',
-    body: 'Settings are finished by hand in our atelier — a process that cannot be replicated by machine. Surfaces are polished to a mirror standard on the exterior and softened on hidden edges, creating depth that rewards close inspection.',
+    body: 'Settings are finished by hand in our atelier, a process no machine can replicate. Surfaces are polished to a mirror standard on the exterior and softened on hidden edges, creating depth that rewards close inspection.',
   },
   {
     num: '04',
     img: IMG.benchInspection,
     imgAlt: 'A setter inspecting a piece under magnification before dispatch',
     title: 'Identity & Record',
-    body: 'Every Tijoray piece carries a unique serial identity, bound to the NFC vault sealed inside it. Its metal, stone, and configuration are registered with the atelier at creation — a provenance record that travels with the piece for life.',
+    body: 'Every Tijoray piece carries a unique serial identity, bound to the NFC vault sealed inside it. Its metal, stone, and configuration are registered with the atelier at creation, a provenance record that travels with the piece for life.',
   },
 ]
 
@@ -55,7 +55,7 @@ export default function CraftsmanshipPage() {
         <h1 className={styles.title}>The craft behind <em>every piece.</em></h1>
         <p className={styles.subtitle}>
           Fine jewelry has always been a statement of permanence.
-          Tijoray pieces are built to outlast their makers — through their materials, technique, and legacy.
+          Tijoray pieces are built to last, in their materials, their technique, and what they carry.
         </p>
       </div>
 

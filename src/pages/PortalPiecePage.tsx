@@ -158,7 +158,7 @@ function SignedMedia({
     mime: mimeForItem(type, mime ? { mime } : null),
   })
 
-  if (err) return <span className={styles.thumbMeta}>—</span>
+  if (err) return <span className={styles.thumbMeta}>n/a</span>
   if (!src) return <div className={styles.thumbSpinner}/>
 
   if (type === 'photo') return <img src={src} alt="" className={styles.thumbImg}/>
@@ -608,7 +608,7 @@ export default function PortalPiecePage() {
                   </button>
                   <p className={styles.recTitle}>Start with a heartfelt message</p>
                   <p className={styles.recBody}>
-                    "Happy Birthday", "I Love You", "Happy Anniversary" — your recipient will see it first.
+                    "Happy Birthday", "I Love You", "Happy Anniversary". Your recipient will see it first.
                   </p>
                   <button className={styles.recBtn} onClick={() => { switchType('note'); dismissRec() }}>
                     Write a Note
@@ -773,7 +773,7 @@ export default function PortalPiecePage() {
                     </p>
                     <span className={styles.itemCount}>{items.length}</span>
                   </div>
-                  <p className={styles.listHint}>Drag to reorder — the carousel updates automatically</p>
+                  <p className={styles.listHint}>Drag to reorder. The carousel updates automatically</p>
 
                   <ul className={styles.sortList}>
                     {items.map((item, i) => (

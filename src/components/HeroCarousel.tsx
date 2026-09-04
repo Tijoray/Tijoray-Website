@@ -3,11 +3,11 @@ import { IMG } from '../lib/assets'
 import styles from './HeroCarousel.module.css'
 
 const SLIDES = [
-  { src: IMG.pendantCloseup, alt: 'Tijoray pendant — macro close-up' },
+  { src: IMG.pendantCloseup, alt: 'Tijoray pendant, macro close-up' },
   { src: IMG.pendantWorn,    alt: 'Tijoray pendant worn on model' },
   { src: IMG.braceletWorn,   alt: 'Tijoray bracelet on wrist' },
   { src: IMG.unboxing,        alt: 'Tijoray unboxing and packaging' },
-  { src: IMG.nfcTap,         alt: 'NFC tap — unlocking the vault' },
+  { src: IMG.nfcTap,         alt: 'NFC tap unlocking the vault' },
 ]
 
 const INTERVAL = 6000

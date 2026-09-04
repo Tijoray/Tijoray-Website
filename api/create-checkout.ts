@@ -217,7 +217,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         // is required once automatic_tax is on, and is inert while it is off.
         tax_behavior: 'exclusive',
         product_data: {
-          name:        `The Tijoray ${productLabel} — ${shapeLabel}`,
+          name:        `The Tijoray ${shapeLabel} ${productLabel}`,
           description: item.specLine ?? `${metalLine} · ${birthstoneName}`,
           // Jewellery has no dedicated Stripe tax code; physical goods is the
           // correct classification for a shipped piece.

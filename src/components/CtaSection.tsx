@@ -16,11 +16,11 @@ export default function CtaSection() {
         </h2>
         <p className={styles.ctaBody}>
           Choose the silhouette, the metal, and the stone for whichever month
-          matters. It is made to that order and arrives with its vault ready —
-          yours to fill before you give it away.
+          matters. It is made to that order and arrives with its vault ready
+          for you to fill before you give it away.
         </p>
         <div className={styles.ctaBtns}>
-          <Link to="/collection" className={styles.btnPrimary}>Design your piece — from $399</Link>
+          <Link to="/collection" className={styles.btnPrimary}>Design your piece from $399</Link>
           <Link to="/technology" className={styles.btnSecondary}>See how it works</Link>
         </div>
         <p className={styles.ctaAside}>

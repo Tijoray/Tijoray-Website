@@ -86,7 +86,7 @@ function ProductCard({ product, collection, index, reveal }: ProductCardProps) {
 }
 
 export default function CollectionPage() {
-  usePageMeta('The Collection', 'Configurable birthstone pendants and bracelets, handmade to order in sterling silver, 10K and 18K gold — each with an encrypted memory vault sealed inside.')
+  usePageMeta('The Collection', 'Configurable birthstone pendants and bracelets, handmade to order in sterling silver, 10K and 18K gold, each with an encrypted memory vault sealed inside.')
   const catalog = useCatalog()
   // First live product — drives the page's primary CTAs.
   const firstLiveProduct = catalog.doc.products.find(p => p.available)
@@ -169,7 +169,7 @@ export default function CollectionPage() {
           </h2>
           <p className={styles.comingBody}>
             Each new series is developed slowly and deliberately. If you have a specific
-            commission in mind — a piece outside our current collections — speak with the atelier directly.
+            commission in mind, a piece outside our current collections, speak with the atelier directly.
           </p>
           <Link to="/contact" className={styles.comingLink}>Speak with the Atelier →</Link>
         </div>

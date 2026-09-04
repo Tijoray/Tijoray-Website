@@ -10,7 +10,7 @@ const NFC_STEPS = [
     num: '01',
     img: asset('/assets/app/app-tap.png'),
     title: 'Tap Your Piece',
-    desc: 'Open the Tijoray app and hold your jewel to the back of your phone. No pairing, no setup, no battery — the connection begins the moment metal meets signal.',
+    desc: 'Open the Tijoray app and hold your jewel to the back of your phone. No pairing, no setup, no battery. The connection starts the moment the two touch.',
   },
   {
     num: '02',
@@ -22,7 +22,7 @@ const NFC_STEPS = [
     num: '03',
     img: asset('/assets/app/app-connected.png'),
     title: 'Your World Unlocks',
-    desc: 'The full digital profile of your piece opens — provenance, stone data, personal memories, and the certificate that proves its origin.',
+    desc: 'The full digital profile of your piece opens: provenance, stone data, personal memories, and the certificate that proves its origin.',
   },
 ]
 
@@ -31,28 +31,28 @@ const APP_FEATURES = [
     img: asset('/assets/app/app-memory.png'),
     label: 'The Tijoray Experience',
     title: 'A message waiting inside your gift.',
-    body: 'When you commission a Tijoray piece, you can embed a private message directly into the jewel itself — photographs, voice recordings, handwritten notes, or words you want your loved one to carry forever. The moment they tap the pendant, it opens. Not a card. Not a text. Something that lives inside what you gave them.',
+    body: 'When you commission a Tijoray piece, you can embed a private message directly into the jewel itself: photographs, voice recordings, handwritten notes, or whatever you want them to keep. The moment they tap the pendant, it opens. It is not a card and not a text. It lives inside the thing you gave them.',
     pills: ['Photos & Video', 'Voice Messages', 'Personal Notes', 'Revealed on First Tap'],
   },
   {
     img: asset('/assets/app/app-atelier.png'),
     label: 'Stone Intelligence',
     title: 'Every stone, documented.',
-    body: 'Tap your piece and unlock its stone record. Stone type, cut, color, and setting — recorded by the atelier at the moment of creation and bound permanently to the piece.',
+    body: 'Tap your piece and unlock its stone record. Stone type, cut, color and setting, all recorded by the atelier when the piece is made and bound permanently to it.',
     pills: ['Stone Type', 'Cut & Color', 'Setting', 'Atelier Record'],
   },
   {
     img: asset('/assets/app/app-gold.png'),
     label: 'Gold Composition',
     title: 'Know what you wear.',
-    body: 'Every alloy in your Tijoray piece is catalogued — metal purity, color composition, and total mass — recorded by the atelier and verified before the piece ships.',
+    body: 'Every alloy in your Tijoray piece is catalogued for metal purity, color composition and total mass, then verified by the atelier before the piece ships.',
     pills: ['Metal Purity', 'Composition', 'Weight', 'Atelier Verified'],
   },
   {
     img: asset('/assets/app/app-vault.png'),
     label: 'The Vault',
     title: 'A private archive, secured forever.',
-    body: 'Beyond the memories they were given, whoever wears the piece has a private vault of their own — space to add their own photographs, recordings and documents as the years go on. It belongs to the wearer alone: encrypted on their device, and closed even to the person who gave the piece.',
+    body: 'Beyond the memories they were given, whoever wears the piece has a private vault of their own, with room to add their own photographs, recordings and documents as the years go on. It belongs to the wearer alone: encrypted on their device, and closed even to the person who gave the piece.',
     pills: ['Personal Storage', 'Certificate Archive', 'Date Organized', 'Secure Access'],
   },
 ]
@@ -107,9 +107,9 @@ export default function TechnologyPage() {
             The intelligence <em>within</em> your jewel.
           </h1>
           <p className={styles.heroSub}>
-            Every Tijoray piece carries a concealed chip — a permanent, encrypted bridge
-            between the physical and digital. One tap connects your jewelry to a living
-            record of its craft, its stones, and the memories you bind to it.
+            Every Tijoray piece carries a concealed chip that holds an encrypted
+            record of the piece. One tap connects your jewelry to its craft, its
+            stones, and the memories you put inside it.
           </p>
         </div>
         <hr className={styles.heroRule} />
@@ -149,7 +149,7 @@ export default function TechnologyPage() {
             <p className={styles.eyebrow}>The App</p>
             <h2 className={styles.sectionTitle}>Your Digital Atelier</h2>
             <p className={styles.appHeaderSub}>
-              The Tijoray app is where your gift comes alive. Embed a private message before you give — and watch it reveal itself the moment your loved one taps their piece for the first time.
+              The Tijoray app is where the gift is put together. Add a private message before you give the piece, then watch it appear the first time they tap it.
             </p>
           </div>
 
@@ -170,7 +170,7 @@ export default function TechnologyPage() {
                       playsInline
                       preload="auto"
                       poster={feature.img}
-                      aria-label="Tijoray memory feature — a personalized message revealing on first tap"
+                      aria-label="Tijoray memory feature, a personalized message revealing on first tap"
                     >
                       <source src={asset('/assets/video/memory-page.mp4')} type="video/mp4" />
                       <source src={asset('/assets/video/memory-page.mov')} type="video/quicktime" />
@@ -204,8 +204,9 @@ export default function TechnologyPage() {
       <section className={`${styles.heritageSection} ${styles.fadeUp}`} ref={reveal}>
         <div className={styles.heritageInner}>
           <blockquote className={styles.heritageQuote}>
-            "Every Tijoray piece is registered in our archive the moment it is made —
-            its stones, its alloy, and the serial identity checked on every tap."
+            "Every Tijoray piece is registered in our archive the moment it is
+            made, with its stones, its alloy and its serial identity checked on
+            every tap."
           </blockquote>
           <div className={styles.statGrid}>
             {STATS.map(stat => (

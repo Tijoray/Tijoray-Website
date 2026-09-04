@@ -59,7 +59,7 @@ const BUILD_DRIFT_Y   = -0.07 // world-units below final position at animation s
 function easeOutCubic(t: number) { return 1 - Math.pow(1 - Math.min(t, 1), 3) }
 
 export default function ConfiguratorPage() {
-  usePageMeta('Design Your Pendant', 'Configure a Tijoray birthstone pendant — silhouette, metal and stone — with an encrypted memory vault sealed inside. From $399.')
+  usePageMeta('Design Your Pendant', 'Configure a Tijoray birthstone pendant: silhouette, metal and stone, with an encrypted memory vault sealed inside. From $399.')
   const { addItem, openCart } = useCart()
   const catalog     = useCatalog()
 
@@ -558,7 +558,7 @@ export default function ConfiguratorPage() {
               ref={canvasRef}
               className={styles.canvas}
               role="img"
-              aria-label="3D preview — drag to rotate, scroll to zoom"
+              aria-label="3D preview, drag to rotate, scroll to zoom"
             />
             {loading && photo === null && (
               <div className={styles.loadingOverlay} aria-live="polite" aria-label="Loading pendant">
@@ -620,7 +620,7 @@ export default function ConfiguratorPage() {
           <section className={styles.step}>
             <div className={styles.stepHeader}>
               <div className={styles.stepTitleRow}>
-                <p className={styles.stepLabel}>01 — Shape</p>
+                <p className={styles.stepLabel}>01 · Shape</p>
               </div>
               <span className={styles.stepLine} aria-hidden="true" />
             </div>
@@ -649,7 +649,7 @@ export default function ConfiguratorPage() {
           <section className={styles.step}>
             <div className={styles.stepHeader}>
               <div className={styles.stepTitleRow}>
-                <p className={styles.stepLabel}>02 — Base Metal</p>
+                <p className={styles.stepLabel}>02 · Base Metal</p>
               </div>
               <span className={styles.stepLine} aria-hidden="true" />
             </div>
@@ -673,7 +673,7 @@ export default function ConfiguratorPage() {
           <section className={styles.step}>
             <div className={styles.stepHeader}>
               <div className={styles.stepTitleRow}>
-                <p className={styles.stepLabel}>03 — Metal Color</p>
+                <p className={styles.stepLabel}>03 · Metal Color</p>
               </div>
               <span className={styles.stepLine} aria-hidden="true" />
             </div>
@@ -698,7 +698,7 @@ export default function ConfiguratorPage() {
           <section className={styles.step}>
             <div className={styles.stepHeader}>
               <div className={styles.stepTitleRow}>
-                <p className={styles.stepLabel}>04 — Birthstone</p>
+                <p className={styles.stepLabel}>04 · Birthstone</p>
               </div>
               <span className={styles.stepLine} aria-hidden="true" />
             </div>
@@ -709,7 +709,7 @@ export default function ConfiguratorPage() {
                   className={`${styles.stoneBtn} ${birthstone === i ? styles.active : ''}`}
                   onClick={() => setBirthstone(i)}
                   aria-pressed={birthstone === i}
-                  aria-label={`${month} — ${BIRTHSTONE_NAMES[i]}`}
+                  aria-label={`${month}, ${BIRTHSTONE_NAMES[i]}`}
                   style={{ '--gem-color': BIRTHSTONE_COLORS[i] } as React.CSSProperties}
                 >
                   <img src={stoneSwatch(i)} alt="" aria-hidden="true" className={styles.gemSwatch} loading="lazy" />
@@ -718,7 +718,7 @@ export default function ConfiguratorPage() {
               ))}
             </div>
             <p className={styles.stoneName}>
-              {BIRTHSTONE_NAMES[birthstone]} — {MONTH_NAMES[birthstone]}
+              {BIRTHSTONE_NAMES[birthstone]}, {MONTH_NAMES[birthstone]}
             </p>
             <p className={styles.stepNote}>{STONE_MEANINGS[birthstone]}</p>
           </section>
@@ -735,7 +735,7 @@ export default function ConfiguratorPage() {
                 piece — it belongs at the point of decision, not four screens
                 further down the page. */}
             <p className={styles.vaultNote}>
-              Includes the Tijoray memory vault — add photos, voice notes and
+              Includes the Tijoray memory vault. Add photos, voice notes and
               letters once your piece arrives.{' '}
               <Link to="/technology" className={styles.vaultLink}>See how it works</Link>
             </p>
@@ -747,7 +747,7 @@ export default function ConfiguratorPage() {
             {/* Every claim here is the policy stated in our own terms. */}
             <ul className={styles.reassure}>
               <li>Complimentary shipping</li>
-              <li>Made to order — ships in 10–14 business days</li>
+              <li>Made to order, ships in 10–14 business days</li>
               <li>Replaced or refunded if it arrives damaged</li>
             </ul>
 
@@ -780,18 +780,18 @@ export default function ConfiguratorPage() {
               A gemstone chosen<br />across <em>centuries.</em>
             </h2>
             <p className={styles.storyBody}>
-              The tradition of birthstones stretches back to ancient civilizations —
-              each stone assigned to a month not by chance, but by the qualities it
-              was believed to carry: protection, clarity, passion, renewal.
+              The tradition of birthstones stretches back to ancient civilizations,
+              where each stone was assigned to a month not by chance but for the
+              qualities it was believed to carry: protection, clarity, passion, renewal.
             </p>
             <p className={styles.storyBody}>
               The Tijoray Pendant honors that tradition and extends it. Beneath the
-              surface of each stone sits a passive NFC vault — no battery, no signal
-              required — holding whatever you choose to preserve. A voice. A map.
-              A letter. A photograph. The stone carries meaning. The vault carries memory.
+              surface of each stone sits a passive NFC vault, needing no battery and
+              no signal, holding whatever you choose to keep in it. A voice. A map.
+              A letter. A photograph.
             </p>
             <p className={styles.storyBody}>
-              Together, they compose something that outlasts both.
+              Together they make something that lasts longer than either would alone.
             </p>
           </div>
           <div className={styles.storyImageWrap}>
@@ -812,7 +812,7 @@ export default function ConfiguratorPage() {
               <div key={name} className={styles.stoneCard}>
                 <img
                   src={stoneSwatch(i)}
-                  alt={`${name} — the ${MONTH_NAMES[i]} birthstone, bezel-set in gold`}
+                  alt={`${name}, the ${MONTH_NAMES[i]} birthstone, bezel-set in gold`}
                   className={styles.stoneCardGem}
                   loading="lazy"
                   width="520"
@@ -838,13 +838,13 @@ export default function ConfiguratorPage() {
             <h2 className={styles.storyTitle}>Built for <em>a lifetime</em> of wear.</h2>
             <p className={styles.storyBody}>
               Every Tijoray pendant passes through multi-stage finishing before it
-              leaves our atelier — cut, set, polished, and inspected by hand, with
-              each stage checked before the next begins.
+              leaves our atelier. It is cut, set, polished and inspected by hand,
+              with each stage checked before the next begins.
             </p>
             <p className={styles.storyBody}>
               The result is a surface that holds its color, its luster, and its
-              precision-set stone through years of continuous wear — a piece made
-              for every day, not for the drawer.
+              precision-set stone through years of continuous wear. It is made for
+              every day, not for the drawer.
             </p>
           </div>
         </div>
@@ -868,7 +868,7 @@ export default function ConfiguratorPage() {
             ))}
           </div>
           <p className={styles.dimsNote}>
-            The pendant face is consistent across all four shapes — Square, Circle, Heart, and Pear —
+            The pendant face is consistent across all four shapes, Square, Circle, Heart and Pear,
             so pieces can be stacked and layered interchangeably on the same chain.
           </p>
           <img
@@ -891,19 +891,19 @@ export default function ConfiguratorPage() {
             {[
               {
                 label: 'Solo',
-                desc: 'Worn alone, the Tijoray pendant speaks for itself — a single stone, a single story, worn close to the skin.',
+                desc: 'Worn alone, the Tijoray pendant needs nothing else. A single stone, worn close to the skin.',
                 img: IMG.wearSolo,
                 alt: 'Tijoray pendant worn solo',
               },
               {
                 label: 'Stacked',
-                desc: 'Multiple Tijoray pendants on a single chain — each stone a different month, a different person, a different memory.',
+                desc: 'Multiple Tijoray pendants on a single chain, each stone a different month and a different person.',
                 img: IMG.wearStacked,
                 alt: 'Multiple Tijoray pendants on one chain',
               },
               {
                 label: 'Layered',
-                desc: 'Pair your Tijoray pendant with other necklaces at varying lengths — the pendant sits naturally at collarbone height.',
+                desc: 'Pair your Tijoray pendant with other necklaces at varying lengths. It sits naturally at collarbone height.',
                 img: IMG.wearLayered,
                 alt: 'Tijoray pendant layered with other necklaces',
               },
