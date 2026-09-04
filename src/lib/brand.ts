@@ -26,7 +26,7 @@ export const LEGAL_ENTITY_LINE = `${BRAND_NAME} is an operating name of ${LEGAL_
  * omits the number rather than render a placeholder, so an unset number is a
  * missing row, never a fake one.
  */
-export const BRAND_PHONE_E164 = ''       // e.g. '+16475550137'
-export const BRAND_PHONE_DISPLAY = ''    // e.g. '+1 (647) 555-0137'
+export const BRAND_PHONE_E164 = '+16478252510'
+export const BRAND_PHONE_DISPLAY = '+1 (647) 825-2510'
 
 export const SUPPORT_EMAIL = 'support@tijoray.com'
