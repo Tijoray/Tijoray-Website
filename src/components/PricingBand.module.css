@@ -39,10 +39,15 @@
 }
 
 /* Full-bleed so the render's warm ground meets the card edge instead of
-   sitting on it as a visible rectangle. */
+   sitting on it as a visible rectangle.
+   height:auto is load-bearing — the <img> carries width/height attributes,
+   which map to a presentational hint for `height`. Without overriding it the
+   box is a definite 1100px tall, aspect-ratio is ignored, and cover crops the
+   square render down to a narrow vertical slice. */
 .tierImg {
   display: block;
   width: calc(100% + 72px);
+  height: auto;
   margin: -40px -36px 18px;
   aspect-ratio: 4 / 3;
   object-fit: cover;
@@ -108,7 +113,7 @@
 
 @media (max-width: 900px) {
   .tierImg {
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 3 / 2;
   }
 
   .grid {
