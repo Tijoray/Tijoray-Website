@@ -848,24 +848,26 @@ export default function BraceletConfiguratorPage() {
       {/* ── Dimensions ── */}
       <section className={styles.dimsSection}>
         <div className={styles.dimsInner}>
-          <p className={styles.eyebrow}>Bracelet Dimensions</p>
-          <div className={styles.dimsGrid}>
-            {[
-              { stat: '18 mm', label: 'Station face' },
-              { stat: '2.5 mm', label: 'Profile depth' },
-              { stat: '18 cm', label: 'Chain length' },
-              { stat: '4–9 g', label: 'Weight by metal' },
-            ].map(d => (
-              <div key={d.label} className={styles.dimStat}>
-                <span className={styles.dimValue}>{d.stat}</span>
-                <span className={styles.dimLabel}>{d.label}</span>
-              </div>
-            ))}
+          <div className={styles.dimsText}>
+            <p className={styles.eyebrow}>Bracelet Dimensions</p>
+            <div className={styles.dimsGrid}>
+              {[
+                { stat: '18 mm', label: 'Station face' },
+                { stat: '2.5 mm', label: 'Profile depth' },
+                { stat: '18 cm', label: 'Chain length' },
+                { stat: '4–9 g', label: 'Weight by metal' },
+              ].map(d => (
+                <div key={d.label} className={styles.dimStat}>
+                  <span className={styles.dimValue}>{d.stat}</span>
+                  <span className={styles.dimLabel}>{d.label}</span>
+                </div>
+              ))}
+            </div>
+            <p className={styles.dimsNote}>
+              The station face is consistent across all four shapes, Asscher, Circle, Heart and Pear,
+              so pieces read cleanly on the wrist.
+            </p>
           </div>
-          <p className={styles.dimsNote}>
-            The station face is consistent across all four shapes, Asscher, Circle, Heart and Pear,
-            so pieces read cleanly on the wrist.
-          </p>
           <img
             src={IMG.braceletStations}
             alt="The four Tijoray bracelet stations, asscher, circle, heart and pear, on gold chains"

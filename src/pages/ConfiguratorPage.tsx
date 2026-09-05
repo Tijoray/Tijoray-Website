@@ -853,24 +853,26 @@ export default function ConfiguratorPage() {
       {/* ── Dimensions ── */}
       <section className={styles.dimsSection}>
         <div className={styles.dimsInner}>
-          <p className={styles.eyebrow}>Pendant Dimensions</p>
-          <div className={styles.dimsGrid}>
-            {[
-              { stat: '18 mm', label: 'Pendant face' },
-              { stat: '2.5 mm', label: 'Profile depth' },
-              { stat: '45 cm', label: 'Chain length' },
-              { stat: '4–9 g', label: 'Weight by metal' },
-            ].map(d => (
-              <div key={d.label} className={styles.dimStat}>
-                <span className={styles.dimValue}>{d.stat}</span>
-                <span className={styles.dimLabel}>{d.label}</span>
-              </div>
-            ))}
+          <div className={styles.dimsText}>
+            <p className={styles.eyebrow}>Pendant Dimensions</p>
+            <div className={styles.dimsGrid}>
+              {[
+                { stat: '18 mm', label: 'Pendant face' },
+                { stat: '2.5 mm', label: 'Profile depth' },
+                { stat: '45 cm', label: 'Chain length' },
+                { stat: '4–9 g', label: 'Weight by metal' },
+              ].map(d => (
+                <div key={d.label} className={styles.dimStat}>
+                  <span className={styles.dimValue}>{d.stat}</span>
+                  <span className={styles.dimLabel}>{d.label}</span>
+                </div>
+              ))}
+            </div>
+            <p className={styles.dimsNote}>
+              The pendant face is consistent across all four shapes, Square, Circle, Heart and Pear,
+              so pieces can be stacked and layered interchangeably on the same chain.
+            </p>
           </div>
-          <p className={styles.dimsNote}>
-            The pendant face is consistent across all four shapes, Square, Circle, Heart and Pear,
-            so pieces can be stacked and layered interchangeably on the same chain.
-          </p>
           <img
             src={IMG.scaleReference}
             alt="A Tijoray pendant beside a fingertip for scale, and turned on edge to show its 2.5 mm profile"

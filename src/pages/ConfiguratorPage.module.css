@@ -708,35 +708,28 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
   gap: 64px;
-  align-items: end;
+  align-items: center;
 }
 
-.dimsInner > .eyebrow,
-.dimsGrid,
-.dimsNote {
-  grid-column: 1;
+.dimsText {
+  min-width: 0;
 }
 
 .dimsImage {
   display: block;
   width: 100%;
   height: auto;
-  grid-column: 2;
-  grid-row: 1 / -1;
-  align-self: center;
   border-radius: 2px;
 }
 
 .dimsGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2px;
-  margin: 48px 0 40px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 32px 24px;
+  margin: 40px 0 36px;
 }
 
 .dimStat {
-  background: var(--cream-warm);
-  padding: 40px 32px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -744,10 +737,11 @@
 
 .dimValue {
   font-family: var(--font-serif);
-  font-size: clamp(36px, 4vw, 52px);
+  font-size: clamp(30px, 2.8vw, 44px);
   font-weight: 300;
   color: var(--ink);
   line-height: 1;
+  white-space: nowrap;
 }
 
 .dimLabel {
@@ -936,8 +930,6 @@
   }
 
   .dimsImage {
-    grid-column: 1;
-    grid-row: auto;
     max-width: 340px;
   }
 
