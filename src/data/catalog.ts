@@ -206,12 +206,23 @@ export function metalPhrase(metal: Metal, color: MetalColor): string {
   return `${karat} ${METAL_COLOR_LABELS_LONG[color]} Gold`
 }
 
+/** UI swatch colours for the metal-colour picker. Not used for rendering. */
 export const METAL_COLOR_HEX: Record<MetalColor, string> = {
   white: '#D0CFCD', gold: '#D4AF37', rose: '#C4786A',
 }
 
+/**
+ * 3D body colours. For a metal (metalness 1) the colour IS its reflectance, so
+ * these are the sRGB specular colours of the real alloys, not swatch tints: the
+ * studio HDRI supplies the darkening, and a darker base just reads as paint.
+ */
+export const METAL_RENDER_HEX: Record<MetalColor, string> = {
+  white: '#F2F1EE', gold: '#FFDB91', rose: '#F2C1A8',
+}
+
+/** Polished-finish roughness. 18k takes the highest polish; silver the softest. */
 export const ROUGHNESS: Record<Metal, number> = {
-  silver: 0.28, '10k': 0.28, '18k': 0.18,
+  silver: 0.20, '10k': 0.16, '18k': 0.12,
 }
 
 

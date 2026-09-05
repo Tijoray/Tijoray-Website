@@ -3,7 +3,13 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { useCart } from '../contexts/CartContext'
 import { useCatalog } from '../contexts/CatalogContext'
 import * as THREE from 'three'
-import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
+import {
+  addStudioLights,
+  applyStudioEnvironment,
+  configureStudioRenderer,
+  pickConfiguratorHdr,
+  BODY_ENV_INTENSITY,
+} from '../3d/environment'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import styles from './ConfiguratorPage.module.css'
 import { IMG, stoneSwatch } from '../lib/assets'
@@ -19,6 +25,7 @@ import {
 import {
   METAL_LABELS_SHORT       as METAL_LABELS,
   METAL_COLOR_HEX,
+  METAL_RENDER_HEX,
   METAL_COLOR_LABELS_SHORT as METAL_COLOR_LABELS,
   ROUGHNESS,
   STONE_COLORS             as BIRTHSTONE_COLORS,
@@ -114,9 +121,7 @@ export default function BraceletConfiguratorPage() {
     // Renderer
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true })
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    renderer.toneMapping = THREE.ACESFilmicToneMapping
-    renderer.toneMappingExposure = 1.1
-    renderer.outputColorSpace = THREE.SRGBColorSpace
+    configureStudioRenderer(renderer)
     rendererRef.current = renderer
 
     // Scene
@@ -128,36 +133,15 @@ export default function BraceletConfiguratorPage() {
     camera.position.set(0, 0, 5)
     cameraRef.current = camera
 
-    // HDR environment (same source as ScrollStory)
-    const pmrem = new THREE.PMREMGenerator(renderer)
-    pmrem.compileEquirectangularShader()
-    new RGBELoader().load(
-      '/assets/hdr/studio_small_09_1k.hdr',
-      (hdr) => {
-        scene.environment = pmrem.fromEquirectangular(hdr).texture
-        hdr.dispose()
-        pmrem.dispose()
-      }
-    )
-
-    // Lights — front-heavy for jewelry: stone and band well-lit head-on
-    scene.add(new THREE.AmbientLight(0xffffff, 0.7))
-    // Strong direct front key — straight-on, slightly high, punches through chain links
-    const frontKey = new THREE.DirectionalLight(0xfff8f0, 2.2)
-    frontKey.position.set(0, 2, 8)
-    scene.add(frontKey)
-    // Softer upper-right accent for metal highlights
-    const keyLight = new THREE.DirectionalLight(0xfff5e0, 0.9)
-    keyLight.position.set(2, 4, 3)
-    scene.add(keyLight)
-    // Left fill to balance rotation
-    const fillLight = new THREE.DirectionalLight(0xd8e8ff, 0.5)
-    fillLight.position.set(-3, 1, 3)
-    scene.add(fillLight)
-    // Soft back-rim for depth separation
-    const rimLight = new THREE.DirectionalLight(0xaaccff, 0.2)
-    rimLight.position.set(-1, -1, -4)
-    scene.add(rimLight)
+    // The studio HDRI carries the lighting (see src/3d/environment.ts).
+    let disposeEnv: (() => void) | null = null
+    applyStudioEnvironment(renderer, scene, pickConfiguratorHdr())
+      .then((dispose) => {
+        if (destroyedRef.current) dispose()
+        else disposeEnv = dispose
+      })
+      .catch((err) => console.error('[Tijoray Configurator] HDR load error:', err))
+    addStudioLights(scene)
 
     // OrbitControls — free Y rotation, tight vertical clamp
     const controls = new OrbitControls(camera, renderer.domElement)
@@ -239,6 +223,7 @@ export default function BraceletConfiguratorPage() {
       controls.removeEventListener('end',   onEnd)
       if (rafRef.current) cancelAnimationFrame(rafRef.current)
       controls.dispose()
+      disposeEnv?.()
       renderer.dispose()
     }
   }, [])
@@ -318,7 +303,7 @@ export default function BraceletConfiguratorPage() {
             std.color.set(bodyColor)
             std.metalness = 1.0
             std.roughness = ROUGHNESS[snapMetal]
-            std.envMapIntensity = 3.5
+            std.envMapIntensity = BODY_ENV_INTENSITY
             std.needsUpdate = true
             bodyMats.push(std)
           }
@@ -339,7 +324,7 @@ export default function BraceletConfiguratorPage() {
 
       const gemMats:  THREE.MeshPhysicalMaterial[] = []
       const bodyMats: THREE.MeshStandardMaterial[]  = []
-      const bodyColor = new THREE.Color(METAL_COLOR_HEX[snapColor])
+      const bodyColor = new THREE.Color(METAL_RENDER_HEX[snapColor])
 
       applyMetal(pivot, bodyMats, gemMats, bodyColor)
       // Include band materials so Effect 3 keeps band in sync on metal change
@@ -452,7 +437,7 @@ export default function BraceletConfiguratorPage() {
   useEffect(() => {
     const mats = bodyMatsRef.current
     if (!mats.length) return
-    const color = new THREE.Color(METAL_COLOR_HEX[metalColor])
+    const color = new THREE.Color(METAL_RENDER_HEX[metalColor])
     mats.forEach(m => {
       m.color.set(color)
       m.roughness = ROUGHNESS[metal]

@@ -1,12 +1,18 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
+import {
+  addStudioLights,
+  applyStudioEnvironment,
+  configureStudioRenderer,
+  BODY_ENV_INTENSITY,
+  STUDIO_HDR_1K,
+} from '../3d/environment'
 import { createGltfLoader } from '../3d/engine'
 import { prepareChain, preparePendant } from '../3d/assemblies/pendant'
 import { CHAIN_PATH, PENDANT_PATHS } from '../data/product-types'
 import type { Shape, Metal, MetalColor } from '../data/catalog'
 import {
-  METAL_COLOR_HEX,
+  METAL_RENDER_HEX,
   ROUGHNESS,
   GEM_PROPS_THUMB as GEM_PROPS,
 } from '../data/catalog'
@@ -52,7 +58,7 @@ function applyMaterials(
         std.color.set(bodyColor)
         std.metalness      = 1.0
         std.roughness      = roughness
-        std.envMapIntensity = 3.0
+        std.envMapIntensity = BODY_ENV_INTENSITY
         std.needsUpdate    = true
       }
     })
@@ -77,24 +83,10 @@ export default function PendantThumbnail({ shape, metal, metalColor, birthstoneI
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
     renderer.setSize(size, size, false)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    renderer.outputColorSpace = THREE.SRGBColorSpace
-    renderer.toneMapping = THREE.ACESFilmicToneMapping
-    renderer.toneMappingExposure = 1.3
-
-    const pmrem = new THREE.PMREMGenerator(renderer)
-    const envTexture = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
-    pmrem.dispose()
+    configureStudioRenderer(renderer)
 
     const scene = new THREE.Scene()
-    scene.environment = envTexture
-
-    scene.add(new THREE.AmbientLight(0xffffff, 0.4))
-    const key = new THREE.DirectionalLight(0xfff8f0, 2.0)
-    key.position.set(1.5, 3, 2)
-    scene.add(key)
-    const fill = new THREE.DirectionalLight(0xd0e8ff, 0.8)
-    fill.position.set(-2, 0, -1)
-    scene.add(fill)
+    addStudioLights(scene)
 
     const camera = new THREE.PerspectiveCamera(30, 1, 0.01, 100)
 
@@ -103,12 +95,16 @@ export default function PendantThumbnail({ shape, metal, metalColor, birthstoneI
     let destroyed = false
     let chainGltf: THREE.Group | null = null
     let pendantGltf: THREE.Group | null = null
+    // The thumbnail is a single frame, so it waits for the environment too. A
+    // failed HDR fetch still renders (flat, but present) rather than blank.
+    let envReady = false
+    let disposeEnv: (() => void) | null = null
 
-    const bodyColor = new THREE.Color(METAL_COLOR_HEX[metalColor])
+    const bodyColor = new THREE.Color(METAL_RENDER_HEX[metalColor])
     const roughness = ROUGHNESS[metal]
 
     function tryRender() {
-      if (!chainGltf || !pendantGltf || destroyed) return
+      if (!chainGltf || !pendantGltf || !envReady || destroyed) return
 
       // ── Build scene using the shared pendant assembly ─────────────────────
       const { chainModel, scale, attach } = prepareChain(chainGltf)
@@ -133,10 +129,18 @@ export default function PendantThumbnail({ shape, metal, metalColor, birthstoneI
       renderer.render(scene, camera)
 
       // Tear down Three.js but keep the pixel data on the canvas
-      envTexture.dispose()
+      disposeEnv?.()
       renderer.dispose()
       disposeLoader()
     }
+
+    applyStudioEnvironment(renderer, scene, STUDIO_HDR_1K)
+      .then((dispose) => {
+        if (destroyed) { dispose(); return }
+        disposeEnv = dispose
+      })
+      .catch((err) => console.error('[Tijoray Thumbnail] HDR load error:', err))
+      .finally(() => { envReady = true; tryRender() })
 
     loader.load(CHAIN_PATH, (gltf) => {
       if (destroyed) return
