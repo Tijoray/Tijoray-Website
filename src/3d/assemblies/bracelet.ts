@@ -52,10 +52,23 @@ const GEM_NUDGE_Z = -0.039
  * the chain axis. The pear is a teardrop — its rings sit ~0.046 BELOW its
  * bounding-box centre — so seating it by that centre drops the rings under the
  * chain and the stone floats above the links. Raising the pear lifts its rings
- * back onto the chain axis. Shapes not listed use only the global nudge.
+ * back onto the chain axis (value tuned at the pear's GEM_SHAPE_SCALE). Shapes
+ * not listed use only the global nudge.
  */
 const GEM_SHAPE_NUDGE: Partial<Record<Shape, { y?: number; z?: number }>> = {
-  pear: { y: 0.046 },
+  pear: { y: 0.054 },
+}
+
+/**
+ * Per-shape size correction. The chain's two end links sit a fixed distance
+ * apart, and circle, heart and asscher are all authored so their jump-rings
+ * reach ±0.48 (band units) and hook those links. The pear GLB is authored
+ * smaller — rings at ±0.41 — so at the shared scale its rings hang inside
+ * the chain ends with a visible gap. Scaling it up to its siblings' span also
+ * brings its stone to a comparable size (it was the smallest of the four).
+ */
+const GEM_SHAPE_SCALE: Partial<Record<Shape, number>> = {
+  pear: 1.18,
 }
 
 export interface PreparedBand {
@@ -119,7 +132,7 @@ export function prepareBraceletGem(
 ): THREE.Group {
   const gemModel = gemSrc.clone(true)
   gemModel.rotation.copy(GEM_FACING_ROTATION)
-  gemModel.scale.setScalar(scale)
+  gemModel.scale.setScalar(scale * ((shape && GEM_SHAPE_SCALE[shape]) ?? 1))
   gemModel.updateMatrixWorld(true)
 
   const gemBox  = new THREE.Box3().setFromObject(gemModel)
