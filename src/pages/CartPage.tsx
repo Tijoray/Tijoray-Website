@@ -6,7 +6,7 @@ import {
   SHAPE_LABELS,
   METAL_LABELS_LONG       as METAL_LABELS,
   METAL_COLOR_LABELS_LONG as METAL_COLOR_LABELS,
-  STONE_NAMES_SHORT       as BIRTHSTONE_NAMES,
+  STONE_NAMES             as BIRTHSTONE_NAMES,
 } from '../data/catalog'
 import { PRODUCT_TYPES } from '../data/product-types'
 import { usePageMeta } from '../lib/usePageMeta'
@@ -21,7 +21,7 @@ const itemTitle = (shape: string, productType: string) => {
   return `${shapeLabel} ${PRODUCT_TYPES[productType as keyof typeof PRODUCT_TYPES]?.label ?? 'Pendant'}`
 }
 
-const fmt = (n: number) => new Intl.NumberFormat('en-US', {
+const fmt = (n: number) => new Intl.NumberFormat('en-CA', {
   style: 'currency', currency: 'USD', maximumFractionDigits: 0,
 }).format(n)
 
@@ -138,7 +138,8 @@ export default function CartPage() {
               <span>{fmt(total)}</span>
             </div>
             <p className={styles.summaryFootnote}>
-              Tax and any promo code are applied at checkout.
+              Prices are USD. Complimentary shipping is available to Canada, the US,
+              UK and Australia. Tax and any promo code are applied at checkout.
             </p>
           </div>
 

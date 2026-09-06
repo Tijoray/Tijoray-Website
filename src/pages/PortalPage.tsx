@@ -5,7 +5,7 @@ import { supabase } from '../lib/supabase'
 import { PIECE_COLUMNS } from '../lib/supabase'
 import type { Piece, Stone, Metal } from '../lib/supabase'
 import PieceThumbnail from '../components/PieceThumbnail'
-import { STONE_NAMES_SHORT as BIRTHSTONE_NAMES } from '../data/catalog'
+import { STONES } from '../data/catalog'
 import styles from './PortalPage.module.css'
 
 type Shape      = 'square' | 'circle' | 'heart' | 'pear'
@@ -31,7 +31,10 @@ const COLLECTION_TO_SHAPE: Record<string, Shape> = {
 
 function stoneToIndex(name: string | null): number {
   if (!name) return 0
-  const idx = BIRTHSTONE_NAMES.findIndex(n => n.toLowerCase() === name.toLowerCase())
+  const idx = STONES.findIndex(stone =>
+    stone.name.toLowerCase() === name.toLowerCase() ||
+    stone.dbName.toLowerCase() === name.toLowerCase(),
+  )
   return idx >= 0 ? idx : 0
 }
 
@@ -116,7 +119,7 @@ export default function PortalPage() {
           <div className={styles.empty}>
             <p className={styles.emptyTitle}>No pieces yet</p>
             <p className={styles.emptyBody}>
-              Your Tijoray piece will appear here once your order is confirmed and dispatched.
+              Your Tijoray piece will appear here after payment is confirmed so you can prepare its memories while it is being made.
             </p>
             <Link to="/collection" className={styles.emptyLink}>Design a piece</Link>
           </div>

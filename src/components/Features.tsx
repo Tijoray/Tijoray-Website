@@ -27,9 +27,9 @@ export default function Features() {
             <div className={styles.featureNum}>02</div>
             <h3 className={styles.featureTitle}>The Vault</h3>
             <p className={styles.featureBody}>
-              A passive NFC vault sits inside your jewelry. It opens when your phone
-              touches it, and not before. Keep photographs, voice notes, letters
-              and certificates in the piece you wear every day.
+              A passive NFC chip inside the jewelry carries the piece's unique identity.
+              Tapping it with a compatible phone opens its encrypted online memory
+              collection in the Tijoray app.
             </p>
           </article>
 
@@ -37,9 +37,9 @@ export default function Features() {
             <div className={styles.featureNum}>03</div>
             <h3 className={styles.featureTitle}>The Legacy</h3>
             <p className={styles.featureBody}>
-              Photographs end up in a drawer. Files end up on a phone nobody can
-              unlock. A Tijoray doesn't. Hand the piece on and the vault goes
-              with it, intact.
+              The physical piece can be handed on. Tijoray support can transfer its
+              online memory collection to a verified new owner, subject to the
+              service and recovery terms.
             </p>
           </article>
         </div>

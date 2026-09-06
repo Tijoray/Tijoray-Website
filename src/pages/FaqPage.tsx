@@ -6,7 +6,7 @@ import { usePageMeta } from '../lib/usePageMeta'
 const FAQS = [
   {
     q: 'Does it work on iPhone and Android?',
-    a: 'Yes. Tijoray uses standard NFC, supported on modern iPhones (XS and later) and NFC-enabled Android devices. You will need the free Tijoray app installed. Open it, hold your phone to the piece, and your memories appear. There is nothing to pair and nothing to charge.',
+    a: 'Tijoray uses standard NFC. The recipient needs the free Tijoray app, a verified account, internet access and a compatible NFC phone. The jewelry itself has nothing to pair or charge. Final supported OS versions and verified store links will be published in the setup guide.',
   },
   {
     q: 'Do I need an app, and who needs it, me or the person I gift it to?',
@@ -18,11 +18,11 @@ const FAQS = [
   },
   {
     q: 'What happens if I lose my jewelry?',
-    a: 'Your memories are stored in an encrypted cloud vault, not solely on the NFC chip. If your piece is lost or stolen, your data remains safe and accessible via your account. You can order a replacement piece and transfer your vault to the new NFC chip.',
+    a: 'Your memories are stored in Tijoray\'s encrypted online service, not on the NFC chip, so losing the jewelry does not by itself delete the stored files. Contact support to verify ownership and discuss recovery or a replacement piece. Online access remains subject to the service terms.',
   },
   {
     q: 'Is my data stored online?',
-    a: 'Your memories are encrypted with AES-256 on your device before they are uploaded, and stored as ciphertext in secure cloud storage. The NFC chip itself holds only the piece\'s identity, never your memories. Each piece has its own key, held in escrow by us and released only to the sender and recipient once their identity is verified. That means we are not end-to-end encrypted: we could decrypt if legally compelled, though no support or admin tool of ours displays vault contents. We hold the keys so a piece can be gifted, inherited or recovered. That would be impossible if the only key sat on one phone.',
+    a: 'Your memories are encrypted with AES-256 on your device before upload and stored as ciphertext online. The NFC chip holds only the piece\'s identity, never the memories. Each piece has its own key, held in escrow by Tijoray and released through account and piece authorization. This is not end-to-end encryption: Tijoray can technically decrypt stored content. Managed keys support gifting, transfer and recovery.',
   },
   {
     q: 'Can I transfer ownership to someone else?',
@@ -38,7 +38,7 @@ const FAQS = [
   },
   {
     q: 'How long does it last?',
-    a: 'The NFC chip is rated for decades of use with no maintenance, no battery and no charging. The jewelry is crafted from materials chosen for longevity: sterling silver and 10K or 18K gold. The memory vault is included with your piece, so there is no subscription and nothing further to pay.',
+    a: 'The passive NFC chip has no battery and needs no charging. The online memory service is included with the piece without a subscription. Access depends on Tijoray continuing to operate the app and service, as explained in the Terms of Service.',
   },
 ]
 

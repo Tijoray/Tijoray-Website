@@ -1,100 +1,127 @@
-import { useEffect, useRef } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './TechnologyPage.module.css'
+import { APP_MEDIA } from '../lib/assets'
 import { useReveal } from '../lib/useReveal'
-import { asset } from '../lib/assets'
 import { usePageMeta } from '../lib/usePageMeta'
 
 const NFC_STEPS = [
   {
     num: '01',
-    img: asset('/assets/app/app-tap.png'),
     title: 'Tap Your Piece',
-    desc: 'Open the Tijoray app and hold your jewel to the back of your phone. No pairing, no setup, no battery. The connection starts the moment the two touch.',
+    desc: 'Install the Tijoray app, sign in to a verified account, and hold your jewelry to the back of a compatible phone. The jewelry needs no pairing, battery, or charging.',
+    image: APP_MEDIA.tapPiece,
+    imageAlt: 'Tijoray app screen prompting the owner to tap their piece to the back of their phone',
   },
   {
     num: '02',
-    img: asset('/assets/app/app-connecting.png'),
     title: 'Identity Confirmed',
-    desc: "Your piece's unique serial identity is verified against the Tijoray vault in seconds. Authenticated. Immutable. Yours.",
+    desc: "Your piece's unique serial identity and account access are checked online before its memory collection opens.",
+    image: APP_MEDIA.establishingConnection,
+    imageAlt: 'Tijoray app establishing a connection with a scanned jewelry piece',
   },
   {
     num: '03',
-    img: asset('/assets/app/app-connected.png'),
     title: 'Your World Unlocks',
     desc: 'The full digital profile of your piece opens: provenance, stone data, personal memories, and the certificate that proves its origin.',
+    image: APP_MEDIA.main,
+    imageAlt: 'Authenticated Tijoray square pendant profile with memory, certificate and vault options',
   },
 ]
 
 const APP_FEATURES = [
   {
-    img: asset('/assets/app/app-memory.png'),
     label: 'The Tijoray Experience',
     title: 'A message waiting inside your gift.',
-    body: 'When you commission a Tijoray piece, you can embed a private message directly into the jewel itself: photographs, voice recordings, handwritten notes, or whatever you want them to keep. The moment they tap the pendant, it opens. It is not a card and not a text. It lives inside the thing you gave them.',
+    body: 'After purchase, add photographs, voice recordings and notes to the piece\'s encrypted online memory collection. When the recipient taps the jewelry with the Tijoray app, the collection opens for their authorized account.',
     pills: ['Photos & Video', 'Voice Messages', 'Personal Notes', 'Revealed on First Tap'],
+    media: { kind: 'video' as const, src: APP_MEDIA.memories, alt: 'Tijoray app memory reveal from a gift giver' },
   },
   {
-    img: asset('/assets/app/app-atelier.png'),
     label: 'Stone Intelligence',
     title: 'Every stone, documented.',
-    body: 'Tap your piece and unlock its stone record. Stone type, cut, color and setting, all recorded by the atelier when the piece is made and bound permanently to it.',
+    body: 'Tap your piece and open its stone record. Stone type, cut, color and setting are recorded by the atelier when the piece is made and associated with its unique identity.',
     pills: ['Stone Type', 'Cut & Color', 'Setting', 'Atelier Record'],
+    media: { kind: 'image' as const, src: APP_MEDIA.authenticity, alt: 'Tijoray Certificate of Authenticity screen showing recorded stone details' },
   },
   {
-    img: asset('/assets/app/app-gold.png'),
     label: 'Gold Composition',
     title: 'Know what you wear.',
     body: 'Every alloy in your Tijoray piece is catalogued for metal purity, color composition and total mass, then verified by the atelier before the piece ships.',
     pills: ['Metal Purity', 'Composition', 'Weight', 'Atelier Verified'],
+    media: null,
   },
   {
-    img: asset('/assets/app/app-vault.png'),
     label: 'The Vault',
-    title: 'A private archive, secured forever.',
-    body: 'Beyond the memories they were given, whoever wears the piece has a private vault of their own, with room to add their own photographs, recordings and documents as the years go on. It belongs to the wearer alone: encrypted on their device, and closed even to the person who gave the piece.',
+    title: 'A private archive with managed recovery.',
+    body: 'Beyond the shared gift memories, the owner has a private area for photographs, recordings and documents. Access is restricted to the owner\'s verified account. Tijoray manages the recovery keys and can technically decrypt stored content; this is not end-to-end encryption.',
     pills: ['Personal Storage', 'Certificate Archive', 'Date Organized', 'Secure Access'],
+    media: { kind: 'image' as const, src: APP_MEDIA.vault, alt: 'Tijoray Vault screen containing private photo, video and music memories' },
   },
 ]
 
 const STATS = [
   { num: 'No Battery', label: 'Passive NFC Chip' },
   { num: 'Encrypted', label: 'Vault Storage' },
-  { num: 'Immutable', label: 'Provenance Record' },
+  { num: 'Verified', label: 'Provenance Record' },
 ]
+
+function AppCapturePlaceholder({ label }: { label: string }) {
+  return (
+    <div className={styles.appCapturePlaceholder} role="img" aria-label={`Tijoray app preview for ${label}; current release capture pending`}>
+      <span className={styles.placeholderBrand}>Tijoray</span>
+      <span className={styles.placeholderMark} aria-hidden="true">T</span>
+      <span className={styles.placeholderLabel}>{label}</span>
+      <span className={styles.placeholderStatus}>Current app capture pending</span>
+    </div>
+  )
+}
+
+function AppCapture({
+  label,
+  src,
+  alt,
+  variant,
+  kind = 'image',
+}: {
+  label: string
+  src?: string
+  alt?: string
+  variant: 'flow' | 'feature'
+  kind?: 'image' | 'video'
+}) {
+  const [failed, setFailed] = useState(false)
+
+  if (!src || failed) return <AppCapturePlaceholder label={label} />
+
+  const className = variant === 'flow' ? styles.phoneImg : styles.featureMedia
+
+  if (kind === 'video') {
+    return (
+      <video
+        className={className}
+        aria-label={alt}
+        poster="/assets/app/memories-poster.jpg"
+        autoPlay
+        muted
+        loop
+        playsInline
+        controls
+        preload="metadata"
+        onError={() => setFailed(true)}
+      >
+        <source src="/assets/app/memories.mp4" type="video/mp4" />
+        <source src={src} type="video/quicktime" />
+      </video>
+    )
+  }
+
+  return <img className={className} src={src} alt={alt ?? label} loading="lazy" onError={() => setFailed(true)} />
+}
 
 export default function TechnologyPage() {
   usePageMeta('The Technology', 'How the Tijoray vault works: a passive NFC chip sealed into the piece, AES-256 encrypted memories, and a provenance record verified on every tap.')
-  const reveal      = useReveal(styles.inView)
-  const scrollImgs  = useRef<(HTMLImageElement | null)[]>([])
-
-  // Scroll-driven image reveal — image starts at top and slides up as user scrolls
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    function onScroll() {
-      scrollImgs.current.forEach((img) => {
-        if (!img) return
-        const container = img.parentElement
-        if (!container) return
-        const rect    = container.getBoundingClientRect()
-        const viewH   = window.innerHeight
-        const contH   = container.clientHeight
-        const imgH    = img.offsetHeight
-        const maxShift = Math.max(0, imgH - contH)
-        // progress: 0 when section top hits bottom of viewport, 1 when section bottom hits top
-        const progress = 1 - (rect.bottom / (viewH + rect.height))
-        const clamped  = Math.max(0, Math.min(1, progress))
-        img.style.transform = `translateY(${-(clamped * maxShift)}px)`
-      })
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    onScroll()
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  function scrollImgRef(i: number) {
-    return (el: HTMLImageElement | null) => { scrollImgs.current[i] = el }
-  }
+  const reveal = useReveal(styles.inView)
 
   return (
     <main className={styles.technology}>
@@ -107,9 +134,9 @@ export default function TechnologyPage() {
             The intelligence <em>within</em> your jewel.
           </h1>
           <p className={styles.heroSub}>
-            Every Tijoray piece carries a concealed chip that holds an encrypted
-            record of the piece. One tap connects your jewelry to its craft, its
-            stones, and the memories you put inside it.
+            Every Tijoray piece carries a concealed passive NFC chip containing its
+            unique identity. One tap connects the Tijoray app to the piece record
+            and encrypted memories stored in Tijoray's online service.
           </p>
         </div>
         <hr className={styles.heroRule} />
@@ -132,7 +159,7 @@ export default function TechnologyPage() {
               >
                 <div className={styles.nfcStepNum}>{step.num}</div>
                 <div className={styles.phoneFrame}>
-                  <img src={step.img} alt={step.title} className={styles.phoneImg} />
+                  <AppCapture label={step.title} src={step.image} alt={step.imageAlt} variant="flow" />
                 </div>
                 <h3 className={styles.nfcCardTitle}>{step.title}</h3>
                 <p className={styles.nfcCardDesc}>{step.desc}</p>
@@ -149,7 +176,7 @@ export default function TechnologyPage() {
             <p className={styles.eyebrow}>The App</p>
             <h2 className={styles.sectionTitle}>Your Digital Atelier</h2>
             <p className={styles.appHeaderSub}>
-              The Tijoray app is where the gift is put together. Add a private message before you give the piece, then watch it appear the first time they tap it.
+              Prepare the gift in your web memory portal after purchase. The recipient uses the Tijoray app, a verified account and internet access to open it.
             </p>
           </div>
 
@@ -161,28 +188,13 @@ export default function TechnologyPage() {
             >
               <div className={styles.featurePhone}>
                 <div className={styles.appPhoneFrame}>
-                  {i === 0 ? (
-                    <video
-                      className={styles.gifImg}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      preload="auto"
-                      poster={feature.img}
-                      aria-label="Tijoray memory feature, a personalized message revealing on first tap"
-                    >
-                      <source src={asset('/assets/video/memory-page.mp4')} type="video/mp4" />
-                      <source src={asset('/assets/video/memory-page.mov')} type="video/quicktime" />
-                    </video>
-                  ) : (
-                    <img
-                      src={feature.img}
-                      alt={feature.title}
-                      className={styles.scrollImg}
-                      ref={scrollImgRef(i - 1)}
-                    />
-                  )}
+                  <AppCapture
+                    label={feature.title}
+                    src={feature.media?.src}
+                    alt={feature.media?.alt}
+                    kind={feature.media?.kind}
+                    variant="feature"
+                  />
                 </div>
               </div>
               <div className={styles.featureContent}>
@@ -228,6 +240,7 @@ export default function TechnologyPage() {
           </h2>
           <div className={styles.ctaBtns}>
             <Link to="/collection" className={styles.btnPrimary}>Build Your Tijoray</Link>
+            <Link to="/app" className={styles.btnSecondary}>App &amp; Compatibility</Link>
             <Link to="/contact" className={styles.btnSecondary}>Speak with the Atelier</Link>
           </div>
         </div>

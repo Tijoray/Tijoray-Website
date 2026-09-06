@@ -28,22 +28,26 @@ export default function Hero() {
       <div className={styles.heroLayout}>
         <div className={styles.heroContent}>
           <h1 className={styles.heroTitle}>
-            Tap it with<br />
-            your phone.<br />
-            Your memories <em>appear.</em>
+            Jewelry that opens<br />
+            your favorite<br />
+            <em>memories.</em>
           </h1>
           <p className={styles.heroSub}>
-            Handcrafted gold and silver jewelry with an encrypted vault sealed
-            inside. Photographs, voice notes and letters, opened by a touch.
-            No charging, no pairing, nothing to set up.
+            Choose a birthstone pendant or bracelet, then add photos, voice notes
+            and messages to its encrypted online memory collection. The recipient
+            opens them by tapping the jewelry with a compatible phone in the Tijoray app.
+          </p>
+          <p className={styles.heroPractical}>
+            No battery or charging for the jewelry. The free app, an account and
+            internet access are needed to open memories.
           </p>
           <div className={styles.heroCtas}>
-            <Link to="/collection" className={styles.heroBtnPrimary}>Design your piece</Link>
+            <Link to="/collection" className={styles.heroBtnPrimary}>Shop the collection</Link>
             <a href="#how-it-works" className={styles.heroBtnSecondary} onClick={scrollToHowItWorks}>How It Works</a>
           </div>
         </div>
 
-        <div className={styles.heroCarouselPanel} aria-hidden="true">
+        <div className={styles.heroCarouselPanel}>
           <HeroCarousel />
         </div>
       </div>

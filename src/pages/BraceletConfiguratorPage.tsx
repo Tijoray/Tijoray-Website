@@ -57,7 +57,7 @@ const BRACELET_SHAPES: Shape[] = ['square', 'circle', 'heart', 'pear']
 function easeOutCubic(t: number) { return 1 - Math.pow(1 - Math.min(t, 1), 3) }
 
 export default function BraceletConfiguratorPage() {
-  usePageMeta('Design Your Bracelet', 'Configure a Tijoray birthstone bracelet: station, metal and stone, with an encrypted memory vault sealed inside. From $399.')
+  usePageMeta('Design Your Bracelet', 'Customize a Tijoray birthstone bracelet from US$399. The passive NFC identity opens encrypted online memories in the Tijoray app.')
   const { addItem, openCart } = useCart()
   const catalog     = useCatalog()
 
@@ -74,6 +74,8 @@ export default function BraceletConfiguratorPage() {
   const [loading,     setLoading]     = useState(false)
   const [isTouch,     setIsTouch]     = useState(false)
   const [shareState,  setShareState]  = useState<'idle' | 'copied' | 'failed'>('idle')
+  const [modelError,  setModelError]  = useState(false)
+  const [modelRetry,  setModelRetry]  = useState(0)
   /** null = the interactive 3D view; a number selects a photograph. */
   const [photo,       setPhoto]       = useState<number | null>(null)
 
@@ -365,6 +367,7 @@ export default function BraceletConfiguratorPage() {
       gemMatsRef.current  = gemMats
       bodyMatsRef.current = bodyMats
       buildStartRef.current = performance.now()
+      setModelError(false)
       setLoading(false)
     }
 
@@ -410,6 +413,8 @@ export default function BraceletConfiguratorPage() {
         tryComplete()
       }, undefined, (err) => {
         console.error('[Tijoray Bracelet] Chain GLB load error:', err)
+        setModelError(true)
+        setPhoto(0)
         setLoading(false)
       })
     }
@@ -421,6 +426,8 @@ export default function BraceletConfiguratorPage() {
         tryComplete()
       }, undefined, (err) => {
         console.error('[Tijoray Bracelet] Gem GLB load error:', err)
+        setModelError(true)
+        setPhoto(0)
         setLoading(false)
       })
     }
@@ -431,7 +438,7 @@ export default function BraceletConfiguratorPage() {
   // metal/metalColor/birthstone intentionally excluded — Effects 3 & 4 mutate
   // existing materials directly so the GLB never needs to reload for those changes.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shape])
+  }, [shape, modelRetry])
 
   /* ── Effect 3: Metal / color mutation (no GLB reload) ── */
   useEffect(() => {
@@ -480,7 +487,7 @@ export default function BraceletConfiguratorPage() {
   }, [shape, metal, metalColor, birthstone])
 
   /* ── Derived values ── */
-  const fmtPrice = (n: number) => new Intl.NumberFormat('en-US', {
+  const fmtPrice = (n: number) => new Intl.NumberFormat('en-CA', {
     style: 'currency', currency: 'USD', maximumFractionDigits: 0,
   }).format(n)
 
@@ -557,6 +564,14 @@ export default function BraceletConfiguratorPage() {
               <p className={styles.orbitHint} aria-hidden="true">
                 {isTouch ? 'Drag to rotate · Pinch to zoom' : 'Drag to rotate · Scroll to zoom'}
               </p>
+            )}
+            {modelError && (
+              <div className={styles.modelError} role="status">
+                <span>3D preview unavailable. A product image is shown; your selected options and Add to Cart still work.</span>
+                <button type="button" onClick={() => { setModelError(false); setPhoto(null); setModelRetry(v => v + 1) }}>
+                  Retry 3D
+                </button>
+              </div>
             )}
           </div>
 
@@ -706,7 +721,7 @@ export default function BraceletConfiguratorPage() {
           {/* Price + CTA */}
           <div className={styles.priceBlock}>
             <div className={styles.priceRow}>
-              <span className={styles.priceLabel}>Price</span>
+              <span className={styles.priceLabel}>Price · USD</span>
               <span className={styles.priceValue}>{price}</span>
             </div>
             <p className={styles.specLine}>{specLine}</p>
@@ -715,10 +730,15 @@ export default function BraceletConfiguratorPage() {
                 piece — it belongs at the point of decision, not four screens
                 further down the page. */}
             <p className={styles.vaultNote}>
-              Includes the Tijoray memory vault. Add photos, voice notes and
-              letters once your piece arrives.{' '}
+              Includes access to the Tijoray online memory service with no subscription.
+              Prepare photos, voice notes and letters in your portal after purchase.{' '}
               <Link to="/technology" className={styles.vaultLink}>See how it works</Link>
             </p>
+
+            <div className={styles.purchaseDetails}>
+              <p className={styles.purchaseDetailsTitle}>Details &amp; fit</p>
+              <p>18 mm station · 2.5 mm depth · 18 cm chain · approximately 4–9 g, depending on metal. Contact us before ordering if you need fit guidance.</p>
+            </div>
 
             <button className={styles.ctaBtn} onClick={handleAdd}>
               Add to Cart
@@ -726,9 +746,9 @@ export default function BraceletConfiguratorPage() {
 
             {/* Every claim here is the policy stated in our own terms. */}
             <ul className={styles.reassure}>
-              <li>Complimentary shipping</li>
-              <li>Made to order, ships in 10–14 business days</li>
-              <li>Replaced or refunded if it arrives damaged</li>
+              <li>Complimentary shipping to Canada, the US, UK and Australia</li>
+              <li>Made to order; dispatches in 10–14 business days, with delivery time additional</li>
+              <li>Made-to-order pieces cannot be returned for a change of mind. <Link to="/terms">Damage and defect policy</Link></li>
             </ul>
 
             <div className={styles.secondaryRow}>
@@ -765,10 +785,10 @@ export default function BraceletConfiguratorPage() {
               qualities it was believed to carry: protection, clarity, passion, renewal.
             </p>
             <p className={styles.storyBody}>
-              The Tijoray Bracelet honors that tradition and extends it. Beneath the
-              surface of each stone sits a passive NFC vault, needing no battery and
-              no signal, holding whatever you choose to keep in it. A voice. A map.
-              A letter. A photograph.
+              The Tijoray Bracelet honors that tradition and extends it. A passive NFC
+              chip inside the jewelry carries its unique identity. The chip needs no
+              battery or charging; the Tijoray app uses an internet connection to open
+              the encrypted online memories linked to it.
             </p>
             <p className={styles.storyBody}>
               Together they make something that lasts longer than either would alone.
@@ -815,7 +835,7 @@ export default function BraceletConfiguratorPage() {
           </div>
           <div className={styles.craftText}>
             <p className={styles.eyebrow}>Crafted to Last</p>
-            <h2 className={styles.storyTitle}>Built for <em>a lifetime</em> of wear.</h2>
+            <h2 className={styles.storyTitle}>Built for <em>everyday</em> wear.</h2>
             <p className={styles.storyBody}>
               Every Tijoray bracelet passes through multi-stage finishing before it
               leaves our atelier. It is cut, set, polished and inspected by hand,

@@ -109,6 +109,17 @@
   animation: riseIn 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards;
 }
 
+.heroPractical {
+  max-width: 480px;
+  margin-top: 14px;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: 1.65;
+  color: var(--ink-mid);
+  opacity: 0;
+  animation: riseIn 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.7s forwards;
+}
+
 .heroCtas {
   display: flex;
   gap: 16px;
@@ -236,6 +247,10 @@
 
   .heroSub {
     margin: 0 auto;
+  }
+
+  .heroPractical {
+    margin: 12px auto 0;
   }
 
   .heroCtas {

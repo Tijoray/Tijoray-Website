@@ -65,7 +65,7 @@ export const BIRTHSTONE: Collection = {
   description:
     'Twelve stones. Twelve months. Each piece carries the gemstone of the ' +
     'moment your loved one entered the world, set in your chosen metal, ' +
-    'embedded with a private memory, and registered in the Tijoray vault forever.',
+    'linked to an encrypted online memory collection through its unique identity.',
   designKind: 'gemstone',
   designApplicator: 'gem-material',
   designLabel: 'Birthstone',
@@ -88,7 +88,7 @@ export const DIAMOND: Collection = {
   description:
     'A single brilliant-cut diamond, held in your chosen metal, the clearest ' +
     'expression of a moment worth keeping. Each piece carries the same private ' +
-    'vault, registered to you forever.',
+    'online memory collection, registered to its owner.',
   designKind: 'gemstone',
   designApplicator: 'gem-material',
   designLabel: 'Diamond',
@@ -107,7 +107,7 @@ export const INITIAL_LETTER: Collection = {
   description:
     'A single initial, sculpted and carried close, for a name, a place, or a ' +
     'person who matters. Set in your chosen metal, with the same private vault ' +
-    'registered to you forever.',
+    'registered to its owner.',
   designKind: 'glyph',
   designApplicator: 'letter-glyph',
   designLabel: 'Initial',

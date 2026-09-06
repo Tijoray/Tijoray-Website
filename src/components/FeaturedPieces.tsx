@@ -3,7 +3,7 @@ import { useCatalog } from '../contexts/CatalogContext'
 import { useReveal } from '../lib/useReveal'
 import styles from './FeaturedPieces.module.css'
 
-const fmt = (n: number) => new Intl.NumberFormat('en-US', {
+const fmt = (n: number) => new Intl.NumberFormat('en-CA', {
   style: 'currency', currency: 'USD', maximumFractionDigits: 0,
 }).format(n)
 

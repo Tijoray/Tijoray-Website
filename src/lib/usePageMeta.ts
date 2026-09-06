@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 
 const SUFFIX = 'Tijoray'
-const DEFAULT_TITLE = 'Tijoray · Fine Jewelry with an Encrypted Memory Vault'
+const DEFAULT_TITLE = 'Tijoray · Jewelry That Opens Your Memories'
 const DEFAULT_DESCRIPTION =
-  'Handcrafted gold and silver jewelry with an encrypted vault sealed inside. Photographs, voice notes and letters, opened with a tap of your phone.'
+  'Birthstone jewelry with a passive NFC identity that opens encrypted online photos, voice notes and messages in the Tijoray app.'
 
 function setMeta(selector: string, content: string) {
   const el = document.head.querySelector<HTMLMetaElement>(selector)
@@ -27,6 +27,10 @@ export function usePageMeta(title: string, description?: string) {
     setMeta('meta[property="og:description"]', desc)
     setMeta('meta[name="twitter:title"]', document.title)
     setMeta('meta[name="twitter:description"]', desc)
+    const canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]')
+    const pageUrl = `${window.location.origin}${window.location.pathname}`
+    if (canonical) canonical.href = pageUrl
+    setMeta('meta[property="og:url"]', pageUrl)
 
     return () => {
       document.title = DEFAULT_TITLE
@@ -35,6 +39,8 @@ export function usePageMeta(title: string, description?: string) {
       setMeta('meta[property="og:description"]', DEFAULT_DESCRIPTION)
       setMeta('meta[name="twitter:title"]', DEFAULT_TITLE)
       setMeta('meta[name="twitter:description"]', DEFAULT_DESCRIPTION)
+      if (canonical) canonical.href = window.location.origin + '/'
+      setMeta('meta[property="og:url"]', window.location.origin + '/')
     }
   }, [title, description])
 }

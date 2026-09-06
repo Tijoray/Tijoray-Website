@@ -512,7 +512,7 @@ export default function ScrollStory() {
           <p className={styles.connEyebrow}>Your Digital Vault</p>
           <div className={styles.connRule} />
           <h2 className={styles.connHeadline}>
-            One Piece.<br /><em>A Lifetime</em><br />of Memory.
+            One Piece.<br /><em>Your Memories</em><br />Within Reach.
           </h2>
           <ul className={styles.connList}>
             <li>
@@ -526,14 +526,14 @@ export default function ScrollStory() {
               <div className={styles.connListBar} />
               <div>
                 <strong>Personal Archive</strong>
-                <span>Photographs, voice notes, letters — encrypted inside your jewel</span>
+                <span>Photographs, voice notes and letters encrypted in the online service</span>
               </div>
             </li>
             <li>
               <div className={styles.connListBar} />
               <div>
                 <strong>Access Your Vault</strong>
-                <span>Tap with any NFC device to reveal your private memories</span>
+                <span>Use the Tijoray app on a compatible NFC phone with internet access</span>
               </div>
             </li>
             <li>

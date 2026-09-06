@@ -7,7 +7,7 @@ export default function PrivacyPage() {
       <div className={styles.hero}>
         <p className={styles.eyebrow}>Legal</p>
         <h1 className={styles.title}>Privacy Policy</h1>
-        <p className={styles.updated}>Last updated: 28 August 2026</p>
+        <p className={styles.updated}>Last updated: 5 September 2026</p>
       </div>
 
       <div className={styles.content}>
@@ -22,7 +22,8 @@ export default function PrivacyPage() {
           <p>We collect information you give us directly when you:</p>
           <ul>
             <li>Create an account: name, email address, and password (stored as a hashed credential via Supabase Auth)</li>
-            <li>Verify a mobile number: the number you type into the Tijoray app or this site, which is what links a piece to your account</li>
+            <li>Buy a gift: the recipient name and mobile number you provide so the piece can later be linked to their verified account</li>
+            <li>Verify your own mobile number: the number you enter in the Tijoray app and confirm with a one-time code</li>
             <li>Place an order: billing details, shipping address, and payment information (processed by Stripe; we never store raw card numbers)</li>
             <li>Upload content to your vault: photos, videos, voice notes, and written messages you choose to store</li>
             <li>Contact us: name, email, and message content submitted via our contact form</li>
@@ -44,8 +45,8 @@ export default function PrivacyPage() {
 
         <div className={styles.section}>
           <h2>Mobile numbers and text messages</h2>
-          <p>A mobile number is only ever collected from you directly: you enter your own number in the Tijoray app or on this site and ask us to send a code. We never buy, rent, or import numbers from anyone else.</p>
-          <p>We use the number for two things. The first is a one-time passcode confirming the number is yours, which is how a piece bought for you is matched to your account. The second is occasional service notifications about the delivery and servicing of the piece you own. We send no marketing or promotional text messages.</p>
+          <p>A gift buyer can provide the intended recipient's mobile number at checkout. We store it with the order so the piece can later be matched to the recipient who verifies that same number in the Tijoray app. Providing a number at checkout does not verify the recipient or sign them up for marketing.</p>
+          <p>Separately, an account holder can enter their own number in the Tijoray app and request a one-time passcode to prove it belongs to them. Customers who have confirmed their own number may receive service notifications about delivery or servicing. We send no marketing or promotional text messages.</p>
           <p>Message frequency varies. Message and data rates may apply. Reply STOP to any message to opt out, or HELP for help. Carriers are not liable for delayed or undelivered messages.</p>
           <p><strong>No mobile information will be shared with third parties or affiliates for marketing or promotional purposes.</strong> All of the categories described elsewhere in this policy exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties.</p>
           <p>Our messaging provider transmits these messages on our behalf and processes your number only for that purpose.</p>
@@ -55,7 +56,7 @@ export default function PrivacyPage() {
           <h2>How we store and protect your data</h2>
           <p>Account data and vault metadata are stored in Supabase (EU region). Vault media files are stored in Cloudflare R2 with private-access controls. All data in transit is encrypted via TLS. Vault contents are encrypted at rest with AES-256.</p>
           <p><strong>How the encryption actually works.</strong> Memories and media you upload, including photos, videos, voice notes and written messages, are encrypted in your browser before they leave your device. What we receive and store is ciphertext.</p>
-          <p>Every piece has its own encryption key. We hold those keys in escrow: each one is wrapped under a master key held on our servers, and released only to the sender and the recipient of that piece once their identity is verified. <strong>This is not end-to-end encryption.</strong> Because we hold the master key, we are technically capable of decrypting vault contents, and we would do so if legally compelled. We do not do so otherwise, no customer-support or administrative tool in our systems displays vault contents, and access to the master key is limited to the engineers who operate our production environment.</p>
+          <p>Every piece has its own encryption key. We hold those keys in escrow: each one is wrapped under a master key held on our servers, and key requests are subject to account and piece authorization. <strong>This is not end-to-end encryption.</strong> Because we hold the master key, we are technically capable of decrypting vault contents, including when legally compelled. No customer-support or administrative screen displays vault contents, and production key access is restricted.</p>
           <p>We chose key escrow deliberately rather than by omission. It is what allows a piece to be given to someone else, handed on to the next generation, or recovered after a lost phone. None of that is possible when the only copy of a key lives on one device. We would rather describe that trade-off accurately than claim a guarantee we cannot keep.</p>
         </div>
 

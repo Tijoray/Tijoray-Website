@@ -7,7 +7,7 @@ export default function TermsPage() {
       <div className={styles.hero}>
         <p className={styles.eyebrow}>Legal</p>
         <h1 className={styles.title}>Terms of Service</h1>
-        <p className={styles.updated}>Last updated: 28 August 2026</p>
+        <p className={styles.updated}>Last updated: 5 September 2026</p>
       </div>
 
       <div className={styles.content}>
@@ -26,6 +26,7 @@ export default function TermsPage() {
         <div className={styles.section}>
           <h2>Products and orders</h2>
           <p>All pieces are handcrafted to order. Lead times are 10–14 business days from payment confirmation. We reserve the right to cancel any order and issue a full refund if we are unable to fulfill it for any reason.</p>
+          <p>That lead time is the time before dispatch, not an arrival estimate. Complimentary shipping is currently available to addresses in Canada, the United States, the United Kingdom and Australia. Transit time is additional.</p>
           <p>Product images and 3D previews are representative. Slight variations in stone color, metal finish, and proportions are inherent to handcrafted jewelry and are not grounds for return.</p>
         </div>
 
@@ -37,7 +38,8 @@ export default function TermsPage() {
         <div className={styles.section}>
           <h2>SMS terms</h2>
           <p>Tijoray, also known as {LEGAL_NAME}, operates the text message programs described here.</p>
-          <p><strong>Account verification.</strong> When you enter your own mobile number in the Tijoray app or on this site and ask us to send a code, we send a one-time passcode by SMS so you can confirm the number is yours. Confirming the number is what links a piece bought for you to your account. Entering the number and requesting the code is your consent to receive that message; we never add a number from any other source.</p>
+          <p><strong>Gift recipient details.</strong> A buyer may provide an intended recipient's mobile number at checkout so the piece can later be matched to the person who verifies that number. Providing it does not verify the recipient or subscribe them to marketing.</p>
+          <p><strong>Account verification.</strong> When you enter your own mobile number in the Tijoray app and ask us to send a code, we send a one-time passcode so you can confirm the number is yours. Confirming the number is what links a piece bought for you to your account.</p>
           <p><strong>Account notifications.</strong> Customers who have confirmed a mobile number may also receive occasional service notifications about the delivery and servicing of the piece they own.</p>
           <p>Message frequency varies; typically one verification message per sign-up. Message and data rates may apply. Reply STOP to cancel at any time, or reply HELP for help; you can also reach us at <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>. Carriers are not liable for any delays or undelivered messages.</p>
           <p>We send no marketing or promotional text messages on these programs. No mobile information will be shared with third parties or affiliates for marketing or promotional purposes; see our <a href="/privacy">Privacy Policy</a>.</p>
@@ -70,7 +72,7 @@ export default function TermsPage() {
 
         <div className={styles.section}>
           <h2>NFC and hardware</h2>
-          <p>The NFC chip embedded in your piece is passive: it has no battery, needs no charging, and does not depend on our service to remain physically intact. It is a physical component subject to normal wear and is rated for decades of typical use. Tijoray is not responsible for damage caused by physical impact, exposure to extreme conditions, or tampering. Tampering with the chip voids any warranty.</p>
+          <p>The NFC chip embedded in your piece is passive: it has no battery and needs no charging. It is a physical component subject to normal wear. Reading online memories depends on the Tijoray app and service. Tijoray is not responsible for damage caused by physical impact, exposure to extreme conditions, or tampering.</p>
         </div>
 
         <div className={styles.section}>

@@ -40,6 +40,7 @@ const CraftsmanshipPage = lazy(() => import('./pages/CraftsmanshipPage'))
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage'))
 const CookiesPage = lazy(() => import('./pages/CookiesPage'))
 const TermsPage = lazy(() => import('./pages/TermsPage'))
+const AppPage = lazy(() => import('./pages/AppPage'))
 
 // Admin panel (operational dashboard) — lazy so it never ships in the public bundle path.
 const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'))
@@ -169,6 +170,7 @@ export default function App() {
             <Route key={p.id} path={p.route} element={<BraceletConfiguratorPage />} />
           ))}
           <Route path="/technology" element={<TechnologyPage />} />
+          <Route path="/app" element={<AppPage />} />
           <Route path="/collection" element={<CollectionPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />

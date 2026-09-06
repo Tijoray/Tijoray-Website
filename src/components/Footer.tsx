@@ -37,6 +37,7 @@ export default function Footer() {
         <div>
           <p className={styles.footerColHead}>Support</p>
           <ul className={styles.footerLinks}>
+            <li><Link to="/app">Get the App</Link></li>
             <li><Link to="/contact">Contact Us</Link></li>
             <li><Link to="/faq#care">Care Guide</Link></li>
             <li><Link to="/faq">FAQ</Link></li>

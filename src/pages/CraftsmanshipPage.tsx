@@ -31,14 +31,14 @@ const PILLARS = [
     img: IMG.benchInspection,
     imgAlt: 'A setter inspecting a piece under magnification before dispatch',
     title: 'Identity & Record',
-    body: 'Every Tijoray piece carries a unique serial identity, bound to the NFC vault sealed inside it. Its metal, stone, and configuration are registered with the atelier at creation, a provenance record that travels with the piece for life.',
+    body: 'Every Tijoray piece carries a unique serial identity on its passive NFC chip. Its metal, stone, and configuration are registered with the atelier at creation and can be checked when an authorized account taps the piece.',
   },
 ]
 
 const SPECS = [
   { label: 'Metals', value: 'Sterling Silver (925) · 10K & 18K Gold' },
   { label: 'Birthstones', value: 'Twelve Stones · Hand-Set · Recorded in the Piece\'s Profile' },
-  { label: 'NFC Integration', value: 'Passive Chip · No Battery · Rated for Decades of Use' },
+  { label: 'NFC Integration', value: 'Passive Chip · No Battery or Charging' },
   { label: 'Finishing', value: 'Hand-Finished · Inspected Before Dispatch' },
   { label: 'Identity', value: 'Unique Serial · Digital Provenance Record' },
   { label: 'Bespoke', value: 'Platinum & Rare Gemstones by Private Consultation' },

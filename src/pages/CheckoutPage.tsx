@@ -24,11 +24,46 @@ function GoogleIcon() {
   )
 }
 
-const fmt = (n: number) => new Intl.NumberFormat('en-US', {
+const fmt = (n: number) => new Intl.NumberFormat('en-CA', {
   style: 'currency', currency: 'USD', maximumFractionDigits: 0,
 }).format(n)
 
 type Step = 'form' | 'verify-email'
+const CHECKOUT_DRAFT_KEY = 'tijoray_checkout_draft'
+const CHECKOUT_PROMO_KEY = 'tijoray_checkout_promo'
+
+type CheckoutForm = {
+  name: string
+  email: string
+  phone: string
+  password: string
+  confirm: string
+  recipientName: string
+  recipientPhone: string
+  forSelf: boolean
+}
+
+function loadCheckoutDraft(): CheckoutForm {
+  const empty: CheckoutForm = {
+    name: '', email: '', phone: '', password: '', confirm: '',
+    recipientName: '', recipientPhone: '', forSelf: false,
+  }
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(CHECKOUT_DRAFT_KEY) ?? '{}') as Partial<CheckoutForm>
+    return {
+      ...empty,
+      name: typeof saved.name === 'string' ? saved.name : '',
+      email: typeof saved.email === 'string' ? saved.email : '',
+      phone: typeof saved.phone === 'string' ? saved.phone : '',
+      recipientName: typeof saved.recipientName === 'string' ? saved.recipientName : '',
+      recipientPhone: typeof saved.recipientPhone === 'string' ? saved.recipientPhone : '',
+      forSelf: saved.forSelf === true,
+    }
+  } catch {
+    sessionStorage.removeItem(CHECKOUT_DRAFT_KEY)
+    return empty
+  }
+}
 
 export default function CheckoutPage() {
   usePageMeta('Checkout')
@@ -38,7 +73,7 @@ export default function CheckoutPage() {
 
   const [step,       setStep]       = useState<Step>('form')
   const [sentTo,     setSentTo]     = useState('')
-  const [form,       setForm]       = useState({ name: '', email: '', phone: '', password: '', confirm: '', recipientName: '', recipientPhone: '', forSelf: false })
+  const [form,       setForm]       = useState<CheckoutForm>(loadCheckoutDraft)
   const [errors,     setErrors]     = useState<Record<string, string>>({})
   const [submitting, setSubmitting] = useState(false)
   const [apiError,   setApiError]   = useState('')
@@ -46,10 +81,22 @@ export default function CheckoutPage() {
 
   // Promo code. `applied` is only ever set from a server answer — a code the
   // shopper typed is not a discount until Stripe has agreed it is one.
-  const [promoInput, setPromoInput] = useState('')
+  const [promoInput, setPromoInput] = useState(() => sessionStorage.getItem(CHECKOUT_PROMO_KEY) ?? '')
   const [promoBusy,  setPromoBusy]  = useState(false)
   const [promoError, setPromoError] = useState('')
   const [applied,    setApplied]    = useState<{ code: string; label: string; discountCents: number } | null>(null)
+
+  // Preserve checkout progress through Google sign-in, email verification and
+  // profile completion. Passwords are deliberately excluded.
+  useEffect(() => {
+    const { password: _password, confirm: _confirm, ...safeDraft } = form
+    sessionStorage.setItem(CHECKOUT_DRAFT_KEY, JSON.stringify(safeDraft))
+  }, [form])
+
+  useEffect(() => {
+    if (promoInput) sessionStorage.setItem(CHECKOUT_PROMO_KEY, promoInput)
+    else sessionStorage.removeItem(CHECKOUT_PROMO_KEY)
+  }, [promoInput])
 
   async function handleGoogle() {
     setGoogleBusy(true)
@@ -275,7 +322,9 @@ export default function CheckoutPage() {
         ) : (
           <>
             <p className={styles.recipientBody}>
-              Tell us who this piece is for. We'll ship directly to them and send an invitation to their memory portal once it arrives. No spoilers.
+              Tell us who will own the piece. On the next screen, use your delivery
+              address if you plan to give it in person, or the recipient's address
+              for direct delivery.
             </p>
 
             <div className={styles.fieldRow}>
@@ -299,11 +348,17 @@ export default function CheckoutPage() {
                   error={!!errors.recipientPhone}
                 />
                 {errors.recipientPhone && <span className={styles.errorMsg}>{errors.recipientPhone}</span>}
+                <p className={styles.recipientPhoneHelp}>
+                  Use the mobile number your recipient will verify in the Tijoray app.
+                  Entering it here does not verify the recipient or opt them into marketing.
+                </p>
               </div>
             </div>
 
             <p className={styles.recipientShippingNote}>
-              Their shipping address will be collected on the next screen.
+              {items.length > 1
+                ? 'Every piece in this order will be assigned to this one recipient. Place separate orders for different recipients.'
+                : 'The delivery address will be collected securely by Stripe on the next screen.'}
             </p>
           </>
         )}
@@ -343,7 +398,8 @@ export default function CheckoutPage() {
           ) : (
             <>
               <p className={styles.formSub}>
-                Your account unlocks your piece's memory portal, where you can add photos, voice notes and messages for the recipient after purchase.
+                Your account secures your order and memory portal. After purchase,
+                you can prepare photos, voice notes and messages while the piece is being made.
               </p>
 
               <button
@@ -535,7 +591,7 @@ export default function CheckoutPage() {
               <span>Subtotal</span>
               <span>{fmt(total - (applied ? applied.discountCents / 100 : 0))}</span>
             </div>
-            <p className={styles.summaryFootnote}>Tax is added on the next screen, once you’ve entered a delivery address.</p>
+            <p className={styles.summaryFootnote}>Prices are USD. Complimentary shipping is available to Canada, the US, UK and Australia. Tax is added on the next screen after you enter a delivery address. Dispatch is 10–14 business days after payment; delivery time is additional.</p>
           </div>
 
           <p className={styles.secureNote}>Secured by Stripe · 256-bit TLS encryption</p>

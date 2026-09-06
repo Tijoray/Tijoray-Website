@@ -4,9 +4,9 @@ import { useCart } from '../contexts/CartContext'
 import { useCatalog } from '../contexts/CatalogContext'
 import PieceThumbnail from './PieceThumbnail'
 import styles from './CartDrawer.module.css'
-import { SHAPE_LABELS, metalPhrase, STONE_NAMES_SHORT } from '../data/catalog'
+import { SHAPE_LABELS, metalPhrase, STONE_NAMES } from '../data/catalog'
 
-const fmt = (n: number) => new Intl.NumberFormat('en-US', {
+const fmt = (n: number) => new Intl.NumberFormat('en-CA', {
   style: 'currency', currency: 'USD', maximumFractionDigits: 0,
 }).format(n)
 
@@ -100,7 +100,7 @@ export default function CartDrawer() {
                   {item.productType === 'bracelet' ? 'Bracelet' : 'Pendant'}
                 </p>
                 <p className={styles.rowSpec}>
-                  {metalPhrase(item.metal, item.metalColor)} · {STONE_NAMES_SHORT[item.birthstoneIndex]}
+                  {metalPhrase(item.metal, item.metalColor)} · {STONE_NAMES[item.birthstoneIndex]}
                 </p>
                 <div className={styles.rowBottom}>
                   <span className={styles.rowPrice}>{fmt(item.price)}</span>
@@ -116,7 +116,7 @@ export default function CartDrawer() {
             <span>Subtotal</span>
             <span className={styles.subtotalValue}>{fmt(subtotal)}</span>
           </div>
-          <p className={styles.footNote}>Shipping and tax calculated at checkout.</p>
+          <p className={styles.footNote}>Complimentary shipping to Canada, the US, UK and Australia. Tax is calculated at checkout.</p>
 
           <Link to="/checkout" className={styles.checkout} onClick={closeCart}>
             Checkout

@@ -4,7 +4,7 @@ import { useCatalog } from '../contexts/CatalogContext'
 import type { Metal } from '../data/catalog'
 import { pendantRender } from '../lib/assets'
 
-const dollars = (n: number) => `from $${Math.round(n).toLocaleString('en-US')}`
+const dollars = (n: number) => `from US$${Math.round(n).toLocaleString('en-US')}`
 
 export default function PricingBand() {
   const { doc } = useCatalog()
@@ -21,7 +21,7 @@ export default function PricingBand() {
       img: pendantRender('circle', 'silver', 'white'),
       imgAlt: 'Circle pendant in sterling silver',
       from: dollars(lowestAcross(['silver'])),
-      desc: 'Sterling silver pieces with the same handcrafted form and the same memory vault, at a lower entry price.',
+      desc: 'Sterling silver pieces with the same handcrafted form and access to the Tijoray online memory service.',
       link: '/collection',
       cta: 'Explore Collection',
     },
@@ -30,7 +30,7 @@ export default function PricingBand() {
       img: pendantRender('square', '18k', 'gold'),
       imgAlt: 'Square pendant in 18K yellow gold',
       from: dollars(lowestAcross(['10k', '18k'])),
-      desc: '10K and 18K gold settings in white, yellow, or rose. Each piece carries your chosen birthstone and a lifetime memory vault.',
+      desc: '10K and 18K gold settings in white, yellow, or rose. Each piece carries your chosen birthstone and opens its encrypted online memories.',
       link: '/products/birthstone-pendant',
       cta: 'Configure Yours',
     },

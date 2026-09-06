@@ -7,14 +7,13 @@
  * (e.g. `src/lib/assets.ts`). Asset/model paths live in `src/data/collection.ts`,
  * which is frontend-only.
  *
- * Several display strings intentionally differ between surfaces and are preserved
- * here as separate exports — do not "simplify" them into one value:
+ * Database identity can differ from customer-facing copy and is preserved here
+ * without exposing the internal value in carts, receipts, or certificates:
  *   • Metal labels  — short ("Silver") in the configurator vs long ("Sterling
  *     Silver") in the cart/checkout/receipt.
  *   • Metal colours — "Gold" in the configurator vs "Yellow" in cart/checkout/API.
- *   • Stone #5      — "Mother of Pearl" in the configurator vs "Pearl" everywhere
- *     else. The short name is also used to look up the row in the Supabase
- *     `Stones` table during checkout, so changing it would break order creation.
+ *   • Stone #5      — "Mother of Pearl" is the display name. The legacy "Pearl"
+ *     value remains only as the Supabase `Stones` lookup key.
  *   • Gem material  — the configurator uses a richer material (iridescence,
  *     per-gem env intensity) than the static cart thumbnail. Both sets are kept.
  */
@@ -58,7 +57,7 @@ export interface Stone {
   month:   string
   /** Display name in the configurator (e.g. "Mother of Pearl"). */
   name:    string
-  /** Short name used in cart/checkout/portal AND for the Supabase Stones lookup. */
+  /** Stable internal name used for the Supabase Stones lookup. */
   dbName:  string
   /** UI swatch colour (CSS hex). */
   color:   string
@@ -105,7 +104,8 @@ export const STONES: Stone[] = [
     gemThumb: { color: '#22873A', ior: 1.58, transmission: 0.62, thickness: 0.4, roughness: 0.05, clearcoat: 1.0, clearcoatRoughness: 0.05, attenuationColor: '#38A850', attenuationDistance: 0.8 },
   },
   {
-    // Configurator shows "Mother of Pearl"; cart/checkout/API use "Pearl".
+    // Keep the legacy DB identity stable while all customer-facing copy uses the
+    // actual material name.
     month: 'June', name: 'Mother of Pearl', dbName: 'Pearl', color: '#F0EDE8',
     meaning: 'Purity and wisdom earned through experience.',
     gem:      { color: '#F5F3EF', ior: 1.53, transmission: 0.00, thickness: 0.5, roughness: 0.06, clearcoat: 0.95, clearcoatRoughness: 0.04, envMapIntensity: 3.5, attenuationColor: '#FFFFFF', attenuationDistance: 4.0, iridescence: 1.00, iridescenceIOR: 1.60 },
@@ -152,7 +152,7 @@ export const STONES: Stone[] = [
 /* ── Derived stone arrays (index-aligned with STONES) ──── */
 /** Long display names — used by the configurator. */
 export const STONE_NAMES       = STONES.map(s => s.name)
-/** Short names — used by cart/checkout/portal and Supabase Stones lookup. */
+/** Internal database names. Never use these as customer-facing labels. */
 export const STONE_NAMES_SHORT = STONES.map(s => s.dbName)
 export const STONE_COLORS      = STONES.map(s => s.color)
 export const STONE_MEANINGS    = STONES.map(s => s.meaning)
@@ -239,20 +239,9 @@ export const PRODUCT_TYPE_LABELS: Record<string, string> = {
 }
 
 /* ── Collection list page — decorative chip strip ──────── */
-// NOTE: this is the *traditional* birthstone list used purely for the marketing
-// chip strip on the Collection page. It intentionally differs from the
-// configurable STONES above (e.g. April = Diamond, June = Pearl).
-export const BIRTHSTONE_CHIPS = [
-  { month: 'Jan', stone: 'Garnet',     color: '#9B1B30' },
-  { month: 'Feb', stone: 'Amethyst',   color: '#9B59B6' },
-  { month: 'Mar', stone: 'Aquamarine', color: '#7EC8C8' },
-  { month: 'Apr', stone: 'Diamond',    color: '#E8F4F8' },
-  { month: 'May', stone: 'Emerald',    color: '#2ECC71' },
-  { month: 'Jun', stone: 'Pearl',      color: '#D4AF8A' },
-  { month: 'Jul', stone: 'Ruby',       color: '#CC0000' },
-  { month: 'Aug', stone: 'Peridot',    color: '#93C572' },
-  { month: 'Sep', stone: 'Sapphire',   color: '#154EC1' },
-  { month: 'Oct', stone: 'Tourmaline', color: '#FF6EB4' },
-  { month: 'Nov', stone: 'Citrine',    color: '#E4A800' },
-  { month: 'Dec', stone: 'Turquoise',  color: '#3BC4C4' },
-]
+// Derived from the sellable catalog so discovery and purchase can never drift.
+export const BIRTHSTONE_CHIPS = STONES.map(stone => ({
+  month: stone.month.slice(0, 3),
+  stone: stone.name,
+  color: stone.color,
+}))

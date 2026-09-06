@@ -6,7 +6,7 @@ import type { CatalogCollection, CatalogProduct } from '../data/catalog-doc'
 import { usePageMeta } from '../lib/usePageMeta'
 import { IMG, stoneSwatch } from '../lib/assets'
 
-const fmt = (n: number) => new Intl.NumberFormat('en-US', {
+const fmt = (n: number) => new Intl.NumberFormat('en-CA', {
   style: 'currency', currency: 'USD', maximumFractionDigits: 0,
 }).format(n)
 
@@ -46,7 +46,7 @@ function ProductCard({ product, collection, index, reveal }: ProductCardProps) {
               <span className={styles.priceFrom}>From</span>
               <span className={styles.priceNum}>{fmt(product.priceFrom)}</span>
             </div>
-            <span className={styles.cardCta}>Build Your Piece</span>
+            <span className={styles.cardCta}>Customize</span>
           </div>
         </div>
       </Link>
@@ -86,7 +86,7 @@ function ProductCard({ product, collection, index, reveal }: ProductCardProps) {
 }
 
 export default function CollectionPage() {
-  usePageMeta('The Collection', 'Configurable birthstone pendants and bracelets, handmade to order in sterling silver, 10K and 18K gold, each with an encrypted memory vault sealed inside.')
+  usePageMeta('The Collection', 'Customize birthstone pendants and bracelets from US$399. Each piece uses a passive NFC identity to open encrypted online memories in the Tijoray app.')
   const catalog = useCatalog()
   // First live product — drives the page's primary CTAs.
   const firstLiveProduct = catalog.doc.products.find(p => p.available)
@@ -103,9 +103,9 @@ export default function CollectionPage() {
             Every piece <em>carries</em> its story.
           </h1>
           <p className={styles.heroSub}>
-            Not as a figure of speech. Each piece is configured by you, handmade to
-            that order, and sealed with an encrypted vault that holds the
-            photographs, recordings and letters you put inside it.
+            Choose a pendant or bracelet, its shape, metal and birthstone. A passive
+            NFC identity inside the jewelry opens its encrypted online collection of
+            photographs, recordings and letters in the Tijoray app.
           </p>
         </div>
         <img

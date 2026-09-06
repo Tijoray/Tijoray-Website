@@ -3,7 +3,8 @@ import { createClient } from '@supabase/supabase-js'
 import {
   METAL_LABELS_LONG       as METAL_LABELS,
   METAL_COLOR_LABELS_LONG as METAL_COLOR_LABELS,
-  STONE_NAMES_SHORT       as BIRTHSTONE_NAMES,
+  STONE_NAMES,
+  STONE_NAMES_SHORT,
   PRODUCT_TYPE_LABELS,
 } from '../src/data/catalog.js'
 import type { Metal } from '../src/data/catalog.js'
@@ -193,7 +194,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const item = items[i]
     const productType    = item.productType  ?? 'pendant'
     const collectionId   = item.collectionId ?? 'birthstone'
-    const birthstoneName = BIRTHSTONE_NAMES[item.birthstoneIndex] ?? 'Unknown'
+    const birthstoneName = STONE_NAMES[item.birthstoneIndex] ?? 'Unknown'
+    const birthstoneDbName = STONE_NAMES_SHORT[item.birthstoneIndex] ?? birthstoneName
     const productLabel   = PRODUCT_TYPE_LABELS[productType] ?? 'Pendant'
     // The bracelet's 'square' key is an asscher cut — label it accordingly.
     const shapeLabel     = productType === 'bracelet' && item.shape === 'square'
@@ -202,7 +204,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const metalLine      = `${METAL_COLOR_LABELS[item.metalColor]} ${METAL_LABELS[item.metal]}`
 
     // Look up IDs
-    const { data: stones } = await supabase.from('Stones').select('id').ilike('name', birthstoneName).limit(1)
+    const { data: stones } = await supabase.from('Stones').select('id').ilike('name', birthstoneDbName).limit(1)
     const stoneId = stones?.[0]?.id ?? ''
 
     const { data: metals } = await supabase.from('Metals').select('id')
@@ -218,7 +220,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         tax_behavior: 'exclusive',
         product_data: {
           name:        `The Tijoray ${shapeLabel} ${productLabel}`,
-          description: item.specLine ?? `${metalLine} · ${birthstoneName}`,
+          description: `${metalLine} · ${birthstoneName}`,
           // Jewellery has no dedicated Stripe tax code; physical goods is the
           // correct classification for a shipped piece.
           tax_code:    'txcd_99999999', // General - Tangible Goods

@@ -67,6 +67,19 @@ export const IMG = {
   wearStacked:      asset('/assets/editorial/wear-stacked.png'),
 } as const
 
+/** Current Tijoray app captures supplied from the public R2 app folder. */
+const APP_BASE = 'https://pub-1f8cd5d39ec04621bc73d5667b85e00b.r2.dev/assets/app'
+
+export const APP_MEDIA = {
+  main:                   `${APP_BASE}/main-page.png`,
+  tapPiece:               `${APP_BASE}/Tap-piece.png`,
+  establishingConnection: `${APP_BASE}/establishing-connection.png`,
+  pieceScreen:            `${APP_BASE}/piece-screen.png`,
+  authenticity:           `${APP_BASE}/authenticity.png`,
+  vault:                  `${APP_BASE}/Vault.png`,
+  memories:               `${APP_BASE}/memories.mov`,
+} as const
+
 /**
  * Photoreal studio render of a pendant for a given silhouette and metal.
  * Silver and white gold share the white-metal render; every render is
@@ -78,22 +91,6 @@ export function pendantRender(shape: string, metal: string, color: string): stri
   const s = ['square', 'circle', 'heart', 'pear'].includes(shape) ? shape : 'square'
   return asset(`${V2}/renders/pendant-${s}-${tone}.webp`)
 }
-
-/*
- * Still to come — the seven Technology-page app screens.
- * They are the last assets pointing at the white-label template
- * (they read "Arcana" and "Aurelia Infinite"). Once real screenshots
- * are uploaded as:
- *     assets/v2/app/app-tap.webp
- *     assets/v2/app/app-connecting.webp
- *     assets/v2/app/app-connected.webp
- *     assets/v2/app/app-memory.webp
- *     assets/v2/app/app-atelier.webp
- *     assets/v2/app/app-gold.webp
- *     assets/v2/app/app-vault.webp
- * point the seven app-screen paths at the top of pages/TechnologyPage.tsx
- * at the V2 prefix instead of /assets/app, the same way IMG does above.
- */
 
 /** Macro swatch of the set stone for a birthstone index (0 = January). */
 const STONE_SLUGS = [

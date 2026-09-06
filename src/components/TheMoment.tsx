@@ -14,7 +14,7 @@ import styles from './TheMoment.module.css'
 const CONTRASTS = [
   {
     before: 'A photograph in a drawer',
-    after:  'Worn every day, on the piece itself',
+    after:  'Opened from the jewelry in the Tijoray app',
   },
   {
     before: 'A caption under a picture',
@@ -35,11 +35,11 @@ export default function TheMoment() {
         <div className={`${styles.media} ${styles.fadeUp}`} ref={reveal}>
           <img
             src={IMG.nfcTap}
-            alt="A phone held against a Tijoray pendant, opening the vault inside it"
+            alt="A phone held against a Tijoray pendant to open its online memories"
             className={styles.image}
             loading="lazy"
           />
-          <p className={styles.caption}>One tap. No app pairing, no battery, nothing to set up.</p>
+          <p className={styles.caption}>No battery or pairing for the jewelry. The app, an account and internet access are required.</p>
         </div>
 
         <div className={`${styles.text} ${styles.fadeUp}`} ref={reveal}>
@@ -49,8 +49,8 @@ export default function TheMoment() {
             This one holds <em>her voice.</em>
           </h2>
           <p className={styles.lede}>
-            The jewelry is the point. Handmade, hallmarked, meant to be worn for
-            decades. What makes it a Tijoray is sealed underneath the stone.
+            The jewelry is the point. What makes it a Tijoray is the passive NFC
+            identity beneath the stone, linked to its encrypted online memories.
           </p>
 
           <dl className={styles.contrasts}>

@@ -42,13 +42,11 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
-  overflow-x: hidden;
 }
 body {
   background: var(--cream);
   color: var(--ink);
   font-family: var(--font-sans);
-  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   font-synthesis: none;
 }

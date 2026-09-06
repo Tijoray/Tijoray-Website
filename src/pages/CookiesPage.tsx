@@ -24,6 +24,16 @@ const STORAGE: Row[] = [
     necessary: true,
   },
   {
+    name: 'tijoray_checkout_draft', setter: 'Tijoray', kind: 'Session storage',
+    purpose: 'Keeps non-secret checkout fields through sign-in or email verification in this browser tab. Passwords are never stored.',
+    necessary: true,
+  },
+  {
+    name: 'tijoray_checkout_promo', setter: 'Tijoray', kind: 'Session storage',
+    purpose: 'Keeps the promo code you entered through sign-in or email verification in this browser tab.',
+    necessary: true,
+  },
+  {
     name: 'mb_tutorial_seen', setter: 'Tijoray', kind: 'Local storage',
     purpose: 'Remembers that you have already seen the walkthrough for adding a memory, so it is not shown again.',
     necessary: false,
@@ -61,14 +71,14 @@ export default function CookiesPage() {
       <div className={styles.hero}>
         <p className={styles.eyebrow}>Legal</p>
         <h1 className={styles.title}>Cookies and storage</h1>
-        <p className={styles.updated}>Last updated: 28 August 2026</p>
+        <p className={styles.updated}>Last updated: 5 September 2026</p>
       </div>
 
       <div className={styles.content}>
 
         <div className={styles.section}>
           <h2>The short version</h2>
-          <p>We use no advertising cookies, no profiling cookies, and no third-party trackers. Our analytics do not use cookies at all. What we store on your device is the handful of items below: enough to keep you signed in, hold your cart, and remember two interface choices you have already made.</p>
+          <p>We use no advertising cookies, no profiling cookies, and no third-party trackers. Our analytics do not use cookies at all. What we store on your device is the handful of items below: enough to keep you signed in, hold your cart and checkout progress, and remember interface choices you have already made.</p>
           <p>The law here covers anything stored on or read from your device, not only cookies, so browser local storage is listed on the same footing.</p>
         </div>
 

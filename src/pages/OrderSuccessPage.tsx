@@ -17,6 +17,8 @@ export default function OrderSuccessPage() {
     if (cleared.current) return
     cleared.current = true
     clearCart()
+    sessionStorage.removeItem('tijoray_checkout_draft')
+    sessionStorage.removeItem('tijoray_checkout_promo')
   }, [clearCart])
 
   // No Stripe session in the URL means there is no order to confirm — a direct
@@ -39,12 +41,13 @@ export default function OrderSuccessPage() {
           A confirmation has been sent to your email. Your piece will be handcrafted and dispatched within 10–14 business days.
         </p>
         <p className={styles.body}>
-          Once your piece arrives, return to your portal to compose the memory inside: photos, voice notes, music and more.
+          Your memory portal is ready after payment. Add photos, voice notes,
+          messages and more now, while your piece is being made.
         </p>
 
         <div className={styles.actions}>
           <Link to="/portal" className={styles.primaryBtn}>
-            Go to My Portal
+            Prepare the Memories
           </Link>
           <Link to="/" className={styles.secondaryLink}>
             Return to home

@@ -22,7 +22,7 @@ const TRUST_POINTS = [
       </svg>
     ),
     label: 'Private by Design',
-    detail: 'Every piece has its own key, released only to the sender and the recipient once their identity is verified. We hold those keys in escrow rather than stranding them on a single phone, which is what lets a piece be given away, inherited, or recovered. It also means this is not end-to-end encryption: we could decrypt if legally compelled. We would rather say so than promise otherwise.',
+    detail: 'Every piece has its own key and access is controlled through account and piece authorization. We hold those keys in escrow rather than stranding them on a single phone, which supports gifting, transfer and recovery. It also means this is not end-to-end encryption: Tijoray can technically decrypt stored content.',
   },
   {
     icon: (
@@ -31,7 +31,7 @@ const TRUST_POINTS = [
       </svg>
     ),
     label: 'Passive NFC, No Charging',
-    detail: 'The NFC chip is completely passive. It draws power from your phone\'s field. No battery, no charging, no connectivity required. It works for decades without maintenance.',
+    detail: 'The NFC chip is completely passive and draws power from your phone\'s field. The jewelry has no battery and needs no charging. The app uses internet access to verify the piece and retrieve its encrypted online memories.',
   },
   {
     icon: (
@@ -43,7 +43,7 @@ const TRUST_POINTS = [
       </svg>
     ),
     label: 'Made to Be Passed On',
-    detail: 'A Tijoray piece is designed to outlive its first owner. When it is handed to the next generation, the vault travels with it, memories and provenance intact, tied to the piece rather than to a single account.',
+    detail: 'A Tijoray piece can be transferred to a new owner. Tijoray support verifies the parties and transfers access to its online memory collection and provenance record under the service terms.',
   },
   {
     icon: (
@@ -68,8 +68,8 @@ export default function TrustSection() {
           <p className={styles.eyebrow}>Security &amp; Privacy</p>
           <h2 className={styles.title}>Built for the <em>long run.</em></h2>
           <p className={styles.subtitle}>
-            Encrypted before they leave your phone. Readable by no one but you
-            and the person you give the piece to.
+            Encrypted before upload and restricted to authorized accounts. Tijoray
+            manages recovery keys, so this is not end-to-end encryption.
           </p>
         </header>
 
@@ -83,7 +83,7 @@ export default function TrustSection() {
             height="960"
           />
           <figcaption className={styles.cutawayCaption}>
-            The chip sits under the stone, sealed into the metal. Nothing to charge, nothing to pair.
+            The chip sits under the stone and carries the piece's identity, not the memories themselves.
           </figcaption>
         </figure>
 

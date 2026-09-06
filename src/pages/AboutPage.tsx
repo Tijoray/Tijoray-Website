@@ -20,9 +20,8 @@ export default function AboutPage() {
             to <em>last.</em>
           </h1>
           <p className={styles.heroSub}>
-            Atelier Tijoray makes fine jewelry with an encrypted vault sealed
-            inside, for people who would rather leave behind a voice than a
-            photograph.
+            Atelier Tijoray makes fine jewelry whose passive NFC identity opens
+            an encrypted online collection of photographs, voices and letters.
           </p>
         </div>
         <div className={styles.heroRule} />
@@ -47,13 +46,12 @@ export default function AboutPage() {
           </div>
           <div className={styles.missionRight}>
             <p className={styles.bodyText}>
-              We make jewelry that carries more than gemstone and metal. Each
-              piece is built to hold the photographs and voices you would not
-              want to lose.
+              We make jewelry that connects gemstone and metal with the photographs
+              and voices you would not want to lose.
             </p>
             <p className={styles.bodyText}>
-              Our atelier works in two crafts at once. Jewelry made by hand, and
-              encryption strong enough to still be standing in fifty years.
+              Our atelier works across jewelry and software: a physical piece made
+              by hand, with encrypted online memories and managed recovery.
             </p>
           </div>
         </div>
@@ -65,18 +63,18 @@ export default function AboutPage() {
           {[
             {
               num: '01',
-              title: 'Eternal Craft',
+              title: 'Considered Craft',
               body: 'Each piece is individually finished by hand in our atelier. Responsibly sourced metals and gemstones, blended and set to tolerances that hold up after decades of daily wear.',
             },
             {
               num: '02',
               title: 'Private by Design',
-              body: 'Your vault belongs to you alone. Memories are encrypted before they ever leave your device, and only the piece itself, held close and tapped, unlocks what is inside.',
+              body: 'Memories are encrypted before upload and access is restricted to authorized accounts. Tijoray manages recovery keys, so this is not end-to-end encryption.',
             },
             {
               num: '03',
               title: 'Generational Transfer',
-              body: 'Tijoray pieces are designed to be passed on. When you hand on the jewel, the vault goes with it. Photographs, voices and letters, all intact.',
+              body: 'Tijoray pieces can be passed on. Support verifies the parties and transfers access to the online memory collection and provenance record.',
             },
           ].map((p, i) => (
             <article
@@ -105,8 +103,9 @@ export default function AboutPage() {
               is set.
             </p>
             <p className={styles.bodyText}>
-              The NFC vault sealed within requires no battery, no signal, no subscription.
-              It lives entirely inside the piece, passive and permanent, and yours alone to open.
+              The NFC chip inside the jewelry needs no battery or charging and carries
+              only the piece's identity. The Tijoray app uses internet access to open
+              its encrypted online memories; the service is included without a subscription.
             </p>
           </div>
           <div className={styles.craftQuote}>
@@ -124,7 +123,7 @@ export default function AboutPage() {
         <div className={styles.ctaInner}>
           <p className={styles.eyebrow}>Begin Your Legacy</p>
           <h2 className={styles.ctaTitle}>
-            Compose something <em>permanent.</em>
+            Compose something <em>personal.</em>
           </h2>
           <p className={styles.ctaBody}>
             Every Tijoray piece begins with a conversation. Tell us what you wish to

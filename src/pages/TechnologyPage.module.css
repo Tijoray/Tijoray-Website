@@ -144,6 +144,63 @@
   width: 100%;
   height: 480px;
   object-fit: cover;
+  object-position: top center;
+}
+
+.appCapturePlaceholder {
+  width: 100%;
+  height: 100%;
+  min-height: 480px;
+  padding: 44px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 28%, rgba(191, 161, 95, 0.18), transparent 30%),
+    linear-gradient(160deg, #f7f7f2, #efe8de);
+  color: var(--ink);
+}
+
+.placeholderBrand {
+  margin-bottom: auto;
+  font-family: var(--font-serif);
+  font-size: 18px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.placeholderMark {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 26px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  color: var(--burgundy);
+  font-family: var(--font-serif);
+  font-size: 36px;
+  margin-top: auto;
+}
+
+.placeholderLabel {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.placeholderStatus {
+  max-width: 180px;
+  margin-top: 14px;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  line-height: 1.5;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  margin-bottom: auto;
 }
 
 .nfcCardTitle {
@@ -233,6 +290,15 @@
   max-width: 280px;
   width: 100%;
   height: 540px;
+}
+
+.featureMedia {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  background: var(--cream);
 }
 
 /* GIF — plays at natural size, no scroll effect */
